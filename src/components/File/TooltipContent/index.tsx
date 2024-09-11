@@ -7,7 +7,7 @@ import local from './style.css';
 
 const css = cssBinder(local);
 
-const getSearchString = (search?: Record<string, string>): string => {
+const getSearchString = (search?: InterProLocationSearch): string => {
   const entries = Object.entries(search || []);
   if (entries.length === 0) return '';
   return `?${entries.map(([k, v]) => `${k}=${v}`).join('&')}`;
@@ -19,7 +19,7 @@ type Props = {
   count: number;
   subpath?: string;
   fileType: string;
-  search?: Record<string, string>;
+  search?: InterProLocationSearch;
 };
 
 const TooltipContent = ({
@@ -49,12 +49,8 @@ const TooltipContent = ({
               },
               hash: `${subpath || ''}${getSearchString(search)}|${fileType}`,
             }}
-            className={css(
-              'vf-button',
-              'vf-button--tertiary',
-              'vf-button--sm',
-              'in-popup',
-            )}
+            buttonType="tertiary"
+            className={css('in-popup')}
           >
             See more download options
           </Link>

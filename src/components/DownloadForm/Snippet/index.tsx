@@ -10,6 +10,7 @@ import perl from 'react-syntax-highlighter/dist/esm/languages/hljs/perl';
 import docco from 'react-syntax-highlighter/dist/esm/styles/hljs/docco';
 
 import Callout from 'components/SimpleCommonComponents/Callout';
+import { Button } from 'components/SimpleCommonComponents/Button';
 import blockEvent from 'utils/block-event';
 import { addToast } from 'actions/creators';
 
@@ -22,8 +23,9 @@ import cssBinder from 'styles/cssBinder';
 import style from '../style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(style, fonts, ebiGlobalStyles);
+const css = cssBinder(style, fonts, ebiGlobalStyles, buttonCSS);
 
 SyntaxHighlighter.registerLanguage('javascript', js);
 SyntaxHighlighter.registerLanguage('python', python);
@@ -171,18 +173,26 @@ export class Snippet extends PureComponent<Props, State> {
               <option value="js">JavaScript (node, version ≥ 10)</option>
             </select>
           </label>
-          <button
-            type="button"
-            className={css('button', 'hollow')}
-            ref={this._ref}
-          >
+          <Button type="secondary" ref={this._ref} icon="icon-copy">
             Copy to clipboard
-          </button>
+          </Button>{' '}
           <a
-            className={css('button', 'hollow')}
+            className={css(
+              'vf-button',
+              'vf-button--secondary',
+              'vf-button--sm',
+            )}
             download={`script-InterPro.${language}`}
             href={href || ''}
           >
+            <span
+              className={css(
+                'icon',
+                'icon-common',
+                'ico-neutral',
+                'icon-download',
+              )}
+            ></span>{' '}
             Download
           </a>
           {language === 'js' && (

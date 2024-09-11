@@ -39,6 +39,7 @@
       font-weight: 600;
       display: flex;
       align-items: center;
+      word-break: break-all;
       gap: 0.5rem;
       & * {
         flex-grow: 1;
@@ -65,7 +66,7 @@
     color: #a0a0a0;
     gap: 0.5rem;
     align-items: center;
-    padding: 0.7rem 0;
+    padding: 0.7rem 0 0;
 
     & > div:first-child {
       flex-grow: 1;

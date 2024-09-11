@@ -191,6 +191,9 @@
 .sign-label-head.cc {
   background: var(--colors-go-cc);
 }
+.go-short-label {
+  margin: 0 0.2rem;
+}
 
 .icon-wrapper {
   position: relative;
@@ -289,4 +292,8 @@ div.breadcrumb {
   & > * {
     background: var(--colors-filter-background);
   }
+}
+
+.row {
+  max-width: 81.25em;
 }

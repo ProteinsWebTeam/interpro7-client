@@ -100,6 +100,7 @@ const nightingaleAliases = [
   'nightingale-sequence',
   'nightingale-sunburst',
   'nightingale-track',
+  'nightingale-variation',
 ].reduce(
   (agg, v) => ({
     ...agg,

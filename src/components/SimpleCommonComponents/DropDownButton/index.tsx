@@ -1,5 +1,6 @@
 import React, { useState, PropsWithChildren, ReactElement } from 'react';
 
+import Button, { ButtonTypes } from 'components/SimpleCommonComponents/Button';
 import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -8,6 +9,10 @@ import s from './style.css';
 const css = cssBinder(s, fonts);
 
 type Props = PropsWithChildren<{
+  /**
+   * What type of button should use, default to secondary
+   */
+  type?: ButtonTypes;
   /**
    * What should be the label of the component. It supports nested react element
    */
@@ -35,6 +40,7 @@ type Props = PropsWithChildren<{
 }>;
 
 const DropDownButton = ({
+  type = 'secondary',
   label,
   icon,
   color,
@@ -66,22 +72,16 @@ const DropDownButton = ({
         disabled ? 'disableDropdown' : '',
       )}`}
     >
-      <button
-        className={css(
-          'vf-button',
-          'vf-button--secondary',
-          'vf-button--sm',
-          'dropdown-button',
-        )}
+      <Button
+        type={type}
+        className={css('dropdown-button')}
         style={buttonStyle}
+        icon={icon}
         onClick={handleClick}
       >
-        {icon ? (
-          <span className={css('icon', 'icon-common')} data-icon={icon} />
-        ) : null}
         <span className={css('hide-for-small-only')}>{label}</span>{' '}
         <span className={css('icon', 'icon-common', 'icon-caret-down')} />
-      </button>
+      </Button>
       <div
         className={css('dropdown-pane', 'dropdown-content')}
         style={{

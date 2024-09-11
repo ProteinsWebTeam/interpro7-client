@@ -14,6 +14,7 @@ import loadData from 'higherOrder/loadData';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Loading from 'components/SimpleCommonComponents/Loading';

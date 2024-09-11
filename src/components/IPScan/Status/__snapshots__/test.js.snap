@@ -2,7 +2,7 @@
 
 exports[`<IPScanStatus /> should render 1`] = `
 <div
-  className="row columns"
+  className="vf-stack"
 >
   <h3
     className="light"
@@ -43,43 +43,35 @@ exports[`<IPScanStatus /> should render 1`] = `
     </div>
     <Memo(Connect(ImportResultSearch)) />
   </div>
-  <Memo(Table)
+  <Table
     actualSize={0}
     contentType="result"
     dataTable={[]}
-    groupActions={
-      {
-        "$$typeof": Symbol(react.memo),
-        "WrappedComponent": [Function],
-        "compare": null,
-        "type": [Function],
-      }
-    }
     query={{}}
     rowKey="localID"
-    shouldGroup={true}
     showTableIcon={false}
   >
     <ExtraOptions>
       <DropDownButton
-        icon=""
+        icon="icon-trash"
         label="Clear All"
       >
         <ul>
           <li>
-            <button
+            <ForwardRef
               onClick={[Function]}
+              type="hollow"
             >
               Loaded from File
-            </button>
+            </ForwardRef>
           </li>
           <li>
-             
-            <button
+            <ForwardRef
               onClick={[Function]}
+              type="hollow"
             >
               Loaded from Servers
-            </button>
+            </ForwardRef>
           </li>
         </ul>
       </DropDownButton>
@@ -87,13 +79,22 @@ exports[`<IPScanStatus /> should render 1`] = `
     <Column
       dataKey="localTitle"
       isSearchable={true}
+      isSortable={true}
       renderer={[Function]}
     >
       Results
     </Column>
     <Column
+      dataKey="entries"
+      isSearchable={true}
+      isSortable={true}
+    >
+      Sequences
+    </Column>
+    <Column
       dataKey="times"
       isSearchable={true}
+      isSortable={true}
       renderer={[Function]}
     >
       Created
@@ -101,7 +102,7 @@ exports[`<IPScanStatus /> should render 1`] = `
     <Column
       cellClassName="table-center"
       dataKey="status"
-      headerClassName="table-center"
+      headerClassName="table-header-center"
       renderer={[Function]}
     >
       Status
@@ -110,16 +111,16 @@ exports[`<IPScanStatus /> should render 1`] = `
       cellClassName="table-center font-ml"
       dataKey="localID"
       defaultKey="actions"
-      headerClassName="table-center"
+      headerClassName="table-header-center"
       renderer={[Function]}
     >
       Action
     </Column>
-  </Memo(Table)>
+  </Table>
   <Memo(Connect(ClearAllDialog))
     closeModal={[Function]}
     from={null}
-    jobs={null}
+    jobs={[]}
     show={false}
   />
 </div>

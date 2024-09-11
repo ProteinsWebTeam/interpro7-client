@@ -4,7 +4,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 
 import SelectedParameter, { getTextAfterLastSlash } from './SelectedParameter';
@@ -120,4 +119,4 @@ export default loadData({
   fetchOptions: {
     responseType: 'yaml',
   },
-} as Params)(URLParameters);
+} as LoadDataParameters)(URLParameters);

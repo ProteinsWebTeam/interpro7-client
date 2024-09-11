@@ -38,6 +38,7 @@ exports[`getInitialState about 1`] = `
       "result": {
         "accession": null,
         "detail": null,
+        "job": null,
         "type": null,
       },
       "search": {
@@ -110,6 +111,7 @@ exports[`getInitialState browse entries 1`] = `
       "result": {
         "accession": null,
         "detail": null,
+        "job": null,
         "type": null,
       },
       "search": {
@@ -182,6 +184,7 @@ exports[`getInitialState browse proteins 1`] = `
       "result": {
         "accession": null,
         "detail": null,
+        "job": null,
         "type": null,
       },
       "search": {
@@ -254,6 +257,7 @@ exports[`getInitialState home 1`] = `
       "result": {
         "accession": null,
         "detail": null,
+        "job": null,
         "type": null,
       },
       "search": {
@@ -326,6 +330,7 @@ exports[`getInitialState summary entry 1`] = `
       "result": {
         "accession": null,
         "detail": null,
+        "job": null,
         "type": null,
       },
       "search": {
@@ -398,6 +403,7 @@ exports[`getInitialState summary protein 1`] = `
       "result": {
         "accession": null,
         "detail": null,
+        "job": null,
         "type": null,
       },
       "search": {

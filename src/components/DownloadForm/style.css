@@ -20,17 +20,12 @@
   & h6 {
     font-weight: bold;
   }
-  button {
-    color: var(--colors-almost-white);
-    background-color: var(--colors-submain);
-    &:hover {
-      background-color: var(--colors-submain-darker);
+
+  & .button-group button {
+    margin-left: 2px;
+    &:first-of-type {
+      margin-left: 0;
     }
-  }
-  & .button.hollow {
-    color: var(--colors-submain);
-    background-color: var(--colors-almost-white);
-    margin-right: 0.5rem;
   }
 }
 

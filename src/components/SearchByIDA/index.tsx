@@ -10,18 +10,21 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 import DomainButton from './DomainButton';
 import PanelIDA from './PanelIDA';
 import ToggleSwitch from 'components/ToggleSwitch';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import cssBinder from 'styles/cssBinder';
 
+import blocks from 'styles/blocks.css';
 import local from './style.css';
+import searchPageCss from 'pages/Search/style.css';
 import search from 'components/IPScan/Search/style.css';
+
+const css = cssBinder(local, blocks, search, searchPageCss);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
-
-const css = cssBinder(local, search);
 
 type Props = {
   customLocation: InterProLocation;
@@ -33,12 +36,6 @@ type State = {
   options: Record<string, EntryMetadata>;
 };
 
-type SearchProps = {
-  ida_search?: string;
-  ida_ignore?: string;
-  ordered?: boolean;
-  exact?: boolean;
-};
 export class SearchByIDA extends PureComponent<Props, State> {
   state = {
     markerBeforeEntry: null,
@@ -56,7 +53,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
     exact?: boolean;
     ignore: Array<string>;
   }) => {
-    const search: SearchProps = {
+    const search: InterProLocationSearch = {
       ida_search: entries.join(','),
     };
     if (order) {
@@ -132,7 +129,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
       ordered,
       exact,
       ida_ignore: ignoreFromURL,
-    }: SearchProps = this.props.customLocation.search;
+    }: InterProLocationSearch = this.props.customLocation.search;
     const entries = searchFromURL ? searchFromURL.split(',') : [];
     if (searchFromURL !== undefined && searchFromURL.trim() === '')
       entries.push('');
@@ -142,8 +139,9 @@ export class SearchByIDA extends PureComponent<Props, State> {
     if (ignoreFromURL !== undefined && ignoreFromURL.trim() === '')
       ignore.push('');
     return (
-      <div className={css('vf-stack', 'vf-stack--400')}>
-        <div className={css('ida-search')}>
+      <section className={css('vf-stack', 'vf-stack--400')}>
+        <div className={css('simple-box')}>
+          <header>Search for proteins containing specific domains</header>
           <SchemaOrgData
             data={{
               name: 'Search By Domain Architecture IDA',
@@ -153,9 +151,6 @@ export class SearchByIDA extends PureComponent<Props, State> {
           />
           <div className={css('vf-stack', 'vf-stack--400')}>
             <div className={css('search-input')}>
-              <h3 className={css('light')}>
-                Search for proteins with a specific domain architecture
-              </h3>
               <div className={css('description')}>
                 <p>
                   Domain architectures are derived from matches to Pfam models.
@@ -212,8 +207,8 @@ export class SearchByIDA extends PureComponent<Props, State> {
                 />
               </div>
               <div className={css('ida-controls')}>
-                <button
-                  className={css('button', 'secondary')}
+                <Button
+                  className={css('ida-button')}
                   onClick={() =>
                     this._handleSubmit({
                       entries: entries.concat(''),
@@ -224,9 +219,9 @@ export class SearchByIDA extends PureComponent<Props, State> {
                 >
                   <DomainButton label="➕" fill="#75bf40" stroke="#75bf40" />{' '}
                   <span>Add Domain to include</span>
-                </button>
-                <button
-                  className={css('button', 'secondary')}
+                </Button>
+                <Button
+                  className={css('ida-button')}
                   onClick={() =>
                     this._handleSubmit({
                       ignore: ignore.concat(''),
@@ -237,7 +232,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
                 >
                   <DomainButton label="✖️️" fill="#bf4540" stroke="#bf4540" />{' '}
                   <span>Add Domain to exclude</span>
-                </button>
+                </Button>
                 <div className={css('options')}>
                   <ToggleSwitch
                     switchCond={order}
@@ -279,7 +274,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
             </div>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

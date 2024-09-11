@@ -28,7 +28,7 @@ const SummaryCounterEntries = ({
     taxa,
     structures,
     sets,
-  } = counters;
+  } = counters || {};
 
   return (
     <div className={css('card-counter-block')}>

@@ -3,8 +3,10 @@ import React from 'react';
 import T from 'prop-types';
 
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 import LazyImage from 'components/LazyImage';
+// $FlowFixMe
 import StructureListFilters from 'components/Structure/StructureListFilters';
 // $FlowFixMe
 import StructureCard from 'components/Structure/Card';
@@ -15,12 +17,16 @@ import Table, {
   PageSizeSelector,
   Exporter,
   HighlightToggler,
+  // $FlowFixMe
 } from 'components/Table';
 
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Loading from 'components/SimpleCommonComponents/Loading';
 // $FlowFixMe
 import File from 'components/File';
+// $FlowFixMe
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 
 import loadable from 'higherOrder/loadable';
 
@@ -241,18 +247,7 @@ const List = (
                 fileType="tsv"
               />
               <label htmlFor="api">API</label>
-              <Link
-                name="api"
-                target="_blank"
-                href={url}
-                className={f('button', 'hollow', 'imitate-progress-button')}
-              >
-                <span
-                  className={f('icon', 'icon-common', 'icon-export')}
-                  data-icon="&#xf233;"
-                />
-                <span className={f('file-label')}>Web View</span>
-              </Link>
+              <APIViewButton url={url} />
             </div>
           </Exporter>
           <PageSizeSelector />

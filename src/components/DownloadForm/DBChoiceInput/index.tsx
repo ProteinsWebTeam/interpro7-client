@@ -8,9 +8,10 @@ import { toPlural } from 'utils/pages/toPlural';
 import sortFnFor from 'utils/sort-functions/basic';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
+
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import cssBinder from 'styles/cssBinder';
 import InputGroup from '../InputGroup';
@@ -112,14 +113,9 @@ export const DBChoiceInputWithoutData = (props: LoadedProps) => {
           </>
         }
         button={
-          <button
-            type="button"
-            data-key={_name}
-            className={css('button')}
-            onClick={onClick}
-          >
+          <Button data-key={_name} onClick={onClick}>
             Clear
-          </button>
+          </Button>
         }
       />
       {integration}
@@ -141,4 +137,6 @@ const mapStateToUrlFor = createSelector(
     ),
 );
 
-export default loadData(mapStateToUrlFor as Params)(DBChoiceInputWithoutData);
+export default loadData(mapStateToUrlFor as LoadDataParameters)(
+  DBChoiceInputWithoutData,
+);

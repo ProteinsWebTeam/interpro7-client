@@ -7,8 +7,9 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import summary from 'styles/summary.css';
 import ipro from 'styles/interpro-vf.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(summary, ipro, fonts);
+const css = cssBinder(summary, ipro, fonts, buttonCSS);
 
 type Props = { accession: string; sequence: string };
 const DownloadButton = ({ accession, sequence }: Props) => {
@@ -24,7 +25,7 @@ const DownloadButton = ({ accession, sequence }: Props) => {
       href={URL.createObjectURL(
         new Blob([splitSequenceByChunks(sequence, accession, false)], {
           type: 'text/plain',
-        })
+        }),
       )}
     >
       <span

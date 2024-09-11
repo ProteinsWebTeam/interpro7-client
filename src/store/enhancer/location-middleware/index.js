@@ -2,9 +2,11 @@
 /*:: declare var gtag: (str: string, str: string, obj: {}) => void; */
 import { format } from 'url';
 
+// $FlowFixMe
 import { NEW_CUSTOM_LOCATION } from 'actions/types';
 import { customLocationChangeFromHistory } from 'actions/creators';
 
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import autoScroll from 'utils/auto-scroll';
 

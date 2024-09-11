@@ -170,6 +170,16 @@ exports[`<SummaryStructure /> should render 1`] = `
               Proteopedia
             </BaseLink>
           </li>
+          <li>
+            <BaseLink
+              className="ext"
+              id="102m"
+              pattern="https://search.foldseek.com/search?accession={id}&source=PDB"
+              target="_blank"
+            >
+              Foldseek
+            </BaseLink>
+          </li>
         </ul>
       </section>
     </div>

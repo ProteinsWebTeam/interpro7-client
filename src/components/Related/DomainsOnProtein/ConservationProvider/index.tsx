@@ -4,7 +4,6 @@ import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 type Props = {
   generateData: boolean;
@@ -43,7 +42,7 @@ const getConservationURL = createSelector(
   (
     { protocol, hostname, port, root }: ParsedURLServer,
     description: InterProDescription,
-    generateData: boolean
+    generateData: boolean,
   ) => {
     if (!generateData) return null;
     const url = format({
@@ -56,13 +55,13 @@ const getConservationURL = createSelector(
       },
     });
     return url;
-  }
+  },
 );
 
 export default loadData<ConservationPayload, 'Conservation'>({
   getUrl: getConservationURL,
   propNamespace: 'Conservation',
-} as Params)(ConservationProvider);
+} as LoadDataParameters)(ConservationProvider);
 
 const CONSERVATION_WINDOW = 25;
 
@@ -101,7 +100,7 @@ export const processConservationData = (match: Array<ConservationValue>) => {
 export const addExistingEntryToConservationResults = (
   data: ProteinViewerDataObject<MinimalFeature>,
   conservationDatabases: Array<string>,
-  entryWithMostCoverage: string
+  entryWithMostCoverage: string,
 ) => {
   for (const matches of [data.domain, data.family, data.repeat]) {
     if (matches) {
@@ -136,7 +135,7 @@ type PartialConservationValue = {
 
 export const mergeConservationData = (
   data: ProteinViewerDataObject<MinimalFeature>,
-  conservationData: ConservationPayload
+  conservationData: ConservationPayload,
 ) => {
   data.match_conservation = [];
   const conservationDatabases = [];
@@ -165,7 +164,7 @@ export const mergeConservationData = (
           const matches = entries[entry];
           const length = matches.reduce(
             (sum: number, array) => sum + array.length,
-            0
+            0,
           );
           if (length > coverage) {
             coverage = length;
@@ -211,7 +210,7 @@ export const mergeConservationData = (
         addExistingEntryToConservationResults(
           data,
           conservationDatabases,
-          entryWithMostCoverage
+          entryWithMostCoverage,
         );
       }
     }
@@ -221,7 +220,7 @@ export const mergeConservationData = (
 const MAX_PROTEIN_LENGTH_FOR_HMMER = 5000;
 export const isConservationDataAvailable = (
   data: ProteinViewerDataObject<MinimalFeature>,
-  proteinDB: string
+  proteinDB: string,
 ) => {
   // HMMER can't generate conservation data for unreviewed proteins
   if (proteinDB === 'unreviewed') return false;
@@ -244,7 +243,7 @@ export const isConservationDataAvailable = (
     if (matches) {
       for (const entry of matches) {
         for (const memberDatabase of Object.keys(
-          entry.member_databases || {}
+          entry.member_databases || {},
         )) {
           if (memberDatabase.toLowerCase() === 'panther') return true;
         }

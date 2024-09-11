@@ -17,8 +17,15 @@
   opacity: 0.8;
 }
 
-.view-link {
+body:global(.interpro) .view-link {
   font-size: 160%;
   border: none;
   padding: 0.3em;
+
+  &:hover {
+    text-decoration: none;
+    &::before {
+      text-decoration: none;
+    }
+  }
 }

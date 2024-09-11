@@ -7,9 +7,10 @@ type Props = {
     length: number;
     fragment?: string;
   };
+  orf?: number;
 };
 
-const Length = ({ metadata: { length, fragment } }: Props) => {
+const Length = ({ metadata: { length, fragment }, orf }: Props) => {
   let fragmentText;
   if (fragment) {
     fragmentText = ` (${fragment === 'N' ? 'complete' : 'fragment'})`;
@@ -24,6 +25,7 @@ const Length = ({ metadata: { length, fragment } }: Props) => {
             detail: 'sequence',
           },
         },
+        search: { orf },
       })}
     >
       {length} amino acids

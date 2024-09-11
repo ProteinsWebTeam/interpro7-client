@@ -5,11 +5,27 @@
   }
   & .help-col {
     display: block;
+    margin-left: 0.5rem;
   }
   & .help-col.removed {
     display: none;
   }
   & .hollow {
     margin-left: 0.5em;
+  }
+}
+
+section .simple-box {
+  margin-right: 0.5rem;
+  & > header {
+    font-size: 1.5em;
+    font-weight: 300;
+    margin-bottom: 1em;
+  }
+  & footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    align-items: flex-end;
   }
 }

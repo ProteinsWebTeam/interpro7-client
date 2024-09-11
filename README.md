@@ -6,7 +6,7 @@ New InterPro Web-Client
 
 Requirements
 ------------
--   Node version 6+
+-   Node version 19+
     (if not in your system, or lower version,
     see [nvm](https://github.com/creationix/nvm),
     or install from [node.js](https://nodejs.org/en/))
@@ -22,8 +22,7 @@ How to install
 
 Development
 -----------
--   `npm run start` to start the tests (that will re-run on file change)
-    and to start the dev server
+-   `npm run start` to start the dev server
 
 -   Access the website at the address defined in your configuration
 

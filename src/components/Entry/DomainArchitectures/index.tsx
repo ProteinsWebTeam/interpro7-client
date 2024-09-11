@@ -14,7 +14,6 @@ import IDAOptions from './Options';
 import IDAProtVista from './IDAProtVista';
 import TextIDA from './TextIDA';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import loadable from 'higherOrder/loadable';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
@@ -281,11 +280,9 @@ const getUrlFor = createSelector(
 const mapStateToProps = createSelector(
   (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).accession,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].accession,
   (state: GlobalState) => state.customLocation.search,
   (state: GlobalState) => state.settings.ui,
   (mainAccession, search, { idaAccessionDB }) => ({
@@ -302,5 +299,5 @@ export default loadData<RootAPIPayload, 'DB'>({
   loadData({
     getUrl: getUrlFor,
     mapStateToProps,
-  } as Params)(DomainArchitecturesWithData),
+  } as LoadDataParameters)(DomainArchitecturesWithData),
 );

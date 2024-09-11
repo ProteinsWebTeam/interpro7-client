@@ -14,6 +14,8 @@ import MemberDBSelector from 'components/MemberDBSelector';
 import EntryListFilter from 'components/Entry/EntryListFilters';
 import MemberSymbol from 'components/Entry/MemberSymbol';
 import File from 'components/File';
+// $FlowFixMe
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 
 import Table, {
   Column,
@@ -23,6 +25,7 @@ import Table, {
   Exporter,
   HighlightToggler,
 } from 'components/Table';
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 
 import getExtUrlFor from 'utils/url-patterns';
@@ -243,18 +246,7 @@ class List extends PureComponent /*:: <Props> */ {
                   name="tsv"
                 />
                 <label htmlFor="api">API</label>
-                <Link
-                  target="_blank"
-                  href={data.url}
-                  name="api"
-                  className={f('button', 'hollow', 'imitate-progress-button')}
-                >
-                  <span
-                    className={f('icon', 'icon-common', 'icon-export')}
-                    data-icon="&#xf233;"
-                  />
-                  <span className={f('file-label')}>Web View</span>
-                </Link>
+                <APIViewButton url={data.url} />
               </div>
             </Exporter>
             <PageSizeSelector />
@@ -282,6 +274,7 @@ class List extends PureComponent /*:: <Props> */ {
             )}
             <Column
               dataKey="accession"
+              isSortable={true}
               renderer={(accession /*: string */, row) => (
                 <Link
                   to={(customLocation) => ({
@@ -311,6 +304,33 @@ class List extends PureComponent /*:: <Props> */ {
               )}
             >
               Accession
+            </Column>
+
+            <Column
+              dataKey="counters.extra_fields.short_name"
+              renderer={(_, meta, extra) =>
+                extra.short_name ? (
+                  <Link
+                    to={(customLocation) => ({
+                      description: {
+                        ...customLocation.description,
+                        entry: {
+                          ...customLocation.description.entry,
+                          accession: meta.accession,
+                        },
+                      },
+                      search: {},
+                    })}
+                  >
+                    <HighlightedText
+                      text={extra.short_name}
+                      textToHighlight={search.search}
+                    />
+                  </Link>
+                ) : null
+              }
+            >
+              Short name
             </Column>
 
             <Column

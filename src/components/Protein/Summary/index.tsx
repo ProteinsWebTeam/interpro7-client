@@ -43,6 +43,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-vf.css';
 import local from './style.css';
 import summary from 'styles/summary.css';
+import BaseLink from 'components/ExtLink/BaseLink';
 
 const css = cssBinder(summary, fonts, ipro, local);
 
@@ -221,7 +222,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 <td>Family membership</td>
                 <td>
                   <FamilyHierarchy
-                    entriesCounter={metadata.counters.entries as number}
+                    entriesCounter={metadata.counters!.entries as number}
                     families={families}
                     matchesLoaded={matchesLoaded}
                   />
@@ -258,7 +259,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                           { disabled: !isoform },
                         )}
                         disabled={!isoform}
-                        dataIcon={'\uF0DB'}
+                        dataIcon="icon-columns"
                         tooltip="Compare side-by-side with canonical sequence"
                         onFullScreenHook={() => setComparisonMode(true)}
                         onExitFullScreenHook={() => setComparisonMode(false)}
@@ -280,6 +281,30 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                     UniProt
                   </UniProtLink>
                 </li>
+                {metadata.in_alphafold ? (
+                  <>
+                    <li>
+                      <BaseLink
+                        id={metadata.accession}
+                        target={'_blank'}
+                        pattern="https://alphafold.ebi.ac.uk/entry/{id}"
+                        className={css('ext')}
+                      >
+                        AlphaFold
+                      </BaseLink>
+                    </li>
+                    <li>
+                      <BaseLink
+                        id={metadata.accession}
+                        target={'_blank'}
+                        pattern="https://search.foldseek.com/search?accession={id}&source=AlphaFoldDB"
+                        className={css('ext')}
+                      >
+                        Foldseek
+                      </BaseLink>
+                    </li>
+                  </>
+                ) : null}
               </ul>
             </section>
             <hr style={{ margin: '0.8em' }} />
@@ -299,7 +324,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
               minWidth={MIN_WIDTH}
             />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label>
+            <label style={{ marginBottom: '0.4rem' }}>
               <FileExporter
                 description={{
                   main: { key: 'protein' },
@@ -309,7 +334,7 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                   },
                   entry: { integration: 'all' },
                 }}
-                count={metadata.counters.entries as number}
+                count={metadata.counters!.entries as number}
                 fileType="tsv"
                 primary="entry"
                 secondary="protein"

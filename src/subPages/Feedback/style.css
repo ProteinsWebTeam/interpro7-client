@@ -1,0 +1,4 @@
+div.flex-space-evenly {
+  display: flex;
+  justify-content: space-evenly;
+}

@@ -85,56 +85,46 @@ exports[`<DownloadForm /> should render 1`] = `
       <div
         className="button-group"
       >
-        <button
-          className="button"
+        <ForwardRef
           data-key="description.protein.isFilter"
           data-value={true}
           onClick={[Function]}
-          type="button"
           value="protein"
         >
           Protein
-        </button>
-        <button
-          className="button"
+        </ForwardRef>
+        <ForwardRef
           data-key="description.structure.isFilter"
           data-value={true}
           onClick={[Function]}
-          type="button"
           value="structure"
         >
           Structure
-        </button>
-        <button
-          className="button"
+        </ForwardRef>
+        <ForwardRef
           data-key="description.taxonomy.isFilter"
           data-value={true}
           onClick={[Function]}
-          type="button"
           value="taxonomy"
         >
           Taxonomy
-        </button>
-        <button
-          className="button"
+        </ForwardRef>
+        <ForwardRef
           data-key="description.proteome.isFilter"
           data-value={true}
           onClick={[Function]}
-          type="button"
           value="proteome"
         >
           Proteome
-        </button>
-        <button
-          className="button"
+        </ForwardRef>
+        <ForwardRef
           data-key="description.set.isFilter"
           data-value={true}
           onClick={[Function]}
-          type="button"
           value="set"
         >
           Set
-        </button>
+        </ForwardRef>
       </div>
       <ul
         className="no-bullet"

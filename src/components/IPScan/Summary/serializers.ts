@@ -139,7 +139,7 @@ const condenseLocations = (
 // eslint-disable-next-line max-statements
 export const mergeData = (
   matches: Array<Iprscan5Match>,
-  sequenceLength: number,
+  sequenceLength?: number,
 ) => {
   const mergedData: Record<string, Record<string, unknown>[]> = {
     unintegrated: [],
@@ -161,7 +161,7 @@ export const mergeData = (
       name: match.signature.description || match.signature.name,
       short_name: match.signature.name,
       source_database: iproscan2urlDB(library),
-      protein_length: sequenceLength,
+      protein_length: sequenceLength || 0,
       locations: match.locations.map((loc) => ({
         ...loc,
         model_acc: match['model-ac'],

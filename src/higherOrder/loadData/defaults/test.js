@@ -159,7 +159,7 @@ describe('getUrlForApi', () => {
       };
 
       expect(getUrlForApi(state)).toBe(
-        'https://www.example.com:443/basename/entry/InterPro/?page_size=50',
+        'https://www.example.com:443/basename/entry/InterPro/?page_size=50&extra_fields=short_name',
       );
     });
 
@@ -182,7 +182,7 @@ describe('getUrlForApi', () => {
       );
       expect(url).toEqual(
         expect.stringMatching(
-          /[?&]extra_fields=description,literature,counters(:([a-z]+-?)+)?(&|$)/,
+          /[?&]extra_fields=short_name,description,literature,counters(:([a-z]+-?)+)?(&|$)/,
         ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page_size=10(&|$)/));
@@ -208,7 +208,7 @@ describe('getUrlForApi', () => {
       );
       expect(url).toEqual(
         expect.stringMatching(
-          /[?&]extra_fields=description,literature,counters(:([a-z]+-?)+)?(&|$)/,
+          /[?&]extra_fields=short_name,description,literature,counters(:([a-z]+-?)+)?(&|$)/,
         ),
       );
       expect(url).toEqual(expect.stringMatching(/[?&]page=2(&|$)/));

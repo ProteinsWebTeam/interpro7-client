@@ -6,10 +6,11 @@ import { set } from 'lodash-es';
 
 import loadData from 'higherOrder/loadData/ts';
 import loadable from 'higherOrder/loadable';
-import { Params } from 'higherOrder/loadData/extract-params';
+
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 import { goToCustomLocation } from 'actions/creators';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import DBChoiceInput from './DBChoiceInput';
 import ApiLink from './ApiLink';
@@ -185,7 +186,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
     if (
       (object.fileType === 'fasta' || object.fileType === 'accession') &&
       object.description.main &&
-      !(object.description[object.description.main.key] as EndpointLocation)?.db
+      !object.description[object.description.main.key as Endpoint]?.db
     ) {
       // Since we can only have counter objects in JSON, change type to default
       object.fileType = 'json';
@@ -195,7 +196,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
       .join('|');
     if (nextHash !== this.props.customLocation?.hash) {
       this.props.goToCustomLocation?.({
-        ...this.props.customLocation,
+        ...this.props.customLocation!,
         hash: nextHash,
       });
     }
@@ -237,13 +238,12 @@ export class DownloadForm extends PureComponent<LoadedProps> {
 
     const main = description.main.key || 'entry';
     const secondary = filters.length && (filters[0][0] as Endpoint);
-    let columnKey =
+    const columnKey =
       secondary && description[secondary].accession
         ? `${main}${secondary[0].toUpperCase()}${secondary.slice(1)}`
         : main;
-    // @ts-ignore: Needs to be updated when the object2TSV is migrated
-    const endpointColumns = columns[columnKey];
-    if (!endpointColumns) columnKey = main;
+    // @ts-expect-error: Needs to be updated when the object2TSV is migrated
+    const endpointColumns = columns[columnKey] || columns[main];
 
     const path2code = (path: string, varName: string) => {
       const parts = path.split('[*]');
@@ -279,7 +279,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
       return `${varName}${selector}`;
     };
 
-    const mainEndpoint = description[main] as EndpointLocation;
+    const mainEndpoint = description[main as Endpoint];
 
     return (
       <form
@@ -311,7 +311,9 @@ export class DownloadForm extends PureComponent<LoadedProps> {
           <DBChoiceInput
             type={main}
             value={(mainEndpoint.db || '').toLowerCase()}
-            valueIntegration={(mainEndpoint.integration || '').toLowerCase()}
+            valueIntegration={(
+              (mainEndpoint as EntryLocation).integration || ''
+            ).toLowerCase()}
             name={`description.${main}.db`}
             onClick={this._handleChange}
             databases={this.memberDB}
@@ -333,17 +335,15 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                     type !== main && !description[type as Endpoint].isFilter,
                 )
                 .map(([type]) => (
-                  <button
+                  <Button
                     key={type}
-                    type="button"
-                    className={css('button')}
                     value={type}
                     data-key={`description.${type}.isFilter`}
                     data-value
                     onClick={this._handleChange}
                   >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </button>
+                  </Button>
                 ))}
             </div>
             <ul className={css('no-bullet')}>
@@ -362,14 +362,12 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         />
                       }
                       button={
-                        <button
-                          type="button"
+                        <Button
                           data-key={`description.${key}.isFilter`}
-                          className={css('button')}
                           onClick={this._handleChange}
                         >
                           Remove
-                        </button>
+                        </Button>
                       }
                     />
                     <DBChoiceInput
@@ -378,7 +376,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         (value as EndpointLocation).db || ''
                       ).toLowerCase()}
                       valueIntegration={(
-                        (value as EndpointLocation).integration || ''
+                        (value as EntryLocation).integration || ''
                       ).toLowerCase()}
                       name={`description.${key}.db`}
                       onClick={this._handleChange}
@@ -399,14 +397,12 @@ export class DownloadForm extends PureComponent<LoadedProps> {
                         />
                       }
                       button={
-                        <button
-                          type="button"
+                        <Button
                           data-key={`description.${key}.accession`}
-                          className={css('button')}
                           onClick={this._handleChange}
                         >
                           Remove
-                        </button>
+                        </Button>
                       }
                     />
                   </fieldset>
@@ -435,7 +431,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
           {({ data, download, isStale }) => {
             if (!data) return null;
             const count = (data.payload && data.payload.count) || 0;
-            const { db, integration } = mainEndpoint;
+            const { db, integration } = mainEndpoint as EntryLocation;
             const noData = count === 0 && (db !== null || integration !== null);
             return (
               <>
@@ -500,4 +496,4 @@ export default loadData({
   getUrl: getUrlForMeta,
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-} as Params)(DownloadForm);
+} as LoadDataParameters)(DownloadForm);

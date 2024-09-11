@@ -71,6 +71,12 @@ export default (historyWrapper) => {
         port: config.root.disprot.port || DEFAULT_HTTP_PORT,
         root: config.root.disprot.pathname,
       };
+      settings.proteinsAPI = {
+        protocol: config.root.proteinsAPI.protocol,
+        hostname: config.root.proteinsAPI.hostname,
+        port: config.root.proteinsAPI.port || DEFAULT_HTTP_PORT,
+        root: config.root.proteinsAPI.pathname,
+      };
     }
   }
   let description = { other: ['NotFound'] };

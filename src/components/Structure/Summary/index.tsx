@@ -43,6 +43,10 @@ const EXTERNAL_LINKS = [
     pattern: 'https://proteopedia.org/wiki/index.php/{id}',
     label: 'Proteopedia',
   },
+  {
+    pattern: 'https://search.foldseek.com/search?accession={id}&source=PDB',
+    label: 'Foldseek',
+  },
 ];
 
 interface LoadedProps
@@ -180,7 +184,7 @@ export const getURLForMatches = createSelector(
         page_size: 200,
         extra_fields: 'short_name',
       },
-    })
+    }),
 );
 
 export default loadData({

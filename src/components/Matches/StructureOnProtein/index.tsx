@@ -113,6 +113,7 @@ const StructureOnProtein = ({ matches, match }: Props) => {
                           margin-color="#fafafa"
                           id={`track_${structure.accession}_${m.chain}`}
                           shape="rectangle"
+                          width={300}
                           expanded
                           use-ctrl-to-zoom
                         />

@@ -25,7 +25,7 @@ const css = cssBinder(helperClasses, style);
 type Props = {
   visible: boolean;
   mainAccession?: string | null;
-  mainType?: string;
+  mainType?: string | null;
   closeSideNav: typeof closeSideNav;
   showConnectionStatusToast: boolean;
 };
@@ -135,11 +135,9 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key,
   (state: GlobalState) =>
     state.customLocation.description.main.key &&
-    (
-      state.customLocation.description[
-        state.customLocation.description.main.key
-      ] as EndpointLocation
-    ).accession,
+    state.customLocation.description[
+      state.customLocation.description.main.key as Endpoint
+    ].accession,
   (state: GlobalState) =>
     state.settings.notifications.showConnectionStatusToast,
   (visible, mainType, mainAccession, showConnectionStatusToast) => ({

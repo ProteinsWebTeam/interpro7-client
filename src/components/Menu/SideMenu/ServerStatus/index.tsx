@@ -37,11 +37,9 @@ const BrowserStatus = ({ status }: BrowserProps) => {
   );
 };
 
-type ServerProps = {
+type ServerProps = ServerStatus & {
   browser: boolean;
   endpoint: string;
-  status: boolean;
-  lastCheck: number;
 };
 
 const ServerStatus = ({
@@ -57,7 +55,7 @@ const ServerStatus = ({
           {`${mapEndpointToName.get(endpoint)} appears ${
             status ? 'on' : 'off'
           }line. Last checked `}
-          <TimeAgo date={new Date(lastCheck)} />
+          {lastCheck && <TimeAgo date={new Date(lastCheck)} />}
         </span>
       }
     >
@@ -73,7 +71,7 @@ const ServerStatus = ({
 };
 
 type StatusesProps = {
-  statuses: Object;
+  statuses: Record<string, ServerStatus>;
   browser: boolean;
 };
 

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { noop } from 'lodash-es';
 
 import { _MemberDBSelector as MemberDBSelector } from 'components/MemberDBSelector';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import Provider from '../Provider';
 import configureStore from '../configureStore';
-import { noop } from 'lodash-es';
 
 const store = configureStore();
 
@@ -122,7 +123,7 @@ export const AsSelect = () => {
       dataDB={dataDB}
       dataDBCount={dataDBCount}
     >
-      {() => <button className={'button'}>Click to display</button>}
+      {() => <Button className={'button'}>Click to display</Button>}
     </MemberDBSelector>
   );
 };

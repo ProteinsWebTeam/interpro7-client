@@ -7,12 +7,14 @@ import { sleep } from 'timing-functions';
 import getTableAccess, { DownloadJobs } from 'storage/idb';
 import { object2TSV, columns } from './object2TSV';
 
+// $FlowFixMe
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
 
 import {
   downloadError,
   downloadProgress,
   downloadSuccess,
+  // $FlowFixMe
 } from 'actions/creators';
 
 /*:: type FileType = 'accession' | 'fasta' | 'json' | 'tsv'; */

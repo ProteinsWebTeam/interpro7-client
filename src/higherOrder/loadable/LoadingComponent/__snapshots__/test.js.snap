@@ -14,12 +14,11 @@ exports[`<ErrorMessage /> should render error message 1`] = `
       <br />
       Please use the button below to clear your web browser's cache and reload the page. This may resolve the issue.
     </p>
-    <button
-      className="vf-button vf-button--secondary vf-button--sm"
+    <ForwardRef
       onClick={[Function]}
     >
       Clear the cache & reload
-    </button>
+    </ForwardRef>
     <p>
       If this does not solve the issue, clear the cache manually.
     </p>

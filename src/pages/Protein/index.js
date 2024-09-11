@@ -7,10 +7,14 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import SpaceFiller from 'components/SimpleCommonComponents/SpaceFiller';
 import Link from 'components/generic/Link';
+// $FlowFixMe
 import MemberDBSelector from 'components/MemberDBSelector';
 // $FlowFixMe
 import ProteinCard from 'components/Protein/Card';
+// $FlowFixMe
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 
+// $FlowFixMe
 import ProteinListFilters from 'components/Protein/ProteinListFilters';
 import Table, {
   Column,
@@ -19,7 +23,9 @@ import Table, {
   PageSizeSelector,
   Exporter,
   HighlightToggler,
+  // $FlowFixMe
 } from 'components/Table';
+// $FlowFixMe
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 // $FlowFixMe
 import File from 'components/File';
@@ -214,18 +220,7 @@ class List extends PureComponent /*:: <ListProps> */ {
                   fileType="tsv"
                 />
                 <label htmlFor="api">API</label>
-                <Link
-                  name="api"
-                  target="_blank"
-                  href={url}
-                  className={f('button', 'hollow', 'imitate-progress-button')}
-                >
-                  <span
-                    className={f('icon', 'icon-common', 'icon-export')}
-                    data-icon="&#xf233;"
-                  />
-                  <span className={f('file-label')}>Web View</span>
-                </Link>
+                <APIViewButton url={url} />
               </div>
             </Exporter>
             <Card>
@@ -372,12 +367,12 @@ class List extends PureComponent /*:: <ListProps> */ {
                       },
                     }}
                   >
-                    View predicted structure
+                    AlphaFold
                   </Link>
                 ) : null
               }
             >
-              AlphaFold
+              Predicted structure
             </Column>{' '}
           </Table>
         </section>

@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import Literature, {
   getLiteratureIdsFromDescription,
@@ -138,4 +137,6 @@ const getUrlFor = createSelector(
   },
 );
 
-export default loadData(getUrlFor as Params)(DescriptionFromIntegrated);
+export default loadData(getUrlFor as LoadDataParameters)(
+  DescriptionFromIntegrated,
+);

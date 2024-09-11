@@ -1,35 +1,74 @@
-@import '../../../styles/colors.css';
-@import '../../../styles/timing.css';
+@import "../../../styles/colors.css";
+@import "../../../styles/timing.css";
 
-.fieldset label {
-  display: inline-block;
-  margin-right: 2em;
+.new-fieldset {
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border: 2px solid #ccc;
 
-  &.input-group {
-    display: table;
+  & legend {
+    margin: 0;
+  }
 
-    & > input {
-      margin-bottom: 0;
+  & > label {
+    display: inline-block;
+    margin-right: 1rem;
+
+    &.new-input-group {
+      display: table;
+
+      .new-input-group-label {
+        margin: 0;
+        white-space: nowrap;
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0 1rem;
+        border: 1px solid var(--colors-ulightgray);
+        background: var(--colors-ulightgray);
+        color: #0a0a0a;
+        text-align: center;
+        font-weight: 300;
+        width: 1%;
+        height: 100%;
+      }
+      & > input {
+        margin-bottom: 0;
+      }
     }
   }
 }
 
-.stay-checkbox {
-  color: var(--colors-dark);
-  margin-bottom: 1em;
-
-  & > .switch {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 1ch 0 0;
+details.option-style {
+  margin: 0.5rem;
+  & > summary {
+    color: var(--colors-submain);
+    font-weight: bold;
+    border: 0px solid var(--colors-very-white);
+    border-bottom-width: 0;
+    padding: 0.5rem;
+    cursor: pointer;
+    outline: 0;
+    z-index: var(--z-index-deepest);
+    position: relative; /*for animation*/
+    list-style: none; /*to keep for Firefox*/
+    transition: all var(--timing-medclose) ease-out;
+    /*remove default icon (Edge + Chrome + Opera_*/
+    &:hover {
+      background-color: var(--colors-unknown-sub);
+      text-decoration: underline;
+      transition: all var(--timing-medclose) ease-out;
+    }
   }
-}
-details .triangle {
-  position: absolute;
-  left: 0;
-  transform: rotate(0deg);
-  transition: transform 0.2s;
-}
-details[open] .triangle {
-  transform: rotate(90deg);
+  & .triangle {
+    position: absolute;
+    left: 0;
+    transform: rotate(0deg);
+    transition: transform 0.2s;
+    & + * {
+      margin-left: 1rem;
+    }
+  }
+  &[open] .triangle {
+    transform: rotate(90deg);
+  }
 }

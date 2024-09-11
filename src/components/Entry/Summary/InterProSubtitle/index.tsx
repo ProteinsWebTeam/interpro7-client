@@ -7,7 +7,7 @@ import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import { MiniBadgeAI } from '../../BadgeAI';
+import { getTooltipContentFormMetadata, MiniBadgeAI } from '../../BadgeAI';
 
 const css = cssBinder(ipro, fonts);
 
@@ -44,7 +44,11 @@ const InterProSubtitle = ({
             <td>Short name</td>
             <td>
               <i className={css('shortname')}>{metadata.name.short}</i>{' '}
-              {hasLLM && <MiniBadgeAI />}
+              {hasLLM && (
+                <MiniBadgeAI
+                  tooltipText={getTooltipContentFormMetadata(metadata)}
+                />
+              )}
             </td>
           </tr>
         )}

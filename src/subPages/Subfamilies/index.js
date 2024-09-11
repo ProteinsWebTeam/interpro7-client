@@ -5,9 +5,12 @@ import { dataPropType } from 'higherOrder/loadData/dataPropTypes';
 
 import { createSelector } from 'reselect';
 import { format } from 'url';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData';
 
+// $FlowFixMe
 import Table, { Column, PageSizeSelector } from 'components/Table';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';

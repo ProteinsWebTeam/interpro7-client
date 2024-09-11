@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Button from 'components/SimpleCommonComponents/Button';
 
 const meta = {
   title: 'Basic UI/Tooltip',
@@ -37,7 +38,7 @@ export const InteractiveJSX: TooltipStory = {
       <>
         <p>The info about it. </p>
         <p>
-          But this time there is a <button className="vf-button">Button</button>{' '}
+          But this time there is a <Button>Button</Button>{' '}
         </p>
         <p>
           So the tooltip needs to give time for the user to click it. <br />

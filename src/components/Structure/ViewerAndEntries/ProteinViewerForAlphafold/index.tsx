@@ -14,7 +14,7 @@ import {
 import { Selection } from 'components/Structure/ViewerAndEntries';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { Params } from 'src/higherOrder/loadData/extract-params';
+
 import {
   flattenTracksObject,
   makeTracks,
@@ -26,25 +26,22 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
+/* Processing of the payload needs to be slightly different 
+to add tracks to the dataMerged object instead of the dataSorted object */
 export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
   protein: string,
-  tracks: ProteinViewerData,
+  tracks: ProteinViewerDataObject,
 ) => {
   if (dataConfidence?.payload?.confidenceCategory?.length) {
-    const confidenceTrack: [string, Array<unknown>] = [
-      'AlphaFold confidence',
-      [
-        {
-          accession: `confidence_af_${protein}`,
-          data: dataConfidence.payload.confidenceCategory.join(''),
-          type: 'confidence',
-          protein,
-          source_database: 'alphafold',
-        },
-      ],
-    ];
-    tracks.splice(0, 0, confidenceTrack);
+    tracks['alphafold_confidence'] = [];
+    tracks['alphafold_confidence'][0] = {
+      accession: `confidence_af_${protein}`,
+      data: dataConfidence.payload.confidenceCategory.join(''),
+      type: 'confidence',
+      protein,
+      source_database: 'alphafold',
+    };
   }
 };
 
@@ -134,8 +131,8 @@ const ProteinViewerForAlphafold = ({
     unintegrated: unintegrated as Array<MinimalFeature>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
   });
+  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, groups);
   const tracks = flattenTracksObject(groups);
-  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>
@@ -153,7 +150,7 @@ const getProteinURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
   ({ protocol, hostname, port, root }, accession) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };
@@ -169,7 +166,7 @@ const getInterproRelatedEntriesURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
   ({ protocol, hostname, port, root }, protein) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'entry' },
       entry: { db: 'all' },
       protein: { isFilter: true, db: 'uniprot', accession: protein },
@@ -190,16 +187,16 @@ const getInterproRelatedEntriesURL = createSelector(
 export default loadData<AlphafoldPayload, 'Prediction'>({
   getUrl: getAlphaFoldPredictionURL,
   propNamespace: 'Prediction',
-} as Params)(
+} as LoadDataParameters)(
   loadData<AlphafoldConfidencePayload, 'Confidence'>({
     getUrl: getConfidenceURLFromPayload('Prediction'),
     propNamespace: 'Confidence',
-  } as Params)(
+  } as LoadDataParameters)(
     loadData<{ metadata: ProteinMetadata }, 'Protein'>({
       getUrl: getProteinURL,
       propNamespace: 'Protein',
-    } as Params)(
-      loadData(getInterproRelatedEntriesURL as Params)(
+    } as LoadDataParameters)(
+      loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
         ProteinViewerForAlphafold,
       ),
     ),

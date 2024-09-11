@@ -60,7 +60,7 @@ const Tooltip = ({
       size({
         apply({ availableWidth, availableHeight, elements }) {
           Object.assign(elements.floating.style, {
-            maxWidth: `${availableWidth}px`,
+            maxWidth: `${Math.min(availableWidth, 400)}px`,
             maxHeight: `${availableHeight}px`,
           });
         },

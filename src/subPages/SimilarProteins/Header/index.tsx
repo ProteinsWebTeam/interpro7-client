@@ -5,7 +5,6 @@ import { format } from 'url';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { ida2json } from 'components/Entry/DomainArchitectures';
@@ -135,7 +134,7 @@ const getUrlForDomains = createSelector(
   (state: GlobalState) => state.customLocation.description,
   (state: GlobalState) => state.customLocation.search,
   ({ protocol, hostname, port, root }, description) => {
-    const newDescription = {
+    const newDescription: InterProPartialDescription = {
       main: { key: 'entry' },
       entry: { db: 'all' },
       protein: {
@@ -168,9 +167,9 @@ const mapStateToPropsAccessionDB = createSelector(
 export default loadData<DomainsPayload, 'Domain'>({
   getUrl: getUrlForDomains,
   propNamespace: 'Domain',
-} as Params)(
+} as LoadDataParameters)(
   loadData({
     getUrl: getUrlForIDA,
     mapStateToProps: mapStateToPropsAccessionDB,
-  } as Params)(React.memo(SimilarProteinsHeaderWithData)),
+  } as LoadDataParameters)(React.memo(SimilarProteinsHeaderWithData)),
 );

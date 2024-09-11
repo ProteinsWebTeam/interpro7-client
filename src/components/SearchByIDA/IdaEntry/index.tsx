@@ -27,7 +27,7 @@ const getUrlForAutocomplete = (
   entryDB: string,
   search: string,
 ) => {
-  const description = {
+  const description: InterProPartialDescription = {
     main: { key: 'entry' },
     entry: { db: entryDB },
   };

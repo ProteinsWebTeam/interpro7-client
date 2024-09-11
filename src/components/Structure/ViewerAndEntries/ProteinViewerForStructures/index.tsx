@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -64,7 +63,7 @@ export const getURLForMatches = createSelector(
         main: { key: 'entry' },
         structure: { isFilter: true, db: 'pdb', accession },
         entry: { db: 'all' },
-      })}`,
+      } as InterProPartialDescription)}`,
       query: {
         page_size: 200,
         extra_fields: 'short_name',
@@ -75,7 +74,7 @@ const getSecondaryStructureURL = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description.structure,
   ({ protocol, hostname, port, root }, { db, accession }) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'structure' },
       structure: { db, accession },
     };
@@ -94,7 +93,7 @@ const getSecondaryStructureURL = createSelector(
 export default loadData<StructureWithSecondary, 'Secondary'>({
   propNamespace: 'Secondary',
   getUrl: getSecondaryStructureURL,
-} as Params)(
+} as LoadDataParameters)(
   loadData<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>>(
     getURLForMatches,
   )(ProteinViewerForStructure),

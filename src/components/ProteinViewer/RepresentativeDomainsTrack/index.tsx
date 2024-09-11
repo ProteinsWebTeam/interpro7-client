@@ -63,9 +63,9 @@ const RepresentativeDomainsTrack = ({
                   : null,
               }
             : entry,
-          colorDomainsBy
+          colorDomainsBy,
         ),
-      }))
+      })),
     );
   }, [entries, colorDomainsBy]);
   return (
@@ -80,6 +80,7 @@ const RepresentativeDomainsTrack = ({
           length={length}
           data={data}
           margin-color="#fafafa"
+          margin-left={20}
           id="Domains"
           shape="roundRectangle"
           highlight-event="onmouseover"
@@ -105,6 +106,6 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
   (ui) => ({
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
-  })
+  }),
 );
 export default connect(mapStateToProps)(RepresentativeDomainsTrack);

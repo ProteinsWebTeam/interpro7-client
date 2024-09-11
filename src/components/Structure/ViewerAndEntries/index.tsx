@@ -454,7 +454,7 @@ class StructureView extends PureComponent<Props, State> {
                 element={this._splitView.current}
                 className={css('icon', 'icon-common', 'as-link')}
                 tooltip="Split full screen"
-                dataIcon={'\uF0DB'}
+                dataIcon="icon-columns"
                 onFullScreenHook={() => this.setState({ isSplitScreen: true })}
                 onExitFullScreenHook={() =>
                   this.setState({ isSplitScreen: false })

@@ -10,6 +10,8 @@ import config from 'config';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Link from 'components/generic/Link';
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { foundationPartial } from 'styles/foundation';

@@ -22,7 +22,13 @@ The top of the file has some constants that you might want to play with, and onc
 node scripts/browse-with-puppetteer.js
 ```
 
-My suggestion is to run by parts, by changing the value of the constant `SHOULD_RUN` at the top of the file. For instance just the Browse - By InterPro, and if it fails restart it multiple times until it finishes, it doesn't matter if a page is loaded again generating duplicates of the API request. at the end we can clean the API log file.
+My suggestion is to run by parts. The script accepts arguments specifying the endpoint to browse by. For instance just the Browse - By InterPro:
+
+```
+node scripts/browse-with-puppetteer.js --interpro
+```
+
+And if it fails restart it multiple times until it finishes, it doesn't matter if a page is loaded again generating duplicates of the API request. At the end we can clean the API log file.
 
 The protein endpoint is the one with more filters, so more combinations to go through. Maybe in that one, you might want to split the run more, maybe just running a couple of DBs at the time. The easiest will be to comment out some DBs from the array at the top of the file.
 
@@ -36,6 +42,6 @@ and then use it in the cache warming!
 
 ##### Known Issues
 
-- Because of the way the sticky header of the website is implemented. there are ocassions where puppeteer scrolls into a component but endup under the header, and mistakingly clicks on the interpro logo, sending the page to Home. I have added some Scroll to top to cater for that, but if you notice happening, you could, press the back button in the browser and scroll the page to make the filter visible. If done quickly enough, this canjust let the script resume where it was.
+- Because of the way the sticky header of the website is implemented. there are ocassions where puppeteer scrolls into a component but endup under the header, and mistakingly clicks on the interpro logo, sending the page to Home. I have added some Scroll to top to cater for that, but if you notice happening, you could, press the back button in the browser and scroll the page to make the filter visible. If done quickly enough, this can just let the script resume where it was.
 
 - When the table has very few items and the filter bar is longer than the table, the footer of elixir might endup over the last filter and instead of clicking an option it ends up opening the elixir page. The script should keep going as the page is open in a different tab, but that particular filter combination was never clicked.

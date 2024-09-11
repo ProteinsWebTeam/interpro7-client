@@ -78,6 +78,7 @@ const EntriesOnProtein = ({ matches, match }: Props) => {
             id={`track_${entry.accession}`}
             data={data || []}
             shape="roundRectangle"
+            width={300}
             expanded
             use-ctrl-to-zoom
           />

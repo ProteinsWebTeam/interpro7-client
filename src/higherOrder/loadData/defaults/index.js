@@ -74,7 +74,7 @@ export const getUrl = createSelector(
           switch (description.main.key) {
             case 'entry':
               _search.extra_fields =
-                'description,literature,counters:protein-ida-taxonomy-structure';
+                'short_name,description,literature,counters:protein-ida-taxonomy-structure';
               if (DBS_WITH_SETS.includes(description.entry.db))
                 _search.extra_fields += '-set';
               break;
@@ -101,6 +101,9 @@ export const getUrl = createSelector(
         }
         if (hash === 'table') {
           switch (description.main.key) {
+            case 'entry':
+              _search.extra_fields = 'short_name';
+              break;
             case 'taxonomy':
             case 'proteome':
               _search.extra_fields = 'counters:entry-protein';
@@ -185,7 +188,7 @@ export const getReversedUrl = createSelector(
       extra_fields: undefined,
       page_size: search.page_size || settingsPageSize,
     };
-    if (description.main.key === 'set' && description?.entry?.isFilter) {
+    if (newMain === 'entry') {
       newQuery.extra_fields = 'short_name';
     }
     const counters = getNeededCountersForSubpages(
@@ -230,6 +233,9 @@ export const getUrlForApi = (...parameters) =>
     .replace('/interactions', '/')
     .replace('/subfamilies', '/')
     .replace('/pathways', '/')
+    .replace('/feedback', '/')
     .replace('/sequence', '/')
     .replace('/similar_proteins', '/')
-    .replace('/curation', '/');
+    .replace('/curation', '/')
+    // To simplify set calls to use a single endpoint
+    .replace(/\/set\/[a-zA-Z0-9]+\/entry\/([a-zA-Z0-9]+)\//, '/set/$1/');

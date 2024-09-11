@@ -6,8 +6,11 @@ import { createSelector } from 'reselect';
 
 import classnames from 'classnames/bind';
 
+// $FlowFixMe
 import { stuckSelector } from 'reducers/ui/stuck';
+// $FlowFixMe
 import { sideNavSelector } from 'reducers/ui/sideNav';
+// $FlowFixMe
 import { toggleSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
@@ -18,9 +21,12 @@ import DynamicMenu from 'components/Menu/DynamicMenu';
 import Title from './Title';
 import TextSearchBox, {
   DEBOUNCE_RATE_SLOW,
+  // $FlowFixMe
 } from 'components/SearchByText/TextSearchBox';
 
 import { sticky as supportsSticky } from 'utils/support';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { foundationPartial } from 'styles/foundation';

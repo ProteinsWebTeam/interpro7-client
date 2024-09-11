@@ -1,9 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<RefreshButton /> should render 1`] = `
-<button
+<ForwardRef
   aria-label="Manually refresh job information"
-  className="button"
   onClick={[Function]}
 >
   <Tooltip
@@ -14,5 +13,5 @@ exports[`<RefreshButton /> should render 1`] = `
       data-icon=""
     />
   </Tooltip>
-</button>
+</ForwardRef>
 `;

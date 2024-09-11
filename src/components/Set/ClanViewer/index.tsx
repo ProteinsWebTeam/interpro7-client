@@ -6,6 +6,7 @@ import { goToCustomLocation } from 'actions/creators';
 
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Card from 'components/SimpleCommonComponents/Card';
+import Button from 'components/SimpleCommonComponents/Button';
 import { getTextForLabel } from 'utils/text';
 import LabelBy from 'components/ProteinViewer/Options/LabelBy';
 
@@ -188,16 +189,13 @@ class ClanViewer extends PureComponent<Props, State> {
                 member entries. Displaying more than {MAX_NUMBER_OF_NODES} nodes
                 in this visualisation can affect the performance of your
                 browser.
-                <button
-                  className={css(
-                    'vf-button',
-                    'vf-button--secondary',
-                    'vf-button--sm',
-                  )}
-                  onClick={() => this.setState({ showClanViewer: true })}
-                >
-                  Visualise it
-                </button>
+                <div style={{ textAlign: 'right' }}>
+                  <Button
+                    onClick={() => this.setState({ showClanViewer: true })}
+                  >
+                    Visualise it
+                  </Button>
+                </div>
               </section>
             </Card>
           )}

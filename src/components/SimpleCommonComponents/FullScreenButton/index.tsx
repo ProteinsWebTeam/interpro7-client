@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { noop } from 'lodash-es';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
 import cssBinder from 'styles/cssBinder';
@@ -84,12 +85,14 @@ const FullScreenButton = ({
   };
   const _className =
     className || css('margin-bottom-none', 'icon', 'icon-common');
-  const icon = dataIcon || (isFull ? 'G' : 'F');
+  const icon =
+    dataIcon || (isFull ? 'icon-fullscreen-collapse' : 'icon-fullscreen');
   return (
     <Tooltip title={tooltip}>
-      <button
+      <Button
+        type="inline"
         onClick={_handleFullScreen}
-        data-icon={icon}
+        icon={icon}
         title={tooltip}
         className={_className}
         disabled={disabled}

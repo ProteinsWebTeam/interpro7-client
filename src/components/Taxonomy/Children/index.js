@@ -9,6 +9,8 @@ import { foundationPartial } from 'styles/foundation';
 import local from './style.css';
 import loadable from 'higherOrder/loadable';
 import config from 'config';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(local);
@@ -50,7 +52,7 @@ class Children extends PureComponent /*:: <Props> */ {
     return (
       <div className={f('list-children')}>
         {taxChildren.length ? (
-          taxChildren.map(taxId => (
+          taxChildren.map((taxId) => (
             <div key={taxId}>
               <TaxIdOrName accession={taxId} name={names[taxId]} />
               <SchemaOrgData

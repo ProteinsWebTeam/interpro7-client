@@ -21,6 +21,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
+import APIViewButton from 'components/Table/Exporter/APIViewButton';
 import LazyImage from 'components/LazyImage';
 import Lazy from 'wrappers/Lazy';
 import loadWebComponent from 'utils/load-web-component';
@@ -37,9 +38,10 @@ import cssBinder from 'styles/cssBinder';
 
 import localStyle from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import tableStyles from 'components/Table/style.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 
-const css = cssBinder(fonts, localStyle, exporterStyle);
+const css = cssBinder(fonts, localStyle, exporterStyle, tableStyles);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -137,7 +139,7 @@ const includeAccessionSearch = (
   accessionSearch: AccSearchData,
   primary: Endpoint,
   secondary: Endpoint,
-  mainData: MetadataWithLocations,
+  mainData: Metadata,
 ) => {
   const indexInPayload = dataTable.findIndex(
     ({ accession }) => accession === accessionSearch.metadata.accession,
@@ -172,13 +174,13 @@ type Props = {
   primary?: Endpoint;
   secondary?: Endpoint;
   matches: Array<GenericMatch>;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
   description?: InterProDescription;
   hash?: string;
   state?: GlobalState;
-  databases: Record<string, { name: string }>;
-  dbCounters?: Object;
-  mainData: MetadataWithLocations;
+  databases: DBsInfo;
+  dbCounters?: MetadataCounters;
+  mainData: Metadata;
   accessionSearch?: AccSearchData;
   focusType?: string;
   currentAPICall?: string;
@@ -211,7 +213,7 @@ const Matches = ({
   status,
   ...props
 }: Props) => {
-  const [focused, setFocused] = useState(null);
+  const [focused, setFocused] = useState<string | null>(null);
   useEffect(() => {
     loadWebComponent(() =>
       import(
@@ -252,12 +254,15 @@ const Matches = ({
       withSunburst={isTaxonomySubpage}
       withKeySpecies={isTaxonomySubpage}
       dbCounters={dbCounters}
-      rowClassName={(row: Record<string, unknown>) => css({ exact: row.exact })}
+      rowClassName={(row) =>
+        css({ exact: (row as Record<string, unknown>).exact })
+      }
       nextAPICall={nextAPICall}
       previousAPICall={previousAPICall}
       currentAPICall={currentAPICall}
       status={status}
       onFocusChanged={setFocused}
+      alwaysShowTotalNB={true}
     >
       <PageSizeSelector />
       {!(
@@ -309,19 +314,11 @@ const Matches = ({
                 </>
               )}
               <label htmlFor="api">API</label>
-              <Link
-                target="_blank"
-                href={toPublicAPI(
+              <APIViewButton
+                url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}
-                className={css('button', 'hollow', 'imitate-progress-button')}
-              >
-                <span
-                  className={css('icon', 'icon-common', 'icon-export')}
-                  data-icon="&#xf233;"
-                />
-                <span className={css('file-label')}>Web View</span>
-              </Link>
+              />
             </div>
           </Exporter>
         )}
@@ -340,7 +337,10 @@ const Matches = ({
                   dimension=".8em"
                 />
               ) : null}
-              <HighlightedText text={acc} textToHighlight={search?.search} />
+              <HighlightedText
+                text={acc}
+                textToHighlight={search?.search as string}
+              />
             </span>
           );
           return (
@@ -384,37 +384,8 @@ const Matches = ({
         {focusType === 'taxonomy' ? 'Tax ID' : 'Accession'}
       </Column>
       <Column
-        dataKey="name"
-        renderer={(
-          name: string,
-          {
-            accession,
-            source_database: sourceDatabase,
-          }: { accession: string; source_database: string },
-        ) => (
-          <>
-            {focusType === 'taxonomy' || focusType === 'proteome' ? (
-              <HighlightedText text={name} textToHighlight={search?.search} />
-            ) : (
-              <Link
-                to={
-                  primary && {
-                    description: {
-                      main: { key: primary },
-                      [primary]: { db: sourceDatabase, accession },
-                    },
-                  }
-                }
-              >
-                <HighlightedText text={name} textToHighlight={search?.search} />
-              </Link>
-            )}
-          </>
-        )}
-      />
-      <Column
         dataKey="counters.extra_fields.short_name"
-        displayIf={primary === 'entry' && secondary === 'set'}
+        displayIf={primary === 'entry'}
         renderer={(
           name: string,
           {
@@ -432,12 +403,50 @@ const Matches = ({
               }
             }
           >
-            <HighlightedText text={name} textToHighlight={search?.search} />
+            <HighlightedText
+              text={name}
+              textToHighlight={search?.search as string}
+            />
           </Link>
         )}
       >
         Short Name
       </Column>
+      <Column
+        dataKey="name"
+        renderer={(
+          name: string,
+          {
+            accession,
+            source_database: sourceDatabase,
+          }: { accession: string; source_database: string },
+        ) => (
+          <>
+            {focusType === 'taxonomy' || focusType === 'proteome' ? (
+              <HighlightedText
+                text={name}
+                textToHighlight={search?.search as string}
+              />
+            ) : (
+              <Link
+                to={
+                  primary && {
+                    description: {
+                      main: { key: primary },
+                      [primary]: { db: sourceDatabase, accession },
+                    },
+                  }
+                }
+              >
+                <HighlightedText
+                  text={name}
+                  textToHighlight={search?.search as string}
+                />
+              </Link>
+            )}
+          </>
+        )}
+      />
       <Column
         dataKey="source_organism"
         displayIf={primary === 'protein'}
@@ -457,7 +466,7 @@ const Matches = ({
               {sourceOrganism.fullName}
             </Link>
           ) : (
-            sourceOrganism
+            String(sourceOrganism)
           )
         }
       >
@@ -465,7 +474,7 @@ const Matches = ({
       </Column>
       <Column
         dataKey="source_database"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary !== 'taxonomy' &&
@@ -490,7 +499,7 @@ const Matches = ({
       </Column>
       <Column
         dataKey="accession"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         defaultKey="structureAccession"
         displayIf={primary === 'structure'}
@@ -533,12 +542,12 @@ const Matches = ({
                 },
               }}
             >
-              View predicted structure
+              AlphaFold
             </Link>
           ) : null
         }
       >
-        Alphafold
+        Predicted structure
       </Column>
       <Column
         dataKey="match"
@@ -577,7 +586,7 @@ const Matches = ({
       <Column
         dataKey="counters.extra_fields.counters.proteins"
         defaultKey="protein-count"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={(count: number) => (
@@ -589,7 +598,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="proteinFastas"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
         renderer={ProteinDownloadRenderer(description)}
@@ -599,7 +608,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="seedAlignment"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary === 'entry' &&
@@ -629,7 +638,7 @@ const Matches = ({
       <Column
         dataKey="accession"
         defaultKey="ida"
-        headerClassName={css('table-center')}
+        headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={
           primary === 'entry' &&
@@ -654,6 +663,41 @@ const Matches = ({
         )}
       >
         Domain architectures
+      </Column>
+      <Column
+        dataKey="matches"
+        defaultKey="entryInMatch"
+        headerClassName={css('table-center')}
+        cellClassName={css('table-center')}
+        displayIf={
+          ['protein', 'structure'].includes(primary || '') &&
+          secondary === 'set'
+        }
+        renderer={(matches: Array<AnyMatch>) => {
+          const accessions = new Set(
+            (matches || [])
+              .map((match) => match.entry_accession)
+              .filter(Boolean),
+          ) as Set<string>;
+          return Array.from(accessions).map((accession) => (
+            <Link
+              key={accession}
+              to={(customLocation) => ({
+                description: {
+                  main: { key: 'entry' },
+                  entry: {
+                    db: customLocation.description.set.db,
+                    accession,
+                  },
+                },
+              })}
+            >
+              {accession.toUpperCase()}{' '}
+            </Link>
+          ));
+        }}
+      >
+        Matching Entry
       </Column>
     </Table>
   );

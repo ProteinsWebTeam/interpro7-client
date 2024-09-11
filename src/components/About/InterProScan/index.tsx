@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'components/generic/Link';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
+
 import { getUrlForRelease } from 'higherOrder/loadData/defaults';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -102,4 +102,6 @@ export const InterProScan = ({ data }: LoadedProps) => {
   );
 };
 
-export default loadData(getUrlForRelease('IPScan') as Params)(InterProScan);
+export default loadData(getUrlForRelease('IPScan') as LoadDataParameters)(
+  InterProScan,
+);

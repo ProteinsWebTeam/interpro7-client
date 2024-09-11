@@ -1,25 +1,69 @@
-.masthead-black-bar a:visited {
-  color: white;
-}
-
 /* Overwrite EBI guidelines styles… */
-.global-nav > * {
-  float: initial !important;
+.masthead-black-bar {
+  --vf-stack-margin--custom: 0;
+  background-color: var(--vf-color--grey--darkest);
+  /* border-top: 0 solid #eee; */
 
-  &.embl-selector {
-    float: right !important;
+  & > nav {
+    max-width: var(--vf-body-width, 80em);
+    margin: 0 auto;
+    & .global-nav {
+      & > li {
+        font-size: 14.4px;
+        float: initial !important;
 
-    & > button {
-      cursor: pointer !important;
+        & > a {
+          &,
+          &:visited,
+          &:focus {
+            color: white;
+          }
+          &:not(.float-right):hover {
+            color: var(--vf-color--grey--darkest);
+            background-color: var(--vf-color--grey--lightest);
+            border-bottom: none;
+            text-decoration: underline;
+          }
+        }
 
-      &::after {
-        content: none !important;
+        &.embl-selector {
+          float: right !important;
+
+          & > a {
+            cursor: pointer !important;
+            &:hover,
+            &:active,
+            &:focus {
+              border: 1px solid transparent;
+              border-bottom: 0;
+              text-decoration: none;
+              opacity: 1;
+            }
+
+            &::after {
+              content: none !important;
+            }
+          }
+        }
       }
     }
   }
+  &.text-right {
+    text-align: right;
+  }
 }
 
-.home-mobile a {
-  color: transparent !important;
-  user-select: none;
+@media screen and (max-width: 39.9375em) {
+  .masthead-black-bar {
+    height: 3em;
+  }
+  .masthead-black-bar li.embl-selector {
+    padding-left: 0.5rem;
+  }
+  .masthead-black-bar li.embl-selector .button {
+    padding-right: 1rem;
+    &:hover {
+      padding-right: 1rem;
+    }
+  }
 }

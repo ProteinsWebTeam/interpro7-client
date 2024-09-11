@@ -19,12 +19,6 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 
 const css = cssBinder(styles, fonts);
 
-export type TaxNode = {
-  name: string;
-  id: string;
-  children?: Array<TaxNode>;
-  hitcount?: number;
-};
 type Props = {
   data?: TaxNode | null;
   focused?: string;
@@ -147,7 +141,7 @@ export class Tree extends PureComponent<Props, State> {
               tooltip="View the taxonomy tree in full screen mode"
               onFullScreenHook={() =>
                 requestAnimationFrame(() =>
-                  this.setState({ isFullScreen: true })
+                  this.setState({ isFullScreen: true }),
                 )
               }
               onExitFullScreenHook={() =>
@@ -200,7 +194,7 @@ export class Tree extends PureComponent<Props, State> {
 }
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.search.search as string,
-  (search) => ({ search })
+  (search) => ({ search }),
 );
 
 export default connect(mapStateToProps)(Tree);

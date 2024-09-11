@@ -41,6 +41,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: 0.1rem;
   & .switch {
     margin-bottom: 0.3rem;
     &.disabled label {
@@ -54,12 +55,9 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  & button.button.secondary {
+  & .ida-button {
     & * {
       vertical-align: middle;
-    }
-    & span {
-      font-size: 1.2em;
     }
   }
   & label {

@@ -11,7 +11,7 @@
     cursor: pointer;
   }
   & .dropdown-button {
-    background: #ffffff;
+    /* background: #ffffff; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -45,23 +45,26 @@
 
   & .dropdown-pane {
     z-index: var(--z-index-over-plus); /* so sticky header stay on top*/
-    border: 2px solid var(--vf-color--blue);
+    border: 2px solid var(--colors-submain);
     & ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
       & li {
-        padding: 0.3rem 0.5rem;
+        padding: 0.1rem 0.1rem;
         text-align: left;
         &:hover {
           background-color: lightgray;
         }
 
-        & a {
+        & a,
+        & button {
           display: block;
+          text-align: left;
         }
-        & a:hover {
-          color: white;
+        & a:hover,
+        & button:hover {
+          color: var(--vf-color--black);
         }
       }
     }

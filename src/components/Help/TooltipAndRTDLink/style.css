@@ -1,0 +1,7 @@
+sup .rtd-link,
+.rtd-link:active,
+.rtd-link:focus,
+.rtd-link:hover,
+.rtd-link:visited {
+  color: white;
+}

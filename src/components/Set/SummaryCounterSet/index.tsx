@@ -28,7 +28,9 @@ const SummaryCounterSets = ({
     <div className={css('card-counter-block')}>
       <CounterIcon
         endpoint="entry"
-        count={entries as number}
+        count={
+          typeof entries === 'object' ? entries.total : (entries as number)
+        }
         name={setName}
         db={entryDB}
         to={{

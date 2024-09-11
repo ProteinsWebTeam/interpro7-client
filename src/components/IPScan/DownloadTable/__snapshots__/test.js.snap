@@ -2,7 +2,7 @@
 
 exports[`<DownloadTable /> should render 1`] = `
 <table
-  className="classic"
+  className="vf-table"
 >
   <thead>
     <tr>

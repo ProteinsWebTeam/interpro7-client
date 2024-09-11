@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 

@@ -139,7 +139,7 @@ export class ByEntryType extends PureComponent /*:: <Props> */ {
               entry: { db: 'InterPro' },
             },
           }}
-          className={f('button', 'margin-bottom-none', 'margin-top-large')}
+          buttonType="primary"
         >
           View all entries
         </Link>

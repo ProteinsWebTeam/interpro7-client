@@ -2,11 +2,13 @@ import React from 'react';
 
 import ProtVistaConfidencePopup, { ConfidenceDetail } from './Confidence';
 import ProtVistaResiduePopup, { ResidueDetail } from './Residue';
+import ProtVistaVariationPopup, { VariationDetail } from './Variation';
 import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import Genome3DPopup, { Genome3DDetail } from './Genome3D';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 import DisProtPopup, { DisProtDetail } from './DisProt';
+import { ExtendedFeature } from '..';
 
 export type PopupDetail = (
   | ConservationDetail
@@ -31,9 +33,8 @@ const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
 
   // comes from a residue
   if (
-    (detail?.target?.classList &&
-      detail.target.classList.contains('residue')) ||
-    sourceDatabase === 'PIRSR'
+    (detail.feature as ExtendedFeature).type === 'residue' ||
+    (detail.feature as ExtendedFeature).residues !== undefined
   ) {
     return (
       <ProtVistaResiduePopup
@@ -49,18 +50,23 @@ const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
     if (colouredTrack.classList.contains('confidence'))
       return <ProtVistaConfidencePopup detail={detail as ConfidenceDetail} />;
   }
+  const variationTrack = detail?.target?.closest('nightingale-variation');
+  // comes from the alphafold confidence track
+  if (variationTrack) {
+    return <ProtVistaVariationPopup detail={detail as VariationDetail} />;
+  }
   if (((detail as Genome3DDetail)?.feature?.accession || '').startsWith('G3D:'))
     return <Genome3DPopup detail={detail as Genome3DDetail} />;
 
   if (
     ((detail as RepeatsDBDetail)?.feature?.accession || '').startsWith(
-      'REPEAT:'
+      'REPEAT:',
     )
   )
     return <RepeatsDBPopup detail={detail as RepeatsDBDetail} />;
   if (
     ((detail as RepeatsDBDetail)?.feature?.accession || '').startsWith(
-      'DISPROT:'
+      'DISPROT:',
     )
   )
     return <DisProtPopup detail={detail as DisProtDetail} />;

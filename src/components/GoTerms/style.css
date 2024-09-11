@@ -11,6 +11,9 @@ body a.go-terms:visited,
 body a.go-terms:focus {
   color: #222;
   font-size: 0.9rem;
+  white-space: nowrap;
+  padding: 0.1rem;
+  margin: 0.1rem;
 }
 
 body a.go-terms:hover {

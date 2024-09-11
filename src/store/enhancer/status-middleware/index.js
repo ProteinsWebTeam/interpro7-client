@@ -4,6 +4,7 @@ import { schedule } from 'timing-functions';
 
 import customFetch from 'utils/cached-fetch';
 
+// $FlowFixMe
 import { CHANGE_SETTINGS, RESET_SETTINGS } from 'actions/types';
 import { serverStatus, browserStatus } from 'actions/creators';
 

@@ -34,6 +34,7 @@ exports[`getEmptyDescription should return new empty description object 1`] = `
   "result": {
     "accession": null,
     "detail": null,
+    "job": null,
     "type": null,
   },
   "search": {

@@ -504,7 +504,7 @@ exports[`<ByEntryType /> Entry types 1`] = `
     </Memo(Connect(Link))>
   </Memo(Connect(AnimatedEntry))>
   <Memo(Connect(Link))
-    className="button margin-bottom-none margin-top-large"
+    buttonType="primary"
     to={
       {
         "description": {

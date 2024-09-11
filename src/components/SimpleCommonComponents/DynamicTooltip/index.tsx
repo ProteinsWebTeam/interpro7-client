@@ -1,7 +1,6 @@
 import React, { useState, useEffect, PropsWithChildren } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { createSelector } from 'reselect';
@@ -49,11 +48,15 @@ const _DataProvider = ({ data, onLoad, databases, locations }: LoadedProps) => {
 const getUrlFor = createSelector(
   (state: GlobalState) => state.settings.api,
   (_: GlobalState, props: ProviderProps) => props,
+
   ({ protocol, hostname, port, root }, props) => {
     if (!props.shouldLoad) return null;
-    const description = {
-      main: { key: props.type },
-      [props.type]: { accession: props.accession, db: props.source },
+    const description: InterProPartialDescription = {
+      main: { key: props.type as Endpoint },
+      [props.type as Endpoint]: {
+        accession: props.accession,
+        db: props.source,
+      },
     };
     return format({
       protocol,
@@ -64,9 +67,9 @@ const getUrlFor = createSelector(
   },
 );
 
-const DataProvider = loadData<{ metadata: Metadata }>(getUrlFor as Params)(
-  _DataProvider,
-);
+const DataProvider = loadData<{ metadata: Metadata }>(
+  getUrlFor as LoadDataParameters,
+)(_DataProvider);
 
 type Props = PropsWithChildren<{
   accession: string;

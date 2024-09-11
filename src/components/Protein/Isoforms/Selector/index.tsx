@@ -4,7 +4,6 @@ import { format } from 'url';
 import { createSelector } from 'reselect';
 
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { goToCustomLocation } from 'actions/creators';
@@ -70,14 +69,14 @@ const Selector = ({
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation,
   (state: GlobalState) => state.customLocation.search,
-  (customLocation, { isoform }) => ({ customLocation, isoform })
+  (customLocation, { isoform }) => ({ customLocation, isoform }),
 );
 
 const getIsoformURL = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description,
   ({ protocol, hostname, port, root }, { protein: { accession } }) => {
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };
@@ -91,10 +90,10 @@ const getIsoformURL = createSelector(
         isoforms: '',
       },
     });
-  }
+  },
 );
 export default loadData({
   getUrl: getIsoformURL,
   mapStateToProps,
   mapDispatchToProps: { goToCustomLocation },
-} as Params)(Selector);
+} as LoadDataParameters)(Selector);

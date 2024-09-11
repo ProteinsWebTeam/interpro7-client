@@ -184,7 +184,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'overview',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -204,7 +204,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'entry',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -219,6 +219,10 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
                 key === 'set' ? customLocation.description.set.db : 'InterPro',
             },
           },
+          search:
+            typeof customLocation.search.orf !== 'undefined'
+              ? { orf: String(customLocation.search.orf) }
+              : undefined,
         };
       },
       name: 'Entries',
@@ -229,7 +233,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'protein',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -253,7 +257,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'structure',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -277,7 +281,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'taxonomy',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -301,7 +305,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'proteome',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -325,7 +329,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'set',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -336,7 +340,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
             },
             set: {
               isFilter: true,
-              db: (customLocation.description[key] as EndpointLocation).db,
+              db: customLocation.description[key as Endpoint].db,
             },
           },
         };
@@ -349,7 +353,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'sequence',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -359,6 +363,10 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
               detail: 'sequence',
             },
           },
+          search:
+            typeof customLocation.search.orf !== 'undefined'
+              ? { orf: String(customLocation.search.orf) }
+              : undefined,
         };
       },
       name: 'Sequence',
@@ -368,7 +376,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'domain_architecture',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -388,7 +396,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'similar_proteins',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -408,7 +416,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'logo',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -427,7 +435,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'alphafold',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -447,7 +455,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'entry_alignments',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -466,7 +474,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'interactions',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -486,7 +494,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     'pathways',
     {
       to(customLocation: InterProLocation) {
-        const { key } = customLocation.description.main;
+        const key = customLocation.description.main.key as Endpoint;
         return {
           description: {
             ...getEmptyDescription(),
@@ -707,7 +715,7 @@ export const InterPro: Array<MenuItemProps> = [
   },
   {
     to(customLocation: InterProLocation) {
-      const { key } = customLocation.description.main;
+      const key = customLocation.description.main.key;
       if (!key || key === 'search' || key === 'result') {
         return {
           description: {
@@ -732,7 +740,7 @@ export const InterPro: Array<MenuItemProps> = [
           ...getEmptyDescription(),
           main: { key },
           [key]: {
-            db: (customLocation.description[key] as EndpointLocation).db,
+            db: customLocation.description[key as Endpoint].db,
           },
           entry: {
             isFilter: key !== 'entry',

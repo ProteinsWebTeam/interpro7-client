@@ -3,13 +3,12 @@ import React from 'react';
 import { format } from 'url';
 import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
 import { groupByEntryType } from 'components/Related/DomainsOnProtein';
 import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
-import { selectRepresentativeDomains } from 'components/ProteinViewer/utils';
+import { selectRepresentativeData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -71,9 +70,10 @@ const features2protvista = (features: FeatureMap) => {
   ];
 
   const sortedCategories = categories.sort(byEntryType);
-  const representativeDomains = selectRepresentativeDomains(
+  const representativeDomains = selectRepresentativeData(
     featArray,
     'locations',
+    'domain'
   );
 
   if (representativeDomains?.length) {
@@ -140,7 +140,7 @@ const getIsoformURL = createSelector(
     { protein: { accession } },
     { isoform },
   ) => {
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };
@@ -156,6 +156,7 @@ const getIsoformURL = createSelector(
     });
   },
 );
-export default loadData({ getUrl: getIsoformURL, mapStateToProps } as Params)(
-  Viewer,
-);
+export default loadData({
+  getUrl: getIsoformURL,
+  mapStateToProps,
+} as LoadDataParameters)(Viewer);

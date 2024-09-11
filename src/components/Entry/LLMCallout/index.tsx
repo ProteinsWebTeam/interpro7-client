@@ -13,9 +13,10 @@ const css = cssBinder(globalStyles, localStyles, fonts);
 
 type Props = {
   accession: string;
+  db: string;
 };
 
-const LLMCallout = ({ accession }: Props) => {
+const LLMCallout = ({ accession, db }: Props) => {
   if ((accession || '').length === 0) return null;
 
   return (
@@ -40,17 +41,26 @@ const LLMCallout = ({ accession }: Props) => {
           Read more on description generation
         </Link>
 
-        {config.root?.LLMFeedback?.href ? (
-          <Link
-            href={`${config.root.LLMFeedback.href}${accession}`}
-            target="_blank"
-          >
-            <span
-              className={css('small', 'icon', 'icon-common', 'icon-pencil-alt')}
-            />{' '}
-            Provide feedback
-          </Link>
-        ) : null}
+        <Link
+          to={{
+            description: {
+              main: { key: 'entry' },
+              entry: {
+                db: db,
+                accession: accession,
+                detail: 'feedback',
+              },
+            },
+            search: {
+              llm: 'llm',
+            },
+          }}
+        >
+          <span
+            className={css('small', 'icon', 'icon-common', 'icon-comment')}
+          />{' '}
+          Provide feedback
+        </Link>
       </div>
     </Callout>
   );

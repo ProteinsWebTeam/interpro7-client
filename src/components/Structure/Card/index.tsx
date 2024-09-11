@@ -34,13 +34,14 @@ const StructureCard = ({ data, search, entryDB }: Props) => {
             },
           }}
         >
-          <HighlightedText text={data.metadata.name} textToHighlight={search} />
+          <HighlightedText
+            text={data.metadata.name as string}
+            textToHighlight={search}
+          />
         </Link>
       }
       imageComponent={
-        <Tooltip
-          title={`3D visualisation of ${data.metadata.accession}`}
-        >
+        <Tooltip title={`3D visualisation of ${data.metadata.accession}`}>
           <LazyImage
             src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${data.metadata.accession}&file=traces.jpg`}
             alt={`PDBe entry ${data.metadata.accession}`}

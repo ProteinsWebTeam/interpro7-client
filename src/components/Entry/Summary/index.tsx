@@ -13,6 +13,7 @@ import Literature, {
 } from 'components/Entry/Literature';
 import CrossReferences from 'components/Entry/CrossReferences';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Tabs from 'components/Tabs';
 
 import MemberDBSubtitle from './MemberDBSubtitle';
 import SidePanel from './SidePanel';
@@ -42,14 +43,6 @@ const OtherSections = ({
   hasIntegratedCitations,
 }: OtherSectionsProps) => (
   <>
-    {!Object.keys(metadata.go_terms || []).length ||
-    metadata.source_database.toLowerCase() !== 'interpro' ? null : (
-      <GoTerms
-        terms={metadata.go_terms || []}
-        type="entry"
-        db={metadata.source_database}
-      />
-    )}
     {Object.keys(metadata.literature || []).length ? (
       <section id="references">
         <div className={css('vf-grid')}>
@@ -60,6 +53,15 @@ const OtherSections = ({
         <Literature included={included} extra={extra} />
       </section>
     ) : null}
+
+    {!Object.keys(metadata.go_terms || []).length ||
+    metadata.source_database.toLowerCase() !== 'interpro' ? null : (
+      <GoTerms
+        terms={metadata.go_terms || []}
+        type="entry"
+        db={metadata.source_database}
+      />
+    )}
 
     {Object.keys(metadata.cross_references || {}).length ? (
       <section id="cross_references" data-testid="entry-crossreferences">
@@ -116,7 +118,7 @@ const SummaryEntry = ({
         <>
           <h4>{headerText || 'Description'}</h4>
           <Description
-            textBlocks={metadata.description}
+            textBlocks={metadata.description || []}
             literature={included as Array<[string, Reference]>}
             showBadges={hasLLM}
           />
@@ -135,12 +137,17 @@ const SummaryEntry = ({
     return null;
   };
   const hasLLM = hasLLMParagraphs(metadata.description || []);
+  const hasWiki =
+    metadata.source_database === 'pfam' && !!metadata.wikipedia?.length;
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       <section className={css('vf-grid', 'summary-grid')}>
         <div className={css('vf-stack')}>
           {hasLLM || hasIntegratedLLM || metadata?.is_llm ? (
-            <LLMCallout accession={metadata.accession} />
+            <LLMCallout
+              accession={metadata.accession}
+              db={metadata.source_database}
+            />
           ) : null}
           {metadata?.source_database?.toLowerCase() === 'interpro' ? (
             <InterProSubtitle metadata={metadata} hasLLM={metadata?.is_llm} />
@@ -154,31 +161,38 @@ const SummaryEntry = ({
 
           <section className={css('vf-stack')}>
             {selectDescriptionComponent(hasLLM)}
+            <OtherSections
+              metadata={metadata}
+              citations={
+                { included, extra } as {
+                  included: Array<[string, Reference]>;
+                  extra: Array<[string, Reference]>;
+                }
+              }
+              hasIntegratedCitations={integratedCitations?.length > 0}
+            />
           </section>
         </div>
         <div className={css('vf-stack')}>
           <SidePanel metadata={metadata} dbInfo={dbInfo} />
         </div>
       </section>
-      <OtherSections
-        metadata={metadata}
-        citations={
-          { included, extra } as {
-            included: Array<[string, Reference]>;
-            extra: Array<[string, Reference]>;
-          }
-        }
-        hasIntegratedCitations={integratedCitations?.length > 0}
-      />
-      <section>
-        {metadata.source_database === 'pfam' && metadata.wikipedia ? (
-          <Wikipedia
-            title={metadata.wikipedia.title}
-            extract={metadata.wikipedia.extract}
-            thumbnail={metadata.wikipedia.thumbnail}
-          />
-        ) : null}
-      </section>
+      {hasWiki && (
+        <section>
+          <h4>Wikipedia</h4>
+          <Tabs>
+            {(metadata.wikipedia || []).map((wiki, key) => (
+              <div key={key} title={wiki.title.replaceAll('_', ' ')}>
+                <Wikipedia
+                  title={wiki.title}
+                  extract={wiki.extract}
+                  thumbnail={wiki.thumbnail}
+                />
+              </div>
+            ))}
+          </Tabs>
+        </section>
+      )}
     </div>
   );
 };

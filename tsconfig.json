@@ -4,28 +4,19 @@
     "moduleResolution": "Node",
     "module": "es2020",
     "target": "ES6",
-    "lib": [
-      "es2019",
-      "dom",
-      "esnext"
-    ],
+    "lib": ["es2019", "dom", "esnext"],
     "jsx": "react",
     "declaration": false,
     "experimentalDecorators": true,
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "*": [
-        "*",
-        "src/*",
-        "public/*"
-      ]
+      "*": ["*", "src/*", "public/*"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "rootDirs": ["./src", "./src/types"]
   },
-  "include": [
-    "src/**/*",
-  ]
+  "include": ["src/**/*"]
 }

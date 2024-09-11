@@ -8,13 +8,12 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
     className="tabs-title"
   >
     <BrowseTabsLink
-      data={
+      isFirstLevel={true}
+      metadata={
         {
-          "loading": false,
-          "payload": null,
+          "metadata": null,
         }
       }
-      isFirstLevel={true}
       name="By InterPro"
       to={[Function]}
     />
@@ -23,13 +22,12 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
     className="tabs-title"
   >
     <BrowseTabsLink
-      data={
+      isFirstLevel={true}
+      metadata={
         {
-          "loading": false,
-          "payload": null,
+          "metadata": null,
         }
       }
-      isFirstLevel={true}
       name="By Member DB"
       to={[Function]}
     />
@@ -38,13 +36,12 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
     className="tabs-title"
   >
     <BrowseTabsLink
-      data={
+      isFirstLevel={true}
+      metadata={
         {
-          "loading": false,
-          "payload": null,
+          "metadata": null,
         }
       }
-      isFirstLevel={true}
       name="By Protein"
       to={[Function]}
     />
@@ -53,13 +50,12 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
     className="tabs-title"
   >
     <BrowseTabsLink
-      data={
+      isFirstLevel={true}
+      metadata={
         {
-          "loading": false,
-          "payload": null,
+          "metadata": null,
         }
       }
-      isFirstLevel={true}
       name="By Structure"
       to={[Function]}
     />
@@ -68,13 +64,12 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
     className="tabs-title"
   >
     <BrowseTabsLink
-      data={
+      isFirstLevel={true}
+      metadata={
         {
-          "loading": false,
-          "payload": null,
+          "metadata": null,
         }
       }
-      isFirstLevel={true}
       name="By Taxonomy"
       to={[Function]}
     />
@@ -83,13 +78,12 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
     className="tabs-title"
   >
     <BrowseTabsLink
-      data={
+      isFirstLevel={true}
+      metadata={
         {
-          "loading": false,
-          "payload": null,
+          "metadata": null,
         }
       }
-      isFirstLevel={true}
       name="By Proteome"
       to={[Function]}
     />
@@ -98,13 +92,12 @@ exports[`<BrowseTabsWithoutData /> should render 1`] = `
     className="tabs-title"
   >
     <BrowseTabsLink
-      data={
+      isFirstLevel={true}
+      metadata={
         {
-          "loading": false,
-          "payload": null,
+          "metadata": null,
         }
       }
-      isFirstLevel={true}
       name="By Clan/Set"
       to={[Function]}
     />

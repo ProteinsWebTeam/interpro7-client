@@ -3,10 +3,10 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -149,7 +149,7 @@ const SimilarProteinTable = ({
                   description: {
                     main: { key: 'protein' },
                     protein: { db: sourceDatabase, accession: acc },
-                  },
+                  } as InterProPartialDescription,
                 }}
               >
                 {acc}
@@ -176,7 +176,7 @@ const SimilarProteinTable = ({
                 description: {
                   main: { key: 'protein' },
                   protein: { db: 'uniprot', accession },
-                },
+                } as InterProPartialDescription,
               }}
             >
               {name}
@@ -196,14 +196,14 @@ const SimilarProteinTable = ({
                     taxonomy: {
                       db: 'uniprot',
                       accession: `${sourceOrganism.taxId}`,
-                    },
+                    } as InterProPartialDescription,
                   },
                 }}
               >
                 {sourceOrganism.fullName}
               </Link>
             ) : (
-              sourceOrganism
+              String(sourceOrganism)
             )
           }
         >
@@ -220,15 +220,15 @@ const SimilarProteinTable = ({
                   description: {
                     main: { key: 'protein' },
                     protein: { db: 'uniprot', accession, detail: 'alphafold' },
-                  },
+                  } as InterProPartialDescription,
                 }}
               >
-                View predicted structure
+                AlphaFold
               </Link>
             ) : null
           }
         >
-          AlphaFold
+          Predicted structure
         </Column>
       </Table>
     </>
@@ -247,7 +247,7 @@ const mapStateToPropsForIDA = createSelector(
     // modify search
     restOfSearch.ida = ida;
 
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: db },
     };
@@ -273,4 +273,4 @@ export default loadData<PayloadList<ProteinMetadata>, 'IDA'>({
   getUrl: mapStateToPropsForIDA,
   propNamespace: 'IDA',
   mapStateToProps,
-} as Params)(SimilarProteinTable);
+} as LoadDataParameters)(SimilarProteinTable);

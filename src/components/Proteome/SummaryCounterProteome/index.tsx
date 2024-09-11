@@ -5,7 +5,7 @@ type Props = {
   entryDB: MemberDB | 'interpro';
   proteomeName: string;
   proteomeAccession: string;
-  counters: MetadataCounters;
+  counters?: MetadataCounters;
 };
 
 import cssBinder from 'styles/cssBinder';
@@ -20,6 +20,7 @@ const SummaryCounterProteome = ({
   proteomeAccession,
   counters,
 }: Props) => {
+  if (!counters) return null;
   const { entries, proteins, structures } = counters;
 
   return (

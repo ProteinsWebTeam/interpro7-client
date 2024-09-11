@@ -4,6 +4,7 @@ import T from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
+// $FlowFixMe
 import { overallDataProgressSelector } from 'reducers/data-progress';
 
 import styles from './styles.css';

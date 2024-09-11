@@ -1,4 +1,3 @@
-// @flow
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
@@ -13,8 +12,7 @@ describe('<DownloadTable />', () => {
         data={{
           loading: false,
           payload: {
-            url:
-              'https://api.github.com/repos/ebi-pf-team/interproscan/releases/17364434',
+            url: 'https://api.github.com/repos/ebi-pf-team/interproscan/releases/17364434',
             assets_url:
               'https://api.github.com/repos/ebi-pf-team/interproscan/releases/17364434/assets',
             upload_url:

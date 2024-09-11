@@ -7,12 +7,16 @@ import { createSelector } from 'reselect';
 import { goToCustomLocation } from 'actions/creators';
 
 import { format } from 'url';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import Link from 'components/generic/Link';
 import Tip from 'components/Tip';
 import AlignmentViewer from './Viewer';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
+// $FlowFixMe
+import Button from 'components/SimpleCommonComponents/Button';
 
 import { foundationPartial } from 'styles/foundation';
 import localStyle from './style.css';
@@ -58,10 +62,7 @@ const Alignment = ({
             issues in your browser.
           </p>
           <p>
-            If you still want to display it, press{' '}
-            <button className={f('button')} onClick={() => setForceShow(true)}>
-              HERE
-            </button>
+            <Button onClick={() => setForceShow(true)}>Open alignment</Button>
           </p>
         </div>
       )}
@@ -205,12 +206,7 @@ const EntryAlignments = ({
               </>
             )}
             <Link
-              className={f(
-                'vf-button',
-                'vf-button--secondary',
-                'vf-button--sm',
-                'download',
-              )}
+              buttonType="secondary"
               href={`${url}${tag}${alignmentType}&download`}
               download={`${
                 data?.payload?.metadata?.accession || 'download'

@@ -1,4 +1,4 @@
-@import '../../../styles/colors.css';
+@import "../../../styles/colors.css";
 
 .file-button {
   display: flex;
@@ -9,6 +9,9 @@
   &:hover {
     text-decoration: none;
   }
+}
+.file-label {
+  padding: 0 0.5rem;
 }
 
 .downloading {

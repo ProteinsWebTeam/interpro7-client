@@ -4,7 +4,6 @@ import { format } from 'url';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
-import { Params } from 'higherOrder/loadData/extract-params';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { goToCustomLocation } from 'actions/creators';
@@ -14,7 +13,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 import Accession from 'components/Accession';
 import Lineage from 'components/Taxonomy/Lineage';
 import Children from 'components/Taxonomy/Children';
-import Tree, { TaxNode } from 'components/Tree';
+import Tree from 'components/Tree';
 import BaseLink from 'components/ExtLink/BaseLink';
 
 import cssBinder from 'styles/cssBinder';
@@ -109,7 +108,10 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
       currentNode = newNode;
     }
     if (currentNode) {
-      currentNode.name = data.name.short || data.name.name || data.accession;
+      currentNode.name =
+        (data.name as NameObject)?.short ||
+        (data.name as NameObject)?.name ||
+        data.accession;
       currentNode.hitcount = data?.counters?.proteins as number;
 
       if (data.children) {
@@ -235,7 +237,6 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
         </section>
         <div>
           {
-            // @ts-expect-error until MemberDB is migrated to TS
             <MemberDBSelector
               contentType="taxonomy"
               filterType="entry"
@@ -243,7 +244,7 @@ export class SummaryTaxonomy extends PureComponent<LoadedProps, State> {
               isSelected={this._isSelected}
               hideCounters={true}
             >
-              {(open: string) => (
+              {(open: boolean) => (
                 <span
                   className={css(
                     'header-total-results',
@@ -295,4 +296,4 @@ export default loadData<{ metadata: TaxonomyMetadata } & WithNames, 'Names'>({
   getUrl,
   propNamespace: 'Names',
   mapDispatchToProps: { goToCustomLocation },
-} as Params)(SummaryTaxonomy);
+} as LoadDataParameters)(SummaryTaxonomy);

@@ -8,5 +8,6 @@ exports[`<BrowseTabsLink /> should render 1`] = `
   to={[Function]}
 >
   Entry
+   
 </Memo(Connect(Link))>
 `;

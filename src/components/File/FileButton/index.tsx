@@ -10,8 +10,9 @@ import TooltipContent from '../TooltipContent';
 import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 import ipro from 'styles/interpro-vf.css';
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 
-const css = cssBinder(local, ipro);
+const css = cssBinder(local, ipro, buttonCSS);
 
 const SMALL = 0.01;
 
@@ -25,22 +26,22 @@ const EXTENSIONS = {
 export type SupportedExtensions = keyof typeof EXTENSIONS;
 
 export type FileButtonProps = {
-  fileType: SupportedExtensions;
-  url: string;
+  fileType: DownloadFileTypes;
+  url?: string;
   subpath?: string;
   count: number;
   name: string;
   progress?: number;
   minWidth?: number | string;
-  successful?: boolean;
+  successful?: boolean | null;
   blobURL?: string;
   label?: string;
   className?: string;
   handleClick: (event: Event) => void;
   shouldLinkToResults?: boolean;
   showIcon?: boolean;
-  search?: Record<string, string>;
-};
+  search?: InterProLocationSearch;
+} & ({ url: string } | { blobURL: string });
 
 const FileButton = ({
   fileType,
@@ -79,7 +80,8 @@ const FileButton = ({
   title += ` ${fileType} file`;
   const labelToShow = label || stateLabel;
 
-  const filename = name || `${fileType}.${EXTENSIONS[fileType]}`;
+  const filename =
+    name || `${fileType}.${EXTENSIONS[fileType as SupportedExtensions]}`;
 
   const buttonClass = showIcon
     ? []
@@ -117,7 +119,7 @@ const FileButton = ({
         >
           <ProgressButton
             downloading={downloading}
-            success={successful}
+            success={!!successful}
             failed={failed}
             progress={progress || SMALL}
           />

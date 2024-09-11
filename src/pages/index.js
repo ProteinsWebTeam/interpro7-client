@@ -12,6 +12,7 @@ import loadable from 'higherOrder/loadable';
 import BreadCrumbs from 'components/BreadCrumbs';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+// $FlowFixMe
 import { stuckSelector } from 'reducers/ui/stuck';
 
 import { foundationPartial } from 'styles/foundation';
@@ -40,20 +41,24 @@ const Structure = loadable({
   loader: () => import(/* webpackChunkName: "structure-page" */ './Structure'),
 });
 const Taxonomy = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "taxonomy-page" */ './Taxonomy'),
 });
 const Proteome = loadable({
   loader: () => import(/* webpackChunkName: "proteome-page" */ './Proteome'),
 });
 const EntrySet = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "set-page" */ './Set'),
 });
 
 // Other
 const Search = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "search-page" */ './Search'),
 });
 const Jobs = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "jobs-page" */ './Jobs'),
 });
 

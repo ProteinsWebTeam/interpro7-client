@@ -2,11 +2,12 @@ import React from 'react';
 
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
+import Callout from 'components/SimpleCommonComponents/Callout';
+import Button from 'components/SimpleCommonComponents/Button';
 
 import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
-import Callout from 'components/SimpleCommonComponents/Callout';
 
 const css = cssBinder(ipro);
 
@@ -34,12 +35,7 @@ export const ErrorMessage = () => {
           Please use the button below to clear your web browser's cache and
           reload the page. This may resolve the issue.
         </p>
-        <button
-          onClick={reload}
-          className={css('vf-button', 'vf-button--secondary', 'vf-button--sm')}
-        >
-          Clear the cache & reload
-        </button>
+        <Button onClick={reload}>Clear the cache & reload</Button>
         <p>If this does not solve the issue, clear the cache manually.</p>
         <details className={css('read-more')}>
           <summary>Instructions</summary>

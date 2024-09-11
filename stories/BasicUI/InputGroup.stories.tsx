@@ -2,6 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import InputGroup from 'components/DownloadForm/InputGroup';
+import Button from 'components/SimpleCommonComponents/Button';
 
 const meta = {
   title: 'Basic UI/InputGroup',
@@ -19,6 +20,6 @@ export const Base: CalloutStory = {
   args: {
     label: 'info',
     input: <input type="text"></input>,
-    button: <button>X</button>,
+    button: <Button>X</Button>,
   },
 };

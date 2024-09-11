@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Link from 'components/generic/Link';
 import NumberComponent from 'components/NumberComponent';
 import Callout from 'components/SimpleCommonComponents/Callout';
+import { Button } from 'components/SimpleCommonComponents/Button';
 
 import { downloadURL, downloadDelete } from 'actions/creators';
 
@@ -22,7 +23,7 @@ export const SOFT_LIMIT = 10000;
 
 type Props = {
   url: string;
-  fileType: string;
+  fileType: DownloadFileTypes;
   subset: boolean;
   entityType: string;
   download?: DownloadProgress;
@@ -107,18 +108,20 @@ export class Controls extends PureComponent<Props> {
           </Callout>
         )}
         <div className={css('container')}>
-          <button
-            type="button"
-            className={css('button', 'hollow', { warning: count > SOFT_LIMIT })}
+          <Button
             onClick={this._handleGenerateClick}
             disabled={!!progress || count > HARD_LIMIT || isStale || noData}
+            backgroundColor={count > SOFT_LIMIT ? 'white' : undefined}
+            borderColor={count > SOFT_LIMIT ? 'orange' : undefined}
+            textColor={count > SOFT_LIMIT ? 'orange' : undefined}
           >
             Generate
-          </button>
+          </Button>
           <Link
-            className={css('button', 'hollow', {
+            className={css({
               warning: count >= SOFT_LIMIT,
             })}
+            buttonType="primary"
             disabled={!successful || count > HARD_LIMIT}
             href={blobURL}
             download={`export.${fileType === 'accession' ? 'txt' : fileType}`}
@@ -126,13 +129,9 @@ export class Controls extends PureComponent<Props> {
             Download
           </Link>
           {downloading && (
-            <button
-              type="button"
-              className={css('button', 'hollow')}
-              onClick={this._handleCancelClick}
-            >
+            <Button type="tertiary" onClick={this._handleCancelClick}>
               Cancel
-            </button>
+            </Button>
           )}
         </div>
       </>
