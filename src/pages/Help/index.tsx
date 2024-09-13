@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import loadable from 'higherOrder/loadable';
 
@@ -20,14 +20,6 @@ const Training = () => <ContentFromRTD page="training.rst" />;
 const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );*/
-
-const Documentation = loadable({
-  // prettier-ignore
-  loader: () =>
-    // $FlowFixMe
-    import(/* webpackChunkName: "help-documentation" */'components/Help/Documentation'),
-  loading: () => null,
-});
 
 import config from 'config';
 import Link from 'components/generic/Link';
