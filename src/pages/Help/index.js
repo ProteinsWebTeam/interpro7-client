@@ -12,11 +12,6 @@ import ContentFromRTD from 'components/ContentFromRTD';
 
 import { schemaProcessDataWebPage } from 'schema_org/processors';
 
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
@@ -31,6 +26,11 @@ const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
 const HelpCenter = loadable({
   loader: () =>
     // $FlowFixMe
@@ -38,10 +38,9 @@ const HelpCenter = loadable({
 });
 
 const Documentation = loadable({
-  // $FlowFixMe
   loader: () =>
-    // $FlowFixMe
     import(
+      // $FlowFixMe
       /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
     ),
 });

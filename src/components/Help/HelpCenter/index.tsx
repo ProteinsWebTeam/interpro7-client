@@ -1,26 +1,4 @@
-// @flow
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
-import loadable from 'higherOrder/loadable';
-
-import { schemaProcessDataWebPage } from 'schema_org/processors';
-
-const SchemaOrgData = loadable({
-  loader: () =>
-    // $FlowFixMe
-    import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
-/*
-const f = foundationPartial(ebiGlobalStyles, ipro);
-const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
-const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
-const Training = () => <ContentFromRTD page="training.rst" />;
-const Game = () => (
-  <ContentFromRTD page="protein_families_game.rst" format="faq" />
-);*/
-
 import config from 'config';
 import Link from 'components/generic/Link';
 import Twitter from 'components/Twitter';
@@ -30,6 +8,15 @@ import local from './style.css';
 
 import cssBinder from 'styles/cssBinder';
 const css = cssBinder(fonts, local);
+
+/*
+const f = foundationPartial(ebiGlobalStyles, ipro);
+const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
+const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
+const Training = () => <ContentFromRTD page="training.rst" />;
+const Game = () => (
+  <ContentFromRTD page="protein_families_game.rst" format="faq" />
+);*/
 
 const Help = () => {
   return (
