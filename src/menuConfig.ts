@@ -790,25 +790,11 @@ export const InterPro: Array<MenuItemProps> = [
     icon: '',
     name: 'Help',
     iconClass: 'common',
-    entities: help,
-  },
-  {
-    to: { description: { other: ['about'] } },
-    icon: '',
-    name: 'About',
-    iconClass: 'common',
-    entities: about,
   },
   {
     to: { description: { other: ['settings'] } },
     icon: '',
     name: 'Settings',
-    iconClass: 'common',
-  },
-  {
-    to: { description: { other: ['contact'] } },
-    icon: '',
-    name: 'Contact us',
     iconClass: 'common',
   },
 ];

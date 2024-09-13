@@ -8,7 +8,7 @@ import { schemaProcessDataPageSection } from 'schema_org/processors';
 import Twitter from 'components/Twitter';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import local from './style.css';
+import local from '../../components/Help/Documentation/style.css';
 
 import cssBinder from 'styles/cssBinder';
 const css = cssBinder(fonts, local);
@@ -30,7 +30,7 @@ const Documentation = () => {
         processData={schemaProcessDataPageSection}
       />
 
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
         <div className={css('vf-grid', 'vf-grid__col-3')}>
           <div className={css('flex-box')}>
             <span
