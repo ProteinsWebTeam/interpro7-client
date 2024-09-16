@@ -93,8 +93,7 @@ const FileButton = ({
           failed,
         })}
       >
-        <div className={css('btn-testing')}>
-          <div>{fileType.replace('accession', 'TSV').toUpperCase()}</div>
+        <div className={css('download-btn')}>
           <ProgressButton
             downloading={downloading}
             success={!!successful}
@@ -102,6 +101,7 @@ const FileButton = ({
             iconType={fileType}
             progress={progress || SMALL}
           />
+          <div>{fileType.replace('accession', 'TSV').toUpperCase()}</div>
         </div>
       </div>
     </Link>

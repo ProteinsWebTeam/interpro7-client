@@ -58,15 +58,17 @@ const ExternalExportButton = ({ url, type, search, subpath }: Props) => {
             'vf-button--sm',
           )}
         >
-          <div className={css('btn-testing')}>
+          <div className={css('download-btn')}>
+            <div className={css('external-link-icon')}>
+              <div
+                className={css(
+                  'icon',
+                  'icon-common',
+                  `icon-${type == 'api' ? 'globe' : 'code'}`,
+                )}
+              ></div>
+            </div>
             <div> {type == 'api' ? 'API' : 'CODE'} </div>
-            <div
-              className={css(
-                'icon',
-                'icon-common',
-                `icon-${type == 'api' ? 'globe' : 'code'}`,
-              )}
-            ></div>
           </div>
         </div>
       </Link>
