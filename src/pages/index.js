@@ -74,6 +74,7 @@ const About = loadable({
   loader: () => import(/* webpackChunkName: "about-page" */ './About'),
 });
 const Help = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "help-page" */ './Help'),
 });
 const Settings = loadable({
