@@ -25,7 +25,7 @@ const Help = () => {
         <div className={css('flex-box')}>
           <span
             className={css('icon', 'icon-common', 'xl')}
-            data-icon="&#xf02d;"
+            data-icon="&#xf277;"
           />{' '}
           <h5>Getting started</h5>
           <li>
@@ -56,7 +56,7 @@ const Help = () => {
         <div className={css('flex-box')}>
           <span
             className={css('icon', 'icon-common', 'xl')}
-            data-icon="&#xf02d;"
+            data-icon="&#xf300;"
           />{' '}
           <h5>Training</h5>
           <li>
@@ -122,7 +122,7 @@ const Help = () => {
         <div className={css('flex-box')}>
           <span
             className={css('icon', 'icon-common', 'xl')}
-            data-icon="&#xf02d;"
+            data-icon="&#xf0c0;"
           />{' '}
           <h5>About us</h5>
           <li>
@@ -148,7 +148,7 @@ const Help = () => {
         <div className={css('flex-box')}>
           <span
             className={css('icon', 'icon-common', 'xl')}
-            data-icon="&#xf10d;"
+            data-icon="&#xf2ec;"
           />{' '}
           <h5>How to cite us</h5>
           <ul>
@@ -175,7 +175,7 @@ const Help = () => {
         <div className={css('flex-box')}>
           <span
             className={css('icon', 'icon-common', 'xl')}
-            data-icon="&#xf2fd;"
+            data-icon="&#x74;"
           />{' '}
           <h5>InterProScan</h5>
           <ul>
@@ -203,7 +203,7 @@ const Help = () => {
         <div className={css('flex-box')}>
           <span
             className={css('icon', 'icon-common', 'xl')}
-            data-icon="&#xf085;"
+            data-icon="&#xf121;"
           />
           <h5>Technical corner</h5>
           <ul>
@@ -222,7 +222,7 @@ const Help = () => {
                 className={css('ext')}
                 target="_blank"
               >
-                Open API specification
+                Swagger UI
               </Link>
             </li>
             <li>
@@ -244,7 +244,7 @@ const Help = () => {
 
       <div className={css('box-add')}>
         <div className={css('vf-box')}>
-          <h3> Links </h3>
+          <h3> Contact Us </h3>
         </div>
 
         <div className={css('vf-box')}>
