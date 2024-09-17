@@ -29,16 +29,16 @@ const ExternalExportButton = ({ url, type, search, subpath }: Props) => {
   return (
     <Tooltip
       title={
-        type == 'api'
-          ? 'See the raw response from the InterPro API'
-          : 'Generate script to get JSON data'
+        type === 'api'
+          ? 'Open results in the browsable API'
+          : 'Generate a script to download results on the command line'
       }
     >
       <Link
         target="_blank"
-        href={type == 'api' ? url : ''}
+        href={type === 'api' ? url : ''}
         to={
-          type == 'scriptgen' && search !== undefined
+          type === 'scriptgen' && search !== undefined
             ? {
                 description: {
                   main: { key: 'result' },
@@ -64,11 +64,11 @@ const ExternalExportButton = ({ url, type, search, subpath }: Props) => {
                 className={css(
                   'icon',
                   'icon-common',
-                  `icon-${type == 'api' ? 'globe' : 'code'}`,
+                  `icon-${type === 'api' ? 'globe' : 'code'}`,
                 )}
               ></div>
             </div>
-            <div> {type == 'api' ? 'API' : 'CODE'} </div>
+            <div> {type === 'api' ? 'Browsable API' : 'Script generator'} </div>
           </div>
         </div>
       </Link>

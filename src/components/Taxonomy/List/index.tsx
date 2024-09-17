@@ -38,6 +38,7 @@ import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 import AllTaxDownload from './AllTaxDownload';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { toPublicAPI } from 'utils/url';
 
 const css = cssBinder(
   pageStyle,
@@ -225,7 +226,10 @@ const List = ({
                 focused={focused}
                 fileType="tsv"
               />
-              <ExternalExportButton type={'api'} url={urlToExport} />
+              <ExternalExportButton
+                type={'api'}
+                url={toPublicAPI(urlToExport)}
+              />
               <ExternalExportButton
                 search={search}
                 type={'scriptgen'}

@@ -45,6 +45,8 @@ import EntryCard from 'components/Entry/Card';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import cssBinder from 'styles/cssBinder';
 
+import { toPublicAPI } from 'utils/url';
+
 const css = cssBinder(
   pageStyle,
   ebiStyles,
@@ -235,7 +237,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
                 fileType="tsv"
                 name="tsv"
               />
-              <ExternalExportButton type={'api'} url={data.url} />
+              <ExternalExportButton type={'api'} url={toPublicAPI(data.url)} />
               <ExternalExportButton
                 search={search}
                 type={'scriptgen'}

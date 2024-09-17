@@ -279,7 +279,6 @@ const Matches = ({
                 <>
                   {primary === 'protein' && (
                     <>
-                      <label htmlFor="fasta">FASTA</label>
                       <FileExporter
                         description={description}
                         count={actualSize}
@@ -291,7 +290,6 @@ const Matches = ({
                       />
                     </>
                   )}
-                  <label htmlFor="tsv">TSV</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -301,7 +299,6 @@ const Matches = ({
                     secondary={secondary}
                     focused={focused}
                   />
-                  <label htmlFor="json">JSON</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -313,7 +310,7 @@ const Matches = ({
                   />
                 </>
               )}
-              <label htmlFor="api">API</label>
+
               <ExternalExportButton
                 type={'api'}
                 url={toPublicAPI(

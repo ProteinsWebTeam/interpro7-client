@@ -54,6 +54,8 @@ const css = cssBinder(
   filtersAndTable,
 );
 
+import { toPublicAPI } from 'utils/url';
+
 type ExtraCounters = { counters?: TaxonomyCounters };
 
 const EntryAccessionsRenderer =
@@ -126,7 +128,7 @@ const AllProteomesDownload = ({
 }: AllProteomesDownloadProps) => (
   <File
     fileType={fileType}
-    name={name || `proteomes.${fileType}`}
+    name={`proteomes.${fileType}`}
     count={count}
     customLocationDescription={description}
     search={{ ...search, extra_fields: 'counters:entry-protein' }}
@@ -256,7 +258,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
                 fileType="tsv"
                 name="tsv"
               />
-              <ExternalExportButton type={'api'} url={url} />
+              <ExternalExportButton type={'api'} url={toPublicAPI(url)} />
               <ExternalExportButton
                 search={search}
                 type={'scriptgen'}

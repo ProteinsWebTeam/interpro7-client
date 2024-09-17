@@ -17,6 +17,7 @@ import cssBinder from 'styles/cssBinder';
 
 import exporterStyle from 'components/Table/Exporter/style.css';
 import local from './style.css';
+import { toPublicAPI } from 'utils/url';
 
 const css = cssBinder(local, exporterStyle);
 
@@ -72,15 +73,12 @@ const IDAOptions = ({
       {showExporter && (
         <Exporter includeSettings={false}>
           <div className={css('menu-grid')}>
-            <label htmlFor="json">JSON</label>
             <AllIDADownload count={count} fileType="json" />
-            <label htmlFor="json">JSON</label>
             <AllIDADownload count={count} fileType="tsv" />
-            <label htmlFor="api">API</label>
             {api && (
               <ExternalExportButton
                 type={'api'}
-                url={getAPIURL(api, entryLocation, search)}
+                url={toPublicAPI(getAPIURL(api, entryLocation, search))}
               />
             )}
           </div>

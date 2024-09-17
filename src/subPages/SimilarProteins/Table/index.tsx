@@ -133,12 +133,12 @@ const SimilarProteinTable = ({
               type={'api'}
               url={getAPIURLForSimilarProteins(api, ida, db)}
             />
+            <ExternalExportButton
+              search={search}
+              type={'scriptgen'}
+              subpath={descriptionToPath(description)}
+            />
           </div>
-          <ExternalExportButton
-            search={search}
-            type={'scriptgen'}
-            subpath={descriptionToPath(description)}
-          />
         </Exporter>
 
         <Column

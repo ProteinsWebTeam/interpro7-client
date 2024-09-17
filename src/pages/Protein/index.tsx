@@ -44,6 +44,8 @@ import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import cssBinder from 'styles/cssBinder';
 
+import { toPublicAPI } from 'utils/url';
+
 const css = cssBinder(
   fonts,
   pageStyle,
@@ -86,7 +88,7 @@ const AllProteinDownload = ({
 }: AllProteinDownloadProps) => (
   <File
     fileType={fileType}
-    name={name || `protein-sequences.${fileType}`}
+    name={`protein-sequences.${fileType}`}
     count={count}
     customLocationDescription={description}
     endpoint="protein"
@@ -200,7 +202,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
                 count={size}
                 fileType="tsv"
               />
-              <ExternalExportButton type={'api'} url={url} />
+              <ExternalExportButton type={'api'} url={toPublicAPI(url)} />
               <ExternalExportButton
                 search={search}
                 type={'scriptgen'}
