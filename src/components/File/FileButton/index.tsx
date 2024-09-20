@@ -77,6 +77,10 @@ const FileButton = ({
     ? []
     : ['vf-button', 'vf-button--link', 'vf-button--sm'];
 
+  if (downloading) label = 'Generating ';
+  else if (successful) label = 'Save ';
+  else label = 'Generate ';
+
   const downloadButton = (
     <Link
       download={filename}
@@ -101,7 +105,10 @@ const FileButton = ({
             iconType={fileType}
             progress={progress || SMALL}
           />
-          <div>{fileType.replace('accession', 'TSV').toUpperCase()}</div>
+          <div>
+            {label}
+            {fileType.replace('accession', 'TSV').toUpperCase()}
+          </div>
         </div>
       </div>
     </Link>

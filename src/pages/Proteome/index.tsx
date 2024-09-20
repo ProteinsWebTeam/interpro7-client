@@ -419,7 +419,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
             cellClassName={css('table-center')}
             renderer={ProteinFastasRenderer(entryDB)}
           >
-            Protein sequence
+            Protein sequences
           </Column>
         </Table>
       </section>

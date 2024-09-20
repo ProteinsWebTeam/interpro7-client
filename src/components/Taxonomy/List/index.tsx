@@ -386,7 +386,7 @@ const List = ({
             cellClassName={css('table-center')}
             renderer={ProteinFastasRenderer(entryDB)}
           >
-            FASTA
+            Protein sequences
           </Column>
         </Table>
       </section>
