@@ -1,0 +1,16 @@
+.download-btn {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.file-button {
+  display: flex;
+  height: 2.5em;
+  /* to match loading SVG */
+  align-items: center;
+}
+
+.external-link-icon {
+  width: 2em;
+}

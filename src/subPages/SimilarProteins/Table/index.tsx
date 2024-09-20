@@ -14,7 +14,7 @@ import Link from 'components/generic/Link';
 import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 
 import AllProteinDownload from './AllProteinDownload';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -108,7 +108,6 @@ const SimilarProteinTable = ({
         <PageSizeSelector />
         <Exporter>
           <div className={css('menu-grid')}>
-            <label htmlFor="fasta">FASTA</label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -116,7 +115,6 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="fasta"
             />
-            <label htmlFor="json">JSON</label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -124,7 +122,6 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="json"
             />
-            <label htmlFor="tsv">TSV</label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -132,8 +129,15 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="tsv"
             />
-            <label htmlFor="api">API</label>
-            <APIViewButton url={getAPIURLForSimilarProteins(api, ida, db)} />
+            <ExternalExportButton
+              type={'api'}
+              url={getAPIURLForSimilarProteins(api, ida, db)}
+            />
+            <ExternalExportButton
+              search={search}
+              type={'scriptgen'}
+              subpath={descriptionToPath(description)}
+            />
           </div>
         </Exporter>
 

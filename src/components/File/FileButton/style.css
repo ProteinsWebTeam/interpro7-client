@@ -1,11 +1,10 @@
 @import "../../../styles/colors.css";
 
 .file-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
-  padding: 0.1rem;
+  height: 100%;
+  padding: 0px;
+  margin: 0;
   &:hover {
     text-decoration: none;
   }
@@ -30,4 +29,15 @@
     border-color: white !important;
     color: white !important;
   }
+}
+
+.download-btn {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 3px;
+}
+
+.file-btn-label {
+  margin-right: 0 auto;
 }

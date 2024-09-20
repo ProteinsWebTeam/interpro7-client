@@ -17,7 +17,7 @@ type Props = {
     };
   };
   search: string;
-  entryDB: MemberDB | 'interpro';
+  entryDB: MemberDB | 'interpro' | 'InterPro';
 };
 const EntryCard = ({ data, search, entryDB }: Props) => {
   const name =

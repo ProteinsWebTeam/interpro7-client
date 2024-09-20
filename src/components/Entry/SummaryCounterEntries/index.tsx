@@ -2,7 +2,7 @@ import React from 'react';
 import CounterIcon from 'components/SimpleCommonComponents/Card/CounterIcon';
 
 type Props = {
-  entryDB: MemberDB | 'interpro';
+  entryDB: MemberDB | 'interpro' | 'InterPro';
   entryName: string;
   entryAccession: string;
   counters: MetadataCounters;

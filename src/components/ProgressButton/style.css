@@ -1,5 +1,5 @@
-@import '../../styles/timing.css';
-@import '../../styles/colors.css';
+@import "../../styles/timing.css";
+@import "../../styles/colors.css";
 
 .svg {
   margin: auto;
@@ -89,4 +89,14 @@
 .back {
   transform: rotateY(90deg);
   transition-delay: 0s;
+}
+
+.container {
+  position: relative;
+}
+
+.svg-overlap {
+  position: absolute;
+  top: 50%;
+  left: 8px;
 }

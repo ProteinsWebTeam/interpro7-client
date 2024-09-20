@@ -32,12 +32,15 @@ const Home = loadable({
     ),
 });
 const Entry = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "entry-page" */ './Entry'),
 });
 const Protein = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "protein-page" */ './Protein'),
 });
 const Structure = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "structure-page" */ './Structure'),
 });
 const Taxonomy = loadable({
@@ -45,6 +48,7 @@ const Taxonomy = loadable({
   loader: () => import(/* webpackChunkName: "taxonomy-page" */ './Taxonomy'),
 });
 const Proteome = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "proteome-page" */ './Proteome'),
 });
 const EntrySet = loadable({
