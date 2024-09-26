@@ -187,7 +187,13 @@ nightingale-manager {
   width: 100%;
 }
 
+/* Hide parent tracks for domain and interpro entries*/
 g:global(.feature-group):has(g:global(.residues-group))
   > g:global(.location-group) {
+  display: none;
+}
+
+svg:global(.container):has(g:global(.children-features))
+  > g:global(.sequence-features) {
   display: none;
 }

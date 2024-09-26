@@ -15,6 +15,7 @@ const ProteinViewer = loadable({
 const UNDERSCORE = /_/g;
 
 const FIRST_IN_ORDER = [
+  'family',
   'alphafold_confidence',
   'secondary_structure',
   'spurious_proteins',
@@ -23,7 +24,6 @@ const FIRST_IN_ORDER = [
   'pathogenic_and_likely_pathogenic_variants',
   'intrinsically_disordered_regions',
   'residues',
-  'family',
   'domain',
   'homologous_superfamily',
   'repeat',
@@ -128,13 +128,12 @@ export const makeTracks = ({
       2. Merge unintegrated with result from (1.);
       3. Sort matches in tracks based on their position but, if integrated,
       maintaining grouping for the same InterPro entry.
-  */
 
   // 1. and 2.
   const integratedMatches = getMemberDBMatches(interpro);
   const allMatches = integratedMatches.concat(unintegrated);
 
-  // this was const groups = groupByEntryType(interpro)
+  // this was 
   const groups = groupByEntryType(
     allMatches as { accession: string; type: string }[],
   );
@@ -143,7 +142,6 @@ export const makeTracks = ({
         Group matches of the same type (e.g domain) by IntePro accession
         sort matches by position within the same group,
         sort all the groups based on first fragment of group.
-  */
 
   Object.keys(groups).map((key) => {
     const uniqueInterproAccessions = [
@@ -164,8 +162,13 @@ export const makeTracks = ({
       }
     }
     groups[key] = allMatchesGroupedByEntry.sort(sortTracks).flat();
-  });
+  });*/
 
+  const groups = groupByEntryType(
+    interpro.concat(unintegrated as { accession: string; type: string }[]),
+  );
+  Object.values(groups).map((group) => group.sort(sortTracks).flat());
+  console.log(groups);
   const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
 
   if (other) mergedData.other_features = other;

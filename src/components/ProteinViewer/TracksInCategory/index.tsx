@@ -381,7 +381,8 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                     <NightingaleInterProTrack
                       length={sequence.length}
                       margin-color="#fafafa"
-                      margin-left={20}
+                      height={40}
+                      row-height={40}
                       id={getTrackAccession(entry.accession)}
                       shape="roundRectangle"
                       highlight-event="onmouseover"
