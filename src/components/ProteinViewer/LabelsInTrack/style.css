@@ -1,0 +1,31 @@
+.db-link {
+  overflow-y: hidden;
+}
+
+.track-label {
+  padding: 0px;
+}
+
+.track-label > .track-label {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.track-label > .label-links {
+  width: 100%;
+  overflow-y: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-right: 9px;
+}
+
+.icon-interpro {
+  height: 16px;
+  width: 16px;
+  background-image: url("../../../images/logo/logo_lightblue.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
