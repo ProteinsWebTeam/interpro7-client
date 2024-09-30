@@ -503,22 +503,5 @@ exports[`<ByEntryType /> Entry types 1`] = `
       </p>
     </Memo(Connect(Link))>
   </Memo(Connect(AnimatedEntry))>
-  <Memo(Connect(Link))
-    buttonType="primary"
-    to={
-      {
-        "description": {
-          "entry": {
-            "db": "InterPro",
-          },
-          "main": {
-            "key": "entry",
-          },
-        },
-      }
-    }
-  >
-    View all entries
-  </Memo(Connect(Link))>
 </div>
 `;

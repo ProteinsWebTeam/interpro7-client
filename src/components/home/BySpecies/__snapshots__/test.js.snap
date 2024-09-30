@@ -170,7 +170,7 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     }
   >
-    View all Taxa
+    Browse all species
   </Memo(Connect(Link))>
 </div>
 `;
