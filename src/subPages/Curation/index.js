@@ -72,7 +72,7 @@ const CurationSubPage = ({ data }) => {
             <td>Sequence Ontology</td>
             <td className={f('first-letter-cap')}>
               <a
-                href={`http://www.sequenceontology.org/miso/current_svn/term/${details.curation.sequence_ontology}`}
+                href={`http://www.sequenceontology.org/browser/current_release/term/SO:${details.curation.sequence_ontology}`}
                 target="_blank"
                 rel="noreferrer"
               >
