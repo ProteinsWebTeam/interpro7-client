@@ -147,7 +147,7 @@ export const ProteinViewer = ({
     'conserved site': false,
     'active site': false,
     'binding site': false,
-    ptm: false,
+    PTM: false,
     'match conservation': false,
     'coiled-coils, signal peptides, transmembrane regions': false,
     'short linear motifs': false,
@@ -208,6 +208,79 @@ export const ProteinViewer = ({
     for (const category of categoryRefs.current) {
       category?.setExpandedAllTracks(expanded);
     }
+  };
+
+  const residuesToLocations = (
+    residues: Residue[] | undefined,
+  ): ExtendedFeatureLocation[] => {
+    const newLocations: ExtendedFeatureLocation[] = [];
+    if (residues) {
+      residues.map((residue) => {
+        residue.locations.map((location) => {
+          newLocations.push(location);
+        });
+      });
+    }
+    return newLocations;
+  };
+
+  type PTM = {
+    position: number;
+    name: string;
+    sources: string[];
+  };
+
+  type PTMFeature = {
+    begin: string;
+    end: string;
+    ptms: PTM[];
+    peptide: string;
+    evidences: [];
+    type: string;
+    description: string;
+    accession: string;
+  };
+
+  type PTMData = {
+    accession: string;
+    entryName: string;
+    protein: string;
+    features: [];
+  };
+
+  const ptmsFeaturesToLocations = (
+    accession: string,
+    ptmFeatures: PTMFeature[],
+  ): ExtendedFeatureLocation[] => {
+    const newPTMLocations: ExtendedFeatureLocation[] = [];
+
+    ptmFeatures.map((feature) => {
+      const newPTMLocation: ExtendedFeatureLocation & {
+        accession: string;
+        description: string;
+      } = {
+        accession: accession,
+        description: accession,
+        fragments: [],
+      };
+
+      feature.ptms.map((ptm) => {
+        newPTMLocation.fragments.push({
+          ptm: [feature.peptide[ptm.position - 1]],
+          ptm_type: ptm.name,
+          evidences: feature.evidences,
+          position: ptm.position,
+          peptide: feature.peptide,
+          source: ptm.sources.join(', '),
+          start: parseInt(feature.begin) + ptm.position - 1,
+          end: parseInt(feature.begin) + ptm.position - 1,
+        });
+      });
+
+      newPTMLocations.push(newPTMLocation);
+    });
+
+    return newPTMLocations;
   };
 
   return (
@@ -283,6 +356,25 @@ export const ProteinViewer = ({
                   let hideDiv: string = '';
                   if (!showMore && !mainTracks.includes(type)) {
                     hideDiv = 'none';
+                  }
+
+                  // Transform PTM data to track-like data
+                  if (type == 'PTM') {
+                    const ptmEntries: ExtendedFeature[] = [];
+                    entries.map((entry) => {
+                      const tempFeature: ExtendedFeature = {
+                        accession: (entry.data as PTMData).accession,
+                        protein: (entry.data as PTMData).accession,
+                        type: 'ptm',
+                        source_database: 'ptm',
+                        locations: ptmsFeaturesToLocations(
+                          (entry.data as PTMData).accession,
+                          (entry.data as PTMData).features,
+                        ),
+                      };
+                      ptmEntries.push(tempFeature);
+                    });
+                    entries = ptmEntries;
                   }
 
                   return (
