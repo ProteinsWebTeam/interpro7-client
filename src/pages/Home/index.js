@@ -377,7 +377,7 @@ class Home extends PureComponent {
         <ToolCards />
 
         <div className={f('row')}>
-          <span className={f('elixir-title')}>This service funded by</span>
+          <span className={f('elixir-title')}>This service is funded by</span>
           <img src={embl} className={f('image-funding')} alt="EMBL logo" />
           <img
             src={wellcome}
