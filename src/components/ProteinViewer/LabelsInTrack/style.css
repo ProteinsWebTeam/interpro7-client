@@ -21,6 +21,25 @@
   padding-right: 9px;
 }
 
+.interpro-label {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  overflow-x: hidden;
+}
+
+.interpro-link {
+  display: flex;
+  align-items: center;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.db-member-xs {
+  height: 20px !important;
+  width: 20px !important;
+}
+
 .icon-interpro {
   height: 16px;
   width: 16px;

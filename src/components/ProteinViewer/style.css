@@ -84,8 +84,12 @@
   display: none;
 }
 
-.track-component path:global(.child-fragment) {
-  stroke-width: 1px;
+text:global(.child-label) {
+  font-size: 12px;
+}
+
+path:global(.child-fragment) {
+  stroke-width: 2; /* Optional: Adjust the stroke width for better visibility */
   opacity: 0.5;
   cursor: pointer;
 }

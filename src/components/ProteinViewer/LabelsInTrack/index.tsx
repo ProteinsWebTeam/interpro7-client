@@ -10,9 +10,11 @@ import cssBinder from 'styles/cssBinder';
 
 import style from '../../ProteinViewer/style.css';
 import grid from '../../ProteinViewer/grid.css';
+import local from './style.css';
 import ExceptionalLabels, { isAnExceptionalLabel } from './ExceptionalLabels';
+import MemberSymbol from 'components/Entry/MemberSymbol';
 
-const css = cssBinder(style, grid);
+const css = cssBinder(style, grid, local);
 
 type Props = {
   entry: ExtendedFeature;

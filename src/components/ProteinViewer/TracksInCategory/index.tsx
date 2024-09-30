@@ -381,16 +381,16 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                     <NightingaleInterProTrack
                       length={sequence.length}
                       margin-color="#fafafa"
-                      height={40}
-                      row-height={40}
                       id={getTrackAccession(entry.accession)}
+                      show-label
+                      // @ts-ignore
+                      samesize={true}
                       shape="roundRectangle"
                       highlight-event="onmouseover"
                       highlight-color={highlightColor}
-                      show-label
                       label=".feature.short_name"
                       use-ctrl-to-zoom
-                      expanded={!!expandedTrack[entry.accession]}
+                      expanded={expandedTrack[entry.accession]}
                     />
                   )}
                 </div>

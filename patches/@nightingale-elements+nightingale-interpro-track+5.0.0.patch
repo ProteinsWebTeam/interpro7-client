@@ -1,0 +1,123 @@
+diff --git a/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts b/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts
+index 8302fc6..e412b06 100644
+--- a/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts
++++ b/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts
+@@ -39,24 +39,31 @@ export default class InterproEntryLayout extends DefaultLayout {
+   maxYPos = 0;
+   expanded = false;
+   padding = 1;
+-
++  samesize = false;
+   constructor({
+     expanded,
+     padding,
++    samesize, 
+     ...otherOptions
+-  }: LayoutOptions & { expanded: boolean; padding: number }) {
++  }: LayoutOptions & { expanded: boolean; padding: number, samesize?: boolean }) {
+     super(otherOptions);
++    if (samesize !== undefined){
++      this.samesize = samesize;
++    }
+     this.expanded = expanded;
+     this.padding = padding;
+   }
+ 
+   init(features: InterProFeature[], children?: InterProFeature[]) {
++
++    let childHeight = this.samesize ? EXPANDED_HEIGHT : CHILD_HEIGHT
++    console.log(this.samesize)
+     let yPos = 0;
+     this.#heightMap = new Map();
+     this.#yPositionMap = new Map();
+     this.maxYPos = 0;
+     if (!features) return;
+-    const innerPadding = (COLLAPSED_HEIGHT - CHILD_HEIGHT) / 2;
++    const innerPadding = (COLLAPSED_HEIGHT - childHeight) / 2;
+     const residuesPos: Record<
+       string,
+       Record<string, Record<string, { height: number; yPos: number }>>
+@@ -64,10 +71,22 @@ export default class InterproEntryLayout extends DefaultLayout {
+     for (let k = 0; k < features.length; k++) {
+       const feature = features[k];
+       const isCollapsible = feature?.residues?.length || children?.length;
+-      this.#heightMap.set(
+-        feature.accession,
+-        isCollapsible && !this.expanded ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT,
+-      );
++
++      if (this.samesize){
++        console.log("hey, here")
++        this.#heightMap.set(
++          feature.accession,
++          childHeight
++        );
++      }
++
++      else {
++        this.#heightMap.set(
++          feature.accession,
++          isCollapsible && !this.expanded ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT,
++        );
++      }
++
+       this.#yPositionMap.set(feature.accession, this.padding);
+       yPos = (this.#heightMap.get(feature.accession) || 0) + 2 * this.padding;
+       this.maxYPos = Math.max(this.maxYPos, yPos);
+@@ -89,7 +108,7 @@ export default class InterproEntryLayout extends DefaultLayout {
+       for (let k = 0; k < children.length; k++) {
+         const child: InterProFeature = children[k];
+         if (!this.#heightMap.has(child.accession)) {
+-          this.#heightMap.set(child.accession, CHILD_HEIGHT);
++          this.#heightMap.set(child.accession, childHeight);
+           this.#yPositionMap.set(
+             child.accession,
+             (this.expanded ? this.maxYPos : innerPadding) + this.padding,
+@@ -133,6 +152,9 @@ export default class InterproEntryLayout extends DefaultLayout {
+     > = {},
+     expanded = true,
+   ) {
++
++    let childHeight = this.samesize ? EXPANDED_HEIGHT : CHILD_HEIGHT
++    
+     for (let i = 0; i < residues.length; i++) {
+       const resGroup = residues[i];
+       InterproEntryLayout.filterOutResidueFragmentsOutOfLocation(
+@@ -152,7 +174,7 @@ export default class InterproEntryLayout extends DefaultLayout {
+             yPos: expanded ? this.maxYPos + this.padding : yPos + innerPadding,
+           };
+           yPos = expanded
+-            ? this.maxYPos + 2 * this.padding + CHILD_HEIGHT
++            ? this.maxYPos + 2 * this.padding + childHeight
+             : yPos;
+         }
+         this.#heightMap.set(
+diff --git a/node_modules/@nightingale-elements/nightingale-interpro-track/src/nightingale-interpro-track.ts b/node_modules/@nightingale-elements/nightingale-interpro-track/src/nightingale-interpro-track.ts
+index 41564ba..7ff27f3 100644
+--- a/node_modules/@nightingale-elements/nightingale-interpro-track/src/nightingale-interpro-track.ts
++++ b/node_modules/@nightingale-elements/nightingale-interpro-track/src/nightingale-interpro-track.ts
+@@ -51,12 +51,14 @@ function colorKeywordToRGB(colorKeyword: string) {
+ 
+ @customElement("nightingale-interpro-track")
+ class NightingaleInterproTrack extends NightingaleTrack {
++  @property({ type: Boolean, reflect: true })
++  samesize?: boolean = false;
+   @property({ type: Boolean })
+   expanded?: boolean = false;
+-  @property({ type: Boolean })
+-  "show-label"?: boolean = false;
+   @property({ type: String })
+   label?: string | null = null;
++  @property({ type: Boolean })
++  "show-label"?: boolean = false;
+ 
+   layout = undefined;
+   protected layoutObj?: InterproEntryLayout;
+@@ -116,6 +118,7 @@ class NightingaleInterproTrack extends NightingaleTrack {
+ 
+   getLayout() {
+     return new InterproEntryLayout({
++      samesize: this.samesize,
+       layoutHeight: this.height,
+       expanded: !!this.expanded,
+       padding: (this["margin-top"] + this["margin-bottom"]) / 2,
