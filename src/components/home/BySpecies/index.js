@@ -184,7 +184,7 @@ export class BySpecies extends PureComponent /*:: <Props> */ {
           }}
           buttonType="primary"
         >
-          View all Taxa
+          Browse all species
         </Link>
       </div>
     );
