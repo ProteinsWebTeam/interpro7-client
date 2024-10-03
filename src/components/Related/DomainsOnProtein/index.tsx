@@ -259,13 +259,6 @@ const DomainOnProteinWithoutData = ({
 
     /* End of logic for splitting "other_features" */
   }
-  // if (conservation.data) {
-  //   mergeConservationData(mergedData, conservation.data);
-  // }
-  // Disabling Conservation until hmmer is working
-  // const fetchConservationData = () => {
-  //   setConservation({ ...conservation, generateData: true });
-  // };
 
   if (
     (!Object.keys(mergedData).length ||
@@ -278,40 +271,9 @@ const DomainOnProteinWithoutData = ({
   ) {
     return <Callout type="info">No entries match this protein.</Callout>;
   }
-  // Disabling Conservation until hmmer is working
-  // const showConservationButton =
-  //   // check if conservation data has already been generated
-  //   !conservation.data &&
-  //   // or if the conditions to calculate conservation are met.
-  //   isConservationDataAvailable(mergedData, mainData.metadata.source_database);
 
   return (
     <>
-      {/* <ConservationProvider
-        generateData={conservation.generateData}
-        handleLoaded={(data) =>
-          setConservation({
-            ...conservation,
-            data: data,
-            error: null,
-          })
-        }
-        handleError={(payload) => {
-          let message = 'Unknown issue fetching the data.';
-          if (payload.status) {
-            message =
-              payload.status === HTTP_OK
-                ? 'The server responded OK, however the payload is empty'
-                : `Server code - ${payload.status}`;
-          }
-          setConservation({
-            ...conservation,
-            data: null,
-            error: `ERROR: ${message}`,
-          });
-        }}
-      />
-*/}
       <DomainsOnProteinLoaded
         title={title}
         mainData={mainData}

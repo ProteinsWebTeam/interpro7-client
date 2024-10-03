@@ -169,6 +169,7 @@ export const makeTracks = ({
     interpro.concat(unintegrated as { accession: string; type: string }[]),
   );
 
+  // Merge domain and families into respective representative ones. Merge homologous superfamily into domains.
   const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
 
   if (other) mergedData.other_features = other;
@@ -302,28 +303,6 @@ const DomainsOnProteinLoaded = ({
     if (dataProteomics.payload.features.length > 0) {
       /*addPTMTrack(dataProteomics.payload, protein.accession, sortedData);*/
     }
-  }
-
-  function filterOutRepresentative(
-    entries: ExtendedFeature[],
-  ): ExtendedFeature[] {
-    for (let i = 0; i < entries.length; i++) {
-      let removeEntry: boolean = false;
-      const currentEntry = entries[i];
-      if (currentEntry.children !== undefined) {
-        currentEntry.children = currentEntry.children.filter((child) => {
-          return child.entry_protein_locations?.[0].representative == false;
-        });
-        if (currentEntry.children.length == 0) removeEntry = true;
-      } else {
-        if (currentEntry.entry_protein_locations?.[0].representative == true)
-          removeEntry = true;
-      }
-      if (removeEntry) {
-        entries.splice(i, 1);
-      }
-    }
-    return entries;
   }
 
   const uniqueResidues: Record<string, ExtendedFeature> = {};
