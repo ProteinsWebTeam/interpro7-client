@@ -383,6 +383,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                       margin-color="#fafafa"
                       id={getTrackAccession(entry.accession)}
                       show-label
+                      margin-left={20}
                       // @ts-ignore
                       samesize={true}
                       shape="roundRectangle"

@@ -44,7 +44,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
                 }
                 onMouseOverFeature={[Function]}
               >
-                <Memo(mi)
+                <mi
                   data={[]}
                   display-end={0}
                   display-start={1}

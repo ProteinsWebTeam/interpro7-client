@@ -191,6 +191,10 @@ nightingale-manager {
   width: 100%;
 }
 
+svg {
+  cursor: default;
+}
+
 /* Hide parent tracks for domain and interpro entries*/
 g:global(.feature-group):has(g:global(.residues-group))
   > g:global(.location-group) {
@@ -198,6 +202,6 @@ g:global(.feature-group):has(g:global(.residues-group))
 }
 
 svg:global(.container):has(g:global(.children-features))
-  > g:global(.sequence-features) {
+  > g:global(.sequence-features):has(g:global(.feature-group[id^="g_IPR"])) {
   display: none;
 }

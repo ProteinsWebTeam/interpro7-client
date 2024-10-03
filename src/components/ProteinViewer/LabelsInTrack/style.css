@@ -1,43 +1,17 @@
-.db-link {
-  overflow-y: hidden;
-}
-
-.track-label {
+.inner-track-label {
   padding: 0px;
+  margin-top: 8px;
 }
 
-.track-label > .track-label {
-  width: 100%;
-  overflow-x: auto;
+.track-accession-child {
+  margin-top: 2px;
 }
 
-.track-label > .label-links {
-  width: 100%;
-  overflow-y: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-right: 9px;
-}
-
-.interpro-label {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  overflow-x: hidden;
-}
-
-.interpro-link {
-  display: flex;
-  align-items: center;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
-.db-member-xs {
-  height: 20px !important;
-  width: 20px !important;
+.track-label .inner-track-label > a,
+.track-label .inner-track-label > a:focus,
+.track-label .inner-track-label > a:visited {
+  font-weight: 600;
+  color: var(--colors-dark);
 }
 
 .icon-interpro {

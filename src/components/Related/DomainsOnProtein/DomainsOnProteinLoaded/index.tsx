@@ -4,6 +4,7 @@ import loadable from 'higherOrder/loadable';
 import { groupByEntryType } from 'components/Related/DomainsOnProtein';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 import { ExtendedFeature } from 'components/ProteinViewer';
+import { sleep } from 'timing-functions';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -15,16 +16,16 @@ const ProteinViewer = loadable({
 const UNDERSCORE = /_/g;
 
 const FIRST_IN_ORDER = [
-  'family',
   'alphafold_confidence',
+  'family',
+  'domain',
+  'intrinsically_disordered_regions',
+  'residues',
   'secondary_structure',
   'spurious_proteins',
   'representative_domains',
   'representative_families',
   'pathogenic_and_likely_pathogenic_variants',
-  'intrinsically_disordered_regions',
-  'residues',
-  'domain',
   'homologous_superfamily',
   'repeat',
   'conserved_site',
@@ -167,17 +168,23 @@ export const makeTracks = ({
   const groups = groupByEntryType(
     interpro.concat(unintegrated as { accession: string; type: string }[]),
   );
-  Object.values(groups).map((group) => group.sort(sortTracks).flat());
-  console.log(groups);
+
   const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
 
   if (other) mergedData.other_features = other;
   if (representativeDomains?.length)
-    mergedData.representative_domains = representativeDomains;
+    mergedData.domain = mergedData.domain.concat(representativeDomains);
+  mergedData.domain = mergedData.domain.concat(
+    mergedData.homologous_superfamily,
+  );
+  mergedData.homologous_superfamily = [];
   if (representativeFamilies?.length)
-    mergedData.representative_families = representativeFamilies;
+    mergedData.family = mergedData.family.concat(representativeFamilies);
   if (disorderedRegions?.length)
     mergedData.disorderedRegions = disorderedRegions;
+
+  Object.values(mergedData).map((group) => group.sort(sortTracks).flat());
+
   return mergedData;
 };
 
@@ -297,7 +304,50 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  // Sort all the tracks, including the special ones (eg. alphafold, variants)
+  function filterOutRepresentative(
+    entries: ExtendedFeature[],
+  ): ExtendedFeature[] {
+    for (let i = 0; i < entries.length; i++) {
+      let removeEntry: boolean = false;
+      const currentEntry = entries[i];
+      if (currentEntry.children !== undefined) {
+        currentEntry.children = currentEntry.children.filter((child) => {
+          return child.entry_protein_locations?.[0].representative == false;
+        });
+        if (currentEntry.children.length == 0) removeEntry = true;
+      } else {
+        if (currentEntry.entry_protein_locations?.[0].representative == true)
+          removeEntry = true;
+      }
+      if (removeEntry) {
+        entries.splice(i, 1);
+      }
+    }
+    return entries;
+  }
+
+  const uniqueResidues: Record<string, ExtendedFeature> = {};
+
+  // Group PIRSR residue by description and poistion
+  for (let i = 0; i < dataMerged.residues.length; i++) {
+    const currentResidue = dataMerged.residues[i] as ExtendedFeature;
+    if (currentResidue.source_database == 'pirsr') {
+      const residueStart =
+        currentResidue.locations?.[0].fragments?.[0].start || 0;
+      const residueEnd = currentResidue.locations?.[0].fragments?.[0].end || 0;
+      const residueDescription =
+        currentResidue.locations?.[0].description?.replace('.', '');
+
+      const dictKey =
+        residueStart.toString() + residueEnd.toString() + residueDescription;
+
+      if (!uniqueResidues[dictKey]) uniqueResidues[dictKey] = currentResidue;
+    } else {
+      uniqueResidues[currentResidue.accession] = currentResidue;
+    }
+  }
+
+  dataMerged.residues = Object.values(uniqueResidues);
   const sortedData = flattenTracksObject(dataMerged);
 
   return (

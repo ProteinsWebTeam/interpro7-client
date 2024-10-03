@@ -90,14 +90,9 @@ const RepresentativeDomainsTrack = ({
           use-ctrl-to-zoom
         />
       </div>
-      {entries.length === 1 ? (
-        <LabelsInTrack
-          entry={entries[0]}
-          hideCategory={hideCategory}
-          expandedTrack={true}
-          isPrinting={isPrinting}
-        />
-      ) : null}
+      <div className={css('track-label')}>
+        <b>Representative</b>
+      </div>
     </>
   );
 };

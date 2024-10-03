@@ -76,6 +76,7 @@ export const getTextForLabel = (
     accession: string;
     name: string;
     short_name: string;
+    source_database: string;
   } */,
   label /*: {
     accession: boolean;

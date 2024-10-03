@@ -46,23 +46,31 @@ const LabelsInTrack = ({
               <Label entry={entry} />
             </b>
           ) : (
-            <Link
-              to={{
-                description: {
-                  main: {
-                    key,
-                  },
-                  [key]: {
-                    db: entry.source_database,
-                    accession: entry.accession.startsWith('residue:')
-                      ? entry.accession.split('residue:')[1]
-                      : entry.accession,
-                  },
-                },
-              }}
+            <div
+              className={css(
+                entry.children || entry.residues
+                  ? 'inner-track-label'
+                  : 'track-accession-child',
+              )}
             >
-              <Label entry={entry} />
-            </Link>
+              <Link
+                to={{
+                  description: {
+                    main: {
+                      key,
+                    },
+                    [key]: {
+                      db: entry.source_database,
+                      accession: entry.accession.startsWith('residue:')
+                        ? entry.accession.split('residue:')[1]
+                        : entry.accession,
+                    },
+                  },
+                }}
+              >
+                <Label entry={entry} />
+              </Link>
+            </div>
           )}
           <div
             className={css({

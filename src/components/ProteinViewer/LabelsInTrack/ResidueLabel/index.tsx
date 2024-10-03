@@ -27,11 +27,14 @@ const ResidueLabel = ({ entry, expandedTrack }: Props) => {
           >
             <span>
               {r.description
-                ? r.description.charAt(0).toUpperCase() + r.description.slice(1)
-                : r.accession}
+                ? (
+                    r.description.charAt(0).toUpperCase() +
+                    r.description.slice(1)
+                  ).slice(0, 20) + '..'
+                : r.accession + 'test'}
             </span>
           </div>
-        ))
+        )),
       )}
     </>
   );

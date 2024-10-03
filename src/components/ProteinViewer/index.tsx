@@ -58,12 +58,14 @@ export type ExtendedFeatureLocation = {
     [annotation: string]: unknown;
   }>;
 } & {
+  representative?: boolean;
   confidence?: number;
   description?: string;
   seq_feature?: string;
 };
 export type ExtendedFeature = Feature & {
   data?: unknown;
+  representative?: boolean;
   entry_protein_locations?: Array<ExtendedFeatureLocation>;
   locations?: Array<ExtendedFeatureLocation>;
   name?: string;
@@ -103,12 +105,14 @@ type CategoryVisibility = { [name: string]: boolean };
 
 const switchCategoryVisibility = (
   categories: CategoryVisibility,
-  name: string,
+  names: string[],
 ): CategoryVisibility => {
-  return {
-    ...categories,
-    [name]: !categories[name],
-  };
+  return names.reduce((updatedCategories, name) => {
+    return {
+      ...updatedCategories,
+      [name]: !updatedCategories[name],
+    };
+  }, categories);
 };
 
 export const ProteinViewer = ({
@@ -130,8 +134,8 @@ export const ProteinViewer = ({
   // List of "main" tracks to be displayed, the rest are hidden by default
   const mainTracks = [
     'alphafold confidence',
-    'representative domains',
-    'representative families',
+    'family',
+    'domain',
     'pathogenic and likely pathogenic variants',
     'intrinsically disordered regions',
     'spurious proteins',
@@ -140,9 +144,9 @@ export const ProteinViewer = ({
 
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'secondary structure': false,
-    family: false,
-    domain: false,
     'homologous superfamily': false,
+    family: true,
+    domain: true,
     repeat: false,
     'conserved site': false,
     'active site': false,
@@ -185,13 +189,20 @@ export const ProteinViewer = ({
   ) => {
     if (element && tooltipEnabledRef.current) {
       refs.setReference(element);
-      setTooltipContent(content);
+      setTooltipContent((prevContent) => {
+        // Only update if content has changed
+        if (prevContent !== content) {
+          return content;
+        }
+        return prevContent; // No update, prevents re-render
+      });
       if (intervalId.current) {
         clearInterval(intervalId.current as unknown as number);
         intervalId.current = null;
       }
     }
   };
+
   const closeTooltip = () => {
     if (!intervalId.current)
       intervalId.current = setInterval(() => {
@@ -212,6 +223,7 @@ export const ProteinViewer = ({
 
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
+      {/* Tooltip */}
       <div
         ref={refs.setFloating}
         style={floatingStyles}
@@ -222,6 +234,7 @@ export const ProteinViewer = ({
         <FloatingArrow ref={arrowRef} context={context} />
         {tooltipContent}
       </div>
+
       <div>
         <NightingaleManager id="pv-manager">
           <div
@@ -253,6 +266,9 @@ export const ProteinViewer = ({
               <ShowMoreTracks
                 showMore={showMore}
                 showMoreChanged={setShowMore}
+                setHideCategory={setHideCategory}
+                switchCategoryVisibility={switchCategoryVisibility}
+                hideCategory={hideCategory}
               />
             </div>
           </div>
@@ -278,6 +294,17 @@ export const ProteinViewer = ({
                   });
 
                   const LabelComponent = component?.component || 'span';
+                  let representativeEntries: ExtendedFeature[] | null = null;
+                  let nonRepresentativeEntries: ExtendedFeature[] | null = null;
+
+                  if (type === 'domain' || type === 'family') {
+                    representativeEntries = entries.filter(
+                      (entry) => entry.representative === true,
+                    );
+                    nonRepresentativeEntries = entries.filter(
+                      (entry) => entry.representative !== true,
+                    );
+                  }
 
                   // Show only the main tracks unless button "Show more" is clicked
                   let hideDiv: string = '';
@@ -303,7 +330,7 @@ export const ProteinViewer = ({
                         <button
                           onClick={() =>
                             setHideCategory(
-                              switchCategoryVisibility(hideCategory, type),
+                              switchCategoryVisibility(hideCategory, [type]),
                             )
                           }
                           className={css('as-text')}
@@ -325,26 +352,35 @@ export const ProteinViewer = ({
                           <LabelComponent {...(component?.attributes || {})} />
                         </div>
                       )}{' '}
-                      {type === 'representative domains' ? (
-                        <RepresentativeDomainsTrack
-                          hideCategory={hideCategory[type]}
-                          highlightColor={highlightColor}
-                          entries={entries}
-                          length={protein.sequence.length}
-                          openTooltip={openTooltip}
-                          closeTooltip={closeTooltip}
-                          isPrinting={isPrinting}
-                        />
-                      ) : type === 'representative families' ? (
-                        <RepresentativeDomainsTrack
-                          hideCategory={hideCategory[type]}
-                          highlightColor={highlightColor}
-                          entries={entries}
-                          length={protein.sequence.length}
-                          openTooltip={openTooltip}
-                          closeTooltip={closeTooltip}
-                          isPrinting={isPrinting}
-                        />
+                      {representativeEntries ? (
+                        <>
+                          {representativeEntries.length > 0 ? (
+                            <RepresentativeDomainsTrack
+                              hideCategory={false}
+                              highlightColor={highlightColor}
+                              entries={representativeEntries}
+                              length={protein.sequence.length}
+                              openTooltip={() => {}}
+                              closeTooltip={() => {}}
+                              isPrinting={isPrinting}
+                            />
+                          ) : (
+                            ' '
+                          )}
+                          <TracksInCategory
+                            entries={nonRepresentativeEntries || []}
+                            sequence={protein.sequence}
+                            hideCategory={hideCategory[type]}
+                            highlightColor={highlightColor}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
+                            isPrinting={isPrinting}
+                            ref={(ref: ExpandedHandle) =>
+                              categoryRefs.current.push(ref)
+                            }
+                            databases={dataBase?.payload?.databases}
+                          />
+                        </>
                       ) : (
                         <TracksInCategory
                           entries={entries}
