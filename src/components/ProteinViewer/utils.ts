@@ -9,15 +9,22 @@ export const selectRepresentativeDomains = (
 ) => {
   const flatDomains = [];
   for (const domain of domains) {
-    const { accession, short_name, name, source_database, integrated, chain } =
-      domain;
+    const {
+      accession,
+      short_name,
+      name,
+      source_database,
+      integrated,
+      chain,
+      type,
+    } = domain;
     if (domain[locationKey] === null) {
       continue;
     }
     for (const location of domain[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end } = fragment;
-        if (location.representative) {
+        if (location.representative && type !== 'family') {
           flatDomains.push({
             accession,
             chain,
