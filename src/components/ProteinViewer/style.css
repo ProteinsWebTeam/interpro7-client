@@ -52,6 +52,10 @@
   margin-bottom: 3px;
 }
 
+.centered-label {
+  margin-top: 6px;
+}
+
 .sequence-conservation {
   cursor: pointer;
 }

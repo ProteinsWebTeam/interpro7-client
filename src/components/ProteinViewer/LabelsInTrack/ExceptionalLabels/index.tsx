@@ -59,10 +59,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         )}
         {entry.children &&
           entry.children.map((d) => (
-            <div
-              className={css('track-accession-child')}
-              key={`main_${d.accession}`}
-            >
+            <div className={css('centered-label')} key={`main_${d.accession}`}>
               {d.accession.replace('Mobidblt-', '')}
             </div>
           ))}

@@ -63,6 +63,7 @@ const MARGIN_CHANGE_TRACKS = [
   'pfam-n',
   'funfam',
   'match_conservation',
+  'mobidblt',
 ];
 
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
@@ -386,7 +387,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           length={sequence.length}
                           margin-color="#fafafa"
                           margin-left={20}
-                          height={15}
+                          height={12}
                           id={getTrackAccession(entry.accession)}
                           highlight-event="onmouseover"
                           highlight-color={highlightColor}
@@ -404,7 +405,9 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                         margin-left={20}
                         margin-top={trackTopMargin} // Space unintegrated
                         // @ts-ignore
-                        samesize={true}
+                        samesize={
+                          entry.source_database == 'mobidblt' ? false : true
+                        }
                         shape="roundRectangle"
                         highlight-event="onmouseover"
                         highlight-color={highlightColor}

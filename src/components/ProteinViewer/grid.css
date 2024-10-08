@@ -45,6 +45,12 @@
   cursor: move;
   min-height: 1rem;
 }
+
+.residue-accession-child {
+  height: 12px;
+  margin-top: 5px;
+}
+
 .protvista-grid .track path:global(.feature) {
   stroke: transparent;
   stroke-width: 1;

@@ -21,7 +21,7 @@ const ResidueLabel = ({ entry, expandedTrack }: Props) => {
         residue.locations.map((r, i) => (
           <div
             key={`res_${r.accession}_${i}`}
-            className={css('track-accession-child', {
+            className={css('residue-accession-child', {
               hide: !expandedTrack,
             })}
           >

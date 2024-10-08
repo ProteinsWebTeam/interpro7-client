@@ -90,7 +90,7 @@ const RepresentativeDomainsTrack = ({
           use-ctrl-to-zoom
         />
       </div>
-      <div className={css('track-label')}>
+      <div className={css('track-label', 'centered-label')}>
         <b>Representative</b>
       </div>
     </>
