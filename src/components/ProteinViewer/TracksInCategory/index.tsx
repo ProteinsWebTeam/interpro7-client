@@ -56,6 +56,15 @@ const OTHER_TRACK_TYPES = [
   'consensus majority',
   'variation',
 ];
+
+const MARGIN_CHANGE_TRACKS = [
+  'coiled-coils,_signal_peptides,_transmembrane_regions',
+  'short_linear_motifs',
+  'pfam-n',
+  'funfam',
+  'match_conservation',
+];
+
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
 const b2sh = new Map([
@@ -278,6 +287,14 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
               entry.accession.startsWith(prefix),
             );
 
+            // Space unintegrated tracks
+            const trackTopMargin =
+              entry.source_database !== 'interpro' && // Not integrated
+              !MARGIN_CHANGE_TRACKS.includes(entry.source_database || '') && // Not included in other_features (eg. pfam-n, etc..)
+              !entry.accession.startsWith('residue:') // Not a residue
+                ? 14
+                : 2;
+
             return (
               <React.Fragment key={entry.accession}>
                 <div
@@ -385,16 +402,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                         id={getTrackAccession(entry.accession)}
                         show-label
                         margin-left={20}
-                        // Space unintegrated
-                        margin-top={
-                          entry.source_database !== 'interpro' &&
-                          !(
-                            entry.accession.startsWith('residue:') ||
-                            entry.accession.startsWith('PIRSR')
-                          )
-                            ? 14
-                            : 2
-                        }
+                        margin-top={trackTopMargin} // Space unintegrated
                         // @ts-ignore
                         samesize={true}
                         shape="roundRectangle"

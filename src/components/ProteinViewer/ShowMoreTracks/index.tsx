@@ -48,7 +48,7 @@ const ShowMoreTracks = ({
           showMoreChanged(!showMore);
         }}
       >
-        {showMore ? 'Show less annotations' : 'Show all annotations'}
+        {showMore ? 'Show summary view' : 'Show all annotations'}
       </button>
     </div>
   );

@@ -46,8 +46,10 @@
 }
 
 .pirsr-label {
-  color: var(--colors-graydark);
+  color: var(--colors-dark);
   font-weight: bold;
+  margin-top: 14px;
+  margin-bottom: 3px;
 }
 
 .sequence-conservation {

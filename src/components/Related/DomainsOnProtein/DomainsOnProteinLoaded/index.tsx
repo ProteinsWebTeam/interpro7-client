@@ -309,9 +309,6 @@ const DomainsOnProteinLoaded = ({
   }
 
   const uniqueResidues: Record<string, ExtendedFeature> = {};
-
-  console.log(dataMerged.residues);
-
   // Group PIRSR residue by description and position
   for (let i = 0; i < dataMerged.residues.length; i++) {
     const currentResidue = dataMerged.residues[i] as ExtendedFeature;
@@ -331,7 +328,7 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  // Group PIRSR into single object with multiple locations
+  // Create fake PIRSR object to display group label
   uniqueResidues['PIRSR'] = {
     accession: 'PIRSR_GROUP',
     source_database: 'pirsr',
@@ -339,7 +336,7 @@ const DomainsOnProteinLoaded = ({
     locations: [
       {
         description: 'PIRSR',
-        fragments: [{ residues: '', start: 0, end: 0 }],
+        fragments: [{ residues: '', start: -10, end: 0 }],
       } as ExtendedFeatureLocation,
     ],
   };
