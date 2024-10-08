@@ -35,10 +35,19 @@
   }
 }
 
+.unintegrated-label {
+  margin-top: 10px;
+}
+
 /*blobs*/
 
 .sequence-conservation-label {
   margin-top: 1.3em;
+}
+
+.pirsr-label {
+  color: var(--colors-graydark);
+  font-weight: bold;
 }
 
 .sequence-conservation {

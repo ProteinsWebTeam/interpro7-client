@@ -134,19 +134,19 @@ export const ProteinViewer = ({
   // List of "main" tracks to be displayed, the rest are hidden by default
   const mainTracks = [
     'alphafold confidence',
-    'family',
-    'domain',
+    'families',
+    'domains',
     'pathogenic and likely pathogenic variants',
     'intrinsically disordered regions',
     'spurious proteins',
-    'residues',
+    'conserved residues',
   ];
 
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'secondary structure': false,
     'homologous superfamily': false,
-    family: true,
-    domain: true,
+    families: true,
+    domains: true,
     repeat: false,
     'conserved site': false,
     'active site': false,
@@ -297,7 +297,7 @@ export const ProteinViewer = ({
                   let representativeEntries: ExtendedFeature[] | null = null;
                   let nonRepresentativeEntries: ExtendedFeature[] | null = null;
 
-                  if (type === 'domain' || type === 'family') {
+                  if (type === 'domains' || type === 'families') {
                     representativeEntries = entries.filter(
                       (entry) => entry.representative === true,
                     );

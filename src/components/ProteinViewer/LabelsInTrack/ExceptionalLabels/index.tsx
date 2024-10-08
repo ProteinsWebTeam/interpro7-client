@@ -123,6 +123,8 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
 
   if (entry.type === 'residue') {
     const processedAccession = entry.accession.replace('residue:', '');
+    const descriptionString = entry.locations?.[0].description;
+
     return isPrinting ? (
       <span>Residue: {processedAccession}</span>
     ) : (
@@ -142,7 +144,14 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
             {processedAccession}
           </Link>
         )}
-        <div>{entry.locations?.[0].description}</div>
+
+        <div
+          className={css(
+            processedAccession == 'PIRSR_GROUP' ? 'pirsr-label' : '',
+          )}
+        >
+          {descriptionString}
+        </div>
       </>
     );
   }

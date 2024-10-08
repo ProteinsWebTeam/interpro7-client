@@ -3,7 +3,10 @@ import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/Protei
 import loadable from 'higherOrder/loadable';
 import { groupByEntryType } from 'components/Related/DomainsOnProtein';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
-import { ExtendedFeature } from 'components/ProteinViewer';
+import {
+  ExtendedFeature,
+  ExtendedFeatureLocation,
+} from 'components/ProteinViewer';
 import { sleep } from 'timing-functions';
 
 const ProteinViewer = loadable({
@@ -17,10 +20,10 @@ const UNDERSCORE = /_/g;
 
 const FIRST_IN_ORDER = [
   'alphafold_confidence',
-  'family',
-  'domain',
+  'families',
+  'domains',
   'intrinsically_disordered_regions',
-  'residues',
+  'conserved_residues',
   'secondary_structure',
   'spurious_proteins',
   'representative_domains',
@@ -307,7 +310,9 @@ const DomainsOnProteinLoaded = ({
 
   const uniqueResidues: Record<string, ExtendedFeature> = {};
 
-  // Group PIRSR residue by description and poistion
+  console.log(dataMerged.residues);
+
+  // Group PIRSR residue by description and position
   for (let i = 0; i < dataMerged.residues.length; i++) {
     const currentResidue = dataMerged.residues[i] as ExtendedFeature;
     if (currentResidue.source_database == 'pirsr') {
@@ -326,8 +331,39 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  dataMerged.residues = Object.values(uniqueResidues);
-  const sortedData = flattenTracksObject(dataMerged);
+  // Group PIRSR into single object with multiple locations
+  uniqueResidues['PIRSR'] = {
+    accession: 'PIRSR_GROUP',
+    source_database: 'pirsr',
+    type: 'residue',
+    locations: [
+      {
+        description: 'PIRSR',
+        fragments: [{ residues: '', start: 0, end: 0 }],
+      } as ExtendedFeatureLocation,
+    ],
+  };
+
+  dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
+    if (
+      a.accession == 'PIRSR_GROUP' &&
+      a.source_database == 'pirsr' &&
+      b.accession !== 'PIRSR_GROUP' &&
+      b.source_database == 'pirsr'
+    )
+      return -1;
+    else return 1;
+  });
+
+  console.log(dataMerged.conserved_residues);
+
+  dataMerged.domains = dataMerged.domain.slice();
+  dataMerged.families = dataMerged.family.slice();
+
+  const renamedTracks = ['domain', 'family', 'residues'];
+  const sortedData = flattenTracksObject(dataMerged).filter(
+    (track) => !renamedTracks.includes(track[0]),
+  );
 
   return (
     <ProteinViewer

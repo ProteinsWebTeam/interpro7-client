@@ -378,23 +378,36 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                       )}{' '}
                     </div>
                   ) : (
-                    <NightingaleInterProTrack
-                      length={sequence.length}
-                      margin-color="#fafafa"
-                      id={getTrackAccession(entry.accession)}
-                      show-label
-                      margin-left={20}
-                      // @ts-ignore
-                      samesize={true}
-                      shape="roundRectangle"
-                      highlight-event="onmouseover"
-                      highlight-color={highlightColor}
-                      label=".feature.short_name"
-                      use-ctrl-to-zoom
-                      expanded={expandedTrack[entry.accession]}
-                    />
+                    <>
+                      <NightingaleInterProTrack
+                        length={sequence.length}
+                        margin-color="#fafafa"
+                        id={getTrackAccession(entry.accession)}
+                        show-label
+                        margin-left={20}
+                        // Space unintegrated
+                        margin-top={
+                          entry.source_database !== 'interpro' &&
+                          !(
+                            entry.accession.startsWith('residue:') ||
+                            entry.accession.startsWith('PIRSR')
+                          )
+                            ? 14
+                            : 2
+                        }
+                        // @ts-ignore
+                        samesize={true}
+                        shape="roundRectangle"
+                        highlight-event="onmouseover"
+                        highlight-color={highlightColor}
+                        label=".feature.short_name"
+                        use-ctrl-to-zoom
+                        expanded={expandedTrack[entry.accession]}
+                      />
+                    </>
                   )}
                 </div>
+
                 <LabelsInTrack
                   entry={entry}
                   hideCategory={hideCategory}
