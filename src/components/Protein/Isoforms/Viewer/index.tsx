@@ -73,7 +73,7 @@ const features2protvista = (features: FeatureMap) => {
   const representativeDomains = selectRepresentativeData(
     featArray,
     'locations',
-    'domain'
+    'domain',
   );
 
   if (representativeDomains?.length) {
