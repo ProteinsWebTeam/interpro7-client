@@ -46,9 +46,11 @@
   min-height: 1rem;
 }
 
-.residue-accession-child {
-  height: 12px;
-  margin-top: 5px;
+.residue-accession-container {
+  height: 18px; /* tracks + margins */
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 }
 
 .protvista-grid .track path:global(.feature) {
