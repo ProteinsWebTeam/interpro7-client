@@ -309,8 +309,9 @@ const DomainsOnProteinLoaded = ({
   }
 
   const uniqueResidues: Record<string, ExtendedFeature> = {};
+
   // Group PIRSR residue by description and position
-  for (let i = 0; i < dataMerged.residues.length; i++) {
+  for (let i = 0; i < dataMerged.residues?.length; i++) {
     const currentResidue = dataMerged.residues[i] as ExtendedFeature;
     if (currentResidue.source_database == 'pirsr') {
       const residueStart =
