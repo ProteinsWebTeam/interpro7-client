@@ -342,17 +342,21 @@ const DomainsOnProteinLoaded = ({
   };
 
   dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
+    // If comparing two entries from different DBs, put the non-pirsr always first (a) OR if source database is pirsr and first element is fake label, put fake label first
     if (
-      a.accession == 'PIRSR_GROUP' &&
-      a.source_database == 'pirsr' &&
-      b.accession !== 'PIRSR_GROUP' &&
-      b.source_database == 'pirsr'
+      (a.source_database !== 'pirsr' && b.source_database === 'pirsr') ||
+      (a.source_database === b.source_database && a.accession === 'PIRSR_GROUP')
     )
       return -1;
-    else return 1;
+    // If comparing two entries from different DBs, put the non-pirsr always first (b) OR if source database is pirsr and second element is fake label, put fake label first
+    else if (
+      (a.source_database === 'pirsr' && b.source_database !== 'pirsr') ||
+      (a.source_database === b.source_database && b.accession === 'PIRSR_GROUP')
+    )
+      return 1;
+    // All other cases
+    else return 0;
   });
-
-  console.log(dataMerged.conserved_residues);
 
   dataMerged.domains = dataMerged.domain.slice();
   dataMerged.families = dataMerged.family.slice();
