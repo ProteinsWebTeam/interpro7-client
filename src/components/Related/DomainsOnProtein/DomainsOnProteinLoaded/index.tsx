@@ -355,7 +355,7 @@ const DomainsOnProteinLoaded = ({
     )
       return 1;
     // All other cases
-    else return 0;
+    else return a.accession.localeCompare(b.accession);
   });
 
   dataMerged.domains = dataMerged.domain.slice();
