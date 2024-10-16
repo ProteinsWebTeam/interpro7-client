@@ -18,7 +18,7 @@ type Props = {
 
 type LabelOptions = 'accession' | 'name' | 'short';
 const labelMap: Array<[LabelOptions, string]> = [
-  // ['accession', 'Accession'], Just removing the option for now. Keeping the logic.
+  ['accession', 'Accession'],
   ['name', 'Name'],
   ['short', 'Short Name'],
 ];
@@ -33,7 +33,7 @@ const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
         [opt]: !labelContent?.[opt as LabelOptions],
       };
       if (!next.accession && !next.name && !next.short) {
-        next.accession = true;
+        next.short = true;
       }
       changeSettingsRaw('ui', 'labelContent', next);
     }

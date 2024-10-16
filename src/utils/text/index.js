@@ -84,15 +84,30 @@ export const getTextForLabel = (
     short: boolean;
   } */,
 ) /*: string */ => {
-  let text = '';
+  let textList = [];
 
-  if (!entry.accession.startsWith('IPR')) {
-    text = entry.source_database.toUpperCase() + ': ';
+  if (label.short && entry.short_name) textList.push(entry.short_name);
+  if (label.name && entry.name) textList.push(entry.name);
+  if (label.accession && entry.accession) textList.push(entry.accession);
+
+  // If the only selected label by option is not available, select the first available
+
+  if (textList.length == 0) {
+    const priorityList = ['short_name', 'name', 'accession'];
+    for (let i = 0; i < priorityList.length; i++) {
+      const label = entry[priorityList[i]];
+      if (label) {
+        textList.push(label);
+        break;
+      }
+    }
   }
 
-  if (entry.short_name) text += entry.short_name;
-  else if (entry.name) text += entry.name;
-  else if (entry.accession) text += entry.accession;
+  let text = textList.join(' - ');
+
+  if (!entry.accession.startsWith('IPR')) {
+    text = entry.source_database.toUpperCase() + ': ' + text;
+  }
 
   return text;
 };
