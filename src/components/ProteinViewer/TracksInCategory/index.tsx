@@ -405,9 +405,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                         margin-left={20}
                         margin-top={trackTopMargin} // Space unintegrated
                         // @ts-ignore
-                        samesize={
-                          entry.source_database == 'mobidblt' ? false : true
-                        }
+                        samesize={entry.source_database !== 'mobidblt'}
                         shape="roundRectangle"
                         highlight-event="onmouseover"
                         highlight-color={highlightColor}

@@ -94,9 +94,5 @@ export const getTextForLabel = (
   else if (entry.name) text += entry.name;
   else if (entry.accession) text += entry.accession;
 
-  if (text.length > 20) {
-    text = text.slice(0, 20) + '..';
-  }
-
   return text;
 };

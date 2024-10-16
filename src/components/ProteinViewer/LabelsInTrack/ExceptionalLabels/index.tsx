@@ -144,7 +144,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
 
         <div
           className={css(
-            processedAccession == 'PIRSR_GROUP' ? 'pirsr-label' : '',
+            processedAccession === 'PIRSR_GROUP' ? 'pirsr-label' : '',
           )}
         >
           {descriptionString}

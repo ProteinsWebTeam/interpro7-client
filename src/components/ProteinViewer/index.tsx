@@ -32,7 +32,7 @@ import style from './style.css';
 import grid from './grid.css';
 import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
+import RepresentativeTrack from './RepresentativeDomainsTrack';
 import ShowMoreTracks from './ShowMoreTracks';
 
 TracksInCategory.displayName = 'TracksInCategory';
@@ -144,7 +144,6 @@ export const ProteinViewer = ({
 
   const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
     'secondary structure': false,
-    'homologous superfamily': false,
     families: true,
     domains: true,
     repeat: false,
@@ -355,7 +354,8 @@ export const ProteinViewer = ({
                       {representativeEntries ? (
                         <>
                           {representativeEntries.length > 0 ? (
-                            <RepresentativeDomainsTrack
+                            <RepresentativeTrack
+                              type={type}
                               hideCategory={false}
                               highlightColor={highlightColor}
                               entries={representativeEntries}

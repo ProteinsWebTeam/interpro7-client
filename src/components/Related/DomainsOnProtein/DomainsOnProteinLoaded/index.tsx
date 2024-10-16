@@ -94,10 +94,10 @@ function sortTracks(
 
   if (aStart > bStart) return 1;
   if (aStart < bStart) return -1;
-  if (aStart == bStart) {
+  if (aStart === bStart) {
     if (aEnd < bEnd) return 1;
     if (aEnd > bEnd) return -1;
-    if (aEnd == bEnd) {
+    if (aEnd === bEnd) {
       if (aAccession > bAccession) return 1;
       else return -1;
     }
@@ -311,9 +311,11 @@ const DomainsOnProteinLoaded = ({
   const uniqueResidues: Record<string, ExtendedFeature> = {};
 
   // Group PIRSR residue by description and position
+  let pirsrFound = false;
   for (let i = 0; i < dataMerged.residues?.length; i++) {
     const currentResidue = dataMerged.residues[i] as ExtendedFeature;
-    if (currentResidue.source_database == 'pirsr') {
+    if (currentResidue.source_database === 'pirsr') {
+      if (!pirsrFound) pirsrFound = true;
       const residueStart =
         currentResidue.locations?.[0].fragments?.[0].start || 0;
       const residueEnd = currentResidue.locations?.[0].fragments?.[0].end || 0;
@@ -330,17 +332,18 @@ const DomainsOnProteinLoaded = ({
   }
 
   // Create fake PIRSR object to display group label
-  uniqueResidues['PIRSR'] = {
-    accession: 'PIRSR_GROUP',
-    source_database: 'pirsr',
-    type: 'residue',
-    locations: [
-      {
-        description: 'PIRSR',
-        fragments: [{ residues: '', start: -10, end: 0 }],
-      } as ExtendedFeatureLocation,
-    ],
-  };
+  if (pirsrFound)
+    uniqueResidues['PIRSR'] = {
+      accession: 'PIRSR_GROUP',
+      source_database: 'pirsr',
+      type: 'residue',
+      locations: [
+        {
+          description: 'PIRSR',
+          fragments: [{ residues: '', start: -10, end: 0 }],
+        } as ExtendedFeatureLocation,
+      ],
+    };
 
   dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
     // If comparing two entries from different DBs, put the non-pirsr always first (a) OR if source database is pirsr and first element is fake label, put fake label first

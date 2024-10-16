@@ -95,7 +95,9 @@ const mergeResidues = (
     .forEach((residue) => {
       residue.locations.forEach((location, i) => {
         const residueEntry = { ...residue };
-        residueEntry.accession = `${location.accession || residue.accession}`;
+        residueEntry.accession = `${
+          location.accession || residue.accession
+        }.${i}`;
         residueEntry.type = 'residue';
         residueEntry.locations = [location];
         unlinkedResidues.push(residueEntry);
