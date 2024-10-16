@@ -86,8 +86,6 @@ const HmmModelSection = ({ logo, data }) => {
   // eslint-disable-next-line camelcase
   const details = payload?.extra_fields?.details;
 
-  if (!details) return null;
-
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
@@ -96,47 +94,53 @@ const HmmModelSection = ({ logo, data }) => {
             data={JSON.stringify(logo)}
             processData={schemaProcessData}
           />
-          <skylign-component logo={JSON.stringify(logo)} />
+          {details && (
+            <>
+              <h4>Profile HMM Information</h4>
+              <table className={f('light', 'table-sum')}>
+                <tbody>
+                  <tr>
+                    <td>HMM build commands</td>
+                    <td>
+                      Build method: {details.hmm?.commands?.build || ''}
+                      <br />
+                      Search method: {details.hmm?.commands?.search || ''}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Gathering threshold</td>
+                    <td>
+                      Sequence:{' '}
+                      {details.hmm?.cutoffs?.gathering?.sequence || ''}
+                      <br />
+                      Domain: {details.hmm?.cutoffs?.gathering?.domain || ''}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Download</td>
+                    <td>
+                      <Link
+                        href={`${config.root.API.href}/entry/pfam/${payload?.metadata?.accession}?annotation=hmm`}
+                        download={`${
+                          payload?.metadata?.accession || 'download'
+                        }.hmm.gz`}
+                      >
+                        <span
+                          className={f('icon', 'icon-common', 'icon-download')}
+                          data-icon="&#xf019;"
+                        />{' '}
+                        Download
+                      </Link>{' '}
+                      the raw HMM for this family
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          )}
           <br />
-          <h4>HMM Information</h4>
-          <table className={f('light', 'table-sum')}>
-            <tbody>
-              <tr>
-                <td>HMM build commands</td>
-                <td>
-                  Build method: {details.hmm?.commands?.build || ''}
-                  <br />
-                  Search method: {details.hmm?.commands?.search || ''}
-                </td>
-              </tr>
-              <tr>
-                <td>Gathering threshold</td>
-                <td>
-                  Sequence: {details.hmm?.cutoffs?.gathering?.sequence || ''}
-                  <br />
-                  Domain: {details.hmm?.cutoffs?.gathering?.domain || ''}
-                </td>
-              </tr>
-              <tr>
-                <td>Download</td>
-                <td>
-                  <Link
-                    href={`${config.root.API.href}/entry/pfam/${payload?.metadata?.accession}?annotation=hmm`}
-                    download={`${
-                      payload?.metadata?.accession || 'download'
-                    }.hmm.gz`}
-                  >
-                    <span
-                      className={f('icon', 'icon-common', 'icon-download')}
-                      data-icon="&#xf019;"
-                    />{' '}
-                    Download
-                  </Link>{' '}
-                  the raw HMM for this family
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <h4>Profile HMM logo</h4>
+          <skylign-component logo={JSON.stringify(logo)} />
         </div>
       </div>
     </div>
