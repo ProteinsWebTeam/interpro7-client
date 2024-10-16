@@ -44,7 +44,7 @@ exports[`<StructureOnProtein /> should render 1`] = `
                 }
                 onMouseOverFeature={[Function]}
               >
-                <mi
+                <Memo(mi)
                   data={[]}
                   display-end={625}
                   display-start={1}

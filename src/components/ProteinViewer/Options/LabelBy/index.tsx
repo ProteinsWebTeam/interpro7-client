@@ -18,7 +18,7 @@ type Props = {
 
 type LabelOptions = 'accession' | 'name' | 'short';
 const labelMap: Array<[LabelOptions, string]> = [
-  ['accession', 'Accession'],
+  // ['accession', 'Accession'], Just removing the option for now. Keeping the logic.
   ['name', 'Name'],
   ['short', 'Short Name'],
 ];
