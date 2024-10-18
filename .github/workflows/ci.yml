@@ -24,7 +24,4 @@ jobs:
           COMMIT_HASH=$(git rev-parse HEAD)
           # Create a file and write the commit hash to it
           echo "Latest Commit Hash: $COMMIT_HASH" > commit-hash.txt
-          
-      # Optional: Verify the content of the file (output to the console)
-      - name: Display the commit hash
-        run: cat commit-hash.txt
+
