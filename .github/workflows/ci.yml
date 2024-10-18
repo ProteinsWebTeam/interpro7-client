@@ -17,5 +17,5 @@ jobs:
 
       - name: Write commit hash to file
         run: |
-          echo "Done"
+          echo "Branch exists"
 
