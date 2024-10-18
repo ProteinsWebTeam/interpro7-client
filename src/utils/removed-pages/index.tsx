@@ -43,6 +43,35 @@ export const removedPages: Array<{
       );
     },
   },
+
+  {
+    description: {
+      main: { key: 'entry' },
+      entry: { detail: 'curation' },
+    },
+    getMessage: (location) => {
+      return (
+        <>
+          The curation information has been moved to the{' '}
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  ...location.entry,
+                  detail: 'overview',
+                },
+              },
+            }}
+          >
+            Overview
+          </Link>{' '}
+          section
+        </>
+      );
+    },
+  },
+
   {
     description: {
       main: { key: 'entry' },
@@ -51,8 +80,7 @@ export const removedPages: Array<{
     getMessage: (location) => {
       return (
         <>
-          Genome3D models have been removed in InterPro 98.0.
-          You can use{' '}
+          Genome3D models have been removed in InterPro 98.0. You can use{' '}
           <Link
             to={{
               description: {

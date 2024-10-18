@@ -428,7 +428,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
           },
         };
       },
-      name: 'Signature',
+      name: 'Profile HMM',
     },
   ],
   [
@@ -529,7 +529,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
       counter: 'subfamilies',
     },
   ],
-  [
+  /*[
     'curation',
     {
       to(customLocation: InterProLocation) {
@@ -546,7 +546,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
       },
       name: 'Curation',
     },
-  ],
+  ],*/
 ]);
 
 const search: Array<MenuItemProps> = [
