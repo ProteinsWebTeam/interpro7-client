@@ -54,7 +54,6 @@ const ShowMoreTracks = ({
             ),
           );
           showMoreChanged(!showMore);
-          console.log(hideCategory);
         }}
       >
         {showMore ? 'Show summary view' : 'Show all annotations'}
