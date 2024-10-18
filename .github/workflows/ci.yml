@@ -17,14 +17,3 @@ jobs:
           # Pull the repository using the access token
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Get the latest commit hash and write it to a file
-      - name: Write commit hash to file
-        run: |
-          # Get the latest commit hash
-          COMMIT_HASH=$(git rev-parse HEAD)
-          # Create a file and write the commit hash to it
-          echo "Latest Commit Hash: $COMMIT_HASH" > commit-hash.txt
-          
-      # Optional: Verify the content of the file (output to the console)
-      - name: Display the commit hash
-        run: cat commit-hash.txt
