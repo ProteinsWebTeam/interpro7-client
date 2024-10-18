@@ -20,4 +20,8 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: |
-          pwd
+          npm install
+
+      - name: Install dependencies
+        run: |
+          npm run build
