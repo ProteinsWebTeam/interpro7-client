@@ -10,12 +10,10 @@ jobs:
     runs-on: self-hosted  
 
     steps:
+      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          path: ./interpro7-client
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Write commit hash to file
-        run: |
-          echo "Branch exists"
-
+          fetch-depth: 0  # To fetch all history if needed
