@@ -3,7 +3,11 @@ import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/Protei
 import loadable from 'higherOrder/loadable';
 import { groupByEntryType } from 'components/Related/DomainsOnProtein';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
-import { ExtendedFeature } from 'components/ProteinViewer';
+import {
+  ExtendedFeature,
+  ExtendedFeatureLocation,
+} from 'components/ProteinViewer';
+import { sleep } from 'timing-functions';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -16,15 +20,15 @@ const UNDERSCORE = /_/g;
 
 const FIRST_IN_ORDER = [
   'alphafold_confidence',
+  'families',
+  'domains',
+  'intrinsically_disordered_regions',
+  'conserved_residues',
   'secondary_structure',
   'spurious_proteins',
   'representative_domains',
   'representative_families',
   'pathogenic_and_likely_pathogenic_variants',
-  'intrinsically_disordered_regions',
-  'residues',
-  'family',
-  'domain',
   'homologous_superfamily',
   'repeat',
   'conserved_site',
@@ -90,10 +94,10 @@ function sortTracks(
 
   if (aStart > bStart) return 1;
   if (aStart < bStart) return -1;
-  if (aStart == bStart) {
+  if (aStart === bStart) {
     if (aEnd < bEnd) return 1;
     if (aEnd > bEnd) return -1;
-    if (aEnd == bEnd) {
+    if (aEnd === bEnd) {
       if (aAccession > bAccession) return 1;
       else return -1;
     }
@@ -128,13 +132,12 @@ export const makeTracks = ({
       2. Merge unintegrated with result from (1.);
       3. Sort matches in tracks based on their position but, if integrated,
       maintaining grouping for the same InterPro entry.
-  */
 
   // 1. and 2.
   const integratedMatches = getMemberDBMatches(interpro);
   const allMatches = integratedMatches.concat(unintegrated);
 
-  // this was const groups = groupByEntryType(interpro)
+  // this was 
   const groups = groupByEntryType(
     allMatches as { accession: string; type: string }[],
   );
@@ -143,7 +146,6 @@ export const makeTracks = ({
         Group matches of the same type (e.g domain) by IntePro accession
         sort matches by position within the same group,
         sort all the groups based on first fragment of group.
-  */
 
   Object.keys(groups).map((key) => {
     const uniqueInterproAccessions = [
@@ -164,17 +166,29 @@ export const makeTracks = ({
       }
     }
     groups[key] = allMatchesGroupedByEntry.sort(sortTracks).flat();
-  });
+  });*/
 
+  const groups = groupByEntryType(
+    interpro.concat(unintegrated as { accession: string; type: string }[]),
+  );
+
+  // Merge domain and families into respective representative ones. Merge homologous superfamily into domains.
   const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
 
   if (other) mergedData.other_features = other;
   if (representativeDomains?.length)
-    mergedData.representative_domains = representativeDomains;
+    mergedData.domain = mergedData.domain.concat(representativeDomains);
+  mergedData.domain = mergedData.domain.concat(
+    mergedData.homologous_superfamily,
+  );
+  mergedData.homologous_superfamily = [];
   if (representativeFamilies?.length)
-    mergedData.representative_families = representativeFamilies;
+    mergedData.family = mergedData.family.concat(representativeFamilies);
   if (disorderedRegions?.length)
     mergedData.disorderedRegions = disorderedRegions;
+
+  Object.values(mergedData).map((group) => group.sort(sortTracks).flat());
+
   return mergedData;
 };
 
@@ -294,8 +308,67 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  // Sort all the tracks, including the special ones (eg. alphafold, variants)
-  const sortedData = flattenTracksObject(dataMerged);
+  const uniqueResidues: Record<string, ExtendedFeature> = {};
+
+  // Group PIRSR residue by description and position
+  let pirsrFound = false;
+  for (let i = 0; i < dataMerged.residues?.length; i++) {
+    const currentResidue = dataMerged.residues[i] as ExtendedFeature;
+    if (currentResidue.source_database === 'pirsr') {
+      if (!pirsrFound) pirsrFound = true;
+      const residueStart =
+        currentResidue.locations?.[0].fragments?.[0].start || 0;
+      const residueEnd = currentResidue.locations?.[0].fragments?.[0].end || 0;
+      const residueDescription =
+        currentResidue.locations?.[0].description?.replace('.', '');
+
+      const dictKey =
+        residueStart.toString() + residueEnd.toString() + residueDescription;
+
+      if (!uniqueResidues[dictKey]) uniqueResidues[dictKey] = currentResidue;
+    } else {
+      uniqueResidues[currentResidue.accession] = currentResidue;
+    }
+  }
+
+  // Create fake PIRSR object to display group label
+  if (pirsrFound)
+    uniqueResidues['PIRSR'] = {
+      accession: 'PIRSR_GROUP',
+      source_database: 'pirsr',
+      type: 'residue',
+      locations: [
+        {
+          description: 'PIRSR',
+          fragments: [{ residues: '', start: -10, end: 0 }],
+        } as ExtendedFeatureLocation,
+      ],
+    };
+
+  dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
+    // If comparing two entries from different DBs, put the non-pirsr always first (a) OR if source database is pirsr and first element is fake label, put fake label first
+    if (
+      (a.source_database !== 'pirsr' && b.source_database === 'pirsr') ||
+      (a.source_database === b.source_database && a.accession === 'PIRSR_GROUP')
+    )
+      return -1;
+    // If comparing two entries from different DBs, put the non-pirsr always first (b) OR if source database is pirsr and second element is fake label, put fake label first
+    else if (
+      (a.source_database === 'pirsr' && b.source_database !== 'pirsr') ||
+      (a.source_database === b.source_database && b.accession === 'PIRSR_GROUP')
+    )
+      return 1;
+    // All other cases
+    else return a.accession.localeCompare(b.accession);
+  });
+
+  dataMerged.domains = dataMerged.domain.slice();
+  dataMerged.families = dataMerged.family.slice();
+
+  const renamedTracks = ['domain', 'family', 'residues'];
+  const sortedData = flattenTracksObject(dataMerged).filter(
+    (track) => !renamedTracks.includes(track[0]),
+  );
 
   return (
     <ProteinViewer

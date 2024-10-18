@@ -19,6 +19,7 @@ export const selectRepresentativeData = (
     for (const location of entry[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end } = fragment;
+        const representative = location.representative;
         if (location.representative) {
           flatRepresentativeData.push({
             accession,
@@ -27,6 +28,7 @@ export const selectRepresentativeData = (
             name,
             source_database,
             integrated,
+            representative,
             start,
             end,
             color: getTrackColor({ source_database }, EntryColorMode.MEMBER_DB),
