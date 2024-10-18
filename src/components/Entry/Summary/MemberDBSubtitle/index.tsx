@@ -52,10 +52,8 @@ const MemberDBSubtitle = ({ data, metadata, dbInfo, hasLLM }: LoadedProps) => {
   // eslint-disable-next-line camelcase
   const details = payload?.extra_fields?.details;
 
-  if (!details) return null;
-
   // eslint-disable-next-line camelcase
-  const sequenceOntology = details.curation?.sequence_ontology || '';
+  const sequenceOntology = details?.curation?.sequence_ontology || '';
 
   return (
     <table className={css('vf-table', 'left-headers')}>
@@ -137,45 +135,49 @@ const MemberDBSubtitle = ({ data, metadata, dbInfo, hasLLM }: LoadedProps) => {
         ) : null}
         {data?.payload ? (
           <>
-            <tr>
-              <td>Author</td>
-              <td className={css('first-letter-cap')}>
-                {(details.curation?.authors || []).map((author) => {
-                  const preferredName: string | Element = author.author;
-                  if (author.orcid) {
-                    return (
-                      <span key={author.author}>
-                        {' '}
-                        <a
-                          href={`https://orcid.org/${author.orcid}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {author.author}
-                          <i
-                            className={css('icon', 'icon-common')}
-                            data-icon="&#xf112;"
-                          />{' '}
-                        </a>
-                      </span>
-                    );
-                  }
-                  return <span key={author.author}>{preferredName}</span>;
-                })}
-              </td>
-            </tr>
-            <tr>
-              <td>Sequence Ontology</td>
-              <td className={css('first-letter-cap')}>
-                <a
-                  href={`http://www.sequenceontology.org/miso/current_svn/term/${details.curation.sequence_ontology}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {sequenceOntology}
-                </a>
-              </td>
-            </tr>
+            {details?.curation.authors && (
+              <tr>
+                <td>Author</td>
+                <td className={css('first-letter-cap')}>
+                  {(details?.curation?.authors || []).map((author) => {
+                    const preferredName: string | Element = author.author;
+                    if (author.orcid) {
+                      return (
+                        <span key={author.author}>
+                          {' '}
+                          <a
+                            href={`https://orcid.org/${author.orcid}`}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {author.author}
+                            <i
+                              className={css('icon', 'icon-common')}
+                              data-icon="&#xf112;"
+                            />{' '}
+                          </a>
+                        </span>
+                      );
+                    }
+                    return <span key={author.author}>{preferredName}</span>;
+                  })}
+                </td>
+              </tr>
+            )}
+            {details?.curation.sequence_ontology && (
+              <tr>
+                <td>Sequence Ontology</td>
+                <td className={css('first-letter-cap')}>
+                  <a
+                    href={`http://www.sequenceontology.org/miso/current_svn/term/${details?.curation.sequence_ontology}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {sequenceOntology}
+                  </a>
+                </td>
+              </tr>
+            )}
           </>
         ) : null}
       </tbody>

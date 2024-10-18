@@ -52,7 +52,7 @@ export const removedPages: Array<{
     getMessage: (location) => {
       return (
         <>
-          Curation information (if available) has been moved to the{' '}
+          The curation information has been moved to the{' '}
           <Link
             to={{
               description: {

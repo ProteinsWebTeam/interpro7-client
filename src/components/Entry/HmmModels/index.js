@@ -94,11 +94,11 @@ const HmmModelSection = ({ logo, data }) => {
             data={JSON.stringify(logo)}
             processData={schemaProcessData}
           />
-          {details && (
-            <>
-              <h4>Profile HMM Information</h4>
-              <table className={f('light', 'table-sum')}>
-                <tbody>
+          <h4>Profile HMM Information</h4>
+          <table className={f('light', 'table-sum')}>
+            <tbody>
+              {details && (
+                <>
                   <tr>
                     <td>HMM build commands</td>
                     <td>
@@ -116,28 +116,28 @@ const HmmModelSection = ({ logo, data }) => {
                       Domain: {details.hmm?.cutoffs?.gathering?.domain || ''}
                     </td>
                   </tr>
-                  <tr>
-                    <td>Download</td>
-                    <td>
-                      <Link
-                        href={`${config.root.API.href}/entry/pfam/${payload?.metadata?.accession}?annotation=hmm`}
-                        download={`${
-                          payload?.metadata?.accession || 'download'
-                        }.hmm.gz`}
-                      >
-                        <span
-                          className={f('icon', 'icon-common', 'icon-download')}
-                          data-icon="&#xf019;"
-                        />{' '}
-                        Download
-                      </Link>{' '}
-                      the raw HMM for this family
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </>
-          )}
+                </>
+              )}
+              <tr>
+                <td>Download</td>
+                <td>
+                  <Link
+                    href={`${config.root.API.href}/entry/${payload?.metadata?.source_database}/${payload?.metadata?.accession}?annotation=hmm`}
+                    download={`${
+                      payload?.metadata?.accession || 'download'
+                    }.hmm.gz`}
+                  >
+                    <span
+                      className={f('icon', 'icon-common', 'icon-download')}
+                      data-icon="&#xf019;"
+                    />{' '}
+                    Download
+                  </Link>{' '}
+                  the raw HMM for this family
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <br />
           <h4>Profile HMM logo</h4>
           <skylign-component logo={JSON.stringify(logo)} />
