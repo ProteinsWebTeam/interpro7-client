@@ -16,4 +16,4 @@ jobs:
         with:
           path: ./interpro7-client
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0  # To fetch all history if needed
+          fetch-depth: 1  # To fetch all history if needed
