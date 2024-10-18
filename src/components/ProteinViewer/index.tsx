@@ -115,6 +115,19 @@ const switchCategoryVisibility = (
   }, categories);
 };
 
+const switchCategoryVisibilityShowMore = (
+  categories: CategoryVisibility,
+  names: string[],
+  hide: boolean,
+): CategoryVisibility => {
+  return names.reduce((updatedCategories, name) => {
+    return {
+      ...updatedCategories,
+      [name]: hide,
+    };
+  }, categories);
+};
+
 export const ProteinViewer = ({
   protein,
   title,
@@ -266,7 +279,9 @@ export const ProteinViewer = ({
                 showMore={showMore}
                 showMoreChanged={setShowMore}
                 setHideCategory={setHideCategory}
-                switchCategoryVisibility={switchCategoryVisibility}
+                switchCategoryVisibilityShowMore={
+                  switchCategoryVisibilityShowMore
+                }
                 hideCategory={hideCategory}
               />
             </div>

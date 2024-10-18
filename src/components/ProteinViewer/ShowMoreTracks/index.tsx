@@ -15,9 +15,10 @@ type Props = {
   hideCategory: CategoryVisibility;
   showMoreChanged: (v: boolean) => void;
   setHideCategory: (v: CategoryVisibility) => void;
-  switchCategoryVisibility: (
+  switchCategoryVisibilityShowMore: (
     categories: CategoryVisibility,
     name: string[],
+    hide: boolean,
   ) => CategoryVisibility;
 };
 
@@ -29,7 +30,7 @@ const ShowMoreTracks = ({
   hideCategory,
   showMoreChanged,
   setHideCategory,
-  switchCategoryVisibility,
+  switchCategoryVisibilityShowMore,
 }: Props) => {
   return (
     <div>
@@ -45,7 +46,15 @@ const ShowMoreTracks = ({
           'showmore-btn',
         )}
         onClick={() => {
+          setHideCategory(
+            switchCategoryVisibilityShowMore(
+              hideCategory,
+              ['families', 'domains'],
+              !showMore ? false : true,
+            ),
+          );
           showMoreChanged(!showMore);
+          console.log(hideCategory);
         }}
       >
         {showMore ? 'Show summary view' : 'Show all annotations'}
