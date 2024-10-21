@@ -26,22 +26,10 @@ jobs:
           conda activate base
 
       # Install dependencies if package.json has changed
-      - name: Check if package.json has changed
-        id: package-json-changed
-        run: |
-          if git diff --name-only HEAD^ HEAD | grep -q 'package.json'; then
-            echo "package_changed=true" >> $GITHUB_ENV
-          else
-            echo "package_changed=false" >> $GITHUB_ENV
-          fi
-
-      # Install npm dependencies
-      - name: Install dependencies
-        if: env.package_changed == 'true'
-        run: |
+      - name: 
           npm install
 
-      # Run build command
+      # Run build commandß
       - name: Build project
         run: |
           npm run release:dev 
