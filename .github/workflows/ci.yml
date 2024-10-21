@@ -21,7 +21,9 @@ jobs:
       # Alternatively, create or activate a Conda environment manually
       - name: Activate conda
         run: |
-          conda init && conda activate base
+          conda init bash
+          source ~/.bashrc 
+          conda activate base
 
       # Install dependencies if package.json has changed
       - name: Check if package.json has changed
