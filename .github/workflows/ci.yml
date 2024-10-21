@@ -34,3 +34,30 @@ jobs:
       - name: Build project
         run: |
           npm run release:dev 
+
+
+        # Push contents of the build folder to dev_deploy branch
+      - name: Push build contents to dev_deploy
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          
+          # Check out the dev_deploy branch or create it if it doesn't exist
+          git checkout dev_deploy || git checkout --orphan dev_deploy
+
+          # Remove everything from the branch
+          git rm -rf . || echo "Nothing to remove"
+
+          # Copy contents of the build folder to the root
+          cp -r build/* .  # Ensure the build output is copied to the root
+
+          # Add all files to staging
+          git add .
+
+          # Commit changes
+          git commit -m "Deploy to GitHub Pages" || echo "No changes to commit"
+
+          # Push changes to the dev_deploy branch
+          git push origin dev_deploy --force
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
