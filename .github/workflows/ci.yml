@@ -14,14 +14,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
+          clean: false
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1 
 
       # Alternatively, create or activate a Conda environment manually
       - name: Activate conda
         run: |
+          conda init
           conda activate base
-        shell: bash
 
       # Install dependencies if package.json has changed
       - name: Check if package.json has changed
