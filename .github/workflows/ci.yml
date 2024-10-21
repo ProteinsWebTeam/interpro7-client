@@ -27,6 +27,7 @@ jobs:
 
       # Install dependencies if package.json has changed
       - name: 
+        run: |
           npm install
 
       # Run build commandß
