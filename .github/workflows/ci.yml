@@ -35,6 +35,7 @@ jobs:
         run: |
           npm run release:dev 
 
+
       # # Push contents of the build folder to dev_deploy branch
       # - name: Push build contents to dev_deploy
       #   run: |
