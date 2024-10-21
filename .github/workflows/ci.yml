@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted  
+    runs-on: self-hosted  # Or you can use `ubuntu-latest` if you want to use GitHub-hosted runners
 
     steps:
       # Checkout the repository
@@ -17,11 +17,30 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1 
 
-      # Install dependencies
+      # Alternatively, create or activate a Conda environment manually
+      - name: Activate conda
+        run: |
+          conda activate base
+        shell: bash
+
+      # Install dependencies if package.json has changed
+      - name: Check if package.json has changed
+        id: package-json-changed
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -q 'package.json'; then
+            echo "package_changed=true" >> $GITHUB_ENV
+          else
+            echo "package_changed=false" >> $GITHUB_ENV
+          fi
+
+      # Install npm dependencies
       - name: Install dependencies
+        if: env.package_changed == 'true'
         run: |
           npm install
 
-      - name: Install dependencies
+      # Run build command
+      - name: Build project
         run: |
-          npm run build
+          conda activate myenv  # Activate the Conda environment
+          npm run release:dev 
