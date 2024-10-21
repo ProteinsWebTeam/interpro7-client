@@ -54,9 +54,7 @@ const SimilarProteins = loadable({
       /* webpackChunkName: "similar-proteins-subpage" */ './SimilarProteins'
     ),
 });
-const Curation = loadable({
-  loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
-});
+
 const AlphaFoldModelSubPage = loadable({
   loader: () =>
     import(
@@ -171,7 +169,6 @@ const subPages = new Map([
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
   ['similar_proteins', SimilarProteins],
-  ['curation', Curation],
   ['feedback', FeedbackSubPage],
 ]);
 
