@@ -25,17 +25,6 @@ jobs:
           source ~/.bashrc 
           conda activate base
 
-      # Install dependencies if package.json has changed
-      - name: 
-        run: |
-          npm install
-
-      # Run build commandß
-      - name: Build project
-        run: |
-          npm run release:dev 
-
-
         # Push contents of the build folder to dev_deploy branch
       - name: Push build contents to dev_deploy
         run: |
@@ -45,11 +34,14 @@ jobs:
           # Check out the dev_deploy branch or create it if it doesn't exist
           git checkout dev_deploy || git checkout --orphan dev_deploy
 
-          # Remove everything from the branch
-          git rm -rf . || echo "Nothing to remove"
+          # Remove everything except for the dist folder
+          shopt -s extglob  # Enable extended globbing
+          rm -rf !(dist)    # Remove everything except the dist folder
 
-          # Copy contents of the build folder to the root
-          cp -r build/* .  # Ensure the build output is copied to the root
+          # Copy contents of the dist folder to the root
+          cp -r dist/* .  # Ensure the build output is copied to the root
+
+          rm -rf dist/
 
           # Add all files to staging
           git add .
