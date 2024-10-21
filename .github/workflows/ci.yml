@@ -44,5 +44,4 @@ jobs:
       # Run build command
       - name: Build project
         run: |
-          conda activate myenv  # Activate the Conda environment
           npm run release:dev 
