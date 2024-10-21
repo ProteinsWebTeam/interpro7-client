@@ -37,7 +37,6 @@ jobs:
 
       # Install npm dependencies
       - name: Install dependencies
-        if: env.package_changed == 'true'
         run: |
           npm install
 
