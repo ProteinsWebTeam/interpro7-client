@@ -175,17 +175,39 @@ export const makeTracks = ({
   // Merge domain and families into respective representative ones. Merge homologous superfamily into domains.
   const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
 
-  if (other) mergedData.other_features = other;
-  if (representativeDomains?.length)
-    mergedData.domain = mergedData.domain.concat(representativeDomains);
-  mergedData.domain = mergedData.domain.concat(
-    mergedData.homologous_superfamily,
-  );
-  mergedData.homologous_superfamily = [];
+  // Domain and family as empty objects, to cancat other object later
+  if (!mergedData.domain) {
+    mergedData.domain = [];
+  }
+
+  if (!mergedData.family) {
+    mergedData.family = [];
+  }
+
+  // Add repeats and homologous superfamilies to domain
+  if (mergedData.homologous_superfamily) {
+    mergedData.domain = mergedData.domain.concat(
+      mergedData.homologous_superfamily,
+    );
+    mergedData.homologous_superfamily = [];
+  }
+
+  if (mergedData.repeat) {
+    mergedData.domain = mergedData.domain.concat(mergedData.repeat);
+    mergedData.repeat = [];
+  }
+
+  // Add representative data
   if (representativeFamilies?.length)
     mergedData.family = mergedData.family.concat(representativeFamilies);
+
+  if (representativeDomains?.length)
+    mergedData.domain = mergedData.domain.concat(representativeDomains);
+
   if (disorderedRegions?.length)
     mergedData.disorderedRegions = disorderedRegions;
+
+  if (other) mergedData.other_features = other;
 
   Object.values(mergedData).map((group) => group.sort(sortTracks).flat());
 
@@ -362,8 +384,9 @@ const DomainsOnProteinLoaded = ({
     else return a.accession.localeCompare(b.accession);
   });
 
-  dataMerged.domains = dataMerged.domain.slice();
-  dataMerged.families = dataMerged.family.slice();
+  if (dataMerged.domain) dataMerged.domains = dataMerged.domain.slice();
+
+  if (dataMerged.family) dataMerged.families = dataMerged.family.slice();
 
   const renamedTracks = ['domain', 'family', 'residues'];
   const sortedData = flattenTracksObject(dataMerged).filter(

@@ -250,6 +250,7 @@ const DomainOnProteinWithoutData = ({
       'short_linear_motifs',
       'mobidblt',
       'funfam',
+      'elm',
     ]);
     mergedData['other_features'] = mergedData['other_features'].filter(
       (entry) => {
