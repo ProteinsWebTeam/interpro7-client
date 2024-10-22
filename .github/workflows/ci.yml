@@ -3,14 +3,16 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - runner  
+      - dev  
+      - stage
+      - master
+      - runner
 
 jobs:
   build:
-    runs-on: self-hosted  # Or you can use `ubuntu-latest` if you want to use GitHub-hosted runners
+    runs-on: self-hosted 
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
         with:
@@ -18,45 +20,18 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1 
 
-      # Alternatively, create or activate a Conda environment manually
-      - name: Activate conda
-        run: |
-          conda init bash
-          source ~/.bashrc 
-          conda activate base
-
-      # Install dependencies if package.json has changed
-      - name: 
+      - name: Install dependencies
         run: |
           npm install
 
-      # Run build commandß
-      - name: Build project
+      - name: Build app
         run: |
           npm run release:dev 
 
-      # # Push contents of the build folder to dev_deploy branch
-      # - name: Push build contents to dev_deploy
-      #   run: |
-      #     git config --global user.name "GitHub Actions"
-      #     git config --global user.email "actions@github.com"
-          
-      #     # Check out the dev_deploy branch or create it if it doesn't exist
-      #     git checkout dev_deploy || git checkout --orphan dev_deploy
-
-      #     # Remove everything from the branch
-      #     git rm -rf . || echo "Nothing to remove"
-
-      #     # Copy contents of the build folder to the root
-      #     cp -r build/* .  # Ensure the build output is copied to the root
-
-      #     # Add all files to staging
-      #     git add .
-
-      #     # Commit changes
-      #     git commit -m "Deploy to GitHub Pages" || echo "No changes to commit"
-
-      #     # Push changes to the dev_deploy branch
-      #     git push origin dev_deploy --force
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release to dev VM
+        run: |
+          become ipr_adm
+          export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/"
+          export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)"
+          ssh wp-np3-bc 'cd $VM_BASE_PATH; mkdir "$IPRO_RELEASE_FOLDER"'
+          scp -q -r dist/* wp-np3-bc:_work/interpro7-client/interpro7-client/dist/test.txt wp-np3-bc:'$VM_PASE_PATH/$IPRO_RELEASE_FOLDER'
