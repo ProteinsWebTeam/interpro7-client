@@ -35,7 +35,7 @@ jobs:
         run: | 
           npm run release:dev 
 
-      - name: Release to dev VM
+      - name: Release 
         run: |
           export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
           export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
