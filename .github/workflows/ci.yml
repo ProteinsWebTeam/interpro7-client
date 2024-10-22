@@ -20,12 +20,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1 
 
-      - name: Install dependencies and build
+      - name: Install dependencies
         run: |
           npm install
 
       - name: Test
         run: |
+          conda init bash
+          source ~/.bashrc 
+          conda activate base
           npm run test
 
       - name: Build
