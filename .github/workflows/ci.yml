@@ -25,9 +25,11 @@ jobs:
           npm install
 
       - name: Test
+        run: |
           npm run test
 
       - name: Build
+        run: | 
           npm run release:dev 
 
       - name: Release to dev VM
