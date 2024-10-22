@@ -20,13 +20,15 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1 
 
-      # - name: Install dependencies
-      #   run: |
-      #     npm install
+      - name: Install dependencies and build
+        run: |
+          npm install
 
-      # - name: Build app
-      #   run: |
-      #     npm run release:dev 
+      - name: Test
+          npm run test
+
+      - name: Build
+          npm run release:dev 
 
       - name: Release to dev VM
         run: |
