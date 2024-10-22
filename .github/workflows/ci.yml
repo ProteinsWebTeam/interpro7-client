@@ -33,4 +33,4 @@ jobs:
           export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
           export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
           ssh wp-np3-bc "cd $VM_BASE_PATH; mkdir "${IPRO_RELEASE_FOLDER}"";
-          scp -q -r dist/* wp-np3-bc:"$VM_PASE_PATH/$IPRO_RELEASE_FOLDER";
+          scp -q -r dist/* wp-np3-bc:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER";
