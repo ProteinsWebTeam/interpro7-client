@@ -252,11 +252,11 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
               ) {
                 (track as NightingaleInterProTrackCE).data = mapToFeatures(
                   entry,
-                  colorDomainsBy || 'ACCESSION',
+                  colorDomainsBy || 'MEMBER_DB',
                 );
                 const contributors = mapToContributors(
                   entry,
-                  colorDomainsBy || 'ACCESSION',
+                  colorDomainsBy || 'MEMBER_DB',
                 );
                 if (contributors)
                   (track as NightingaleInterProTrackCE).contributors =
