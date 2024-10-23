@@ -40,15 +40,15 @@ jobs:
       - name: Release 
         run: |
 
-            if [ "${{ github.ref }}" == "refs/heads/runner" ]; then
+            if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
-              export VM_NAME="wp-np3-bc";
-            elif [ "${{ github.ref }}" == "refs/heads/stage" ]; then
+              export VM_NAME="wp-np3-bd";
+            elif [ "${{ github.ref }}" == "refs/heads/runner" ]; then
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/stage/website/releases/";
-              export VM_NAME="wp-np3-bc";
+              export VM_NAME="wp-np3-bd";
             elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/production/website/releases/";
-              export VM_NAME="wp-np3-bc";
+              export VM_NAME="wp-np3-bd";
             fi
 
             export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
