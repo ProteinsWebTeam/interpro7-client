@@ -29,7 +29,6 @@ const FIRST_IN_ORDER = [
   'representative_domains',
   'representative_families',
   'pathogenic_and_likely_pathogenic_variants',
-  'homologous_superfamily',
   'repeat',
   'conserved_site',
   'active_site',
