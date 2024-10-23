@@ -92,7 +92,7 @@ export const getTextForLabel = (
 
   // If the only selected label by option is not available, select the first available
 
-  if (textList.length == 0) {
+  if (textList.length === 0) {
     const priorityList = ['short_name', 'name', 'accession'];
     for (let i = 0; i < priorityList.length; i++) {
       const label = entry[priorityList[i]];

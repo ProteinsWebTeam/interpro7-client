@@ -26,8 +26,6 @@ const FIRST_IN_ORDER = [
   'conserved_residues',
   'secondary_structure',
   'spurious_proteins',
-  'representative_domains',
-  'representative_families',
   'pathogenic_and_likely_pathogenic_variants',
   'repeat',
   'conserved_site',

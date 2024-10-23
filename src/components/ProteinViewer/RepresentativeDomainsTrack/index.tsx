@@ -93,11 +93,7 @@ const RepresentativeTrack = ({
         />
       </div>
       <div className={css('track-label', 'centered-label')}>
-        <b>
-          Representative{' '}
-          {type.slice(0, 1).toUpperCase() +
-            type.slice(1).replace('ies', 'y').replace('ns', 'n')}
-        </b>
+        <b>Representative {type.toLowerCase()}</b>
       </div>
     </>
   );
