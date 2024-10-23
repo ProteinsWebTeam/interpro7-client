@@ -29,6 +29,7 @@ jobs:
           conda init bash
           source ~/.bashrc 
           conda activate base
+          export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
           npm run test
 
       - name: Build
@@ -51,5 +52,5 @@ jobs:
       - name: Release 
         run: |
           export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
-          ssh wp-np3-bc "cd $VM_BASE_PATH; mkdir "${IPRO_RELEASE_FOLDER}"";
+          ssh "$VM_NAME" "cd $VM_BASE_PATH; mkdir "${IPRO_RELEASE_FOLDER}"";
           scp -q -r dist/* "$VM_NAME":"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER";
