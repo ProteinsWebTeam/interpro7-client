@@ -39,13 +39,13 @@ jobs:
       - name: Release 
         run: |
           
-          if [[ "${GITHUB_REF##*/}" == "runner" ]]; then
+          if [[ ${{ github.ref }} == "runner" ]]; then
             export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
             export VM_NAME = "wp-np3-bc";
-          elif [[ "${GITHUB_REF##*/}" == "stage" ]]; then
+          elif [[ ${{ github.ref }} == "stage" ]]; then
             export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/stage/website/releases/";
             export VM_NAME = "wp-np3-bc";
-          elif [[ "${GITHUB_REF##*/}" == "master" ]]; then
+          elif [[ ${{ github.ref }} == "master" ]]; then
             export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/production/website/releases/";
             export VM_NAME = "wp-np3-bc";
 
