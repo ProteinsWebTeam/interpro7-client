@@ -21,36 +21,38 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1 
 
-      # - name: Install dependencies
-      #   run: |
-      #     npm install
+      - name: Install dependencies
+        run: |
+          npm install
 
-      # - name: Test
-      #   run: |
-      #     conda init bash
-      #     source ~/.bashrc 
-      #     conda activate base
-      #     export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
-      #     npm run test
+      - name: Test
+        run: |
+          export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+          npm run test
 
-      # - name: Build
-      #   run: | 
-      #     npm run release:dev 
+      - name: Build
+        run: | 
+          npm run release:dev 
 
       - name: Release 
         run: |
 
+            # Release to dev
             if [ "${{ github.ref }}" == "refs/heads/dev" ]; then
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
+
+            # Release to staging
             elif [ "${{ github.ref }}" == "refs/heads/runner" ]; then
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/stage/website/releases/";
               export VM_NAME="wp-np3-bd";
-            elif [ "${{ github.ref }}" == "refs/heads/master" ]; then
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/production/website/releases/";
-              export VM_NAME="wp-np3-bd";
             fi
 
+            # Define folder name
             export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
+            
+            # SSH into correct VM and create directory
             ssh "$VM_NAME" "cd $VM_BASE_PATH; mkdir "${IPRO_RELEASE_FOLDER}"";
+
+            # Copy contents of the build
             scp -q -r dist/* "$VM_NAME":"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER";
