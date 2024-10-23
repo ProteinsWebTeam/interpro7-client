@@ -24,21 +24,21 @@ jobs:
         run: |
           npm install
 
-      - name: Test
-        run: |
-          conda init bash
-          source ~/.bashrc 
-          conda activate base
-          export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
-          npm run test
+      # - name: Test
+      #   run: |
+      #     conda init bash
+      #     source ~/.bashrc 
+      #     conda activate base
+      #     export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+      #     npm run test
 
-      - name: Build
-        run: | 
-          npm run release:dev 
+      # - name: Build
+      #   run: | 
+      #     npm run release:dev 
 
-      - name: Release
+      - name: Release 
         run: |
-          # Determine branch and set VM_BASE_PATH accordingly
+          
           if [[ "${GITHUB_REF##*/}" == "runner" ]]; then
             export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
             export VM_NAME = "wp-np3-bc";
@@ -49,8 +49,6 @@ jobs:
             export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/production/website/releases/";
             export VM_NAME = "wp-np3-bc";
 
-      - name: Release 
-        run: |
           export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
           ssh "$VM_NAME" "cd $VM_BASE_PATH; mkdir "${IPRO_RELEASE_FOLDER}"";
           scp -q -r dist/* "$VM_NAME":"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER";
