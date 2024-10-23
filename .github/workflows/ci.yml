@@ -24,7 +24,7 @@ jobs:
       # - name: Install dependencies
       #   run: |
       #     npm install
-ß
+
       # - name: Test
       #   run: |
       #     conda init bash
@@ -39,18 +39,18 @@ jobs:
 
       - name: Release 
         run: |
-          
-          if [[  sed "s/head\/ref//;s/\/\///" <<< ${{ github.ref }} == "runner" ]]; then
-            export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
-            export VM_NAME = "wp-np3-bc";
-          elif [[ sed "s/head\/ref//;s/\/\///" <<< ${{ github.ref }} == "stage" ]]; then
-            export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/stage/website/releases/";
-            export VM_NAME = "wp-np3-bc";
-          elif [[ sed "s/head\/ref//;s/\/\///" <<< ${{ github.ref }}== "master" ]]; then
-            export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/production/website/releases/";
-            export VM_NAME = "wp-np3-bc";
-          fi
 
-          export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
-          ssh "$VM_NAME" "cd $VM_BASE_PATH; mkdir "${IPRO_RELEASE_FOLDER}"";
-          scp -q -r dist/* "$VM_NAME":"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER";
+            if [[  sed "s/head\/ref//;s/\/\///" <<< ${{ github.ref }} == "runner" ]]; then
+              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
+              export VM_NAME = "wp-np3-bc";
+            elif [[ sed "s/head\/ref//;s/\/\///" <<< ${{ github.ref }} == "stage" ]]; then
+              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/stage/website/releases/";
+              export VM_NAME = "wp-np3-bc";
+            elif [[ sed "s/head\/ref//;s/\/\///" <<< ${{ github.ref }}== "master" ]]; then
+              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/production/website/releases/";
+              export VM_NAME = "wp-np3-bc";
+            fi
+
+            export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
+            ssh "$VM_NAME" "cd $VM_BASE_PATH; mkdir "${IPRO_RELEASE_FOLDER}"";
+            scp -q -r dist/* "$VM_NAME":"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER";
