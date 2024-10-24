@@ -58,12 +58,13 @@ const OTHER_TRACK_TYPES = [
 ];
 
 const MARGIN_CHANGE_TRACKS = [
-  'coiled-coils,_signal_peptides,_transmembrane_regions',
-  'short_linear_motifs',
+  'phobius',
+  'elm',
   'pfam-n',
   'funfam',
-  'match_conservation',
   'mobidblt',
+  'tmhmm',
+  'coils',
 ];
 
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
