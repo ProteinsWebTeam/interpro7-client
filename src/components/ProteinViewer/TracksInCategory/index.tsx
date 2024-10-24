@@ -64,7 +64,7 @@ const MARGIN_CHANGE_TRACKS = [
   'funfam',
   'mobidblt',
   'tmhmm',
-  'coils',
+  'signalp',
 ];
 
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
