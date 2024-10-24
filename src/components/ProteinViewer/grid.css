@@ -45,6 +45,14 @@
   cursor: move;
   min-height: 1rem;
 }
+
+.residue-accession-container {
+  height: 18px; /* tracks + margins */
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
 .protvista-grid .track path:global(.feature) {
   stroke: transparent;
   stroke-width: 1;

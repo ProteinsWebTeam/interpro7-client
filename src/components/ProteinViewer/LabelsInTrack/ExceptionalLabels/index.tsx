@@ -59,10 +59,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         )}
         {entry.children &&
           entry.children.map((d) => (
-            <div
-              className={css('track-accession-child')}
-              key={`main_${d.accession}`}
-            >
+            <div className={css('centered-label')} key={`main_${d.accession}`}>
               {d.accession.replace('Mobidblt-', '')}
             </div>
           ))}
@@ -123,6 +120,8 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
 
   if (entry.type === 'residue') {
     const processedAccession = entry.accession.replace('residue:', '');
+    const descriptionString = entry.locations?.[0].description;
+
     return isPrinting ? (
       <span>Residue: {processedAccession}</span>
     ) : (
@@ -142,7 +141,14 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
             {processedAccession}
           </Link>
         )}
-        <div>{entry.locations?.[0].description}</div>
+
+        <div
+          className={css(
+            processedAccession === 'PIRSR_GROUP' ? 'pirsr-label' : '',
+          )}
+        >
+          {descriptionString}
+        </div>
       </>
     );
   }

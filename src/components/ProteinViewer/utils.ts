@@ -13,12 +13,18 @@ export const selectRepresentativeData = (
   for (const entry of entries) {
     const { accession, short_name, name, source_database, integrated, chain } =
       entry;
-    if (entry[locationKey] === null || entry.type !== type) {
+
+    if (
+      entry[locationKey] === null ||
+      (entry.type !== type &&
+        (type === 'domain' ? entry.type !== 'repeat' : true)) // Handles repeat types, which fall under the "domain" cateogory
+    ) {
       continue;
     }
     for (const location of entry[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end } = fragment;
+        const representative = location.representative;
         if (location.representative) {
           flatRepresentativeData.push({
             accession,
@@ -27,6 +33,7 @@ export const selectRepresentativeData = (
             name,
             source_database,
             integrated,
+            representative,
             start,
             end,
             color: getTrackColor({ source_database }, EntryColorMode.MEMBER_DB),

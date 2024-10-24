@@ -35,10 +35,25 @@
   }
 }
 
+.unintegrated-label {
+  margin-top: 10px;
+}
+
 /*blobs*/
 
 .sequence-conservation-label {
   margin-top: 1.3em;
+}
+
+.pirsr-label {
+  color: var(--colors-dark);
+  font-weight: bold;
+  margin-top: 14px;
+  margin-bottom: 3px;
+}
+
+.centered-label {
+  margin-top: 4px;
 }
 
 .sequence-conservation {
@@ -84,8 +99,12 @@
   display: none;
 }
 
-.track-component path:global(.child-fragment) {
-  stroke-width: 1px;
+text:global(.child-label) {
+  font-size: 12px;
+}
+
+path:global(.child-fragment) {
+  stroke-width: 2; /* Optional: Adjust the stroke width for better visibility */
   opacity: 0.5;
   cursor: pointer;
 }
@@ -187,7 +206,17 @@ nightingale-manager {
   width: 100%;
 }
 
+svg {
+  cursor: default;
+}
+
+/* Hide parent tracks for domain and interpro entries*/
 g:global(.feature-group):has(g:global(.residues-group))
   > g:global(.location-group) {
+  display: none;
+}
+
+svg:global(.container):has(g:global(.children-features))
+  > g:global(.sequence-features):has(g:global(.feature-group[id^="g_IPR"])) {
   display: none;
 }

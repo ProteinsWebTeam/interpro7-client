@@ -56,6 +56,18 @@ const OTHER_TRACK_TYPES = [
   'consensus majority',
   'variation',
 ];
+
+const MARGIN_CHANGE_TRACKS = [
+  'phobius',
+  'elm',
+  'pfam-n',
+  'funfam',
+  'mobidblt',
+  'tmhmm',
+  'signalp',
+  'coils',
+];
+
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
 const b2sh = new Map([
@@ -242,11 +254,11 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
               ) {
                 (track as NightingaleInterProTrackCE).data = mapToFeatures(
                   entry,
-                  colorDomainsBy || 'ACCESSION',
+                  colorDomainsBy || 'MEMBER_DB',
                 );
                 const contributors = mapToContributors(
                   entry,
-                  colorDomainsBy || 'ACCESSION',
+                  colorDomainsBy || 'MEMBER_DB',
                 );
                 if (contributors)
                   (track as NightingaleInterProTrackCE).contributors =
@@ -277,6 +289,14 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
             const isExternalSource = EXCEPTIONAL_PREFIXES.some((prefix) =>
               entry.accession.startsWith(prefix),
             );
+
+            // Space unintegrated tracks
+            const trackTopMargin =
+              entry.source_database !== 'interpro' && // Not integrated
+              !MARGIN_CHANGE_TRACKS.includes(entry.source_database || '') && // Not included in other_features (eg. pfam-n, etc..)
+              !entry.accession.startsWith('residue:') // Not a residue
+                ? 14
+                : 2;
 
             return (
               <React.Fragment key={entry.accession}>
@@ -369,7 +389,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           length={sequence.length}
                           margin-color="#fafafa"
                           margin-left={20}
-                          height={15}
+                          height={12}
                           id={getTrackAccession(entry.accession)}
                           highlight-event="onmouseover"
                           highlight-color={highlightColor}
@@ -378,21 +398,27 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                       )}{' '}
                     </div>
                   ) : (
-                    <NightingaleInterProTrack
-                      length={sequence.length}
-                      margin-color="#fafafa"
-                      margin-left={20}
-                      id={getTrackAccession(entry.accession)}
-                      shape="roundRectangle"
-                      highlight-event="onmouseover"
-                      highlight-color={highlightColor}
-                      show-label
-                      label=".feature.short_name"
-                      use-ctrl-to-zoom
-                      expanded={!!expandedTrack[entry.accession]}
-                    />
+                    <>
+                      <NightingaleInterProTrack
+                        length={sequence.length}
+                        margin-color="#fafafa"
+                        id={getTrackAccession(entry.accession)}
+                        show-label
+                        margin-left={20}
+                        margin-top={trackTopMargin} // Space unintegrated
+                        // @ts-ignore
+                        samesize={entry.source_database !== 'mobidblt'}
+                        shape="roundRectangle"
+                        highlight-event="onmouseover"
+                        highlight-color={highlightColor}
+                        label=".feature.short_name"
+                        use-ctrl-to-zoom
+                        expanded={expandedTrack[entry.accession]}
+                      />
+                    </>
                   )}
                 </div>
+
                 <LabelsInTrack
                   entry={entry}
                   hideCategory={hideCategory}

@@ -18,6 +18,7 @@ import grid from '../grid.css';
 const css = cssBinder(style, grid);
 
 type Props = {
+  type: string;
   entries: Array<ExtendedFeature>;
   highlightColor: string;
   hideCategory: boolean;
@@ -28,7 +29,8 @@ type Props = {
   isPrinting: boolean;
 };
 
-const RepresentativeDomainsTrack = ({
+const RepresentativeTrack = ({
+  type,
   entries,
   highlightColor,
   hideCategory,
@@ -90,14 +92,9 @@ const RepresentativeDomainsTrack = ({
           use-ctrl-to-zoom
         />
       </div>
-      {entries.length === 1 ? (
-        <LabelsInTrack
-          entry={entries[0]}
-          hideCategory={hideCategory}
-          expandedTrack={true}
-          isPrinting={isPrinting}
-        />
-      ) : null}
+      <div className={css('track-label', 'centered-label')}>
+        <b>Representative {type.toLowerCase()}</b>
+      </div>
     </>
   );
 };
@@ -108,4 +105,4 @@ const mapStateToProps = createSelector(
     colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
   }),
 );
-export default connect(mapStateToProps)(RepresentativeDomainsTrack);
+export default connect(mapStateToProps)(RepresentativeTrack);

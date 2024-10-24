@@ -76,6 +76,7 @@ export const getTextForLabel = (
     accession: string;
     name: string;
     short_name: string;
+    source_database: string;
   } */,
   label /*: {
     accession: boolean;
@@ -83,11 +84,30 @@ export const getTextForLabel = (
     short: boolean;
   } */,
 ) /*: string */ => {
-  let text = label.short ? entry.short_name || '' : '';
-  if (text.length > 0 && label.accession) text += ' - ';
-  if (label.accession) text += entry.accession;
-  if (text.length > 0 && label.name) text += ': ';
-  if (label.name) text += entry.name;
-  if (text.length === 0) text += entry.accession;
+  let textList = [];
+
+  if (label.short && entry.short_name) textList.push(entry.short_name);
+  if (label.name && entry.name) textList.push(entry.name);
+  if (label.accession && entry.accession) textList.push(entry.accession);
+
+  // If the only selected label by option is not available, select the first available
+
+  if (textList.length === 0) {
+    const priorityList = ['short_name', 'name', 'accession'];
+    for (let i = 0; i < priorityList.length; i++) {
+      const label = entry[priorityList[i]];
+      if (label) {
+        textList.push(label);
+        break;
+      }
+    }
+  }
+
+  let text = textList.join(' - ');
+
+  if (!entry.accession.startsWith('IPR')) {
+    text = entry.source_database.toUpperCase() + ': ' + text;
+  }
+
   return text;
 };

@@ -31,6 +31,11 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase }: Props) => {
 
   const residueLocation: ProtVistaLocation = detail?.feature.locations[0];
   const residueDescription: string = residueLocation.description || '';
+  const highlightPositions = detail.highlight.split(':');
+  const residuePosition =
+    highlightPositions[0] == highlightPositions[1]
+      ? highlightPositions[0]
+      : highlightPositions[0] + '-' + highlightPositions[1];
 
   return (
     <section>
@@ -43,7 +48,7 @@ const ProtVistaResiduePopup = ({ detail, sourceDatabase }: Props) => {
       {residueDescription && <p>{residueDescription}</p>}
       <div>
         {/* Display only the position of the currently highlighted residue */}
-        Residue ({detail.highlight.split(':')[0]})
+        Residue ({residuePosition})
       </div>
     </section>
   );

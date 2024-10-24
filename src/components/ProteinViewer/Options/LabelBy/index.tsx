@@ -33,7 +33,7 @@ const LabelBy = ({ labelContent, changeSettingsRaw }: Props) => {
         [opt]: !labelContent?.[opt as LabelOptions],
       };
       if (!next.accession && !next.name && !next.short) {
-        next.accession = true;
+        next.short = true;
       }
       changeSettingsRaw('ui', 'labelContent', next);
     }
