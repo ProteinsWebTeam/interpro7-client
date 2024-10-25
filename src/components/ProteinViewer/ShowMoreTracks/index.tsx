@@ -4,18 +4,34 @@ import styles from './style.css';
 
 import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import { hide } from '@floating-ui/react-dom';
 
 const css = cssBinder(styles, fonts, tooltip);
 
+type CategoryVisibility = { [name: string]: boolean };
+
 type Props = {
   showMore: boolean;
+  hideCategory: CategoryVisibility;
   showMoreChanged: (v: boolean) => void;
+  setHideCategory: (v: CategoryVisibility) => void;
+  switchCategoryVisibilityShowMore: (
+    categories: CategoryVisibility,
+    name: string[],
+    hide: boolean,
+  ) => CategoryVisibility;
 };
 
 {
   /* Button to show/hide all secondary tracks (maintains internal view/show state of the specific track)*/
 }
-const ShowMoreTracks = ({ showMore, showMoreChanged }: Props) => {
+const ShowMoreTracks = ({
+  showMore,
+  hideCategory,
+  showMoreChanged,
+  setHideCategory,
+  switchCategoryVisibilityShowMore,
+}: Props) => {
   return (
     <div>
       <button
@@ -30,10 +46,17 @@ const ShowMoreTracks = ({ showMore, showMoreChanged }: Props) => {
           'showmore-btn',
         )}
         onClick={() => {
+          setHideCategory(
+            switchCategoryVisibilityShowMore(
+              hideCategory,
+              ['families', 'domains'],
+              !showMore ? false : true,
+            ),
+          );
           showMoreChanged(!showMore);
         }}
       >
-        {showMore ? 'Show less annotations' : 'Show all annotations'}
+        {showMore ? 'Show summary view' : 'Show all annotations'}
       </button>
     </div>
   );

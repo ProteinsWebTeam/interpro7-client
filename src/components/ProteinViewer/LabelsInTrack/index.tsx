@@ -10,9 +10,10 @@ import cssBinder from 'styles/cssBinder';
 
 import style from '../../ProteinViewer/style.css';
 import grid from '../../ProteinViewer/grid.css';
+import local from './style.css';
 import ExceptionalLabels, { isAnExceptionalLabel } from './ExceptionalLabels';
 
-const css = cssBinder(style, grid);
+const css = cssBinder(style, grid, local);
 
 type Props = {
   entry: ExtendedFeature;
@@ -28,7 +29,6 @@ const LabelsInTrack = ({
   expandedTrack,
 }: Props) => {
   const key = entry.source_database === 'pdb' ? 'structure' : 'entry';
-
   return (
     <div
       className={css('track-label', {
@@ -44,23 +44,44 @@ const LabelsInTrack = ({
               <Label entry={entry} />
             </b>
           ) : (
-            <Link
-              to={{
-                description: {
-                  main: {
-                    key,
-                  },
-                  [key]: {
-                    db: entry.source_database,
-                    accession: entry.accession.startsWith('residue:')
-                      ? entry.accession.split('residue:')[1]
-                      : entry.accession,
-                  },
-                },
-              }}
-            >
-              <Label entry={entry} />
-            </Link>
+            <>
+              {entry.source_database !== 'interpro' &&
+                // Conditions for residue section
+                !(
+                  entry.accession.startsWith('residue:') ||
+                  entry.accession.startsWith('PIRSR')
+                ) &&
+                !hideCategory && (
+                  <div className={css('inner-track-label')}>
+                    <b>Unintegrated</b>
+                  </div>
+                )}
+              <div
+                className={css(
+                  entry.children || entry.residues
+                    ? 'inner-track-label'
+                    : 'track-accession-child',
+                )}
+              >
+                <Link
+                  to={{
+                    description: {
+                      main: {
+                        key,
+                      },
+                      [key]: {
+                        db: entry.source_database,
+                        accession: entry.accession.startsWith('residue:')
+                          ? entry.accession.split('residue:')[1]
+                          : entry.accession,
+                      },
+                    },
+                  }}
+                >
+                  <Label entry={entry} />
+                </Link>
+              </div>
+            </>
           )}
           <div
             className={css({

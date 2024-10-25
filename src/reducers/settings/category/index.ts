@@ -28,10 +28,10 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
     case 'ui':
       return {
         lowGraphics: false,
-        colorDomainsBy: EntryColorMode.ACCESSION,
+        colorDomainsBy: EntryColorMode.MEMBER_DB,
         labelContent: {
-          accession: true,
-          name: false,
+          accession: false,
+          name: true,
           short: true,
         },
         structureViewer: false,
