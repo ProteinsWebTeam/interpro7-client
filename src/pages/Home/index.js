@@ -314,12 +314,15 @@ class Home extends PureComponent {
             <div className={f('pp-browse-by')}>
               <Tabs>
                 <div
-                  title="Member Database"
+                  title="Member Databases"
                   data-testid="home-member-database-button"
                 >
                   <ByMemberDatabase />
                 </div>
-                <div title="Entry type" data-testid="home-entry-type-button">
+                <div
+                  title="InterPro types"
+                  data-testid="home-entry-type-button"
+                >
                   <ByEntryType />
                 </div>
                 <div title="Species" data-testid="home-species-button">

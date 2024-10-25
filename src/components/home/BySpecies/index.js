@@ -43,20 +43,20 @@ export class Species extends PureComponent /*:: <SpeciesProps> */ {
     return (
       <div
         className={f('column', 'small-3', 'medium-2', 'large-4', 'text-center')}
-        key={species.tax_id || 'unclassified'}
+        key={species.proteome_id || 'unclassified'}
         data-testid="by-species-box"
       >
         <Link
           to={{
             description: {
-              main: { key: 'taxonomy' },
-              taxonomy: {
+              main: { key: 'proteome' },
+              proteome: {
                 db: 'uniprot',
-                accession: species.tax_id,
+                accession: species.proteome_id,
               },
             },
           }}
-          data-testid={`species-${species.tax_id}`}
+          data-testid={`species-${species.proteome_id}`}
         >
           <span
             style={{ color: species.color }}

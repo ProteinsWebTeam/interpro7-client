@@ -15,6 +15,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Saccharomyces cerevisiae (strain ATCC 204508 / S288c)",
           "icon": "Y",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000002311",
           "tax_id": "559292",
           "title": "Baker’s yeast",
         }
@@ -27,6 +28,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Caenorhabditis elegans",
           "icon": "W",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000001940",
           "tax_id": "6239",
           "title": "Caenorhabditis elegans",
         }
@@ -39,6 +41,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Escherichia virus T4",
           "icon": "v",
           "kingdom": "Virus",
+          "proteome_id": "UP000009087",
           "tax_id": "10665",
           "title": "Enterobacteria phage T4",
         }
@@ -51,6 +54,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Escherichia coli O127:H6 (strain E2348/69 / EPEC)",
           "icon": "L",
           "kingdom": "Bacteria",
+          "proteome_id": "UP000000625",
           "tax_id": "83333",
           "title": "Escherichia coli",
         }
@@ -63,6 +67,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Schizosaccharomyces pombe (strain 972 / ATCC 24843)",
           "icon": "Y",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000002485",
           "tax_id": "284812",
           "title": "Fission yeast",
         }
@@ -75,6 +80,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Drosophila melanogaster",
           "icon": "F",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000000803",
           "tax_id": "7227",
           "title": "Fruit fly",
         }
@@ -84,9 +90,10 @@ exports[`<BySpecies /> By Species 1`] = `
       species={
         {
           "color": "#5bc0de",
-          "description": "Escherichia virus T4",
+          "description": "Halobacterium salinarum",
           "icon": "v",
-          "kingdom": "Archea",
+          "kingdom": "Archaea",
+          "proteome_id": "UP000000554",
           "tax_id": "2242",
           "title": "Halobacterium salinarum",
         }
@@ -101,6 +108,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Homo sapiens",
           "icon": "H",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000005640",
           "tax_id": "9606",
           "title": "Human",
         }
@@ -113,6 +121,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Mus musculus",
           "icon": "M",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000000589",
           "tax_id": "10090",
           "title": "Mouse",
         }
@@ -125,6 +134,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Arabidopsis thaliana",
           "icon": "B",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000006548",
           "tax_id": "3702",
           "title": "Mouse-ear cress",
         }
@@ -137,6 +147,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Oryza sativa subsp. japonica",
           "icon": "6",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000059680",
           "tax_id": "39947",
           "title": "Rice",
         }
@@ -149,6 +160,7 @@ exports[`<BySpecies /> By Species 1`] = `
           "description": "Danio rerio",
           "icon": "Z",
           "kingdom": "Eukaryota",
+          "proteome_id": "UP000000437",
           "tax_id": "7955",
           "title": "Zebrafish",
         }
@@ -181,15 +193,15 @@ exports[`<Species /> Species 1`] = `
   data-testid="by-species-box"
 >
   <Memo(Connect(Link))
-    data-testid="species-9606"
+    data-testid="species-undefined"
     to={
       {
         "description": {
           "main": {
-            "key": "taxonomy",
+            "key": "proteome",
           },
-          "taxonomy": {
-            "accession": "9606",
+          "proteome": {
+            "accession": undefined,
             "db": "uniprot",
           },
         },
