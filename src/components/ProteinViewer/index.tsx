@@ -375,8 +375,8 @@ export const ProteinViewer = ({
                               highlightColor={highlightColor}
                               entries={representativeEntries}
                               length={protein.sequence.length}
-                              openTooltip={() => {}}
-                              closeTooltip={() => {}}
+                              openTooltip={openTooltip}
+                              closeTooltip={closeTooltip}
                               isPrinting={isPrinting}
                             />
                           ) : (

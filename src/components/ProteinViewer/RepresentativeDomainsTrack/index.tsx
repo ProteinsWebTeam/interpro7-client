@@ -1,14 +1,11 @@
 import React, { ReactNode, useRef, useEffect, useState } from 'react';
-
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import NightingaleInterProTrack from 'components/Nightingale/InterProTrack';
-import LabelsInTrack from 'components/ProteinViewer/LabelsInTrack';
-import DomainPopup from 'components/ProteinViewer/Popup/RepresentativeDomain';
-import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+import ProtVistaPopup, { PopupDetail } from '../Popup';
 
-import { ExtendedFeature } from '..';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -16,6 +13,23 @@ import style from '../style.css';
 import grid from '../grid.css';
 
 const css = cssBinder(style, grid);
+import { ExtendedFeature } from '..';
+
+type EventType =
+  | 'click'
+  | 'mouseover'
+  | 'mouseenter'
+  | 'mouseleave'
+  | 'mouseout'
+  | 'reset';
+type DetailInterface = {
+  eventType: EventType;
+  feature?: ExtendedFeature | null;
+  target?: HTMLElement;
+  highlight?: string;
+  selectedId?: string | null;
+  parentEvent?: Event;
+};
 
 type Props = {
   type: string;
@@ -27,6 +41,7 @@ type Props = {
   openTooltip: (element: HTMLElement | undefined, content: ReactNode) => void;
   closeTooltip: () => void;
   isPrinting: boolean;
+  customLocation?: InterProLocation;
 };
 
 const RepresentativeTrack = ({
@@ -39,20 +54,14 @@ const RepresentativeTrack = ({
   openTooltip,
   closeTooltip,
   isPrinting,
+  customLocation,
 }: Props) => {
   const [data, setData] = useState(entries);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    containerRef?.current?.addEventListener('change', (event) => {
-      const detail = (event as CustomEvent)?.detail;
-      if (detail?.eventType === 'mouseover') {
-        openTooltip(detail.target, <DomainPopup detail={detail} />);
-      }
-      if (detail?.eventType === 'mouseout') {
-        closeTooltip();
-      }
-    });
-  }, [containerRef]);
+  const tooltipTimeout = useRef<number | null>(null);
+  const hasTooltipOpen = useRef(false); // tracks tooltip open state
+
+  // Update data with track color based on the selected color mode
   useEffect(() => {
     setData(
       entries.map((entry) => ({
@@ -70,14 +79,55 @@ const RepresentativeTrack = ({
       })),
     );
   }, [entries, colorDomainsBy]);
+
+  // Tooltip event handling
+  const handleTrackEvent = (event: CustomEvent<DetailInterface>) => {
+    const { detail } = event;
+    if (detail.eventType === 'mouseover' && !hasTooltipOpen.current) {
+      if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
+      hasTooltipOpen.current = true;
+      if (customLocation)
+        openTooltip(
+          detail.target,
+          <ProtVistaPopup
+            detail={detail as unknown as PopupDetail}
+            sourceDatabase={detail.feature?.source_database || ''}
+            currentLocation={customLocation}
+          />,
+        );
+    } else if (detail.eventType === 'mouseout' && hasTooltipOpen.current) {
+      tooltipTimeout.current = window.setTimeout(() => {
+        closeTooltip();
+        hasTooltipOpen.current = false;
+      }, 50);
+    }
+  };
+
+  // Attach event listeners
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('change', (event) =>
+        handleTrackEvent(event as any),
+      );
+      container.addEventListener('change', (event) =>
+        handleTrackEvent(event as any),
+      );
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('mouseenter', handleTrackEvent as any);
+        container.removeEventListener('mouseleave', handleTrackEvent as any);
+      }
+      if (tooltipTimeout.current) {
+        clearTimeout(tooltipTimeout.current);
+      }
+    };
+  }, [closeTooltip]);
+
   return (
     <>
-      <div
-        className={css('track', {
-          hideCategory,
-        })}
-        ref={containerRef}
-      >
+      <div className={css('track', { hideCategory })} ref={containerRef}>
         <NightingaleInterProTrack
           length={length}
           data={data}
@@ -100,9 +150,16 @@ const RepresentativeTrack = ({
 };
 
 const mapStateToProps = createSelector(
+  (state: GlobalState) => state.customLocation,
   (state: GlobalState) => state.settings.ui,
-  (ui) => ({
-    colorDomainsBy: ui.colorDomainsBy || EntryColorMode.DOMAIN_RELATIONSHIP,
+  (customLocation: InterProLocation, ui: Record<string, unknown>) => ({
+    customLocation,
+    colorDomainsBy:
+      (ui.colorDomainsBy as keyof typeof EntryColorMode) ||
+      EntryColorMode.DOMAIN_RELATIONSHIP,
   }),
 );
-export default connect(mapStateToProps)(RepresentativeTrack);
+
+export default connect(mapStateToProps, null, null, { forwardRef: true })(
+  RepresentativeTrack,
+);
