@@ -108,17 +108,13 @@ const RepresentativeTrack = ({
     const container = containerRef.current;
     if (container) {
       container.addEventListener('change', (event) =>
-        handleTrackEvent(event as any),
+        handleTrackEvent(event as CustomEvent<DetailInterface>),
       );
       container.addEventListener('change', (event) =>
-        handleTrackEvent(event as any),
+        handleTrackEvent(event as CustomEvent<DetailInterface>),
       );
     }
     return () => {
-      if (container) {
-        container.removeEventListener('mouseenter', handleTrackEvent as any);
-        container.removeEventListener('mouseleave', handleTrackEvent as any);
-      }
       if (tooltipTimeout.current) {
         clearTimeout(tooltipTimeout.current);
       }
