@@ -53,6 +53,7 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
   if (data?.loading) return <Loading />;
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
+
   return (
     <div
       className={css('vf-stack', 'vf-stack-400', {

@@ -390,6 +390,33 @@ const DomainsOnProteinLoaded = ({
     (track) => !renamedTracks.includes(track[0]),
   );
 
+  // List of "main" tracks to be displayed, the rest are hidden by default
+  const mainTracks = [
+    'alphafold confidence',
+    'families',
+    'domains',
+    'pathogenic and likely pathogenic variants',
+    'intrinsically disordered regions',
+    'spurious proteins',
+    'conserved residues',
+  ];
+
+  const hideCategories = {
+    'secondary structure': false,
+    families: true,
+    domains: true,
+    repeat: false,
+    'conserved site': false,
+    'active site': false,
+    'binding site': false,
+    ptm: false,
+    'match conservation': false,
+    'coiled-coils, signal peptides, transmembrane regions': false,
+    'short linear motifs': false,
+    'pfam-n': false,
+    funfam: false,
+  };
+
   return (
     <ProteinViewer
       protein={protein}
@@ -400,6 +427,8 @@ const DomainsOnProteinLoaded = ({
       handleConservationLoad={handleConservationLoad}
       conservationError={conservationError}
       loading={loading}
+      mainTracks={mainTracks}
+      hideCategories={hideCategories}
     >
       {children}
     </ProteinViewer>

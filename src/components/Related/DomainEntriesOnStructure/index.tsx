@@ -195,6 +195,7 @@ const EntriesOnStructure = ({
     tagChimericStructures(data);
     return data;
   }, [entries, unintegrated, secondaryStructures]);
+
   const representativesPerChain = useMemo(
     () => getRepresentativesPerChain(representativeDomains),
     [representativeDomains],
