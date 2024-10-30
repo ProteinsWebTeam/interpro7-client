@@ -131,9 +131,11 @@ const ProteinViewerForAlphafold = ({
     representativeDomains,
     representativeFamilies,
   } = processedData;
+
+  console.log(unintegrated);
   const groups = makeTracks({
     interpro: interpro as Array<{ accession: string; type: string }>,
-    unintegrated: unintegrated as Array<MinimalFeature>,
+    unintegrated: unintegrated as Array<{ accession: string; type: string }>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
     representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
@@ -155,6 +157,7 @@ const ProteinViewerForAlphafold = ({
     'alphafold confidence',
     'domains',
     'families',
+    'active site',
     'conserved site',
   ];
 
@@ -162,6 +165,7 @@ const ProteinViewerForAlphafold = ({
     'alphafold confidence': false,
     domains: false,
     families: false,
+    'active site': false,
     'conserved site': false,
   };
 

@@ -20,15 +20,17 @@ const UNDERSCORE = /_/g;
 
 const FIRST_IN_ORDER = [
   'alphafold_confidence',
-  'families',
-  'domains',
-  'intrinsically_disordered_regions',
-  'conserved_residues',
   'secondary_structure',
+  'families',
+  'family',
+  'domains',
+  'domain',
+  'intrinsically_disordered_regions',
+  'conserved_site',
+  'conserved_residues',
   'spurious_proteins',
   'pathogenic_and_likely_pathogenic_variants',
   'repeat',
-  'conserved_site',
   'active_site',
   'binding_site',
   'ptm',
@@ -56,6 +58,7 @@ export const byEntryType = (
   }
   return a > b ? 1 : 0;
 };
+
 type tracksProps = {
   interpro: Array<{ accession: string; type: string }>;
   unintegrated: Array<MinimalFeature>;
@@ -82,7 +85,7 @@ function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
   return [0, 0];
 }
 
-function sortTracks(
+export function sortTracks(
   a: ExtendedFeature | ExtendedFeature[],
   b: ExtendedFeature | ExtendedFeature[],
 ) {
@@ -364,6 +367,8 @@ const DomainsOnProteinLoaded = ({
       ],
     };
 
+  console.log(uniqueResidues);
+
   dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
     // If comparing two entries from different DBs, put the non-pirsr always first (a) OR if source database is pirsr and first element is fake label, put fake label first
     if (
@@ -390,32 +395,96 @@ const DomainsOnProteinLoaded = ({
     (track) => !renamedTracks.includes(track[0]),
   );
 
-  // List of "main" tracks to be displayed, the rest are hidden by default
-  const mainTracks = [
-    'alphafold confidence',
-    'families',
-    'domains',
-    'pathogenic and likely pathogenic variants',
-    'intrinsically disordered regions',
-    'spurious proteins',
-    'conserved residues',
-  ];
+  let mainTracks: string[] = [];
+  let hideCategories: Record<string, boolean> = {};
 
-  const hideCategories = {
-    'secondary structure': false,
-    families: true,
-    domains: true,
-    repeat: false,
-    'conserved site': false,
-    'active site': false,
-    'binding site': false,
-    ptm: false,
-    'match conservation': false,
-    'coiled-coils, signal peptides, transmembrane regions': false,
-    'short linear motifs': false,
-    'pfam-n': false,
-    funfam: false,
-  };
+  if (protein.accession.startsWith('iprscan')) {
+    const homologous_superfamily = sortedData.filter(
+      (entry) => entry[0] == 'homologous superfamily',
+    )[0];
+    const representative_domains = sortedData.filter(
+      (entry) => entry[0] == 'representative domains',
+    )[0];
+
+    if (representative_domains) {
+      representative_domains[1].map((domain) => {
+        if (typeof domain === 'object' && domain !== null) {
+          (domain as { representative?: boolean })['representative'] = true;
+        }
+      });
+    }
+
+    sortedData.map((entry) => {
+      if (entry[0] === 'domains') {
+        if (homologous_superfamily) {
+          entry[1] = entry[1].concat(homologous_superfamily[1]);
+        }
+
+        if (representative_domains) {
+          entry[1] = entry[1].concat(representative_domains[1]);
+        }
+      }
+    });
+
+    mainTracks = [
+      'alphafold confidence',
+      'families',
+      'domains',
+      'pathogenic and likely pathogenic variants',
+      'intrinsically disordered regions',
+      'spurious proteins',
+      'conserved residues',
+      'unintegrated',
+      'other features',
+      'other residues',
+    ];
+
+    hideCategories = {
+      'secondary structure': false,
+      families: false,
+      domains: false,
+      repeat: false,
+      'conserved site': false,
+      'active site': false,
+      'binding site': false,
+      ptm: false,
+      'match conservation': false,
+      'coiled-coils, signal peptides, transmembrane regions': false,
+      'short linear motifs': false,
+      'pfam-n': false,
+      funfam: false,
+    };
+
+    sortedData.map((entry) => {
+      (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
+    });
+  } else {
+    mainTracks = [
+      'alphafold confidence',
+      'families',
+      'domains',
+      'pathogenic and likely pathogenic variants',
+      'intrinsically disordered regions',
+      'spurious proteins',
+      'conserved residues',
+    ];
+
+    hideCategories = {
+      'secondary structure': false,
+      families: true,
+      domains: true,
+      repeat: false,
+      'conserved site': false,
+      'active site': false,
+      'binding site': false,
+      ptm: false,
+      'match conservation': false,
+      'coiled-coils, signal peptides, transmembrane regions': false,
+      'short linear motifs': false,
+      'pfam-n': false,
+      funfam: false,
+    };
+  }
 
   return (
     <ProteinViewer

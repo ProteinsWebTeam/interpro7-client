@@ -257,18 +257,18 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
-              <ShowMoreTracks
-                disabled={
-                  mainTracks.length === Object.entries(hideCategories).length
-                }
-                showMore={showMore}
-                showMoreChanged={setShowMore}
-                setHideCategory={setHideCategory}
-                switchCategoryVisibilityShowMore={
-                  switchCategoryVisibilityShowMore
-                }
-                hideCategory={hideCategory}
-              />
+              {!protein.accession.startsWith('iprscan') &&
+                mainTracks.length !== Object.entries(hideCategories).length && (
+                  <ShowMoreTracks
+                    showMore={showMore}
+                    showMoreChanged={setShowMore}
+                    setHideCategory={setHideCategory}
+                    switchCategoryVisibilityShowMore={
+                      switchCategoryVisibilityShowMore
+                    }
+                    hideCategory={hideCategory}
+                  />
+                )}
             </div>
           </div>
 
@@ -284,7 +284,6 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-              []
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
                 .map(([type, entries, component]) => {
@@ -360,8 +359,8 @@ export const ProteinViewer = ({
                               highlightColor={highlightColor}
                               entries={representativeEntries}
                               length={protein.sequence.length}
-                              openTooltip={() => {}}
-                              closeTooltip={() => {}}
+                              openTooltip={openTooltip}
+                              closeTooltip={closeTooltip}
                               isPrinting={isPrinting}
                             />
                           ) : (

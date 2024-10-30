@@ -11,7 +11,6 @@ const css = cssBinder(styles, fonts, tooltip);
 type CategoryVisibility = { [name: string]: boolean };
 
 type Props = {
-  disabled: boolean;
   showMore: boolean;
   hideCategory: CategoryVisibility;
   showMoreChanged: (v: boolean) => void;
@@ -27,7 +26,6 @@ type Props = {
   /* Button to show/hide all secondary tracks (maintains internal view/show state of the specific track)*/
 }
 const ShowMoreTracks = ({
-  disabled,
   showMore,
   hideCategory,
   showMoreChanged,
@@ -37,7 +35,6 @@ const ShowMoreTracks = ({
   return (
     <div>
       <button
-        disabled={disabled}
         style={{
           boxShadow: 'none',
           transform: 'none',
