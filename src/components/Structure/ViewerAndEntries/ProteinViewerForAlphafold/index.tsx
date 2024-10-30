@@ -27,7 +27,7 @@ const ProteinViewer = loadable({
 });
 
 /* Processing of the payload needs to be slightly different 
-to add tracks to the dataMerged object instead of the dataSorted object */
+to add tracks to the groups object instead of the dataSorted object */
 export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
   protein: string,
@@ -125,20 +125,58 @@ const ProteinViewerForAlphafold = ({
     !processedData
   )
     return <Loading />;
-  const { interpro, unintegrated, representativeDomains } = processedData;
+  const {
+    interpro,
+    unintegrated,
+    representativeDomains,
+    representativeFamilies,
+  } = processedData;
+
+  console.log(unintegrated);
   const groups = makeTracks({
     interpro: interpro as Array<{ accession: string; type: string }>,
-    unintegrated: unintegrated as Array<MinimalFeature>,
+    unintegrated: unintegrated as Array<{ accession: string; type: string }>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
+    representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
+
+  if (groups.domain) {
+    groups.domains = groups.domain.slice();
+    groups.domain = [];
+  }
+
+  if (groups.family) {
+    groups.families = groups.family.slice();
+    groups.family = [];
+  }
+
   if (dataConfidence) addConfidenceTrack(dataConfidence, protein, groups);
   const tracks = flattenTracksObject(groups);
+
+  const mainTracks = [
+    'alphafold confidence',
+    'domains',
+    'families',
+    'active site',
+    'conserved site',
+  ];
+
+  const hideCategories = {
+    'alphafold confidence': false,
+    domains: false,
+    families: false,
+    'active site': false,
+    'conserved site': false,
+  };
+
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>
       <ProteinViewer
         protein={dataProtein.payload.metadata}
         data={tracks}
+        mainTracks={mainTracks}
+        hideCategories={hideCategories}
         title="Protein domains"
         showOptions={!isSplitScreen}
       />

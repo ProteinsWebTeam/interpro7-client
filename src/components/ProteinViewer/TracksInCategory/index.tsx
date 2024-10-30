@@ -293,7 +293,9 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
             // Space unintegrated tracks
             const trackTopMargin =
               entry.source_database !== 'interpro' && // Not integrated
-              !MARGIN_CHANGE_TRACKS.includes(entry.source_database || '') && // Not included in other_features (eg. pfam-n, etc..)
+              !MARGIN_CHANGE_TRACKS.includes(
+                entry.source_database?.toLowerCase() || '',
+              ) && // Not included in other_features (eg. pfam-n, etc..)
               !entry.accession.startsWith('residue:') // Not a residue
                 ? 14
                 : 2;

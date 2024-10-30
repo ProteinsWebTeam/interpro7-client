@@ -98,6 +98,10 @@ type Props = PropsWithChildren<{
   conservationError?: string;
   /** TO include loading animation in the header */
   loading: boolean;
+
+  mainTracks: string[];
+
+  hideCategories: Record<string, boolean>;
 }>;
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
@@ -129,6 +133,8 @@ const switchCategoryVisibilityShowMore = (
 };
 
 export const ProteinViewer = ({
+  mainTracks,
+  hideCategories,
   protein,
   title,
   data,
@@ -144,32 +150,8 @@ export const ProteinViewer = ({
   // State variable to show/hide "secondary" tracks
   const [showMore, setShowMore] = useState(false);
 
-  // List of "main" tracks to be displayed, the rest are hidden by default
-  const mainTracks = [
-    'alphafold confidence',
-    'families',
-    'domains',
-    'pathogenic and likely pathogenic variants',
-    'intrinsically disordered regions',
-    'spurious proteins',
-    'conserved residues',
-  ];
-
-  const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
-    'secondary structure': false,
-    families: true,
-    domains: true,
-    repeat: false,
-    'conserved site': false,
-    'active site': false,
-    'binding site': false,
-    ptm: false,
-    'match conservation': false,
-    'coiled-coils, signal peptides, transmembrane regions': false,
-    'short linear motifs': false,
-    'pfam-n': false,
-    funfam: false,
-  });
+  const [hideCategory, setHideCategory] =
+    useState<CategoryVisibility>(hideCategories);
 
   const categoryRefs = useRef<ExpandedHandle[]>([]);
 
@@ -275,15 +257,18 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
-              <ShowMoreTracks
-                showMore={showMore}
-                showMoreChanged={setShowMore}
-                setHideCategory={setHideCategory}
-                switchCategoryVisibilityShowMore={
-                  switchCategoryVisibilityShowMore
-                }
-                hideCategory={hideCategory}
-              />
+              {!protein.accession.startsWith('iprscan') &&
+                mainTracks.length !== Object.entries(hideCategories).length && (
+                  <ShowMoreTracks
+                    showMore={showMore}
+                    showMoreChanged={setShowMore}
+                    setHideCategory={setHideCategory}
+                    switchCategoryVisibilityShowMore={
+                      switchCategoryVisibilityShowMore
+                    }
+                    hideCategory={hideCategory}
+                  />
+                )}
             </div>
           </div>
 
@@ -299,7 +284,6 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-              []
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
                 .map(([type, entries, component]) => {

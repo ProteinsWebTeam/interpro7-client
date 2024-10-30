@@ -85,7 +85,7 @@ const RepresentativeTrack = ({
     const { detail } = event;
     if (detail.eventType === 'mouseover' && !hasTooltipOpen.current) {
       if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
-      hasTooltipOpen.current = true;
+      hasTooltipOpen.current = true; // Set the flag to prevent re-triggering
       if (customLocation)
         openTooltip(
           detail.target,
@@ -110,11 +110,11 @@ const RepresentativeTrack = ({
       container.addEventListener('change', (event) =>
         handleTrackEvent(event as CustomEvent<DetailInterface>),
       );
-      container.addEventListener('change', (event) =>
-        handleTrackEvent(event as CustomEvent<DetailInterface>),
-      );
     }
     return () => {
+      if (container) {
+        //container.removeEventListener('change', handleTrackEvent);
+      }
       if (tooltipTimeout.current) {
         clearTimeout(tooltipTimeout.current);
       }
