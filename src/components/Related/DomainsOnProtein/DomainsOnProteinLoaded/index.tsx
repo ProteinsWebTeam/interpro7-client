@@ -367,8 +367,6 @@ const DomainsOnProteinLoaded = ({
       ],
     };
 
-  console.log(uniqueResidues);
-
   dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
     // If comparing two entries from different DBs, put the non-pirsr always first (a) OR if source database is pirsr and first element is fake label, put fake label first
     if (

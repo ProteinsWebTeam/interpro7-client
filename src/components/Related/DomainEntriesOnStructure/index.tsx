@@ -296,8 +296,6 @@ const EntriesOnStructure = ({
             (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
           });
 
-          console.log('sort', tracks);
-
           return (
             <div key={i} className={css('vf-stack')}>
               <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
