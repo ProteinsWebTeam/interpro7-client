@@ -1,8 +1,8 @@
 diff --git a/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts b/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts
-index 8302fc6..e412b06 100644
+index 8302fc6..ac45de6 100644
 --- a/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts
 +++ b/node_modules/@nightingale-elements/nightingale-interpro-track/src/InterproEntryLayout.ts
-@@ -39,24 +39,31 @@ export default class InterproEntryLayout extends DefaultLayout {
+@@ -39,24 +39,30 @@ export default class InterproEntryLayout extends DefaultLayout {
    maxYPos = 0;
    expanded = false;
    padding = 1;
@@ -11,7 +11,7 @@ index 8302fc6..e412b06 100644
    constructor({
      expanded,
      padding,
-+    samesize, 
++    samesize,
      ...otherOptions
 -  }: LayoutOptions & { expanded: boolean; padding: number }) {
 +  }: LayoutOptions & { expanded: boolean; padding: number, samesize?: boolean }) {
@@ -26,7 +26,6 @@ index 8302fc6..e412b06 100644
    init(features: InterProFeature[], children?: InterProFeature[]) {
 +
 +    let childHeight = this.samesize ? EXPANDED_HEIGHT : CHILD_HEIGHT
-+    console.log(this.samesize)
      let yPos = 0;
      this.#heightMap = new Map();
      this.#yPositionMap = new Map();
@@ -37,7 +36,7 @@ index 8302fc6..e412b06 100644
      const residuesPos: Record<
        string,
        Record<string, Record<string, { height: number; yPos: number }>>
-@@ -64,10 +71,22 @@ export default class InterproEntryLayout extends DefaultLayout {
+@@ -64,10 +70,21 @@ export default class InterproEntryLayout extends DefaultLayout {
      for (let k = 0; k < features.length; k++) {
        const feature = features[k];
        const isCollapsible = feature?.residues?.length || children?.length;
@@ -47,7 +46,6 @@ index 8302fc6..e412b06 100644
 -      );
 +
 +      if (this.samesize){
-+        console.log("hey, here")
 +        this.#heightMap.set(
 +          feature.accession,
 +          childHeight
@@ -64,7 +62,7 @@ index 8302fc6..e412b06 100644
        this.#yPositionMap.set(feature.accession, this.padding);
        yPos = (this.#heightMap.get(feature.accession) || 0) + 2 * this.padding;
        this.maxYPos = Math.max(this.maxYPos, yPos);
-@@ -89,7 +108,7 @@ export default class InterproEntryLayout extends DefaultLayout {
+@@ -89,7 +106,7 @@ export default class InterproEntryLayout extends DefaultLayout {
        for (let k = 0; k < children.length; k++) {
          const child: InterProFeature = children[k];
          if (!this.#heightMap.has(child.accession)) {
@@ -73,17 +71,17 @@ index 8302fc6..e412b06 100644
            this.#yPositionMap.set(
              child.accession,
              (this.expanded ? this.maxYPos : innerPadding) + this.padding,
-@@ -133,6 +152,9 @@ export default class InterproEntryLayout extends DefaultLayout {
+@@ -133,6 +150,9 @@ export default class InterproEntryLayout extends DefaultLayout {
      > = {},
      expanded = true,
    ) {
 +
 +    let childHeight = this.samesize ? EXPANDED_HEIGHT : CHILD_HEIGHT
-+    
++
      for (let i = 0; i < residues.length; i++) {
        const resGroup = residues[i];
        InterproEntryLayout.filterOutResidueFragmentsOutOfLocation(
-@@ -152,7 +174,7 @@ export default class InterproEntryLayout extends DefaultLayout {
+@@ -152,7 +172,7 @@ export default class InterproEntryLayout extends DefaultLayout {
              yPos: expanded ? this.maxYPos + this.padding : yPos + innerPadding,
            };
            yPos = expanded
