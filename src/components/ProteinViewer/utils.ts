@@ -82,7 +82,6 @@ const processData = <M = Metadata>(
       ? 'entry_structure_locations'
       : 'entry_protein_locations';
 
-  console.log('repr', results);
   const representativeData = {
     domains: selectRepresentativeData(results, locationKey, 'domain'),
     families: selectRepresentativeData(results, locationKey, 'family'),

@@ -26,7 +26,7 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
-/* Processing of the payload needs to be slightly different 
+/* Processing of the payload needs to be slightly different
 to add tracks to the groups object instead of the dataSorted object */
 export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
@@ -132,7 +132,6 @@ const ProteinViewerForAlphafold = ({
     representativeFamilies,
   } = processedData;
 
-  console.log(unintegrated);
   const groups = makeTracks({
     interpro: interpro as Array<{ accession: string; type: string }>,
     unintegrated: unintegrated as Array<{ accession: string; type: string }>,
