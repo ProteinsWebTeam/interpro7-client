@@ -2,13 +2,16 @@ import React, { PureComponent } from 'react';
 import T from 'prop-types';
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
+import { cachedFetchJSON } from 'utils/cached-fetch';
 
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
 import AnimatedEntry from 'components/AnimatedEntry';
 import NumberComponent from 'components/NumberComponent';
 
+import loadData from 'higherOrder/loadData';
 import { toPlural } from 'utils/pages';
+
 import { speciesFeat } from 'staticData/home';
 
 import ipro from 'styles/interpro-new.css';
@@ -23,7 +26,14 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 
-export class Species extends PureComponent {
+/*:: type SpeciesProps = {
+  species: Object,
+  entries: number | string,
+  proteins: number | string,
+  loading: boolean,
+}; */
+
+export class Species extends PureComponent /*:: <SpeciesProps> */ {
   static propTypes = {
     species: T.object.isRequired,
     entries: T.oneOfType([T.number, T.string]),
@@ -117,7 +127,11 @@ export class Species extends PureComponent {
   }
 }
 
-export class BySpecies extends PureComponent {
+/*:: type Props = {
+  api: ParsedURLServer,
+}; */
+
+export class BySpecies extends PureComponent /*:: <Props> */ {
   static propTypes = {
     api: T.object.isRequired,
   };
@@ -127,39 +141,42 @@ export class BySpecies extends PureComponent {
     loading: true,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { protocol, hostname, port, root } = this.props.api;
 
-    const speciesData = {};
-    await Promise.all(
-      speciesFeat.map(async (species) => {
-        const description = {
-          main: { key: 'proteome' },
-          proteome: {
-            db: 'uniprot',
-            accession: species.proteome_id,
-          },
-          protein: { db: 'UniProt' },
-        };
+    const fetchSpeciesData = async () => {
+      const speciesData = {};
+      await Promise.all(
+        speciesFeat.map(async (species) => {
+          const description = {
+            main: { key: 'proteome' },
+            proteome: {
+              db: 'uniprot',
+              accession: species.proteome_id,
+            },
+            protein: { db: 'UniProt' },
+          };
 
-        const response = await fetch(
-          format({
-            protocol,
-            hostname,
-            port,
-            pathname: root + descriptionToPath(description),
-          }),
-        );
-        const data = await response.json();
+          const response = await cachedFetchJSON(
+            format({
+              protocol,
+              hostname,
+              port,
+              pathname: root + descriptionToPath(description),
+            }),
+          );
 
-        speciesData[species.proteome_id] = {
-          entries: data.metadata.counters.entries,
-          proteins: data.metadata.counters.proteins,
-        };
-      }),
-    );
+          speciesData[species.proteome_id] = {
+            entries: response.payload.metadata.counters.entries,
+            proteins: response.payload.metadata.counters.proteins,
+          };
+        }),
+      );
 
-    this.setState({ speciesData, loading: false });
+      this.setState({ speciesData, loading: false });
+    };
+
+    fetchSpeciesData();
   }
 
   render() {
@@ -175,8 +192,16 @@ export class BySpecies extends PureComponent {
                 key={species.proteome_id || 'unclassified'}
                 species={species}
                 loading={loading}
-                entries={speciesData[species.proteome_id]?.entries || 0}
-                proteins={speciesData[species.proteome_id]?.proteins || 0}
+                entries={
+                  loading
+                    ? '...'
+                    : speciesData[species.proteome_id]?.entries || 0
+                }
+                proteins={
+                  loading
+                    ? '...'
+                    : speciesData[species.proteome_id]?.proteins || 0
+                }
               />
             ))}
         </AnimatedEntry>
