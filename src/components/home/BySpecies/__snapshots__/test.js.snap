@@ -9,6 +9,9 @@ exports[`<BySpecies /> By Species 1`] = `
     element="div"
   >
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#5bc0de",
@@ -22,6 +25,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#d9534f",
@@ -35,6 +41,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#5bc0de",
@@ -48,6 +57,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#5bc0de",
@@ -61,6 +73,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#5bc0de",
@@ -74,6 +89,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#d9534f",
@@ -87,6 +105,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#5bc0de",
@@ -100,8 +121,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
-      entries={64093}
-      proteins={170588}
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#d9534f",
@@ -115,6 +137,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#d9534f",
@@ -128,6 +153,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#5cb85c",
@@ -141,6 +169,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#5cb85c",
@@ -154,6 +185,9 @@ exports[`<BySpecies /> By Species 1`] = `
       }
     />
     <Species
+      entries="..."
+      loading={true}
+      proteins="..."
       species={
         {
           "color": "#d9534f",
@@ -173,9 +207,9 @@ exports[`<BySpecies /> By Species 1`] = `
       {
         "description": {
           "main": {
-            "key": "taxonomy",
+            "key": "proteome",
           },
-          "taxonomy": {
+          "proteome": {
             "db": "uniprot",
           },
         },
@@ -237,10 +271,10 @@ exports[`<Species /> Species 1`] = `
                 "isFilter": true,
               },
               "main": {
-                "key": "taxonomy",
+                "key": "proteome",
               },
-              "taxonomy": {
-                "accession": "9606",
+              "proteome": {
+                "accession": undefined,
                 "db": "uniprot",
               },
             },
@@ -264,14 +298,14 @@ exports[`<Species /> Species 1`] = `
           {
             "description": {
               "main": {
-                "key": "taxonomy",
+                "key": "proteome",
               },
               "protein": {
                 "db": "UniProt",
                 "isFilter": true,
               },
-              "taxonomy": {
-                "accession": "9606",
+              "proteome": {
+                "accession": undefined,
                 "db": "uniprot",
               },
             },
