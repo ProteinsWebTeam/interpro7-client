@@ -241,6 +241,19 @@ const Matches = ({
   }
 
   const isTaxonomySubpage = primary === 'taxonomy' && secondary === 'entry';
+
+  /*  For matches in subpages, the URL is a composite one (e.g /entry/pfam/protein/UniProt)
+      The the browser URL needs to be reversed so that it is accepted by the API (e.g. /entry/pfam/protein/UniProt)
+      This already happens for the Browsable API button, but it doesn't for the script generator (which at this time uses the descriptionToPath function).
+      The processedSubPath variable will store the subpath computed based on the reversed URL.
+  */
+  const reversedURL = toPublicAPI(
+    includeTaxonFocusedOnURL(getReversedUrl(state), focused),
+  );
+
+  const urlNoParams = reversedURL.split('?')[0];
+  const processedSubPath = '/' + urlNoParams.split('/api/')[1];
+
   return (
     <Table
       dataTable={dataTable}
@@ -316,6 +329,11 @@ const Matches = ({
                 url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}
+              />
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={processedSubPath}
               />
             </div>
           </Exporter>
