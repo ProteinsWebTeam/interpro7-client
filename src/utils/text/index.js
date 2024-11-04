@@ -105,7 +105,7 @@ export const getTextForLabel = (
 
   let text = textList.join(' - ');
 
-  if (!entry.accession.startsWith('IPR')) {
+  if (!entry.accession.startsWith('IPR') && entry.source_database) {
     text = entry.source_database.toUpperCase() + ': ' + text;
   }
 

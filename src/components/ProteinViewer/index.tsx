@@ -257,7 +257,8 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
-              {!protein.accession.startsWith('iprscan') &&
+              {protein.accession &&
+                !protein.accession.startsWith('iprscan') &&
                 mainTracks.length !== Object.entries(hideCategories).length && (
                   <ShowMoreTracks
                     showMore={showMore}
