@@ -36,12 +36,6 @@ type State = {
   options: Record<string, EntryMetadata>;
 };
 
-type SearchProps = {
-  ida_search?: string;
-  ida_ignore?: string;
-  ordered?: boolean;
-  exact?: boolean;
-};
 export class SearchByIDA extends PureComponent<Props, State> {
   state = {
     markerBeforeEntry: null,
@@ -59,7 +53,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
     exact?: boolean;
     ignore: Array<string>;
   }) => {
-    const search: SearchProps = {
+    const search: InterProLocationSearch = {
       ida_search: entries.join(','),
     };
     if (order) {
@@ -135,7 +129,7 @@ export class SearchByIDA extends PureComponent<Props, State> {
       ordered,
       exact,
       ida_ignore: ignoreFromURL,
-    }: SearchProps = this.props.customLocation.search;
+    }: InterProLocationSearch = this.props.customLocation.search;
     const entries = searchFromURL ? searchFromURL.split(',') : [];
     if (searchFromURL !== undefined && searchFromURL.trim() === '')
       entries.push('');

@@ -14,7 +14,8 @@ import Table, {
   HighlightToggler,
 } from 'components/Table';
 import File from 'components/File';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
@@ -35,6 +36,9 @@ import exporterStyle from 'components/Table/Exporter/style.css';
 import local from './style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
 import AllTaxDownload from './AllTaxDownload';
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { toPublicAPI } from 'utils/url';
 
 const css = cssBinder(
   pageStyle,
@@ -57,6 +61,7 @@ const EntryAccessionsRenderer =
   (taxId: string, _row: unknown, extra?: ExtraCounters) => (
     <File
       fileType="accession"
+      endpoint={'taxonomy'}
       name={`${entryDB || 'all'}-entry-accessions-for-${taxId}.txt`}
       count={extra?.counters?.entries || 0}
       customLocationDescription={{
@@ -72,6 +77,7 @@ const ProteinFastasRenderer =
   (taxId: string, _row: unknown, extra?: ExtraCounters) => (
     <File
       fileType="fasta"
+      endpoint={'taxonomy'}
       name={`protein-sequences${
         entryDB ? `-matching-${entryDB}` : ''
       }-for-${taxId}.fasta`}
@@ -98,6 +104,7 @@ type TaxItem = {
   };
   className?: string;
 };
+
 interface LoadedProps
   extends Props,
     LoadDataProps<PayloadList<TaxItem>>,
@@ -163,7 +170,7 @@ const List = ({
   const urlToExport = includeTaxonFocusedOnURL(url);
 
   return (
-    <div className={css('row', 'filters-and-table')}>
+    <div className={css('filters-and-table')}>
       <nav>
         <div className={css('browse-side-panel')}>
           <div className={css('selector-container')}>
@@ -205,7 +212,6 @@ const List = ({
         >
           <Exporter>
             <div className={css('menu-grid')}>
-              <label htmlFor="json">JSON</label>
               <AllTaxDownload
                 description={description}
                 search={search}
@@ -213,8 +219,6 @@ const List = ({
                 focused={focused}
                 fileType="json"
               />
-
-              <label htmlFor="tsv">TSV</label>
               <AllTaxDownload
                 description={description}
                 search={search}
@@ -222,9 +226,15 @@ const List = ({
                 focused={focused}
                 fileType="tsv"
               />
-
-              <label htmlFor="api">API</label>
-              <APIViewButton url={urlToExport} />
+              <ExternalExportButton
+                type={'api'}
+                url={toPublicAPI(urlToExport)}
+              />
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={descriptionToPath(description)}
+              />
             </div>
           </Exporter>
           <PageSizeSelector />
@@ -376,7 +386,7 @@ const List = ({
             cellClassName={css('table-center')}
             renderer={ProteinFastasRenderer(entryDB)}
           >
-            FASTA
+            Protein sequences
           </Column>
         </Table>
       </section>

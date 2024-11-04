@@ -25,6 +25,7 @@ const ProteinViewerForStructure = ({
   dataSecondary,
 }: LoadedProps) => {
   const processedData = useProcessData(data?.payload?.results, 'structure');
+
   if (!data || data.loading) return <Loading />;
 
   let secondaryData;
@@ -37,7 +38,12 @@ const ProteinViewerForStructure = ({
     }
   }
   if (!data.payload || !processedData) return null;
-  const { interpro, unintegrated, representativeDomains } = processedData;
+  const {
+    interpro,
+    unintegrated,
+    representativeDomains,
+    representativeFamilies,
+  } = processedData;
   return (
     <div>
       <EntriesOnStructure
@@ -45,6 +51,7 @@ const ProteinViewerForStructure = ({
         entries={interpro as StructureLinkedObject[]}
         unintegrated={unintegrated as StructureLinkedObject[]}
         secondaryStructures={secondaryData}
+        representativeFamilies={representativeFamilies}
         representativeDomains={representativeDomains}
       />
     </div>
@@ -63,7 +70,7 @@ export const getURLForMatches = createSelector(
         main: { key: 'entry' },
         structure: { isFilter: true, db: 'pdb', accession },
         entry: { db: 'all' },
-      })}`,
+      } as InterProPartialDescription)}`,
       query: {
         page_size: 200,
         extra_fields: 'short_name',
@@ -74,7 +81,7 @@ const getSecondaryStructureURL = createSelector(
   (state) => state.settings.api,
   (state) => state.customLocation.description.structure,
   ({ protocol, hostname, port, root }, { db, accession }) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'structure' },
       structure: { db, accession },
     };

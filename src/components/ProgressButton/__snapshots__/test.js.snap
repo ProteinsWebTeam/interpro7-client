@@ -1,229 +1,169 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ProgressButton /> should render, first step 1`] = `
-<span
-  className="container"
->
-  <svg
-    className="svg"
-    height="3em"
-    viewBox="0 0 120 120"
-    width="3em"
+<React.Fragment>
+  <span
+    className="container"
   >
-    <g
-      className="group downloading"
+    <svg
+      className="svg"
+      height="2em"
+      viewBox="0 0 180 180"
+      width="2em"
     >
-      <circle
-        className="progress"
-        cx={60}
-        cy={60}
-        fill="none"
-        opacity={1}
-        r={48}
-        strokeDasharray={301.59289474462014}
-        strokeDashoffset={301.59289474462014}
-        strokeLinecap="round"
-        strokeWidth={12}
-        transform="rotate(-90 60 60)"
-      />
-      <circle
-        cx={60}
-        cy={60}
-        fill="none"
-        r={43}
-      />
-    </g>
-    <g
-      className="icon-flip"
-    >
-      <image
-        className="back"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-      <image
-        className="front"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-    </g>
-  </svg>
-</span>
+      <g
+        className="group downloading"
+      >
+        <circle
+          className="progress"
+          cx={90}
+          cy={90}
+          fill="none"
+          opacity={1}
+          r={70}
+          strokeDasharray={439.822971502571}
+          strokeDashoffset={439.822971502571}
+          strokeLinecap="round"
+          strokeWidth={20}
+          transform="rotate(-90 90 90)"
+        />
+        <circle
+          cx={90}
+          cy={90}
+          fill="none"
+          r={61}
+        />
+      </g>
+    </svg>
+    <span
+      className="svg-overlap download-icon icon icon-common icon-download-alt"
+    />
+  </span>
+</React.Fragment>
 `;
 
 exports[`<ProgressButton /> should render, with failure 1`] = `
-<span
-  className="container failed"
->
-  <svg
-    className="svg"
-    height="3em"
-    viewBox="0 0 120 120"
-    width="3em"
+<React.Fragment>
+  <span
+    className="container failed"
   >
-    <g
-      className="group"
+    <svg
+      className="svg"
+      height="2em"
+      viewBox="0 0 180 180"
+      width="2em"
     >
-      <circle
-        className="progress"
-        cx={60}
-        cy={60}
-        fill="none"
-        opacity={0}
-        r={48}
-        strokeDasharray={301.59289474462014}
-        strokeDashoffset={60.318578948924014}
-        strokeLinecap="round"
-        strokeWidth={12}
-        transform="rotate(-90 60 60)"
-      />
-      <circle
-        cx={60}
-        cy={60}
-        fill="none"
-        r={43}
-      />
-    </g>
-    <g
-      className="icon-flip flipped"
-    >
-      <image
-        className="back"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-      <image
-        className="front"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-    </g>
-  </svg>
-</span>
+      <g
+        className="group"
+      >
+        <circle
+          className="progress"
+          cx={90}
+          cy={90}
+          fill="none"
+          opacity={0}
+          r={70}
+          strokeDasharray={439.822971502571}
+          strokeDashoffset={87.96459430051418}
+          strokeLinecap="round"
+          strokeWidth={20}
+          transform="rotate(-90 90 90)"
+        />
+        <circle
+          cx={90}
+          cy={90}
+          fill="none"
+          r={61}
+        />
+      </g>
+    </svg>
+    <span
+      className="svg-overlap download-icon icon icon-common icon-save"
+    />
+  </span>
+</React.Fragment>
 `;
 
 exports[`<ProgressButton /> should render, with progress 1`] = `
-<span
-  className="container"
->
-  <svg
-    className="svg"
-    height="3em"
-    viewBox="0 0 120 120"
-    width="3em"
+<React.Fragment>
+  <span
+    className="container"
   >
-    <g
-      className="group downloading"
+    <svg
+      className="svg"
+      height="2em"
+      viewBox="0 0 180 180"
+      width="2em"
     >
-      <circle
-        className="progress"
-        cx={60}
-        cy={60}
-        fill="none"
-        opacity={1}
-        r={48}
-        strokeDasharray={301.59289474462014}
-        strokeDashoffset={150.79644737231007}
-        strokeLinecap="round"
-        strokeWidth={12}
-        transform="rotate(-90 60 60)"
-      />
-      <circle
-        cx={60}
-        cy={60}
-        fill="none"
-        r={43}
-      />
-    </g>
-    <g
-      className="icon-flip"
-    >
-      <image
-        className="back"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-      <image
-        className="front"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-    </g>
-  </svg>
-</span>
+      <g
+        className="group downloading"
+      >
+        <circle
+          className="progress"
+          cx={90}
+          cy={90}
+          fill="none"
+          opacity={1}
+          r={70}
+          strokeDasharray={439.822971502571}
+          strokeDashoffset={219.9114857512855}
+          strokeLinecap="round"
+          strokeWidth={20}
+          transform="rotate(-90 90 90)"
+        />
+        <circle
+          cx={90}
+          cy={90}
+          fill="none"
+          r={61}
+        />
+      </g>
+    </svg>
+    <span
+      className="svg-overlap download-icon icon icon-common icon-download-alt"
+    />
+  </span>
+</React.Fragment>
 `;
 
 exports[`<ProgressButton /> should render, with success 1`] = `
-<span
-  className="container"
->
-  <svg
-    className="svg"
-    height="3em"
-    viewBox="0 0 120 120"
-    width="3em"
+<React.Fragment>
+  <span
+    className="container"
   >
-    <g
-      className="group"
+    <svg
+      className="svg"
+      height="2em"
+      viewBox="0 0 180 180"
+      width="2em"
     >
-      <circle
-        className="progress"
-        cx={60}
-        cy={60}
-        fill="none"
-        opacity={0}
-        r={48}
-        strokeDasharray={301.59289474462014}
-        strokeDashoffset={0}
-        strokeLinecap="round"
-        strokeWidth={12}
-        transform="rotate(-90 60 60)"
-      />
-      <circle
-        cx={60}
-        cy={60}
-        fill="none"
-        r={43}
-      />
-    </g>
-    <g
-      className="icon-flip flipped"
-    >
-      <image
-        className="back"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-      <image
-        className="front"
-        height="100"
-        width="60"
-        x="30"
-        xlinkHref={{}}
-        y="10"
-      />
-    </g>
-  </svg>
-</span>
+      <g
+        className="group"
+      >
+        <circle
+          className="progress"
+          cx={90}
+          cy={90}
+          fill="none"
+          opacity={0}
+          r={70}
+          strokeDasharray={439.822971502571}
+          strokeDashoffset={0}
+          strokeLinecap="round"
+          strokeWidth={20}
+          transform="rotate(-90 90 90)"
+        />
+        <circle
+          cx={90}
+          cy={90}
+          fill="none"
+          r={61}
+        />
+      </g>
+    </svg>
+    <span
+      className="svg-overlap download-icon icon icon-common icon-save"
+    />
+  </span>
+</React.Fragment>
 `;

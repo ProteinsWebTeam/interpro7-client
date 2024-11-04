@@ -12,17 +12,13 @@ import ContentFromRTD from 'components/ContentFromRTD';
 
 import { schemaProcessDataWebPage } from 'schema_org/processors';
 
-const SchemaOrgData = loadable({
-  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
+
 const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
 const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
 const Training = () => <ContentFromRTD page="training.rst" />;
@@ -30,9 +26,21 @@ const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );
 
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
+  loading: () => null,
+});
+
+const HelpCenter = loadable({
+  loader: () =>
+    // $FlowFixMe
+    import(/* webpackChunkName: "help-center" */ 'components/Help/HelpCenter'),
+});
+
 const Documentation = loadable({
   loader: () =>
     import(
+      // $FlowFixMe
       /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
     ),
 });
@@ -47,10 +55,6 @@ const routes = new Map([
 
 const locationSelector = (customLocation) =>
   customLocation.description.other[1];
-
-const RedirectToDefault = () => (
-  <Redirect to={{ description: { other: ['help', 'tutorial'] } }} />
-);
 
 export default class Help extends PureComponent /*:: <{}> */ {
   render() {
@@ -74,7 +78,7 @@ export default class Help extends PureComponent /*:: <{}> */ {
               <ErrorBoundary>
                 <Switch
                   locationSelector={locationSelector}
-                  indexRoute={RedirectToDefault}
+                  indexRoute={HelpCenter}
                   childRoutes={routes}
                 />
               </ErrorBoundary>

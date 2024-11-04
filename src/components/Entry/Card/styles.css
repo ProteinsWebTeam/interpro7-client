@@ -1,9 +1,4 @@
 .md-small {
-  display: flex;
-  width: 46px;
-}
-
-.new-card-description {
-  overflow: hidden;
-  height: 6em; /*better for alignment description + counter*/
+  align-items: center;
+  width: 2.5em !important;
 }

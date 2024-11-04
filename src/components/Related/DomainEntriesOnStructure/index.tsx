@@ -8,9 +8,51 @@ import ProteinViewerForStructure from './ProteinViewerLoaded';
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import { orderByAccession } from 'components/Related/DomainsOnProtein';
-import { flattenTracksObject } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import {
+  flattenTracksObject,
+  byEntryType,
+} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+
+import { ExtendedFeature } from 'src/components/ProteinViewer';
 
 const css = cssBinder(fonts);
+
+function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
+  let fragment = undefined;
+  let accession = undefined;
+
+  if (Array.isArray(item)) {
+    fragment = item[0].locations?.[0].fragments?.[0];
+    accession = item[0].accession;
+  } else {
+    fragment = item.locations?.[0].fragments?.[0];
+    accession = item.accession;
+  }
+  if (fragment && accession) {
+    return [accession, fragment.start, fragment.end];
+  }
+  return [0, 0];
+}
+
+export function sortTracks(
+  a: ExtendedFeature | ExtendedFeature[],
+  b: ExtendedFeature | ExtendedFeature[],
+) {
+  const [aAccession, aStart, aEnd] = getBoundaries(a);
+  const [bAccession, bStart, bEnd] = getBoundaries(b);
+
+  if (aStart > bStart) return 1;
+  if (aStart < bStart) return -1;
+  if (aStart === bStart) {
+    if (aEnd < bEnd) return 1;
+    if (aEnd > bEnd) return -1;
+    if (aEnd === bEnd) {
+      if (aAccession > bAccession) return 1;
+      else return -1;
+    }
+  }
+  return 0;
+}
 
 const toArrayStructure = (locations: Array<ProtVistaLocation>) =>
   locations.map((loc) => loc.fragments.map((fr) => [fr.start, fr.end]));
@@ -102,10 +144,8 @@ const mergeData = (
       };
     }
 
-    const dataType =
-      entry.source_database.toLowerCase() === 'interpro'
-        ? entry.type
-        : 'unintegrated';
+    const dataType = entry.type;
+
     if (!out[entry.chain][entry.protein].data[dataType as string]) {
       out[entry.chain][entry.protein].data[dataType as string] = [];
     }
@@ -181,6 +221,7 @@ type Props = {
   unintegrated: StructureLinkedObject[];
   secondaryStructures?: SecondaryStructure[];
   representativeDomains?: Record<string, unknown>[];
+  representativeFamilies?: Record<string, unknown>[];
 };
 
 const EntriesOnStructure = ({
@@ -189,15 +230,22 @@ const EntriesOnStructure = ({
   secondaryStructures,
   structure,
   representativeDomains,
+  representativeFamilies,
 }: Props) => {
   const merged = useMemo(() => {
     const data = mergeData(entries.concat(unintegrated), secondaryStructures);
     tagChimericStructures(data);
     return data;
   }, [entries, unintegrated, secondaryStructures]);
-  const representativesPerChain = useMemo(
+
+  const representativesDomainsPerChain = useMemo(
     () => getRepresentativesPerChain(representativeDomains),
     [representativeDomains],
+  );
+
+  const representativesFamiliesPerChain = useMemo(
+    () => getRepresentativesPerChain(representativeFamilies),
+    [representativeFamilies],
   );
 
   return (
@@ -210,12 +258,44 @@ const EntriesOnStructure = ({
           };
 
           const tracks = flattenTracksObject(e.data);
-          if (representativesPerChain[e.chain]) {
-            tracks.splice(0, 0, [
-              'representative domains',
-              representativesPerChain[e.chain],
-            ]);
-          }
+          const homologous_superfamily = tracks.filter(
+            (entry) => entry[0] == 'homologous superfamily',
+          )[0][1];
+
+          tracks.map((entry) => {
+            if (entry[0] === 'domain') {
+              entry[0] = 'domains';
+              if (representativesDomainsPerChain[e.chain]) {
+                entry[1] = entry[1].concat(
+                  representativesDomainsPerChain[e.chain],
+                );
+              }
+              if (homologous_superfamily) {
+                entry[1] = entry[1].concat(homologous_superfamily);
+              }
+            }
+
+            if (entry[0] === 'family') {
+              entry[0] = 'families';
+              if (representativesFamiliesPerChain[e.chain]) {
+                entry[1] = entry[1].concat(
+                  representativesFamiliesPerChain[e.chain],
+                );
+              }
+            }
+
+            if (
+              entry[0] === 'homologous superfamily' ||
+              entry[0] === 'unintegrated'
+            ) {
+              entry[1] = [];
+            }
+          });
+
+          tracks.map((entry) => {
+            (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
+          });
+
           return (
             <div key={i} className={css('vf-stack')}>
               <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>

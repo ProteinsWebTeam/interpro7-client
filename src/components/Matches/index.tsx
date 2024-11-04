@@ -21,7 +21,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import LazyImage from 'components/LazyImage';
 import Lazy from 'wrappers/Lazy';
 import loadWebComponent from 'utils/load-web-component';
@@ -139,7 +139,7 @@ const includeAccessionSearch = (
   accessionSearch: AccSearchData,
   primary: Endpoint,
   secondary: Endpoint,
-  mainData: MetadataWithLocations,
+  mainData: Metadata,
 ) => {
   const indexInPayload = dataTable.findIndex(
     ({ accession }) => accession === accessionSearch.metadata.accession,
@@ -180,7 +180,7 @@ type Props = {
   state?: GlobalState;
   databases: DBsInfo;
   dbCounters?: MetadataCounters;
-  mainData: MetadataWithLocations;
+  mainData: Metadata;
   accessionSearch?: AccSearchData;
   focusType?: string;
   currentAPICall?: string;
@@ -241,6 +241,19 @@ const Matches = ({
   }
 
   const isTaxonomySubpage = primary === 'taxonomy' && secondary === 'entry';
+
+  /*  For matches in subpages, the URL is a composite one (e.g /entry/pfam/protein/UniProt)
+      The the browser URL needs to be reversed so that it is accepted by the API (e.g. /entry/pfam/protein/UniProt)
+      This already happens for the Browsable API button, but it doesn't for the script generator (which at this time uses the descriptionToPath function).
+      The processedSubPath variable will store the subpath computed based on the reversed URL.
+  */
+  const reversedURL = toPublicAPI(
+    includeTaxonFocusedOnURL(getReversedUrl(state), focused),
+  );
+
+  const urlNoParams = reversedURL.split('?')[0];
+  const processedSubPath = '/' + urlNoParams.split('/api/')[1];
+
   return (
     <Table
       dataTable={dataTable}
@@ -262,6 +275,7 @@ const Matches = ({
       currentAPICall={currentAPICall}
       status={status}
       onFocusChanged={setFocused}
+      alwaysShowTotalNB={true}
     >
       <PageSizeSelector />
       {!(
@@ -278,7 +292,6 @@ const Matches = ({
                 <>
                   {primary === 'protein' && (
                     <>
-                      <label htmlFor="fasta">FASTA</label>
                       <FileExporter
                         description={description}
                         count={actualSize}
@@ -290,7 +303,6 @@ const Matches = ({
                       />
                     </>
                   )}
-                  <label htmlFor="tsv">TSV</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -300,7 +312,6 @@ const Matches = ({
                     secondary={secondary}
                     focused={focused}
                   />
-                  <label htmlFor="json">JSON</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -312,11 +323,17 @@ const Matches = ({
                   />
                 </>
               )}
-              <label htmlFor="api">API</label>
-              <APIViewButton
+
+              <ExternalExportButton
+                type={'api'}
                 url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}
+              />
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={processedSubPath}
               />
             </div>
           </Exporter>
@@ -541,12 +558,12 @@ const Matches = ({
                 },
               }}
             >
-              View predicted structure
+              AlphaFold
             </Link>
           ) : null
         }
       >
-        Alphafold
+        Predicted structure
       </Column>
       <Column
         dataKey="match"

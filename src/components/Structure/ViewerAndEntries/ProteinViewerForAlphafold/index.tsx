@@ -26,25 +26,22 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
+/* Processing of the payload needs to be slightly different
+to add tracks to the groups object instead of the dataSorted object */
 export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
   protein: string,
-  tracks: ProteinViewerData,
+  tracks: ProteinViewerDataObject,
 ) => {
   if (dataConfidence?.payload?.confidenceCategory?.length) {
-    const confidenceTrack: [string, Array<unknown>] = [
-      'AlphaFold confidence',
-      [
-        {
-          accession: `confidence_af_${protein}`,
-          data: dataConfidence.payload.confidenceCategory.join(''),
-          type: 'confidence',
-          protein,
-          source_database: 'alphafold',
-        },
-      ],
-    ];
-    tracks.splice(0, 0, confidenceTrack);
+    tracks['alphafold_confidence'] = [];
+    tracks['alphafold_confidence'][0] = {
+      accession: `confidence_af_${protein}`,
+      data: dataConfidence.payload.confidenceCategory.join(''),
+      type: 'confidence',
+      protein,
+      source_database: 'alphafold',
+    };
   }
 };
 
@@ -128,20 +125,57 @@ const ProteinViewerForAlphafold = ({
     !processedData
   )
     return <Loading />;
-  const { interpro, unintegrated, representativeDomains } = processedData;
+  const {
+    interpro,
+    unintegrated,
+    representativeDomains,
+    representativeFamilies,
+  } = processedData;
+
   const groups = makeTracks({
     interpro: interpro as Array<{ accession: string; type: string }>,
-    unintegrated: unintegrated as Array<MinimalFeature>,
+    unintegrated: unintegrated as Array<{ accession: string; type: string }>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
+    representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
+
+  if (groups.domain) {
+    groups.domains = groups.domain.slice();
+    groups.domain = [];
+  }
+
+  if (groups.family) {
+    groups.families = groups.family.slice();
+    groups.family = [];
+  }
+
+  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, groups);
   const tracks = flattenTracksObject(groups);
-  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, tracks);
+
+  const mainTracks = [
+    'alphafold confidence',
+    'domains',
+    'families',
+    'active site',
+    'conserved site',
+  ];
+
+  const hideCategories = {
+    'alphafold confidence': false,
+    domains: false,
+    families: false,
+    'active site': false,
+    'conserved site': false,
+  };
+
   if (!dataProtein.payload?.metadata) return null;
   return (
     <div ref={containerRef}>
       <ProteinViewer
         protein={dataProtein.payload.metadata}
         data={tracks}
+        mainTracks={mainTracks}
+        hideCategories={hideCategories}
         title="Protein domains"
         showOptions={!isSplitScreen}
       />
@@ -153,7 +187,7 @@ const getProteinURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
   ({ protocol, hostname, port, root }, accession) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: 'uniprot', accession },
     };
@@ -169,7 +203,7 @@ const getInterproRelatedEntriesURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
   ({ protocol, hostname, port, root }, protein) => {
-    const newDesc = {
+    const newDesc: InterProPartialDescription = {
       main: { key: 'entry' },
       entry: { db: 'all' },
       protein: { isFilter: true, db: 'uniprot', accession: protein },

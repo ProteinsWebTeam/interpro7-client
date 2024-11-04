@@ -25,6 +25,7 @@ export const EntryColorMode /*: ColorModeMap */ = {
   accession: string,
   source_database: string,
   parent?: Entry,
+  integrated?: string
 }; */
 
 export const getTrackColor = (
@@ -47,15 +48,23 @@ export const getTrackColor = (
     case EntryColorMode.MEMBER_DB:
       return config.colors.get(entry.source_database);
     case EntryColorMode.DOMAIN_RELATIONSHIP:
-      if (
-        entry.source_database &&
-        entry.source_database.toLowerCase() === 'interpro'
-      ) {
-        acc = entry.accession.split('').reverse().join('');
-        return colorHash.hex(acc);
+      if (entry.source_database) {
+        if (entry.source_database.toLowerCase() === 'interpro') {
+          acc = entry.accession.split('').reverse().join('');
+          return colorHash.hex(acc);
+        }
+
+        if (entry.source_database.toLowerCase() === 'mobidblt') {
+          return colorHash.hex('MobiDB-lite: Consensus Disorder Prediction');
+        }
       }
       if (entry.parent) {
         acc = entry.parent.accession.split('').reverse().join('');
+        return colorHash.hex(acc);
+      }
+
+      if (entry.integrated) {
+        acc = entry.integrated.split('').reverse().join('');
         return colorHash.hex(acc);
       }
   }

@@ -3,35 +3,37 @@ import { toPlural } from 'utils/pages/toPlural';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
-export const selectRepresentativeDomains = (
-  domains: Record<string, unknown>[],
+export const selectRepresentativeData = (
+  entries: Record<string, unknown>[],
   locationKey: string,
+  type: string,
 ) => {
-  const flatDomains = [];
-  for (const domain of domains) {
-    const {
-      accession,
-      short_name,
-      name,
-      source_database,
-      integrated,
-      chain,
-      type,
-    } = domain;
-    if (domain[locationKey] === null) {
+  const flatRepresentativeData = [];
+
+  for (const entry of entries) {
+    const { accession, short_name, name, source_database, integrated, chain } =
+      entry;
+
+    if (
+      entry[locationKey] === null ||
+      (entry.type !== type &&
+        (type === 'domain' ? entry.type !== 'repeat' : true)) // Handles repeat types, which fall under the "domain" cateogory
+    ) {
       continue;
     }
-    for (const location of domain[locationKey] as Array<ProtVistaLocation>) {
+    for (const location of entry[locationKey] as Array<ProtVistaLocation>) {
       for (const fragment of location.fragments) {
         const { start, end } = fragment;
-        if (location.representative && type !== 'family') {
-          flatDomains.push({
+        const representative = location.representative;
+        if (location.representative) {
+          flatRepresentativeData.push({
             accession,
             chain,
             short_name,
             name,
             source_database,
             integrated,
+            representative,
             start,
             end,
             color: getTrackColor({ source_database }, EntryColorMode.MEMBER_DB),
@@ -42,8 +44,9 @@ export const selectRepresentativeDomains = (
     }
   }
 
-  return flatDomains;
+  return flatRepresentativeData;
 };
+
 export const useProcessData = <M = Metadata>(
   results: EndpointWithMatchesPayload<M, MatchI>[] | undefined,
   endpoint: Endpoint,
@@ -78,10 +81,15 @@ const processData = <M = Metadata>(
     endpoint === 'structure'
       ? 'entry_structure_locations'
       : 'entry_protein_locations';
-  const representativeDomains = selectRepresentativeDomains(
-    results,
-    locationKey,
-  );
+
+  const representativeData = {
+    domains: selectRepresentativeData(results, locationKey, 'domain'),
+    families: selectRepresentativeData(results, locationKey, 'family'),
+  };
+
+  const representativeDomains = representativeData['domains'];
+  const representativeFamilies = representativeData['families'];
+
   const interproMap = new Map(
     interpro.map((ipro) => [
       `${ipro.accession}-${ipro.chain}-${ipro.protein}`,
@@ -112,6 +120,7 @@ const processData = <M = Metadata>(
     interpro,
     unintegrated,
     representativeDomains,
+    representativeFamilies,
     other: [],
   };
 };

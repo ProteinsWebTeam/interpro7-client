@@ -132,17 +132,6 @@ export class ByEntryType extends PureComponent /*:: <Props> */ {
             </Link>
           ))}
         </AnimatedEntry>
-        <Link
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: { db: 'InterPro' },
-            },
-          }}
-          buttonType="primary"
-        >
-          View all entries
-        </Link>
       </div>
     );
   }

@@ -12,6 +12,7 @@ import loadable from 'higherOrder/loadable';
 import BreadCrumbs from 'components/BreadCrumbs';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
+// $FlowFixMe
 import { stuckSelector } from 'reducers/ui/stuck';
 
 import { foundationPartial } from 'styles/foundation';
@@ -31,12 +32,15 @@ const Home = loadable({
     ),
 });
 const Entry = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "entry-page" */ './Entry'),
 });
 const Protein = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "protein-page" */ './Protein'),
 });
 const Structure = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "structure-page" */ './Structure'),
 });
 const Taxonomy = loadable({
@@ -44,6 +48,7 @@ const Taxonomy = loadable({
   loader: () => import(/* webpackChunkName: "taxonomy-page" */ './Taxonomy'),
 });
 const Proteome = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "proteome-page" */ './Proteome'),
 });
 const EntrySet = loadable({
@@ -57,6 +62,7 @@ const Search = loadable({
   loader: () => import(/* webpackChunkName: "search-page" */ './Search'),
 });
 const Jobs = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "jobs-page" */ './Jobs'),
 });
 
@@ -72,6 +78,7 @@ const About = loadable({
   loader: () => import(/* webpackChunkName: "about-page" */ './About'),
 });
 const Help = loadable({
+  // $FlowFixMe
   loader: () => import(/* webpackChunkName: "help-page" */ './Help'),
 });
 const Settings = loadable({

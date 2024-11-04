@@ -8,6 +8,8 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 // $FlowFixMe
 import Related from 'components/Related';

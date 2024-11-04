@@ -143,11 +143,16 @@ export class IPScanSearch extends PureComponent<Props, State> {
     const editorContent = this._editorRef.current?.getContent();
     if (!editorContent) return;
     const localID = id(`internal-${Date.now()}`);
+    const entries =
+      editorContent.split('\n').filter((line) => line.trim().startsWith('>'))
+        .length || 1;
     this.props.createJob({
       metadata: {
         localID,
+        entries,
         group: this.state.title,
         type: 'InterProScan',
+        seqtype: isXChecked('seqtype')(this._formRef.current) ? 'n' : 'p',
       },
       data: {
         input: editorContent,
@@ -374,7 +379,7 @@ const mapStateToProps = createSelector(
   (ipScan, desc, search) => ({
     ipScan,
     value: desc.search.value,
-    main: desc.main.key,
+    main: desc.main.key!,
     search,
   }),
 );

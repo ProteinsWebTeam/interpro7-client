@@ -1,13 +1,17 @@
 type GlobalState = {
   customLocation: InterProLocation;
-  settings: SettingsState;
+  dataProgress: DataProgress;
   download: DownloadState;
+  favourites: FavouritesState;
+  jobs: JobsState;
+  settings: SettingsState;
   status: {
-    servers: Record<string, ServerStatus>;
+    servers: Record<Server, ServerStatus>;
     browser: boolean;
   };
-  [other: string]: unknown;
-}; // TODO: replace for redux state type
+  toasts: ToastsState;
+  ui: UIState;
+};
 
 type Endpoint =
   | 'entry'
@@ -49,7 +53,11 @@ type EndpointPartialLocation = {
   accession?: string | null;
   detail?: string | null;
   order?: number | null;
+};
+type EntryLocation = EndpointPartialLocation & {
   integration?: string | null;
+  memberDB?: string | null;
+  memberDBAccession?: string | null;
 };
 type InterProDescription = Required<
   InterProPartialDescription<EndpointLocation>
@@ -58,14 +66,10 @@ type EndpointFilter = [endpoint: Endpoint, location: EndpointPartialLocation];
 
 type InterProPartialDescription<Location = EndpointPartialLocation> = {
   main?: {
-    key: Endpoint | 'search' | 'result' | 'other';
-    numberOfFilters?: 0;
+    key: Endpoint | 'search' | 'result' | 'other' | null;
+    numberOfFilters?: number;
   };
-  entry?: Location & {
-    integration?: string | null;
-    memberDB?: string | null;
-    memberDBAccession?: string | null;
-  };
+  entry?: Location & EntryLocation;
   protein?: Location;
   structure?: EndpointPartialLocation & {
     chain?: string | null;
@@ -80,12 +84,26 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   result?: {
     type: string | null;
     accession?: string | null;
+    job?: string | null;
     detail?: string | null;
   };
   other?: string[];
 };
 
-type InterProLocationSearch = Record<string, string | boolean | Array<string>>;
+type InterProLocationSearch = {
+  // Pagination
+  page?: number;
+  page_size?: number;
+  // API
+  extra_fields?: string;
+  // IDA search
+  ida_search?: string;
+  ida_ignore?: string;
+  ordered?: boolean;
+  exact?: boolean;
+  [key: string]: string | boolean | number | Array<string> | undefined;
+};
+
 type InterProLocation = {
   description: InterProDescription;
   search: InterProLocationSearch;
@@ -94,27 +112,25 @@ type InterProLocation = {
 };
 type InterProPartialLocation = {
   description: InterProPartialDescription;
-  search?: Record<string, string | boolean>;
+  search?: InterProLocationSearch;
   hash?: string;
   state?: Record<string, string>;
 };
 
+type JobsState = Record<string, { metadata: MinimalJobMetadata }>;
+type MinimalJobMetadata = {
+  localID: string;
+  type: string;
+} & Partial<IprscanMetaIDB>;
+type InitialJobData = {
+  input: string;
+  applications?: Array<string>;
+};
 type SettingsState = {
-  navigation: {
-    pageSize: number;
-    secondsToRetry: number;
-  };
-  notifications: {
-    showTreeToast: boolean;
-    showConnectionStatusToast: boolean;
-    showSettingsToast: boolean;
-    showHelpToast: boolean;
-    showCtrlToZoomToast: boolean;
-  };
+  navigation: NavigationSettings;
+  notifications: NotificationsSettings;
   ui: UISettings;
-  cache: {
-    enabled: boolean;
-  };
+  cache: CacheSettings;
   ebi: ParsedURLServer;
   api: ParsedURLServer;
   ipScan: ParsedURLServer;
@@ -135,6 +151,17 @@ type ParsedURLServer = {
   query: string;
 };
 
+type NavigationSettings = {
+  pageSize: number;
+  secondsToRetry: number;
+};
+type NotificationsSettings = {
+  showTreeToast: boolean;
+  showConnectionStatusToast: boolean;
+  showSettingsToast: boolean;
+  showHelpToast: boolean;
+  showCtrlToZoomToast: boolean;
+};
 type UISettings = {
   lowGraphics: boolean;
   colorDomainsBy: 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP';
@@ -149,17 +176,86 @@ type LabelUISettings = {
   name: boolean;
   short: boolean;
 };
-
-type DownloadState = Record<string, DownloadProgress>;
+type CacheSettings = {
+  enabled: boolean;
+};
+type DownloadState = Record<string, DownloadProgress | CompletedDownload>;
 
 type DownloadProgress = {
   progress: number;
-  successful: null | boolean;
+  successful?: null | boolean;
   blobURL: string;
   size: null | number;
   version: number;
+  fileType: DownloadFileTypes;
+  date?: Date;
+  length?: number;
+  subset?: boolean;
 };
+
+type CompletedDownload = DownloadProgress & {
+  blob: Blob;
+  date: Date;
+  length: number;
+  subset: boolean;
+};
+
+type Server =
+  | 'api'
+  | 'ebi'
+  | 'ipScan'
+  | 'genome3d'
+  | 'wikipedia'
+  | 'alphafold'
+  | 'repeatsDB'
+  | 'disprot'
+  | 'proteinsAPI';
 type ServerStatus = {
-  status: boolean;
-  lastCheck: number;
+  status: boolean | null;
+  lastCheck: number | null;
+};
+
+type DownloadFileTypes =
+  | 'txt'
+  | 'accession'
+  | 'fasta'
+  | 'json'
+  | 'ndjson'
+  | 'tsv'
+  | 'xml';
+
+type DataProgress = Record<string, DatumProgress>;
+type DatumProgress = {
+  progress: number;
+  weight: number;
+};
+
+type FavouritesState = {
+  entries: Array<string>;
+};
+
+type ToastsState = Record<string, ToastData>;
+
+type ToastData = {
+  paused?: boolean;
+  className?: string;
+  title: string;
+  body?: string;
+  link?: { to: InterProPartialLocation; children: string };
+  action?: {
+    text: string;
+    fn: () => void;
+  };
+  ttl?: number;
+  checkBox?: {
+    label: string;
+    fn: () => void;
+  };
+  // handleClose?: () => void;
+};
+
+type UIState = {
+  emblMapNav: boolean;
+  sideNav: boolean;
+  stuck: boolean;
 };

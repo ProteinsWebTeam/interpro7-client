@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import T from 'prop-types';
-import { format } from 'url';
 import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { cachedFetchJSON } from 'utils/cached-fetch';
 
 import { foundationPartial } from 'styles/foundation';
 import Link from 'components/generic/Link';
@@ -20,14 +21,17 @@ import theme from 'styles/theme-interpro.css';
 import byX from '../styles.css';
 import local from './styles.css';
 
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
 const f = foundationPartial(ebiGlobalStyles, fonts, ipro, theme, byX, local);
 
 /*:: type SpeciesProps = {
   species: Object,
   entries: number | string,
   proteins: number | string,
-  loading: boolean
-}*/
+  loading: boolean,
+}; */
 
 export class Species extends PureComponent /*:: <SpeciesProps> */ {
   static propTypes = {
@@ -43,20 +47,20 @@ export class Species extends PureComponent /*:: <SpeciesProps> */ {
     return (
       <div
         className={f('column', 'small-3', 'medium-2', 'large-4', 'text-center')}
-        key={species.tax_id || 'unclassified'}
+        key={species.proteome_id || 'unclassified'}
         data-testid="by-species-box"
       >
         <Link
           to={{
             description: {
-              main: { key: 'taxonomy' },
-              taxonomy: {
+              main: { key: 'proteome' },
+              proteome: {
                 db: 'uniprot',
-                accession: species.tax_id,
+                accession: species.proteome_id,
               },
             },
           }}
-          data-testid={`species-${species.tax_id}`}
+          data-testid={`species-${species.proteome_id}`}
         >
           <span
             style={{ color: species.color }}
@@ -71,10 +75,10 @@ export class Species extends PureComponent /*:: <SpeciesProps> */ {
             <Link
               to={{
                 description: {
-                  main: { key: 'taxonomy' },
-                  taxonomy: {
+                  main: { key: 'proteome' },
+                  proteome: {
                     db: 'uniprot',
-                    accession: species.tax_id,
+                    accession: species.proteome_id,
                   },
                   entry: { isFilter: true, db: 'all' },
                 },
@@ -95,10 +99,10 @@ export class Species extends PureComponent /*:: <SpeciesProps> */ {
             <Link
               to={{
                 description: {
-                  main: { key: 'taxonomy' },
-                  taxonomy: {
+                  main: { key: 'proteome' },
+                  proteome: {
                     db: 'uniprot',
-                    accession: species.tax_id,
+                    accession: species.proteome_id,
                   },
                   protein: { isFilter: true, db: 'UniProt' },
                 },
@@ -124,87 +128,104 @@ export class Species extends PureComponent /*:: <SpeciesProps> */ {
 }
 
 /*:: type Props = {
-  data: {
-    loading: boolean,
-    payload: ?Object,
-  },
-  dataProtein: {
-    loading: boolean,
-    payload: ?Object,
-  }
+  api: ParsedURLServer,
 }; */
 
 export class BySpecies extends PureComponent /*:: <Props> */ {
   static propTypes = {
-    data: T.object,
-    dataProtein: T.object,
+    api: T.object.isRequired,
   };
 
+  state = {
+    speciesData: {},
+    loading: true,
+  };
+
+  componentDidMount() {
+    const { protocol, hostname, port, root } = this.props.api;
+
+    const fetchSpeciesData = async () => {
+      const speciesData = {};
+      await Promise.all(
+        speciesFeat.map(async (species) => {
+          const description = {
+            main: { key: 'proteome' },
+            proteome: {
+              db: 'uniprot',
+              accession: species.proteome_id,
+            },
+            protein: { db: 'UniProt' },
+          };
+
+          const response = await cachedFetchJSON(
+            format({
+              protocol,
+              hostname,
+              port,
+              pathname: root + descriptionToPath(description),
+            }),
+          );
+
+          speciesData[species.proteome_id] = {
+            entries: response.payload.metadata.counters.entries,
+            proteins: response.payload.metadata.counters.proteins,
+          };
+        }),
+      );
+
+      this.setState({ speciesData, loading: false });
+    };
+
+    fetchSpeciesData();
+  }
+
   render() {
-    const countsE = this.props.data.payload;
-    const countsP = this.props.dataProtein.payload;
-    const loading = this.props.data.loading && this.props.dataProtein.loading;
+    const { speciesData, loading } = this.state;
+
     return (
       <div className={f('species-list')}>
         <AnimatedEntry className={f('row')} element="div">
           {speciesFeat
-            .sort((a, b) => {
-              // sort list by alphabetical order
-              if (a.title.toUpperCase() > b.title.toUpperCase()) return 1;
-              if (a.title.toUpperCase() < b.title.toUpperCase()) return -1;
-              return 0;
-            })
-            .map((species) => {
-              const { tax_id: taxID } = species;
-              return (
-                <Species
-                  species={species}
-                  key={taxID || 'unclassified'}
-                  loading={loading}
-                  entries={
-                    loading
-                      ? '...'
-                      : countsE && countsE[taxID] && countsE[taxID].value
-                  }
-                  proteins={
-                    loading
-                      ? '...'
-                      : countsP && countsP[taxID] && countsP[taxID].value
-                  }
-                />
-              );
-            })}
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .map((species) => (
+              <Species
+                key={species.proteome_id || 'unclassified'}
+                species={species}
+                loading={loading}
+                entries={
+                  loading
+                    ? '...'
+                    : speciesData[species.proteome_id]?.entries || 0
+                }
+                proteins={
+                  loading
+                    ? '...'
+                    : speciesData[species.proteome_id]?.proteins || 0
+                }
+              />
+            ))}
         </AnimatedEntry>
         <Link
           to={{
             description: {
-              main: { key: 'taxonomy' },
-              taxonomy: { db: 'uniprot' },
+              main: { key: 'proteome' },
+              proteome: { db: 'uniprot' },
             },
           }}
           buttonType="primary"
         >
-          View all Taxa
+          Browse all species
         </Link>
       </div>
     );
   }
 }
 
-const mapStateToUrl = (endpoint) =>
-  createSelector(
-    (state) => state.settings.api,
-    ({ protocol, hostname, port, root }) =>
-      format({
-        protocol,
-        hostname,
-        port,
-        pathname: `${root}/${endpoint}`,
-        query: { group_by: 'tax_id' },
-      }),
-  );
+const mapStateToProps = createSelector(
+  (state) => state.settings.api,
+  (api) => ({
+    api,
+  }),
+);
 
-export default loadData({
-  getUrl: mapStateToUrl('protein'),
-  propNamespace: 'Protein',
-})(loadData(mapStateToUrl('entry'))(BySpecies));
+export default connect(mapStateToProps)(BySpecies);

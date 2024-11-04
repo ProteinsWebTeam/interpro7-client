@@ -38,8 +38,8 @@ const Exporter = ({
       style={{ display: 'flex' }}
     >
       <DropDownButton
-        label="Export"
-        icon="&#x3d;"
+        label="Download"
+        icon=""
         color={entryDB ? config.colors.get(entryDB) : backgroundColor}
         disabled={disabled}
         extraClasses={css('right-aligned', 'protvista-menu')}

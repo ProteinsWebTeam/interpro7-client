@@ -1,0 +1,24 @@
+.inner-track-label {
+  padding: 0px;
+  margin-top: 8px;
+}
+
+.track-accession-child {
+  margin-top: 2px;
+}
+
+.track-label .inner-track-label > a,
+.track-label .inner-track-label > a:focus,
+.track-label .inner-track-label > a:visited {
+  font-weight: 600;
+  color: var(--colors-dark);
+}
+
+.icon-interpro {
+  height: 16px;
+  width: 16px;
+  background-image: url("../../../images/logo/logo_lightblue.svg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}

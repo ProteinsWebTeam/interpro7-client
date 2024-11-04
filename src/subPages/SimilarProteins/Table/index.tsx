@@ -3,6 +3,7 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData/ts';
@@ -13,7 +14,7 @@ import Link from 'components/generic/Link';
 import Table, { Column, PageSizeSelector, Exporter } from 'components/Table';
 
 import AllProteinDownload from './AllProteinDownload';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -107,7 +108,6 @@ const SimilarProteinTable = ({
         <PageSizeSelector />
         <Exporter>
           <div className={css('menu-grid')}>
-            <label htmlFor="fasta">FASTA</label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -115,7 +115,6 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="fasta"
             />
-            <label htmlFor="json">JSON</label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -123,7 +122,6 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="json"
             />
-            <label htmlFor="tsv">TSV</label>
             <AllProteinDownload
               description={description}
               ida={ida}
@@ -131,8 +129,15 @@ const SimilarProteinTable = ({
               count={payload.count}
               fileType="tsv"
             />
-            <label htmlFor="api">API</label>
-            <APIViewButton url={getAPIURLForSimilarProteins(api, ida, db)} />
+            <ExternalExportButton
+              type={'api'}
+              url={getAPIURLForSimilarProteins(api, ida, db)}
+            />
+            <ExternalExportButton
+              search={search}
+              type={'scriptgen'}
+              subpath={descriptionToPath(description)}
+            />
           </div>
         </Exporter>
 
@@ -148,7 +153,7 @@ const SimilarProteinTable = ({
                   description: {
                     main: { key: 'protein' },
                     protein: { db: sourceDatabase, accession: acc },
-                  },
+                  } as InterProPartialDescription,
                 }}
               >
                 {acc}
@@ -175,7 +180,7 @@ const SimilarProteinTable = ({
                 description: {
                   main: { key: 'protein' },
                   protein: { db: 'uniprot', accession },
-                },
+                } as InterProPartialDescription,
               }}
             >
               {name}
@@ -195,7 +200,7 @@ const SimilarProteinTable = ({
                     taxonomy: {
                       db: 'uniprot',
                       accession: `${sourceOrganism.taxId}`,
-                    },
+                    } as InterProPartialDescription,
                   },
                 }}
               >
@@ -219,15 +224,15 @@ const SimilarProteinTable = ({
                   description: {
                     main: { key: 'protein' },
                     protein: { db: 'uniprot', accession, detail: 'alphafold' },
-                  },
+                  } as InterProPartialDescription,
                 }}
               >
-                View predicted structure
+                AlphaFold
               </Link>
             ) : null
           }
         >
-          AlphaFold
+          Predicted structure
         </Column>
       </Table>
     </>
@@ -246,7 +251,7 @@ const mapStateToPropsForIDA = createSelector(
     // modify search
     restOfSearch.ida = ida;
 
-    const description = {
+    const description: InterProPartialDescription = {
       main: { key: 'protein' },
       protein: { db: db },
     };

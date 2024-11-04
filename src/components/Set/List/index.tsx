@@ -13,7 +13,10 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import SetCard from 'components/Set/Card';
 import NumberComponent from 'components/NumberComponent';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
+
+import AllSetDownload from './AllSetDownload';
 
 import loadable from 'higherOrder/loadable';
 
@@ -28,16 +31,10 @@ import pageStyle from 'pages/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import exporterStyle from 'components/Table/Exporter/style.css';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
-import AllSetDownload from './AllSetDownload';
 
-const f = cssBinder(
-  //   ebiGlobalStyles,
-  fonts,
-  pageStyle,
-  //   ipro,
-  exporterStyle,
-  filtersAndTable,
-);
+const css = cssBinder(fonts, pageStyle, exporterStyle, filtersAndTable);
+
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -78,10 +75,10 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
     };
   }
   return (
-    <div className={f('row', 'filters-and-table')}>
+    <div className={css('filters-and-table')}>
       <nav>
-        <div className={f('browse-side-panel')}>
-          <div className={f('selector-container')}>
+        <div className={css('browse-side-panel')}>
+          <div className={css('selector-container')}>
             <MemberDBSelector
               contentType="set"
               className="pp-left-side-db-selector"
@@ -119,8 +116,7 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
           currentAPICall={url}
         >
           <Exporter>
-            <div className={f('menu-grid')}>
-              <label htmlFor="json">JSON</label>
+            <div className={css('menu-grid')}>
               <AllSetDownload
                 name="json"
                 description={description}
@@ -128,7 +124,6 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                 count={_payload!.count}
                 fileType="json"
               />
-              <label htmlFor="tsv">TSV</label>
               <AllSetDownload
                 name="tsv"
                 description={description}
@@ -136,8 +131,12 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                 count={_payload!.count}
                 fileType="tsv"
               />
-              <label htmlFor="api">API</label>
-              <APIViewButton url={url} />
+              <ExternalExportButton type={'api'} url={url} />
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={descriptionToPath(description)}
+              />
             </div>
           </Exporter>
           <PageSizeSelector />
@@ -169,7 +168,7 @@ const List = ({ data, isStale, customLocation, dataBase }: LoadedProps) => {
                   },
                 })}
               >
-                <span className={f('acc-row')}>
+                <span className={css('acc-row')}>
                   <SchemaOrgData
                     data={{
                       data: { row, endpoint: 'set' },

@@ -176,7 +176,7 @@ export const getUrl = (includeSearch: boolean) =>
       search,
     ) => {
       if (description.main.key === 'entry') {
-        const _description = {
+        const _description: InterProPartialDescription = {
           main: {
             key: 'protein',
             numberOfFilters: 1,

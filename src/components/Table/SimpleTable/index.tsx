@@ -15,7 +15,6 @@ import TableView from '../views/Table';
 
 import cssBinder from 'styles/cssBinder';
 
-// import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import styles from '../style.css';
 
@@ -61,33 +60,23 @@ export default class Table<
           (child as ReactElement).props as ColumnProps<unknown, RowData>,
       );
     return (
-      <div className={css('row')}>
-        <div className={css('columns', 'result-page')}>
-          <div className={css('row')}>
-            <div className={css('columns')}>
-              <div className={css('table-results-filtering')}>
-                <div className={css('pagesize-wrapper')}>
-                  {title && <h4>{title}</h4>}
-                </div>
-              </div>
-            </div>
+      <div className={css('vf-stack', 'result-page')}>
+        <div className={css('table-results-filtering')}>
+          <div className={css('pagesize-wrapper')}>
+            {title && <h4>{title}</h4>}
           </div>
-          <div className={css('row')}>
-            <div className={css('columns')}>
-              <div
-                className={css('table-main', { loading: loading || isStale })}
-              >
-                <TableView<RowData>
-                  loading={loading}
-                  ok={ok}
-                  status={status}
-                  columns={columns}
-                  notFound={notFound}
-                  dataTable={dataTable}
-                  rowKey={rowKey}
-                />
-              </div>
-            </div>
+        </div>
+        <div className={css('vf-stack')}>
+          <div className={css('table-main', { loading: loading || isStale })}>
+            <TableView<RowData>
+              loading={loading}
+              ok={ok}
+              status={status}
+              columns={columns}
+              notFound={notFound}
+              dataTable={dataTable}
+              rowKey={rowKey}
+            />
           </div>
         </div>
       </div>

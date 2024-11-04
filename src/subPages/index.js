@@ -3,6 +3,8 @@ import { format } from 'url';
 
 import loadable from 'higherOrder/loadable';
 import loadData from 'higherOrder/loadData';
+
+// $FlowFixMe
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 // Too small to be split.
 import Proteome from './Proteome';
@@ -52,9 +54,7 @@ const SimilarProteins = loadable({
       /* webpackChunkName: "similar-proteins-subpage" */ './SimilarProteins'
     ),
 });
-const Curation = loadable({
-  loader: () => import(/* webpackChunkName: "curation-subpage" */ './Curation'),
-});
+
 const AlphaFoldModelSubPage = loadable({
   loader: () =>
     import(
@@ -169,7 +169,6 @@ const subPages = new Map([
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
   ['similar_proteins', SimilarProteins],
-  ['curation', Curation],
   ['feedback', FeedbackSubPage],
 ]);
 

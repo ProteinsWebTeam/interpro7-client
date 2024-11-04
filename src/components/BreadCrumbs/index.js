@@ -1,6 +1,6 @@
-// @flow
 import React from 'react';
 import T from 'prop-types';
+// $FlowFixMe
 import { customLocationSelector } from 'reducers/custom-location';
 
 import { connect } from 'react-redux';
@@ -106,7 +106,7 @@ const BreadCrumbsForSearchOrResult = (
   if (!['search', 'result'].includes(location?.main?.key)) return null;
   // $FlowFixMe[incompatible-type]
   const key /*: 'search' | 'result' */ = location.main.key;
-  const { type, value, accession } = location[key];
+  const { type, value, job, accession } = location[key];
   return (
     <>
       <section className={f('main')}>
@@ -120,12 +120,24 @@ const BreadCrumbsForSearchOrResult = (
         >
           {type}
         </BreadCrumb>
+        {job && (
+          <BreadCrumb
+            to={{
+              description: {
+                main: location.main,
+                [location.main.key]: { type, job },
+              },
+            }}
+          >
+            {job}
+          </BreadCrumb>
+        )}
         {accession && (
           <BreadCrumb
             to={{
               description: {
                 main: location.main,
-                [location.main.key]: { type, accession },
+                [location.main.key]: { type, job, accession },
               },
             }}
           >

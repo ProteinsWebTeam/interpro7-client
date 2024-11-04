@@ -26,7 +26,7 @@ interface LoadedProps
 
 const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
   const mainAccession = description[description.main.key as Endpoint].accession;
-  const mainType = description.main.key.toLowerCase();
+  const mainType = description.main.key!.toLowerCase();
   const container = useRef<HTMLDivElement>(null);
   const [selectionsInModel, setSelectionsInModel] =
     useState<Array<Selection> | null>(null);
@@ -53,6 +53,7 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
   if (data?.loading) return <Loading />;
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
+
   return (
     <div
       className={css('vf-stack', 'vf-stack-400', {

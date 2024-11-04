@@ -65,7 +65,7 @@ const GOTermsFilter = ({
     terms.unshift(['All', NaN]);
   }
   return (
-    <div className={css('list-go', { stale: isStale })}>
+    <div className={css({ stale: isStale })}>
       <div className={css('filter')}>
         {terms.map(([t, count]) => {
           const term = t as Categories | 'All';

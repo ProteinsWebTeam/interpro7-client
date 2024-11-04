@@ -27,6 +27,7 @@ export const speciesFeat = [
     icon: '6',
     color: '#5cb85c',
     tax_id: '39947',
+    proteome_id: 'UP000059680',
   },
   {
     title: 'Mouse-ear cress',
@@ -35,6 +36,7 @@ export const speciesFeat = [
     icon: 'B',
     color: '#5cb85c',
     tax_id: '3702',
+    proteome_id: 'UP000006548',
   },
   {
     title: 'Human',
@@ -43,6 +45,7 @@ export const speciesFeat = [
     icon: 'H',
     color: '#d9534f',
     tax_id: '9606',
+    proteome_id: 'UP000005640',
   },
   {
     title: 'Zebrafish',
@@ -51,6 +54,7 @@ export const speciesFeat = [
     icon: 'Z',
     color: '#d9534f',
     tax_id: '7955',
+    proteome_id: 'UP000000437',
   },
   {
     title: 'Mouse',
@@ -59,6 +63,7 @@ export const speciesFeat = [
     icon: 'M',
     color: '#d9534f',
     tax_id: '10090',
+    proteome_id: 'UP000000589',
   },
   {
     title: 'Fruit fly',
@@ -67,6 +72,7 @@ export const speciesFeat = [
     icon: 'F',
     color: '#d9534f',
     tax_id: '7227',
+    proteome_id: 'UP000000803',
   },
   {
     title: 'Caenorhabditis elegans',
@@ -75,6 +81,7 @@ export const speciesFeat = [
     icon: 'W',
     color: '#d9534f',
     tax_id: '6239',
+    proteome_id: 'UP000001940',
   },
   {
     title: 'Baker’s yeast',
@@ -83,6 +90,7 @@ export const speciesFeat = [
     icon: 'Y',
     color: '#5bc0de',
     tax_id: '559292',
+    proteome_id: 'UP000002311',
   },
   {
     title: 'Fission yeast',
@@ -91,6 +99,7 @@ export const speciesFeat = [
     icon: 'Y',
     color: '#5bc0de',
     tax_id: '284812',
+    proteome_id: 'UP000002485',
   },
   {
     title: 'Escherichia coli',
@@ -99,14 +108,16 @@ export const speciesFeat = [
     icon: 'L',
     color: '#5bc0de',
     tax_id: '83333',
+    proteome_id: 'UP000000625',
   },
   {
     title: 'Halobacterium salinarum',
-    kingdom: 'Archea',
-    description: 'Escherichia virus T4',
+    kingdom: 'Archaea',
+    description: 'Halobacterium salinarum',
     icon: 'v',
     color: '#5bc0de',
     tax_id: '2242',
+    proteome_id: 'UP000000554',
   },
   {
     title: 'Enterobacteria phage T4',
@@ -115,6 +126,7 @@ export const speciesFeat = [
     icon: 'v',
     color: '#5bc0de',
     tax_id: '10665',
+    proteome_id: 'UP000009087',
   },
 ];
 

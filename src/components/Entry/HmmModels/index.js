@@ -4,6 +4,17 @@ import T from 'prop-types';
 
 import { foundationPartial } from 'styles/foundation';
 
+import { createSelector } from 'reselect';
+import Loading from 'components/SimpleCommonComponents/Loading';
+import Link from 'components/generic/Link';
+import loadData from 'higherOrder/loadData';
+import { format } from 'url';
+
+// $FlowFixMe
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+
+import config from 'config';
+
 import Skylign from 'skylign/src/index';
 
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
@@ -54,7 +65,7 @@ const schemaProcessData = (data) => {
   };
 };
 
-const HmmModelSection = ({ logo } /*: {logo: {}} */) => {
+const HmmModelSection = ({ logo, data }) => {
   useEffect(() => {
     loadWebComponent(() => Skylign).as('skylign-component');
 
@@ -69,6 +80,12 @@ const HmmModelSection = ({ logo } /*: {logo: {}} */) => {
     });
   });
 
+  const { loading, payload } = data;
+
+  if (loading) return <Loading />;
+  // eslint-disable-next-line camelcase
+  const details = payload?.extra_fields?.details;
+
   return (
     <div className={f('row')}>
       <div className={f('columns')}>
@@ -77,6 +94,52 @@ const HmmModelSection = ({ logo } /*: {logo: {}} */) => {
             data={JSON.stringify(logo)}
             processData={schemaProcessData}
           />
+          <h4>Profile HMM Information</h4>
+          <table className={f('light', 'table-sum')}>
+            <tbody>
+              {details && (
+                <>
+                  <tr>
+                    <td>HMM build commands</td>
+                    <td>
+                      Build method: {details.hmm?.commands?.build || ''}
+                      <br />
+                      Search method: {details.hmm?.commands?.search || ''}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Gathering threshold</td>
+                    <td>
+                      Sequence:{' '}
+                      {details.hmm?.cutoffs?.gathering?.sequence || ''}
+                      <br />
+                      Domain: {details.hmm?.cutoffs?.gathering?.domain || ''}
+                    </td>
+                  </tr>
+                </>
+              )}
+              <tr>
+                <td>Download</td>
+                <td>
+                  <Link
+                    href={`${config.root.API.href}/entry/${payload?.metadata?.source_database}/${payload?.metadata?.accession}?annotation=hmm`}
+                    download={`${
+                      payload?.metadata?.accession || 'download'
+                    }.hmm.gz`}
+                  >
+                    <span
+                      className={f('icon', 'icon-common', 'icon-download')}
+                      data-icon="&#xf019;"
+                    />{' '}
+                    Download
+                  </Link>{' '}
+                  the raw HMM for this family
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <br />
+          <h4>Profile HMM logo</h4>
           <skylign-component logo={JSON.stringify(logo)} />
         </div>
       </div>
@@ -88,4 +151,34 @@ HmmModelSection.propTypes = {
   logo: T.object.isRequired,
 };
 
-export default HmmModelSection;
+const getPfamCurationUrl = createSelector(
+  (state) => state.settings.api,
+  (state) => state.customLocation.description.main.key,
+  (state) =>
+    state.customLocation.description.main.key &&
+    state.customLocation.description[state.customLocation.description.main.key]
+      .db,
+  (state) =>
+    state.customLocation.description[state.customLocation.description.main.key]
+      .accession,
+  ({ protocol, hostname, port, root }, mainType, db, accession) => {
+    if (!accession) return;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname:
+        root +
+        descriptionToPath({
+          main: { key: mainType },
+          [mainType]: {
+            db,
+            accession,
+          },
+        }),
+      query: { extra_fields: 'details' },
+    });
+  },
+);
+
+export default loadData(getPfamCurationUrl)(HmmModelSection);

@@ -156,18 +156,6 @@ export class ByMemberDatabase extends PureComponent /*:: <Props> */ {
               </div>
             ))}
         </AnimatedEntry>
-
-        <Link
-          to={{
-            description: {
-              main: { key: 'entry' },
-              entry: { db: 'InterPro' },
-            },
-          }}
-          buttonType="primary"
-        >
-          View InterPro entries
-        </Link>
       </div>
     );
   }

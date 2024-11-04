@@ -1,8 +1,9 @@
-@import '../../../styles/colors.css';
+@import "../../../styles/colors.css";
 
 .box-add {
   border-left: 4px solid var(--colors-submain);
   padding: 0 1rem;
+  height: max-content;
 }
 .box-add ul {
   list-style-type: none;

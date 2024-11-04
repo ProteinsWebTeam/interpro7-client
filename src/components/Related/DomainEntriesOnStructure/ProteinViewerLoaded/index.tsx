@@ -48,11 +48,30 @@ const ProteinViewerLoaded = ({ protein, tracks, chain, id }: Props) => {
     };
   });
 
+  // List of "main" tracks to be displayed, the rest are hidden by default
+  const mainTracks = [
+    'secondary structure',
+    'families',
+    'domains',
+    'conserved site',
+    'active site',
+  ];
+
+  const hideCategories = {
+    'secondary structure': false,
+    families: false,
+    domains: false,
+    'conserved site': false,
+    'active site': false,
+  };
+
   const enrichedTracks = [...tracks];
 
   return (
     <div ref={protvistaEl}>
       <ProteinViewer
+        mainTracks={mainTracks}
+        hideCategories={hideCategories}
         protein={protein}
         data={enrichedTracks}
         id={id}

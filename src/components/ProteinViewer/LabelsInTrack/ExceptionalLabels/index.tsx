@@ -2,6 +2,7 @@ import React from 'react';
 
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import Link from 'components/generic/Link';
+
 import {
   Genome3dLink,
   AlphafoldLink,
@@ -25,6 +26,7 @@ type PropsEL = {
 };
 
 const EXCEPTIONAL_TYPES = [
+  'intrinsically_disordered_regions',
   'residue',
   'sequence_conservation',
   'chain',
@@ -46,13 +48,25 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     entry.accession) as string;
 
   if (entry.source_database === 'mobidblt') {
-    const mobiLabel = `MobiDB-lite: ${label.replace('Mobidblt-', '')}`;
-    return isPrinting ? (
-      <span>{mobiLabel}</span>
-    ) : (
-      <Link href={`https://mobidb.org/${entry.protein}`}>{mobiLabel}</Link>
+    return (
+      <>
+        {isPrinting ? (
+          <span>{entry.accession}</span>
+        ) : (
+          <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
+            {entry.accession.replace('Mobidblt-', 'MobiDB-lite: ')}
+          </Link>
+        )}
+        {entry.children &&
+          entry.children.map((d) => (
+            <div className={css('centered-label')} key={`main_${d.accession}`}>
+              {d.accession.replace('Mobidblt-', '')}
+            </div>
+          ))}
+      </>
     );
   }
+
   if (entry.source_database === 'funfam') {
     return isPrinting ? (
       <span>{label}</span>
@@ -103,8 +117,42 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         Go to UniProt
       </Link>
     );
-  if (entry.type === 'residue')
-    return <span>{entry.locations?.[0]?.description || ''}</span>;
+
+  if (entry.type === 'residue') {
+    const processedAccession = entry.accession.replace('residue:', '');
+    const descriptionString = entry.locations?.[0].description;
+
+    return isPrinting ? (
+      <span>Residue: {processedAccession}</span>
+    ) : (
+      <>
+        {entry.source_database !== 'pirsr' && (
+          <Link
+            to={{
+              description: {
+                main: { key: 'entry' },
+                entry: {
+                  db: entry.source_database,
+                  accession: processedAccession,
+                },
+              },
+            }}
+          >
+            {processedAccession}
+          </Link>
+        )}
+
+        <div
+          className={css(
+            processedAccession === 'PIRSR_GROUP' ? 'pirsr-label' : '',
+          )}
+        >
+          {descriptionString}
+        </div>
+      </>
+    );
+  }
+
   if (
     NOT_MEMBER_DBS.has(entry.source_database || '') ||
     entry.type === 'chain' ||

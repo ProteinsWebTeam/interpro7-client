@@ -32,7 +32,8 @@ import style from './style.css';
 import grid from './grid.css';
 import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import RepresentativeDomainsTrack from './RepresentativeDomainsTrack';
+import RepresentativeTrack from './RepresentativeDomainsTrack';
+import ShowMoreTracks from './ShowMoreTracks';
 
 TracksInCategory.displayName = 'TracksInCategory';
 Header.displayName = 'TracksHeader';
@@ -57,12 +58,14 @@ export type ExtendedFeatureLocation = {
     [annotation: string]: unknown;
   }>;
 } & {
+  representative?: boolean;
   confidence?: number;
   description?: string;
   seq_feature?: string;
 };
 export type ExtendedFeature = Feature & {
   data?: unknown;
+  representative?: boolean;
   entry_protein_locations?: Array<ExtendedFeatureLocation>;
   locations?: Array<ExtendedFeatureLocation>;
   name?: string;
@@ -82,7 +85,7 @@ type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
   /** data for the protein to display */
-  protein: { accession: string; length: number; sequence: string };
+  protein: MinimalProteinMetadata;
   /** The title at the top left corner */
   title: string;
   /** The data of the entry matches */
@@ -95,6 +98,10 @@ type Props = PropsWithChildren<{
   conservationError?: string;
   /** TO include loading animation in the header */
   loading: boolean;
+
+  mainTracks: string[];
+
+  hideCategories: Record<string, boolean>;
 }>;
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
@@ -102,15 +109,32 @@ type CategoryVisibility = { [name: string]: boolean };
 
 const switchCategoryVisibility = (
   categories: CategoryVisibility,
-  name: string,
+  names: string[],
 ): CategoryVisibility => {
-  return {
-    ...categories,
-    [name]: !categories[name],
-  };
+  return names.reduce((updatedCategories, name) => {
+    return {
+      ...updatedCategories,
+      [name]: !updatedCategories[name],
+    };
+  }, categories);
+};
+
+const switchCategoryVisibilityShowMore = (
+  categories: CategoryVisibility,
+  names: string[],
+  hide: boolean,
+): CategoryVisibility => {
+  return names.reduce((updatedCategories, name) => {
+    return {
+      ...updatedCategories,
+      [name]: hide,
+    };
+  }, categories);
 };
 
 export const ProteinViewer = ({
+  mainTracks,
+  hideCategories,
   protein,
   title,
   data,
@@ -122,10 +146,13 @@ export const ProteinViewer = ({
   children,
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
-  const [hideCategory, setHideCategory] = useState<CategoryVisibility>({
-    'other residues': true,
-    'external sources': true,
-  });
+
+  // State variable to show/hide "secondary" tracks
+  const [showMore, setShowMore] = useState(false);
+
+  const [hideCategory, setHideCategory] =
+    useState<CategoryVisibility>(hideCategories);
+
   const categoryRefs = useRef<ExpandedHandle[]>([]);
 
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
@@ -156,13 +183,20 @@ export const ProteinViewer = ({
   ) => {
     if (element && tooltipEnabledRef.current) {
       refs.setReference(element);
-      setTooltipContent(content);
+      setTooltipContent((prevContent) => {
+        // Only update if content has changed
+        if (prevContent !== content) {
+          return content;
+        }
+        return prevContent; // No update, prevents re-render
+      });
       if (intervalId.current) {
         clearInterval(intervalId.current as unknown as number);
         intervalId.current = null;
       }
     }
   };
+
   const closeTooltip = () => {
     if (!intervalId.current)
       intervalId.current = setInterval(() => {
@@ -183,6 +217,7 @@ export const ProteinViewer = ({
 
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
+      {/* Tooltip */}
       <div
         ref={refs.setFloating}
         style={floatingStyles}
@@ -193,6 +228,7 @@ export const ProteinViewer = ({
         <FloatingArrow ref={arrowRef} context={context} />
         {tooltipContent}
       </div>
+
       <div>
         <NightingaleManager id="pv-manager">
           <div
@@ -221,8 +257,21 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
+              {!protein.accession.startsWith('iprscan') &&
+                mainTracks.length !== Object.entries(hideCategories).length && (
+                  <ShowMoreTracks
+                    showMore={showMore}
+                    showMoreChanged={setShowMore}
+                    setHideCategory={setHideCategory}
+                    switchCategoryVisibilityShowMore={
+                      switchCategoryVisibilityShowMore
+                    }
+                    hideCategory={hideCategory}
+                  />
+                )}
             </div>
           </div>
+
           <div ref={componentsRef} id={idRef.current}>
             <div
               className={css('protvista-grid', {
@@ -237,16 +286,35 @@ export const ProteinViewer = ({
               />
               {(data as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
-
                 .map(([type, entries, component]) => {
                   entries.forEach((entry: ExtendedFeature) => {
                     entry.protein = protein.accession;
                   });
 
                   const LabelComponent = component?.component || 'span';
+                  let representativeEntries: ExtendedFeature[] | null = null;
+                  let nonRepresentativeEntries: ExtendedFeature[] | null = null;
+
+                  if (type === 'domains' || type === 'families') {
+                    representativeEntries = entries.filter(
+                      (entry) => entry.representative === true,
+                    );
+                    nonRepresentativeEntries = entries.filter(
+                      (entry) => entry.representative !== true,
+                    );
+                  }
+
+                  // Show only the main tracks unless button "Show more" is clicked
+                  let hideDiv: string = '';
+                  if (!showMore && !mainTracks.includes(type)) {
+                    hideDiv = 'none';
+                  }
+
                   return (
                     <div
                       key={type}
+                      // Conditioanally display the div containing the track
+                      style={{ display: hideDiv }}
                       className={css(
                         'tracks-container',
                         'track-sized',
@@ -260,7 +328,7 @@ export const ProteinViewer = ({
                         <button
                           onClick={() =>
                             setHideCategory(
-                              switchCategoryVisibility(hideCategory, type),
+                              switchCategoryVisibility(hideCategory, [type]),
                             )
                           }
                           className={css('as-text')}
@@ -282,16 +350,36 @@ export const ProteinViewer = ({
                           <LabelComponent {...(component?.attributes || {})} />
                         </div>
                       )}{' '}
-                      {type === 'representative domains' ? (
-                        <RepresentativeDomainsTrack
-                          hideCategory={hideCategory[type]}
-                          highlightColor={highlightColor}
-                          entries={entries}
-                          length={protein.sequence.length}
-                          openTooltip={openTooltip}
-                          closeTooltip={closeTooltip}
-                          isPrinting={isPrinting}
-                        />
+                      {representativeEntries ? (
+                        <>
+                          {representativeEntries.length > 0 ? (
+                            <RepresentativeTrack
+                              type={type}
+                              hideCategory={false}
+                              highlightColor={highlightColor}
+                              entries={representativeEntries}
+                              length={protein.sequence.length}
+                              openTooltip={openTooltip}
+                              closeTooltip={closeTooltip}
+                              isPrinting={isPrinting}
+                            />
+                          ) : (
+                            ' '
+                          )}
+                          <TracksInCategory
+                            entries={nonRepresentativeEntries || []}
+                            sequence={protein.sequence}
+                            hideCategory={hideCategory[type]}
+                            highlightColor={highlightColor}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
+                            isPrinting={isPrinting}
+                            ref={(ref: ExpandedHandle) =>
+                              categoryRefs.current.push(ref)
+                            }
+                            databases={dataBase?.payload?.databases}
+                          />
+                        </>
                       ) : (
                         <TracksInCategory
                           entries={entries}
