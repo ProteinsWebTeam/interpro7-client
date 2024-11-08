@@ -44,7 +44,7 @@ class Redirect extends PureComponent /*:: <Props> */ {
 
   componentDidMount() {
     const { to, customLocation, goToCustomLocation } = this.props;
-    console.log(to, customLocation, goToCustomLocation);
+
     // Go to the new location, but replacing current location
     let _to = to;
     if (typeof to === 'function') {
