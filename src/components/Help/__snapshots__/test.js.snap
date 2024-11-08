@@ -1,0 +1,409 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Help /> should render 1`] = `
+<div
+  className="help-flex"
+>
+  <div
+    className="vf-grid vf-grid__col-3 help-grid"
+  >
+    <div
+      className="flex-box"
+    >
+      <span
+        className="icon icon-common xl"
+        data-icon=""
+      />
+       
+      <h5>
+        Getting started
+      </h5>
+      <li>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              className="ext"
+              href="https://www.ebi.ac.uk/training/online/courses/interpro-quick-tour/"
+              target="_blank"
+            >
+              InterPro quick tour
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              className="ext"
+              href="https://www.ebi.ac.uk/training/online/courses/pfam-quick-tour/"
+              target="_blank"
+            >
+              Pfam quick tour
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </li>
+    </div>
+    <div
+      className="flex-box"
+    >
+      <span
+        className="icon icon-common xl"
+        data-icon=""
+      />
+       
+      <h5>
+        Training & outreach
+      </h5>
+      <li>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              className="ext"
+              href="https://www.ebi.ac.uk/training/search-results?query=interpro&domain=ebiweb_training&page=1&facets="
+              target="_blank"
+            >
+              InterPro
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              className="ext"
+              href="https://www.ebi.ac.uk/training/search-results?query=pfam&domain=ebiweb_training&page=1&facets="
+              target="_blank"
+            >
+              Pfam
+            </Memo(Connect(Link))>
+          </li>
+          <Memo(Connect(Link))
+            to={
+              {
+                "description": {
+                  "other": [
+                    "help",
+                    "protein_families_game",
+                  ],
+                },
+              }
+            }
+          >
+            Protein families game
+          </Memo(Connect(Link))>
+        </ul>
+      </li>
+    </div>
+    <div
+      className="flex-box"
+    >
+      <span
+        className="icon icon-common xl"
+        data-icon=""
+      />
+       
+      <h5>
+        Documentations
+      </h5>
+      <li>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              to={
+                {
+                  "description": {
+                    "other": [
+                      "help",
+                      "faqs",
+                    ],
+                  },
+                }
+              }
+            >
+              InterPro FAQs
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              className="ext"
+              href="https://interpro-documentation.readthedocs.io/en/latest/"
+              target="_blank"
+            >
+              InterPro documentation
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              className="ext"
+              href="https://pfam-docs.readthedocs.io/en/latest/"
+              target="_blank"
+            >
+              Pfam documentation
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </li>
+    </div>
+    <div
+      className="flex-box"
+    >
+      <span
+        className="icon icon-common xl"
+        data-icon=""
+      />
+       
+      <h5>
+        About us
+      </h5>
+      <li>
+        <ul>
+          <li>
+            <Memo(Connect(Link))
+              to={
+                {
+                  "description": {
+                    "other": [
+                      "about",
+                      "interpro",
+                    ],
+                  },
+                }
+              }
+            >
+              InterPro
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              to={
+                {
+                  "description": {
+                    "other": [
+                      "about",
+                      "consortium",
+                    ],
+                  },
+                }
+              }
+            >
+              InterPro consortium
+            </Memo(Connect(Link))>
+          </li>
+          <li>
+            <Memo(Connect(Link))
+              to={
+                {
+                  "description": {
+                    "other": [
+                      "about",
+                      "team",
+                    ],
+                  },
+                }
+              }
+            >
+              Team
+            </Memo(Connect(Link))>
+          </li>
+        </ul>
+      </li>
+    </div>
+    <div
+      className="flex-box"
+    >
+      <span
+        className="icon icon-common xl"
+        data-icon=""
+      />
+       
+      <h5>
+        How to cite us
+      </h5>
+      <ul>
+        <li>
+          <Memo(Connect(Link))
+            className="ext"
+            href="https://interpro-documentation.readthedocs.io/en/latest/citing.html"
+            target="_blank"
+          >
+            Citing InterPro
+          </Memo(Connect(Link))>
+        </li>
+        <li>
+          <Memo(Connect(Link))
+            className="ext"
+            href="https://pfam-docs.readthedocs.io/en/latest/citing-pfam.html"
+            target="_blank"
+          >
+            Citing Pfam
+          </Memo(Connect(Link))>
+        </li>
+      </ul>
+    </div>
+    <div
+      className="flex-box"
+    >
+      <span
+        className="icon icon-common xl"
+        data-icon="t"
+      />
+       
+      <h5>
+        InterProScan
+      </h5>
+      <ul>
+        <li>
+          <Memo(Connect(Link))
+            className="ext"
+            href="https://interproscan-docs.readthedocs.io/"
+            target="_blank"
+          >
+            InterProScan documentation
+          </Memo(Connect(Link))>
+        </li>
+        <li>
+          <Memo(Connect(Link))
+            className="ext"
+            href="//www.ebi.ac.uk/jdispatcher/docs/"
+            target="_blank"
+          >
+            Job Dispatcher documentation
+          </Memo(Connect(Link))>
+        </li>
+      </ul>
+    </div>
+    <div
+      className="flex-box"
+    >
+      <span
+        className="icon icon-common xl"
+        data-icon=""
+      />
+      <h5>
+        Technical corner
+      </h5>
+      <ul>
+        <li>
+          <Memo(Connect(Link))
+            className="ext"
+            href="          https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+            target="_blank"
+          >
+            Programmatic access
+          </Memo(Connect(Link))>
+        </li>
+        <li>
+          <Memo(Connect(Link))
+            className="ext"
+            href="https://www.ebi.ac.uk/interpro/api/static_files/swagger/"
+            target="_blank"
+          >
+            Swagger UI
+          </Memo(Connect(Link))>
+        </li>
+        <li>
+          <Memo(Connect(Link))
+            to={
+              {
+                "description": {
+                  "main": {
+                    "key": "result",
+                  },
+                  "result": {
+                    "type": "download",
+                  },
+                },
+                "hash": "/entry/interpro/|json",
+              }
+            }
+          >
+            Code snippet generator
+          </Memo(Connect(Link))>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div
+    className="box-add"
+  >
+    <div
+      className="vf-box"
+    >
+      <h3>
+         Contact Us 
+      </h3>
+    </div>
+    <div
+      className="vf-box"
+    >
+      <p
+        className="help-links"
+      >
+        InterPro
+      </p>
+      <ul
+        className="vf-list"
+      >
+        <li>
+          <Memo(Connect(Link))
+            href="//www.ebi.ac.uk/support/interpro"
+            target="_blank"
+            withReferrer={true}
+          >
+            <span
+              className="icon icon-common"
+              data-icon="n"
+            />
+             
+            Submit a ticket
+          </Memo(Connect(Link))>
+        </li>
+        <li>
+          <Twitter />
+        </li>
+        <li>
+          <Memo(Connect(Link))
+            href="https://www.linkedin.com/company/interpro-pfam/"
+            target="_blank"
+            withReferrer={true}
+          >
+            <span
+              className="icon icon-common"
+              data-icon=""
+            />
+             
+            LinkedIn account
+          </Memo(Connect(Link))>
+        </li>
+      </ul>
+    </div>
+    <div
+      className="vf-box"
+    >
+      <p
+        className="help-links"
+      >
+         Pfam 
+      </p>
+      <ul
+        className="vf-list"
+      >
+        <li>
+          <Memo(Connect(Link))
+            href="//www.ebi.ac.uk/support/pfam"
+            target="_blank"
+            withReferrer={true}
+          >
+            <span
+              className="icon icon-common"
+              data-icon="n"
+            />
+             
+            Submit a ticket
+          </Memo(Connect(Link))>
+        </li>
+        <li>
+          <Twitter
+            handler="PfamDB"
+          />
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
