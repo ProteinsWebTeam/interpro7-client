@@ -14,7 +14,7 @@ root:
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
-  EBISurvey: 
+  EBISurvey:
 
 title: InterPro
 
@@ -31,7 +31,7 @@ github:
   ReadTheDocs:
     owner: ProteinsWebTeam
     repo: interpro-docs
-    branch: latest
+    branch: master
 
 IPScan:
   contactEmail: example@example.com
