@@ -260,7 +260,7 @@ const EntriesOnStructure = ({
           const tracks = flattenTracksObject(e.data);
           const homologous_superfamily = tracks.filter(
             (entry) => entry[0] == 'homologous superfamily',
-          )[0][1];
+          )[0];
 
           tracks.map((entry) => {
             if (entry[0] === 'domain') {
@@ -271,7 +271,7 @@ const EntriesOnStructure = ({
                 );
               }
               if (homologous_superfamily) {
-                entry[1] = entry[1].concat(homologous_superfamily);
+                entry[1] = entry[1].concat(homologous_superfamily[1]);
               }
             }
 
