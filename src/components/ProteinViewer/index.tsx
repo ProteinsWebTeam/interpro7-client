@@ -1,4 +1,13 @@
-import React, { useState, useRef, ReactNode, PropsWithChildren } from 'react';
+import React, {
+  useState,
+  useRef,
+  ReactNode,
+  PropsWithChildren,
+  useEffect,
+} from 'react';
+import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { changeSettingsRaw } from 'actions/creators';
 
 import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -99,6 +108,9 @@ type Props = PropsWithChildren<{
   /** TO include loading animation in the header */
   loading: boolean;
 
+  changeSettingsRaw: typeof changeSettingsRaw;
+  showMoreSettings: boolean;
+
   mainTracks: string[];
 
   hideCategories: Record<string, boolean>;
@@ -139,6 +151,8 @@ export const ProteinViewer = ({
   title,
   data,
   showConservationButton,
+  changeSettingsRaw,
+  showMoreSettings,
   handleConservationLoad,
   conservationError,
   dataBase,
@@ -148,7 +162,7 @@ export const ProteinViewer = ({
   const [isPrinting, setPrinting] = useState(false);
 
   // State variable to show/hide "secondary" tracks
-  const [showMore, setShowMore] = useState(false);
+  const [showMore, setShowMore] = useState(showMoreSettings);
 
   const [hideCategory, setHideCategory] =
     useState<CategoryVisibility>(hideCategories);
@@ -176,6 +190,15 @@ export const ProteinViewer = ({
       }),
     ],
   });
+
+  useEffect(() => {
+    const newHideCategory = switchCategoryVisibilityShowMore(
+      hideCategory,
+      ['families', 'domains'],
+      showMoreSettings ? false : true,
+    );
+    setHideCategory(newHideCategory);
+  }, [showMoreSettings]);
 
   const openTooltip = (
     element: HTMLElement | undefined,
@@ -261,6 +284,7 @@ export const ProteinViewer = ({
                 mainTracks.length !== Object.entries(hideCategories).length && (
                   <ShowMoreTracks
                     showMore={showMore}
+                    changeSettingsRaw={changeSettingsRaw}
                     showMoreChanged={setShowMore}
                     setHideCategory={setHideCategory}
                     switchCategoryVisibilityShowMore={
@@ -412,7 +436,18 @@ export const ProteinViewer = ({
   );
 };
 
-export default loadData<RootAPIPayload, 'Base'>({
-  getUrl: getUrlForMeta,
-  propNamespace: 'Base',
-})(ProteinViewer);
+// Map the Redux state and actions to props
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ui,
+  (ui) => ({
+    showMoreSettings: ui.showMoreSettings,
+  }),
+);
+
+// Connect to the Redux store and inject `changeSettingsRaw` into the props of ProteinViewer
+export default connect(mapStateToProps, { changeSettingsRaw })(
+  loadData<RootAPIPayload, 'Base'>({
+    getUrl: getUrlForMeta,
+    propNamespace: 'Base',
+  })(ProteinViewer),
+);

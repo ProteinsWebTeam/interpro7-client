@@ -1,3 +1,33 @@
 .showmore-btn {
   margin: 0;
 }
+
+.showmore-toggle-outer {
+  display: flex;
+  align-items: center;
+  width: 80px;
+  height: 38px;
+  background-color: #1779ba;
+  cursor: pointer;
+  padding: 0 5px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 14px;
+  position: relative;
+  border-radius: 2px;
+}
+
+.showmore-toggle-inner {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 20px;
+  height: 28px;
+  background-color: #ffffff;
+  transition: left 0.3s ease;
+  border-radius: 2px;
+}
+
+.showmore-toggle-inner.moved {
+  left: 55px;
+}

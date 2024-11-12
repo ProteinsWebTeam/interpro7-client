@@ -1,10 +1,9 @@
 import React from 'react';
 import cssBinder from 'styles/cssBinder';
 import styles from './style.css';
-
 import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import { hide } from '@floating-ui/react-dom';
+import { SettingsAction } from 'src/actions/types';
 
 const css = cssBinder(styles, fonts, tooltip);
 
@@ -20,44 +19,45 @@ type Props = {
     name: string[],
     hide: boolean,
   ) => CategoryVisibility;
+  changeSettingsRaw: (
+    category: string,
+    key: string,
+    value: string | number | boolean | LabelUISettings,
+  ) => SettingsAction;
 };
 
-{
-  /* Button to show/hide all secondary tracks (maintains internal view/show state of the specific track)*/
-}
 const ShowMoreTracks = ({
   showMore,
   hideCategory,
   showMoreChanged,
   setHideCategory,
   switchCategoryVisibilityShowMore,
+  changeSettingsRaw, // Destructure the prop
 }: Props) => {
+  const handleClick = () => {
+    // Update the hideCategory state
+    const newHideCategory = switchCategoryVisibilityShowMore(
+      hideCategory,
+      ['families', 'domains'],
+      !showMore ? false : true,
+    );
+    setHideCategory(newHideCategory);
+    showMoreChanged(!showMore);
+
+    // Save the showMore state to the Redux store
+    changeSettingsRaw('ui', 'showMoreSettings', !showMore);
+  };
+
   return (
-    <div>
-      <button
-        style={{
-          boxShadow: 'none',
-          transform: 'none',
-        }}
-        className={css(
-          'vf-button',
-          'vf-button--secondary',
-          'vf-button--sm',
-          'showmore-btn',
-        )}
-        onClick={() => {
-          setHideCategory(
-            switchCategoryVisibilityShowMore(
-              hideCategory,
-              ['families', 'domains'],
-              !showMore ? false : true,
-            ),
-          );
-          showMoreChanged(!showMore);
-        }}
-      >
-        {showMore ? 'Show summary view' : 'Show all annotations'}
-      </button>
+    <div onClick={handleClick}>
+      <div className={css('showmore-toggle-outer')}>
+        <div
+          className={css('showmore-toggle-inner', showMore ? 'moved' : '')}
+        />
+        <span style={{ marginLeft: showMore ? '10px' : '30px' }}>
+          {showMore ? 'More' : 'Less'}
+        </span>
+      </div>
     </div>
   );
 };

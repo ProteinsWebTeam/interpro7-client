@@ -165,6 +165,7 @@ type NotificationsSettings = {
 type UISettings = {
   lowGraphics: boolean;
   colorDomainsBy: 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP';
+  showMoreSettings: boolean;
   labelContent: LabelUISettings;
   structureViewer: boolean;
   shouldHighlight: boolean;
