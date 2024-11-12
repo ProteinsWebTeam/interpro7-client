@@ -14,20 +14,18 @@
   font-weight: bold;
   font-size: 14px;
   position: relative;
-  border-radius: 2px;
 }
 
 .showmore-toggle-inner {
   position: absolute;
   top: 5px;
   left: 5px;
-  width: 20px;
+  width: 15px;
   height: 28px;
   background-color: #ffffff;
   transition: left 0.3s ease;
-  border-radius: 2px;
 }
 
 .showmore-toggle-inner.moved {
-  left: 55px;
+  left: 60px;
 }
