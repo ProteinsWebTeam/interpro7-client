@@ -16,12 +16,16 @@ import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import config from 'config';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
 
-const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
+const TrainingAndTutorials = () => {
+  return (
+    <Redirect to="https://www.ebi.ac.uk/training/search-results?query=interpro&domain=ebiweb_training&page=1&facets=" />
+  );
+};
 const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
-const Training = () => <ContentFromRTD page="training.rst" />;
 const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );
@@ -34,20 +38,16 @@ const SchemaOrgData = loadable({
 const HelpCenter = loadable({
   loader: () =>
     // $FlowFixMe
-    import(/* webpackChunkName: "help-center" */ 'components/Help/HelpCenter'),
+    import(/* webpackChunkName: "help-center" */ 'components/Help'),
 });
 
-const Documentation = loadable({
-  loader: () =>
-    import(
-      // $FlowFixMe
-      /* webpackChunkName: "help-documentation" */ 'components/Help/Documentation'
-    ),
-});
+const Documentation = () => {
+  return <Redirect to={config.root.readthedocs.href} />;
+};
 
 const routes = new Map([
-  ['tutorial', Tutorials],
-  ['training', Training],
+  ['tutorial', TrainingAndTutorials],
+  ['training', TrainingAndTutorials],
   ['faqs', Faqs],
   ['documentation', Documentation],
   ['protein_families_game', Game],
