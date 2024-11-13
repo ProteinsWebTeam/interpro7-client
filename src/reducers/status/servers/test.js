@@ -7,7 +7,7 @@ import {
 
 describe('selectors', () => {
   const state = {
-    status: { servers: { api: {}, ebi: {}, ipScan: {}, genome3d: {} } },
+    status: { servers: { api: {}, ebi: {}, ipScan: {} } },
   };
 
   test('serverStatusesSelector', () => {

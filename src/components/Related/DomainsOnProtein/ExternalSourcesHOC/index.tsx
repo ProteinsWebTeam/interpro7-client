@@ -3,7 +3,6 @@ import { createSelector } from 'reselect';
 import { format } from 'url';
 
 import loadData from 'higherOrder/loadData/ts';
-import { formatGenome3dIntoProtVistaPanels } from 'components/Genome3D';
 import formatRepeatsDB from './RepeatsDB';
 import formatDisProt from './DisProt';
 
@@ -19,14 +18,11 @@ export function loadExternalSources<
     WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
   type Props = Omit<T, keyof ExtenalSourcesProps> &
-    LoadDataProps<Genome3DProteinPayload, 'Genome3D'> &
     LoadDataProps<DisProtPayload, 'DisProt'> &
     LoadDataProps<RepeatsDBPayload, 'RepeatsDB'>;
 
   const ComponentWithExternalData = (props: Props) => {
     const {
-      dataGenome3D,
-      isStaleGenome3D: _,
       dataRepeatsDB,
       isStaleRepeatsDB: __,
       dataDisProt,
@@ -34,9 +30,6 @@ export function loadExternalSources<
       ...otherProps
     } = props;
 
-    const genome3dFormatted = dataGenome3D
-      ? formatGenome3dIntoProtVistaPanels(dataGenome3D)
-      : [];
     const repeatsDBFormatted = dataRepeatsDB
       ? formatRepeatsDB(dataRepeatsDB)
       : [];
@@ -46,12 +39,7 @@ export function loadExternalSources<
 
     // Fetch the props you want to inject. This could be done with context instead.
     const newProps = {
-      loading: !!dataGenome3D?.loading,
-      externalSourcesData: [
-        ...genome3dFormatted,
-        ...repeatsDBFormatted,
-        ...disprotFormatted,
-      ],
+      externalSourcesData: [...repeatsDBFormatted, ...disprotFormatted],
     };
 
     // props comes afterwards so the can override the default ones.
@@ -67,34 +55,9 @@ export function loadExternalSources<
     loadData<DisProtPayload, 'DisProt'>({
       getUrl: getDisProtURL,
       propNamespace: 'DisProt',
-    } as LoadDataParameters)(
-      loadData<Genome3DProteinPayload, 'Genome3D'>({
-        getUrl: getGenome3dURL,
-        propNamespace: 'Genome3D',
-      } as LoadDataParameters)(ComponentWithExternalData),
-    ),
+    } as LoadDataParameters)(ComponentWithExternalData),
   );
 }
-
-const getGenome3dURL = createSelector(
-  (state: GlobalState) => state.settings.genome3d,
-  (state: GlobalState) => state.customLocation.description.protein.accession,
-  (
-    { protocol, hostname, port, root }: ParsedURLServer,
-    accession: string | null,
-  ) => {
-    if (!accession) return null;
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}uniprot/${accession}`,
-      query: {
-        protvista: true,
-      },
-    });
-  },
-);
 
 const getRepeatsDBURL = createSelector(
   (state: GlobalState) => state.settings.repeatsDB,
@@ -115,6 +78,7 @@ const getRepeatsDBURL = createSelector(
     });
   },
 );
+
 const getDisProtURL = createSelector(
   (state: GlobalState) => state.settings.disprot,
   (state: GlobalState) => state.customLocation.description.protein.accession,

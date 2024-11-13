@@ -86,11 +86,11 @@ type Iprscan5Payload = {
 };
 
 type ProteinsAPIProteomics = {
-  accession: string,
-  start: number,
-  end: number,
-  features: []
-}
+  accession: string;
+  start: number;
+  end: number;
+  features: [];
+};
 
 type IprscanParameterValue = {
   label: string;
@@ -172,47 +172,6 @@ type AlphafoldConfidencePayload = {
   confidenceCategory: Array<string>;
 };
 
-type Genome3DAnnotation = {
-  accession: string;
-  metadata: {
-    source_database: string;
-    name: string;
-    resource: string;
-    type: string;
-    confidence: number;
-  };
-  length: number;
-  locations: Array<ProtVistaLocation>;
-};
-type Genome3DProteinPayload = {
-  data: {
-    annotations: Array<Genome3DAnnotation>;
-    sequence: string;
-    gene_name: string;
-    description: string;
-    taxon_id: number;
-    uniprot_acc: string;
-  };
-  message: string;
-};
-type Genome3DStructurePayload = {
-  data: Array<{
-    annotations: Array<{
-      resource: string;
-      uniprot_acc: string;
-      confidence: number;
-      segments: Array<{
-        uniprot_start: number;
-        uniprot_stop: number;
-      }>;
-    }>;
-    sequence: string;
-    gene_name: string;
-    description: string;
-    taxon_id: number;
-  }>;
-  message: string;
-};
 type RepeatsDBAnnotation = {
   start: number;
   end: number;
