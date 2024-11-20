@@ -7,11 +7,13 @@ export const formatRepeatsDB = ({
 }: RequestedData<RepeatsDBPayload>) => {
   const panelsData: MinimalFeature[] = [];
   if (!loading && status === HTTP_OK && payload) {
-    for (const repeatDatum of payload || []) {
-      for (const feature of repeatDatum.repeatsdb_consensus_majority || []) {
+    const data = Object.values(payload.items);
+    for (const item of data) {
+      const proteinAcc = item.content.chain.structure;
+      for (const feature of item.content.loci) {
         panelsData.push({
-          accession: `REPEAT:${repeatDatum.uniprot_id}:${feature.start}-${feature.end}`,
-          protein: repeatDatum.uniprot_id,
+          accession: `REPEAT:${proteinAcc}:${feature.start}-${feature.end}`,
+          protein: proteinAcc,
           source_database: 'RepeatsDB',
           type: 'Consensus',
           locations: [

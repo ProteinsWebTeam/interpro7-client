@@ -73,7 +73,10 @@ const getRepeatsDBURL = createSelector(
       port,
       pathname: `${root}`,
       query: {
-        query: `uniprot_id:${accession}`,
+        'chain.structure': `${accession}`,
+        'chain.id': 'A',
+        skip: '0',
+        limit: '1',
       },
     });
   },

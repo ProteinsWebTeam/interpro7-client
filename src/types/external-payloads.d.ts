@@ -175,17 +175,24 @@ type AlphafoldConfidencePayload = {
 type RepeatsDBAnnotation = {
   start: number;
   end: number;
-  classification: Array<string>;
-  period: number;
+  class: string;
 };
-type RepeatsDBPayload = Array<{
-  uniprot_id: string;
-  uniprot_name: string;
-  uniprot_sequence: string;
-  repeatsdb_consensus_majority: Array<RepeatsDBAnnotation>;
-  reviewed_one: boolean;
-  reviewed_all: boolean;
-}>;
+
+type RepeatsDBItem = {
+  content: {
+    chain: {
+      structure: string;
+    };
+    loci: Array<RepeatsDBAnnotation>;
+  };
+};
+
+type RepeatsDBPayload = {
+  items: {
+    [key: number]: RepeatsDBItem;
+  };
+};
+
 type DisprotRegion = {
   region_id: string;
   term_namespace: string;

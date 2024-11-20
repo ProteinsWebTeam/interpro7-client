@@ -175,13 +175,15 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
 
   if (entry.accession && entry.accession.startsWith('REPEAT:')) {
     return isPrinting ? (
-      <span>RepeatsDB consensus</span>
+      <span>RepeatsDB</span>
     ) : (
       <Link
-        href={`https://repeatsdb.bio.unipd.it/protein/${entry.protein}`}
+        href={`https://repeatsdb.org/annotations/source/AlphaFoldDB/structure/${
+          entry.accession.split(':')[1]
+        }/chain/A`}
         target="_blank"
       >
-        RepeatsDB consensus
+        RepeatsDB
       </Link>
     );
   }
