@@ -50,12 +50,14 @@ const ShowMoreTracks = ({
 
   return (
     <div onClick={handleClick}>
-      <div className={css('showmore-toggle-outer')}>
+      <div
+        className={css('showmore-toggle-outer', showMore ? 'full' : 'overview')}
+      >
         <div
           className={css('showmore-toggle-inner', showMore ? 'moved' : '')}
         />
-        <span style={{ marginLeft: showMore ? '10px' : '30px' }}>
-          {showMore ? 'More' : 'Less'}
+        <span style={{ marginLeft: showMore ? '7px' : '25px' }}>
+          {showMore ? 'Full View' : 'Overview'}
         </span>
       </div>
     </div>
