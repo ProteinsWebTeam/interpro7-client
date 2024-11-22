@@ -11,22 +11,23 @@ export const formatRepeatsDB = ({
     for (const item of data) {
       const proteinAcc = item.content.chain.structure;
       for (const feature of item.content.loci) {
-        panelsData.push({
-          accession: `REPEAT:${proteinAcc}:${feature.start}-${feature.end}`,
-          protein: proteinAcc,
-          source_database: 'RepeatsDB',
-          type: 'Consensus',
-          locations: [
-            {
-              fragments: [
-                {
-                  start: feature.start,
-                  end: feature.end,
-                },
-              ],
-            },
-          ],
-        } as MinimalFeature);
+        if (feature.type === 'region')
+          panelsData.push({
+            accession: `REPEAT:${proteinAcc}:${feature.start}-${feature.end}`,
+            protein: proteinAcc,
+            source_database: 'RepeatsDB',
+            type: 'Consensus',
+            locations: [
+              {
+                fragments: [
+                  {
+                    start: feature.start,
+                    end: feature.end,
+                  },
+                ],
+              },
+            ],
+          } as MinimalFeature);
       }
     }
   }

@@ -599,28 +599,40 @@ const Matches = ({
       >
         Matches
       </Column>
-      <Column
+      {/*<Column
         dataKey="counters.extra_fields.counters.proteins"
         defaultKey="protein-count"
         headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
-        displayIf={primary === 'taxonomy' || primary === 'proteome'}
+        displayIf={false}
         renderer={(count: number) => (
           <NumberComponent abbr>{count}</NumberComponent>
         )}
       >
         protein count
-      </Column>
+      </Column>*/}
       <Column
         dataKey="accession"
         defaultKey="proteinFastas"
         headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
-        renderer={ProteinDownloadRenderer(description)}
+        renderer={(
+          accession: string,
+          row: {
+            source_database: string;
+            proteins?: number;
+            counters?: { extra_fields: { counters: { proteins: number } } };
+          },
+        ) => {
+          const count =
+            row.proteins || row.counters?.extra_fields.counters.proteins || 0; // Extract count
+          return ProteinDownloadRenderer(description)(accession, row, count); // Pass count
+        }}
       >
-        Actions
+        Proteins
       </Column>
+
       <Column
         dataKey="accession"
         defaultKey="seedAlignment"

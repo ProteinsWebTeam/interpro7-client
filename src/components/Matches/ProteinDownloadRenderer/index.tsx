@@ -20,6 +20,7 @@ const ProteinDownloadRenderer =
       proteins?: number;
       counters?: { extra_fields: { counters: { proteins: number } } };
     },
+    count?: number,
   ) => {
     if (!description) return null;
     const endpointToFilterBy = description.taxonomy.isFilter
@@ -50,65 +51,12 @@ const ProteinDownloadRenderer =
               },
             }}
             aria-label="View proteins"
-            data-icon="&#x50;"
           >
-            <small className={css('match-proteins-link')}>View Matches</small>
+            <small className={css('match-proteins-link')}>
+              {count} protein matched{' '}
+            </small>
           </Link>
         </div>
-        {endpointToFilterBy !== 'proteome' && (
-          <File
-            fileType="fasta"
-            name={`protein-sequences-matching-${
-              description[description.main.key as Endpoint].accession
-            }-for-${accession}.fasta`}
-            count={
-              row.proteins || row.counters?.extra_fields.counters.proteins || 0
-            }
-            customLocationDescription={{
-              main: { key: 'protein' },
-              protein: { db: 'UniProt' },
-              [endpointToFilterBy]: {
-                isFilter: true,
-                db: 'UniProt',
-                accession: `${accession}`,
-              },
-              [description.main.key!]: {
-                ...description[description.main.key as Endpoint],
-                isFilter: true,
-              },
-            }}
-            showIcon={true}
-          />
-        )}
-        {endpointToFilterBy !== 'proteome' && (
-          <Tooltip title={`View ${endpointToFilterBy} information`}>
-            <div className={css('view-icon-div')}>
-              <Link
-                className={css('icon', 'icon-count-organisms', 'icon-wrapper')}
-                to={{
-                  description: {
-                    main: {
-                      key: endpointToFilterBy,
-                    },
-                    [endpointToFilterBy]: {
-                      db: row.source_database,
-                      accession: accession,
-                    },
-                  },
-                }}
-                data-icon="&#x50;"
-              >
-                <div
-                  className={css(
-                    'icon',
-                    'icon-count-organisms',
-                    'icon-wrapper',
-                  )}
-                />
-              </Link>
-            </div>
-          </Tooltip>
-        )}
       </div>
     );
   };

@@ -176,6 +176,7 @@ type RepeatsDBAnnotation = {
   start: number;
   end: number;
   class: string;
+  type: string;
 };
 
 type RepeatsDBItem = {
