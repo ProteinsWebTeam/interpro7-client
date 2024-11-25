@@ -182,6 +182,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
           entry.accession.split(':')[1]
         }/chain/A`}
         target="_blank"
+        className={css('ext')}
       >
         RepeatsDB
       </Link>

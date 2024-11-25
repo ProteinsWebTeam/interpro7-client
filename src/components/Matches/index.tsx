@@ -599,18 +599,6 @@ const Matches = ({
       >
         Matches
       </Column>
-      {/*<Column
-        dataKey="counters.extra_fields.counters.proteins"
-        defaultKey="protein-count"
-        headerClassName={css('table-header-center')}
-        cellClassName={css('table-center')}
-        displayIf={false}
-        renderer={(count: number) => (
-          <NumberComponent abbr>{count}</NumberComponent>
-        )}
-      >
-        protein count
-      </Column>*/}
       <Column
         dataKey="accession"
         defaultKey="proteinFastas"

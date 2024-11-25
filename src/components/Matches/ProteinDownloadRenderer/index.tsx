@@ -53,7 +53,7 @@ const ProteinDownloadRenderer =
             aria-label="View proteins"
           >
             <small className={css('match-proteins-link')}>
-              {count} protein matched{' '}
+              {count} protein{count && count > 1 ? 's' : ''} matched{' '}
             </small>
           </Link>
         </div>
