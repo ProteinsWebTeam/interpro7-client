@@ -1,11 +1,11 @@
 import React from 'react';
 import cssBinder from 'styles/cssBinder';
 import styles from './style.css';
-import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import { SettingsAction } from 'src/actions/types';
 
-const css = cssBinder(styles, fonts, tooltip);
+const css = cssBinder(styles, fonts);
 
 type CategoryVisibility = { [name: string]: boolean };
 
@@ -32,33 +32,61 @@ const ShowMoreTracks = ({
   showMoreChanged,
   setHideCategory,
   switchCategoryVisibilityShowMore,
-  changeSettingsRaw, // Destructure the prop
+  changeSettingsRaw,
 }: Props) => {
-  const handleClick = () => {
-    // Update the hideCategory state
+  const handleClick = (view: boolean) => {
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
       ['families', 'domains'],
-      !showMore ? false : true,
+      view,
     );
     setHideCategory(newHideCategory);
-    showMoreChanged(!showMore);
-
-    // Save the showMore state to the Redux store
-    changeSettingsRaw('ui', 'showMoreSettings', !showMore);
+    showMoreChanged(view);
+    changeSettingsRaw('ui', 'showMoreSettings', view);
   };
 
   return (
-    <div onClick={handleClick}>
-      <div
-        className={css('showmore-toggle-outer', showMore ? 'full' : 'overview')}
-      >
-        <div
-          className={css('showmore-toggle-inner', showMore ? 'moved' : '')}
-        />
-        <span style={{ marginLeft: showMore ? '7px' : '25px' }}>
-          {showMore ? 'Full View' : 'Overview'}
-        </span>
+    <div className={css('view-mode-option-container')}>
+      <div className={css('no-margin', 'view-mode-option-label')}>
+        <b>Feature Display Mode</b>{' '}
+        <Tooltip
+          html={`
+        <b style = "text-align:left" > Change which annotations are displayed</b>
+        <ul style = "text-align:left" >
+          <li> Overview: representative features only </li>
+          <li> Full: all available features </li>
+        </ul> `}
+        >
+          <span className={css('icon', 'icon-common')} data-icon="&#xf059;" />
+        </Tooltip>
+      </div>
+      <div className={css('view-mode-checkboxes')}>
+        <div className={css('view-mode-checkbox')}>
+          <div>
+            <input
+              type="radio"
+              name="featureDisplay"
+              value="overview"
+              checked={!showMore}
+              className={css('no-margin')}
+              onChange={() => handleClick(false)}
+            />
+          </div>
+          <div className={css('checkbox-label')}>Summary</div>
+        </div>
+        <div className={css('view-mode-checkbox')}>
+          <div>
+            <input
+              type="radio"
+              name="featureDisplay"
+              value="overview"
+              checked={showMore}
+              className={css('no-margin')}
+              onChange={() => handleClick(true)}
+            />
+          </div>
+          <div className={css('checkbox-label')}>Full</div>
+        </div>
       </div>
     </div>
   );
