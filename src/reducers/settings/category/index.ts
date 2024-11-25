@@ -64,13 +64,6 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
         port: config.root.IPScan.port || DEFAULT_HTTP_PORT,
         root: config.root.IPScan.pathname,
       } as SettingsState[T];
-    case 'genome3d':
-      return {
-        protocol: config.root.genome3d.protocol,
-        hostname: config.root.genome3d.hostname,
-        port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
-        root: config.root.genome3d.pathname,
-      } as SettingsState[T];
     case 'repeatsDB':
       return {
         protocol: config.root.repeatsDB.protocol,

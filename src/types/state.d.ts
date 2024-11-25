@@ -134,7 +134,6 @@ type SettingsState = {
   ebi: ParsedURLServer;
   api: ParsedURLServer;
   ipScan: ParsedURLServer;
-  genome3d: ParsedURLServer;
   repeatsDB: ParsedURLServer;
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
@@ -205,7 +204,6 @@ type Server =
   | 'api'
   | 'ebi'
   | 'ipScan'
-  | 'genome3d'
   | 'wikipedia'
   | 'alphafold'
   | 'repeatsDB'
