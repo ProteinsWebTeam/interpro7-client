@@ -1,26 +1,9 @@
 import React from 'react';
-
-type PTMEvidence = {
-  code: string;
-  source: {
-    name: string;
-  };
-  PEP: string;
-  url: string;
-};
-
-type PTMFragment = {
-  evidences: PTMEvidence[];
-  ptm: string;
-  peptide: string;
-  ptm_type: string;
-  source: string;
-  start: number;
-  position: number;
-};
+import type { PTMFragment } from 'src/components/ProteinViewer';
 
 export type PTMDetail = {
   target?: HTMLElement;
+  highlight: string;
   feature?: {
     name?: string;
     accession?: string;
@@ -38,27 +21,39 @@ type Props = {
 };
 
 const ProtVistaPTMPopup = ({ detail }: Props) => {
+  const highlightedPosition = parseInt(detail.highlight.split(':')[0]);
   const ptmData: PTMFragment | undefined =
-    detail.feature?.locations[0].fragments[0];
-  console.log(detail);
+    detail.feature?.locations[0].fragments.filter(
+      (f) => f.start == highlightedPosition,
+    )[0];
+
   if (ptmData) {
+    const ptmPeptide: string = ptmData.peptide as string;
+    const ptmPos: number = ptmData.relative_pos as number;
+    const peptideStart: number = ptmData.peptide_start as number;
+
     return (
       <section>
-        {detail.feature?.name}
         <div>
           <span> Peptide: </span>
-          <span>{ptmData.peptide.slice(0, ptmData.position - 1)}</span>
+
+          {/* Show peptide sequence and highlight PTM */}
+          <span>{ptmPeptide.slice(0, ptmPos)}</span>
           <span>
-            <b>[{ptmData.peptide[ptmData.position - 1]}]</b>
+            <b>{ptmPeptide[ptmPos]}</b>
           </span>
-          <span>{ptmData.peptide.slice(ptmData.position)}</span>
-          <span>&nbsp;(starts at {ptmData.start - ptmData.position + 1})</span>
+          <span>{ptmPeptide.slice(ptmPos + 1)}</span>
+
+          {/* Show peptide sequence and highlight PTM */}
+          <span>
+            &nbsp;({peptideStart} - {ptmData.peptide_end as string}){' '}
+          </span>
         </div>
         <div>
-          {ptmData.ptm_type} on {ptmData.peptide[ptmData.position - 1]} (
-          {ptmData.position})
+          {ptmData.ptm_type as string} on {ptmPeptide[ptmPos]} (
+          {peptideStart + ptmPos})
         </div>
-        <div>Source: {ptmData.source}</div>
+        <div>Source: {ptmData.source as string[]}</div>
       </section>
     );
   }

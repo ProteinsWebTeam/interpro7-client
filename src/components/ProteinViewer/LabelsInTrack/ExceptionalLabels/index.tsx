@@ -109,8 +109,8 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     return isPrinting ? (
       <span>UniProt</span>
     ) : (
-      <PTMLink id={entry.protein || ''} className={css('ext')}>
-        PTM Data
+      <PTMLink id={entry.accession || ''} className={css('ext')}>
+        {entry.name}
       </PTMLink>
     );
   }

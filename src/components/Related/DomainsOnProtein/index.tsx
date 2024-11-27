@@ -406,7 +406,7 @@ const getPTMPayload = createSelector(
       protocol,
       hostname,
       port,
-      pathname: root + 'proteomics-ptm/' + accession,
+      pathname: root + 'proteomics/ptm/' + accession,
     });
     return url;
   },

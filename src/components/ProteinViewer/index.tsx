@@ -79,6 +79,30 @@ export type ExtendedFeature = Feature & {
   warnings?: Array<string>;
 };
 
+type PTM = {
+  position: number;
+  name: string;
+  sources: string[];
+};
+
+type PTMFeature = {
+  begin: string;
+  end: string;
+  peptide: string;
+  ptms: PTM[];
+};
+
+type PTMData = {
+  accession: string;
+  features: PTMFeature[];
+};
+
+export type PTMFragment = {
+  [annotation: string]: unknown;
+  start: number;
+  end: number;
+};
+
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
@@ -224,63 +248,26 @@ export const ProteinViewer = ({
     return newLocations;
   };
 
-  type PTM = {
-    position: number;
-    name: string;
-    sources: string[];
-  };
+  const ptmFeaturesFragments = (features: PTMFeature[]): PTMFragment[] => {
+    const ptmFragments: PTMFragment[] = [];
 
-  type PTMFeature = {
-    begin: string;
-    end: string;
-    ptms: PTM[];
-    peptide: string;
-    evidences: [];
-    type: string;
-    description: string;
-    accession: string;
-  };
-
-  type PTMData = {
-    accession: string;
-    entryName: string;
-    protein: string;
-    features: [];
-  };
-
-  const ptmsFeaturesToLocations = (
-    accession: string,
-    ptmFeatures: PTMFeature[],
-  ): ExtendedFeatureLocation[] => {
-    const newPTMLocations: ExtendedFeatureLocation[] = [];
-
-    ptmFeatures.map((feature) => {
-      const newPTMLocation: ExtendedFeatureLocation & {
-        accession: string;
-        description: string;
-      } = {
-        accession: accession,
-        description: accession,
-        fragments: [],
-      };
-
+    features.map((feature) => {
       feature.ptms.map((ptm) => {
-        newPTMLocation.fragments.push({
-          ptm: [feature.peptide[ptm.position - 1]],
+        const ptmFragment: PTMFragment = {
+          start: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
+          end: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
+          relative_pos: ptm.position - 1,
           ptm_type: ptm.name,
-          evidences: feature.evidences,
-          position: ptm.position,
           peptide: feature.peptide,
+          peptide_start: parseInt(feature.begin),
+          peptide_end: parseInt(feature.end),
           source: ptm.sources.join(', '),
-          start: parseInt(feature.begin) + ptm.position - 1,
-          end: parseInt(feature.begin) + ptm.position - 1,
-        });
+        };
+
+        ptmFragments.push(ptmFragment);
       });
-
-      newPTMLocations.push(newPTMLocation);
     });
-
-    return newPTMLocations;
+    return ptmFragments;
   };
 
   return (
@@ -360,21 +347,50 @@ export const ProteinViewer = ({
 
                   // Transform PTM data to track-like data
                   if (type == 'PTM') {
-                    const ptmEntries: ExtendedFeature[] = [];
+                    const ptmFragmentsGroupedByModification: {
+                      [type: string]: PTMFragment[];
+                    } = {};
+
                     entries.map((entry) => {
-                      const tempFeature: ExtendedFeature = {
-                        accession: (entry.data as PTMData).accession,
-                        protein: (entry.data as PTMData).accession,
-                        type: 'ptm',
-                        source_database: 'ptm',
-                        locations: ptmsFeaturesToLocations(
-                          (entry.data as PTMData).accession,
-                          (entry.data as PTMData).features,
-                        ),
-                      };
-                      ptmEntries.push(tempFeature);
+                      const fragments = ptmFeaturesFragments(
+                        (entry.data as PTMData).features,
+                      );
+                      fragments.map((fragment) => {
+                        if (
+                          ptmFragmentsGroupedByModification[
+                            fragment.ptm_type as string
+                          ]
+                        ) {
+                          ptmFragmentsGroupedByModification[
+                            fragment.ptm_type as string
+                          ].push(fragment);
+                        } else {
+                          ptmFragmentsGroupedByModification[
+                            fragment.ptm_type as string
+                          ] = [fragment];
+                        }
+                      });
                     });
-                    entries = ptmEntries;
+
+                    const ptmsEntriesGroupedByModification: ExtendedFeature[] =
+                      [];
+                    Object.entries(ptmFragmentsGroupedByModification).map(
+                      (ptmData) => {
+                        const modificationType: string = ptmData[0]; // Key
+                        const fragments: PTMFragment[] = ptmData[1]; // Key
+                        const newFeature: ExtendedFeature = {
+                          accession: protein.accession,
+                          name: modificationType,
+                          type: 'ptm',
+                          source_database: 'ptm',
+                          locations: [{ fragments: fragments }],
+                        };
+
+                        ptmsEntriesGroupedByModification.push(newFeature);
+                      },
+                    );
+
+                    entries = ptmsEntriesGroupedByModification;
                   }
 
                   return (
