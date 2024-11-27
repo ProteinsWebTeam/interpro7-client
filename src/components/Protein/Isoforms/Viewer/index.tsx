@@ -70,18 +70,45 @@ const features2protvista = (features: FeatureMap) => {
   ];
 
   const sortedCategories = categories.sort(byEntryType);
+
   const representativeDomains = selectRepresentativeData(
     featArray,
     'locations',
-    'domain'
+    'domain',
   );
 
-  if (representativeDomains?.length) {
-    sortedCategories.splice(0, 0, [
-      'representative domains',
-      representativeDomains,
-    ]);
-  }
+  const representativeFamilies = selectRepresentativeData(
+    featArray,
+    'locations',
+    'family',
+  );
+
+  const homologous_superfamily = sortedCategories.filter(
+    (entry) => entry[0] == 'homologous superfamily',
+  )[0];
+
+  sortedCategories.map((entry) => {
+    if (entry[0] === 'domain') {
+      entry[0] = 'domains';
+      if (homologous_superfamily) {
+        if (Array.isArray(entry[1]))
+          entry[1] = entry[1].concat(homologous_superfamily[1]);
+      }
+
+      if (representativeDomains) {
+        if (Array.isArray(entry[1]))
+          entry[1] = entry[1].concat(representativeDomains);
+      }
+    }
+
+    if (entry[0] === 'family') {
+      entry[0] = 'families';
+      if (representativeFamilies) {
+        if (Array.isArray(entry[1]))
+          entry[1] = entry[1].concat(representativeFamilies);
+      }
+    }
+  });
 
   return sortedCategories;
 };
@@ -114,10 +141,39 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
 
   const { accession, length, sequence, features } = data.payload;
   const dataProtvista = features2protvista(features);
+
+  const mainTracks = [
+    'alphafold confidence',
+    'families',
+    'domains',
+    'pathogenic and likely pathogenic variants',
+    'intrinsically disordered regions',
+    'spurious proteins',
+    'conserved residues',
+  ];
+
+  const hideCategories = {
+    'secondary structure': false,
+    families: true,
+    domains: true,
+    repeat: false,
+    'conserved site': false,
+    'active site': false,
+    'binding site': false,
+    ptm: false,
+    'match conservation': false,
+    'coiled-coils, signal peptides, transmembrane regions': false,
+    'short linear motifs': false,
+    'pfam-n': false,
+    funfam: false,
+  };
+
   return (
     <div className={css('isoform-panel')}>
       <IsoformHeader accession={accession} length={length} />
       <ProteinViewer
+        mainTracks={mainTracks}
+        hideCategories={hideCategories}
         protein={{ sequence, length: sequence.length }}
         data={dataProtvista}
         title="Entry matches to this isoform"
