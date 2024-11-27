@@ -8,44 +8,56 @@ import local from './style.css';
 import cssBinder from 'styles/cssBinder';
 const css = cssBinder(local);
 
-const data4InterPro2022 = {
-  url: 'https://doi.org/10.1093/nar/gkac993',
-  title: 'InterPro in 2022',
-  authors: `Paysan-Lafosse T, Blum M, Chuguransky S, Grego T, Pinto BL, Salazar GA, 
-            Bileschi ML, Bork P, Bridge A, Colwell L, Gough J, Haft DH, Letunić I, 
-            Marchler-Bauer A, Mi H, Natale DA, Orengo CA, Pandurangan AP, Rivoire C, 
-            Sigrist CJA, Sillitoe I, Thanki N, Thomas PD, Tosatto SCE, Wu CH, Bateman A.`,
-  source: 'Nucleic Acids Research, Nov 2022, (doi: 10.1093/nar/gkac993)',
+const citationDetails = {
+  doi: '10.1093/nar/gkae1082',
+  title: 'InterPro: the protein sequence classification resource in 2025',
+  authors: `Blum M, Andreeva A, Florentino LC, Chuguransky SR, Grego T, Hobbs E,
+            Pinto BL, Orr A, Paysan-Lafosse T, Ponamareva I, Salazar GA,
+            Bordin N, Bork P, Bridge A, Colwell L, Gough J, Haft DH, Letunic I,
+            Llinares-López F, Marchler-Bauer A, Meng-Papaxanthos L, Mi H,
+            Natale DA, Orengo CA, Pandurangan AP, Piovesan D, Rivoire C,
+            Sigrist CJA, Thanki N, Thibaud-Nissen F, Thomas PD, Tosatto SCE,
+            Wu CH, Bateman A.`,
+  source: 'Nucleic Acids Research',
+  year: 2024,
   imageClass: 'image-nar-default',
 };
 
 type pubProps = {
-  url: string;
+  doi: string;
   title: string;
   authors: string;
   source: string;
-  imageClass?: string;
-  dark?: boolean;
+  year: number;
 };
 
 export const PrintedPublication = ({
-  url,
+  doi,
   title,
   authors,
   source,
-  dark,
+  year,
 }: pubProps) => {
   return (
-    <blockquote className={css('vf-quote', { dark })}>
-      {authors}{' '}
-      <Link href={url} target="_blank">
-        {title}
-      </Link>
-      . <i>{source}</i>
+    <blockquote className={css('vf-blockquote')}>
+      <div>{authors}</div>
+      <div>
+        <b>{title}</b>
+      </div>
+      <>
+        <i>{source}</i>. {year},{' '}
+        <Link
+          href={`https://doi.org/${doi}`}
+          className={css('ext')}
+          target="_blank"
+        >
+          doi: {doi}
+        </Link>
+      </>
     </blockquote>
   );
 };
 
-export const PrintedInterPro2022 = () => (
-  <PrintedPublication {...data4InterPro2022} />
+export const InterProCitation = () => (
+  <PrintedPublication {...citationDetails} />
 );

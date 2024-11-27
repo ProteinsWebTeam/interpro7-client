@@ -28,10 +28,10 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
     case 'ui':
       return {
         lowGraphics: false,
-        colorDomainsBy: EntryColorMode.ACCESSION,
+        colorDomainsBy: EntryColorMode.MEMBER_DB,
         labelContent: {
-          accession: true,
-          name: false,
+          accession: false,
+          name: true,
           short: true,
         },
         structureViewer: false,
@@ -63,13 +63,6 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
         hostname: config.root.IPScan.hostname,
         port: config.root.IPScan.port || DEFAULT_HTTP_PORT,
         root: config.root.IPScan.pathname,
-      } as SettingsState[T];
-    case 'genome3d':
-      return {
-        protocol: config.root.genome3d.protocol,
-        hostname: config.root.genome3d.hostname,
-        port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
-        root: config.root.genome3d.pathname,
       } as SettingsState[T];
     case 'repeatsDB':
       return {

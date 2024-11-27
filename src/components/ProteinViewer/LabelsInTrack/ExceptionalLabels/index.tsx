@@ -3,11 +3,7 @@ import React from 'react';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import Link from 'components/generic/Link';
 
-import {
-  Genome3dLink,
-  AlphafoldLink,
-  PTMLink,
-} from 'components/ExtLink/patternLinkWrapper';
+import { AlphafoldLink, PTMLink } from 'components/ExtLink/patternLinkWrapper';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { FunFamLink } from 'subPages/Subfamilies';
@@ -61,10 +57,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
         )}
         {entry.children &&
           entry.children.map((d) => (
-            <div
-              className={css('track-accession-child')}
-              key={`main_${d.accession}`}
-            >
+            <div className={css('centered-label')} key={`main_${d.accession}`}>
               {d.accession.replace('Mobidblt-', '')}
             </div>
           ))}
@@ -136,6 +129,8 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
 
   if (entry.type === 'residue') {
     const processedAccession = entry.accession.replace('residue:', '');
+    const descriptionString = entry.locations?.[0].description;
+
     return isPrinting ? (
       <span>Residue: {processedAccession}</span>
     ) : (
@@ -155,7 +150,14 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
             {processedAccession}
           </Link>
         )}
-        <div>{entry.locations?.[0].description}</div>
+
+        <div
+          className={css(
+            processedAccession === 'PIRSR_GROUP' ? 'pirsr-label' : '',
+          )}
+        >
+          {descriptionString}
+        </div>
       </>
     );
   }
@@ -182,24 +184,19 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
       </Tooltip>
     );
   }
-  if (entry.accession && entry.accession.startsWith('G3D:')) {
-    return isPrinting ? (
-      <span>Genome3D: {entry.source_database} </span>
-    ) : (
-      <Genome3dLink id={entry.protein || ''}>
-        Genome3D: [{entry.type}] {entry.source_database}
-      </Genome3dLink>
-    );
-  }
+
   if (entry.accession && entry.accession.startsWith('REPEAT:')) {
     return isPrinting ? (
-      <span>RepeatsDB consensus</span>
+      <span>RepeatsDB</span>
     ) : (
       <Link
-        href={`https://repeatsdb.bio.unipd.it/protein/${entry.protein}`}
+        href={`https://repeatsdb.org/annotations/source/AlphaFoldDB/structure/${
+          entry.accession.split(':')[1]
+        }/chain/A`}
         target="_blank"
+        className={css('ext')}
       >
-        RepeatsDB consensus
+        RepeatsDB
       </Link>
     );
   }

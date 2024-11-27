@@ -33,6 +33,7 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 import summary from 'styles/summary.css';
+import { ExtendedFeature } from 'src/components/ProteinViewer';
 
 const css = cssBinder(summary, fonts, style);
 
@@ -183,6 +184,7 @@ const SummaryIPScanJob = ({
       }
       const payload = bPayload as Iprscan5Result;
       const organisedData = mergeData(payload.matches, payload.sequenceLength);
+
       setMergedData(organisedData);
       if (organisedData.family) {
         const families: Array<EntryMetadata> = [];

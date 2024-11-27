@@ -46,6 +46,8 @@
   & .dropdown-pane {
     z-index: var(--z-index-over-plus); /* so sticky header stay on top*/
     border: 2px solid var(--colors-submain);
+    width: auto;
+    white-space: nowrap;
     & ul {
       list-style-type: none;
       margin: 0;

@@ -53,12 +53,6 @@ export default (historyWrapper) => {
         port: config.root.IPScan.port || DEFAULT_HTTP_PORT,
         root: config.root.IPScan.pathname,
       };
-      settings.genome3d = {
-        protocol: config.root.genome3d.protocol,
-        hostname: config.root.genome3d.hostname,
-        port: config.root.genome3d.port || DEFAULT_HTTP_PORT,
-        root: config.root.genome3d.pathname,
-      };
       settings.repeatsDB = {
         protocol: config.root.repeatsDB.protocol,
         hostname: config.root.repeatsDB.hostname,

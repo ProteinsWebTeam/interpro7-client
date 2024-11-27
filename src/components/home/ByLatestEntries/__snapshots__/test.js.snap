@@ -58,7 +58,7 @@ exports[`<ByEntriesFeatured /> By Entries Featured 1`] = `
           }
         }
       >
-        View all new entries
+        Browse all new entries
       </Memo(Connect(Link))>
     </div>
   </div>

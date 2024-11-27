@@ -121,22 +121,5 @@ exports[`<ByMemberDatabase /> Member Databases types 1`] = `
       </p>
     </div>
   </Memo(Connect(AnimatedEntry))>
-  <Memo(Connect(Link))
-    buttonType="primary"
-    to={
-      {
-        "description": {
-          "entry": {
-            "db": "InterPro",
-          },
-          "main": {
-            "key": "entry",
-          },
-        },
-      }
-    }
-  >
-    View InterPro entries
-  </Memo(Connect(Link))>
 </div>
 `;

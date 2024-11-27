@@ -2,13 +2,24 @@
 
 exports[`<Publication /> should render 1`] = `
 <blockquote
-  className="vf-quote"
+  className="vf-blockquote"
 >
-   
-  <Memo(Connect(Link))
-    target="_blank"
-  />
-  . 
-  <i />
+  <div />
+  <div>
+    <b />
+  </div>
+  <React.Fragment>
+    <i />
+    . 
+    ,
+     
+    <Memo(Connect(Link))
+      className="ext"
+      href="https://doi.org/undefined"
+      target="_blank"
+    >
+      doi: 
+    </Memo(Connect(Link))>
+  </React.Fragment>
 </blockquote>
 `;

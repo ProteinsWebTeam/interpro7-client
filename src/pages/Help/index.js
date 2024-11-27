@@ -12,37 +12,42 @@ import ContentFromRTD from 'components/ContentFromRTD';
 
 import { schemaProcessDataWebPage } from 'schema_org/processors';
 
-const SchemaOrgData = loadable({
-  loader: () =>
-    // $FlowFixMe
-    import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
-  loading: () => null,
-});
-
 import { foundationPartial } from 'styles/foundation';
 
 import ipro from 'styles/interpro-new.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
+import config from 'config';
 
 const f = foundationPartial(ebiGlobalStyles, ipro);
-const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
+
+const TrainingAndTutorials = () => {
+  return (
+    <Redirect to="https://www.ebi.ac.uk/training/search-results?query=interpro&domain=ebiweb_training&page=1&facets=" />
+  );
+};
 const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
-const Training = () => <ContentFromRTD page="training.rst" />;
 const Game = () => (
   <ContentFromRTD page="protein_families_game.rst" format="faq" />
 );
 
-const Documentation = loadable({
-  // prettier-ignore
-  loader: () =>
-    // $FlowFixMe
-    import(/* webpackChunkName: "help-documentation" */'components/Help/Documentation'),
+const SchemaOrgData = loadable({
+  loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
 });
 
+const HelpCenter = loadable({
+  loader: () =>
+    // $FlowFixMe
+    import(/* webpackChunkName: "help-center" */ 'components/Help'),
+});
+
+const Documentation = () => {
+  return <Redirect to={config.root.readthedocs.href} />;
+};
+
 const routes = new Map([
-  ['tutorial', Tutorials],
-  ['training', Training],
+  ['tutorial', TrainingAndTutorials],
+  ['training', TrainingAndTutorials],
   ['faqs', Faqs],
   ['documentation', Documentation],
   ['protein_families_game', Game],
@@ -51,10 +56,6 @@ const routes = new Map([
 const locationSelector = (customLocation) =>
   customLocation.description.other[1];
 
-const RedirectToDefault = () => (
-  <Redirect to={{ description: { other: ['help', 'tutorial'] } }} />
-);
-
 export default class Help extends PureComponent /*:: <{}> */ {
   render() {
     return (
@@ -62,6 +63,7 @@ export default class Help extends PureComponent /*:: <{}> */ {
         <Helmet>
           <title>Help</title>
         </Helmet>
+
         <SchemaOrgData
           data={{
             name: 'InterPro Help Page',
@@ -76,7 +78,7 @@ export default class Help extends PureComponent /*:: <{}> */ {
               <ErrorBoundary>
                 <Switch
                   locationSelector={locationSelector}
-                  indexRoute={RedirectToDefault}
+                  indexRoute={HelpCenter}
                   childRoutes={routes}
                 />
               </ErrorBoundary>

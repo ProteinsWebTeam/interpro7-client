@@ -21,7 +21,7 @@ import Table, {
 } from 'components/Table';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import LazyImage from 'components/LazyImage';
 import Lazy from 'wrappers/Lazy';
 import loadWebComponent from 'utils/load-web-component';
@@ -241,6 +241,19 @@ const Matches = ({
   }
 
   const isTaxonomySubpage = primary === 'taxonomy' && secondary === 'entry';
+
+  /*  For matches in subpages, the URL is a composite one (e.g /entry/pfam/protein/UniProt)
+      The the browser URL needs to be reversed so that it is accepted by the API (e.g. /entry/pfam/protein/UniProt)
+      This already happens for the Browsable API button, but it doesn't for the script generator (which at this time uses the descriptionToPath function).
+      The processedSubPath variable will store the subpath computed based on the reversed URL.
+  */
+  const reversedURL = toPublicAPI(
+    includeTaxonFocusedOnURL(getReversedUrl(state), focused),
+  );
+
+  const urlNoParams = reversedURL.split('?')[0];
+  const processedSubPath = '/' + urlNoParams.split('/api/')[1];
+
   return (
     <Table
       dataTable={dataTable}
@@ -279,7 +292,6 @@ const Matches = ({
                 <>
                   {primary === 'protein' && (
                     <>
-                      <label htmlFor="fasta">FASTA</label>
                       <FileExporter
                         description={description}
                         count={actualSize}
@@ -291,7 +303,6 @@ const Matches = ({
                       />
                     </>
                   )}
-                  <label htmlFor="tsv">TSV</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -301,7 +312,6 @@ const Matches = ({
                     secondary={secondary}
                     focused={focused}
                   />
-                  <label htmlFor="json">JSON</label>
                   <FileExporter
                     description={description}
                     count={actualSize}
@@ -313,11 +323,17 @@ const Matches = ({
                   />
                 </>
               )}
-              <label htmlFor="api">API</label>
-              <APIViewButton
+
+              <ExternalExportButton
+                type={'api'}
                 url={toPublicAPI(
                   includeTaxonFocusedOnURL(getReversedUrl(state), focused),
                 )}
+              />
+              <ExternalExportButton
+                search={search}
+                type={'scriptgen'}
+                subpath={processedSubPath}
               />
             </div>
           </Exporter>
@@ -584,27 +600,27 @@ const Matches = ({
         Matches
       </Column>
       <Column
-        dataKey="counters.extra_fields.counters.proteins"
-        defaultKey="protein-count"
-        headerClassName={css('table-header-center')}
-        cellClassName={css('table-center')}
-        displayIf={primary === 'taxonomy' || primary === 'proteome'}
-        renderer={(count: number) => (
-          <NumberComponent abbr>{count}</NumberComponent>
-        )}
-      >
-        protein count
-      </Column>
-      <Column
         dataKey="accession"
         defaultKey="proteinFastas"
         headerClassName={css('table-header-center')}
         cellClassName={css('table-center')}
         displayIf={primary === 'taxonomy' || primary === 'proteome'}
-        renderer={ProteinDownloadRenderer(description)}
+        renderer={(
+          accession: string,
+          row: {
+            source_database: string;
+            proteins?: number;
+            counters?: { extra_fields: { counters: { proteins: number } } };
+          },
+        ) => {
+          const count =
+            row.proteins || row.counters?.extra_fields.counters.proteins || 0; // Extract count
+          return ProteinDownloadRenderer(description)(accession, row, count); // Pass count
+        }}
       >
-        Actions
+        Proteins
       </Column>
+
       <Column
         dataKey="accession"
         defaultKey="seedAlignment"

@@ -16,7 +16,7 @@ import { customLocationSelector } from 'reducers/custom-location';
     search: ?Object,
     hash: ?string,
   },
-  to: function | {
+  to: function | string | {
     description: Object,
     search: ?Object,
     hash: ?string,
@@ -38,17 +38,27 @@ class Redirect extends PureComponent /*:: <Props> */ {
         hash: T.string,
       }),
       T.func,
+      T.string,
     ]),
   };
 
   componentDidMount() {
     const { to, customLocation, goToCustomLocation } = this.props;
+
     // Go to the new location, but replacing current location
     let _to = to;
     if (typeof to === 'function') {
       _to = to(customLocation);
     }
-    goToCustomLocation(_to, true);
+
+    // Check if _to is an external URL
+    if (typeof _to === 'string' && /^https?:\/\//.test(_to)) {
+      // External redirection
+      window.location.replace(_to);
+    } else {
+      // Internal redirection
+      goToCustomLocation(_to, true);
+    }
   }
 
   render() {

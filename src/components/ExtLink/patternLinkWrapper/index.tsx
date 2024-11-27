@@ -29,9 +29,4 @@ export const AlphafoldLink = patternLinkWrapper(
 );
 AlphafoldLink.displayName = 'AlphafoldLink';
 
-export const Genome3dLink = patternLinkWrapper(
-  'https://www.genome3d.net/uniprot/id/{id}/annotations',
-);
-Genome3dLink.displayName = 'Genome3DLink';
-
 export default patternLinkWrapper;

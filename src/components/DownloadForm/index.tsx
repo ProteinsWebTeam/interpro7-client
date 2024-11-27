@@ -101,14 +101,20 @@ export class DownloadForm extends PureComponent<LoadedProps> {
   // eslint-disable-next-line complexity, max-statements
   _handleChange = (event?: FormEvent) => {
     if (!this._ref.current) return;
-    const object: {
-      description: InterProPartialDescription;
-      search?: Record<string, string>;
-      subset?: boolean;
-      fileType?: string;
-    } = {
-      description: {},
+    const {
+      description,
+      search,
+      fileType: ft,
+      subset,
+    } = extractDataFromHash(this.props.matched);
+
+    const object = {
+      description: { ...description },
+      search: { ...search },
+      subset: subset,
+      fileType: ft,
     };
+
     const target = event?.target as HTMLElement;
     // Only the add filters buttons trigger this method directly
     if (target instanceof HTMLButtonElement) {
@@ -191,6 +197,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
       // Since we can only have counter objects in JSON, change type to default
       object.fileType = 'json';
     }
+
     const nextHash = [path, object.fileType, object.subset && 'subset']
       .filter(Boolean)
       .join('|');
@@ -201,7 +208,6 @@ export class DownloadForm extends PureComponent<LoadedProps> {
       });
     }
   };
-
   render() {
     const { matched, api, lowGraphics, data } = this.props;
     if (!data || !api) return null;
@@ -211,6 +217,7 @@ export class DownloadForm extends PureComponent<LoadedProps> {
       fileType: ft,
       subset,
     } = extractDataFromHash(matched);
+
     if (!description) return null;
 
     const fileType = ft || 'json';
@@ -280,7 +287,6 @@ export class DownloadForm extends PureComponent<LoadedProps> {
     };
 
     const mainEndpoint = description[main as Endpoint];
-
     return (
       <form
         onChange={this._handleChange}

@@ -144,7 +144,9 @@ class ClanViewer extends PureComponent<Props, State> {
     if (g) {
       const accession = (g as HTMLElement).dataset.accession;
       if ((event as MouseEvent).metaKey || (event as MouseEvent).ctrlKey) {
-        window.open(`/entry/${this.props.db}/${accession}`, '_blank')?.focus();
+        window
+          .open(`/interpro/entry/${this.props.db}/${accession}`, '_blank')
+          ?.focus();
       } else {
         this.props.goToCustomLocation({
           description: {

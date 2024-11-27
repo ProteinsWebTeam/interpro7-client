@@ -1,8 +1,7 @@
-@import '../../../styles/colors.css';
-
 .box-add {
   border-left: 4px solid var(--colors-submain);
   padding: 0 1rem;
+  height: max-content;
 }
 .box-add ul {
   list-style-type: none;
@@ -46,4 +45,23 @@
     margin-bottom: 1rem;
     margin-right: 0;
   }
+}
+
+.help-links {
+  font-size: 25px;
+  font-family: sans-serif;
+}
+
+.help-grid {
+  column-gap: 0.5em;
+  row-gap: 0.5em;
+}
+
+.help-flex {
+  display: flex;
+  gap: 3em;
+}
+
+.vf-grid > *:first-child {
+  margin: 0.2em;
 }

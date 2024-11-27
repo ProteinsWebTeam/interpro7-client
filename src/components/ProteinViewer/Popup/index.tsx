@@ -5,7 +5,6 @@ import ProtVistaResiduePopup, { ResidueDetail } from './Residue';
 import ProtVistaVariationPopup, { VariationDetail } from './Variation';
 import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
-import Genome3DPopup, { Genome3DDetail } from './Genome3D';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 import ProtVistaPTMPopup, { PTMDetail } from './PTM';
 import DisProtPopup, { DisProtDetail } from './DisProt';
@@ -61,8 +60,6 @@ const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   if (variationTrack) {
     return <ProtVistaVariationPopup detail={detail as VariationDetail} />;
   }
-  if (((detail as Genome3DDetail)?.feature?.accession || '').startsWith('G3D:'))
-    return <Genome3DPopup detail={detail as Genome3DDetail} />;
 
   if (
     ((detail as RepeatsDBDetail)?.feature?.accession || '').startsWith(

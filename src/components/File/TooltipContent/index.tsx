@@ -1,20 +1,11 @@
 import React from 'react';
 
-import Link from 'components/generic/Link';
-
 import cssBinder from 'styles/cssBinder';
 import local from './style.css';
 
 const css = cssBinder(local);
 
-const getSearchString = (search?: InterProLocationSearch): string => {
-  const entries = Object.entries(search || []);
-  if (entries.length === 0) return '';
-  return `?${entries.map(([k, v]) => `${k}=${v}`).join('&')}`;
-};
-
 type Props = {
-  shouldLinkToResults: boolean;
   title: string;
   count: number;
   subpath?: string;
@@ -22,14 +13,7 @@ type Props = {
   search?: InterProLocationSearch;
 };
 
-const TooltipContent = ({
-  shouldLinkToResults,
-  title,
-  count,
-  subpath,
-  fileType,
-  search,
-}: Props) => {
+const TooltipContent = ({ title, count }: Props) => {
   return count === 0 ? (
     <div>
       <p className={css('tooltip-paragraph')}>
@@ -38,24 +22,7 @@ const TooltipContent = ({
     </div>
   ) : (
     <div>
-      <h5 style={{ color: 'var(--color-almost-white)' }}>{title}</h5>
-      {shouldLinkToResults && (
-        <p className={css('tooltip-paragraph')}>
-          <Link
-            to={{
-              description: {
-                main: { key: 'result' },
-                result: { type: 'download' },
-              },
-              hash: `${subpath || ''}${getSearchString(search)}|${fileType}`,
-            }}
-            buttonType="tertiary"
-            className={css('in-popup')}
-          >
-            See more download options
-          </Link>
-        </p>
-      )}
+      <span style={{ color: 'var(--color-almost-white)' }}>{title}</span>
     </div>
   );
 };

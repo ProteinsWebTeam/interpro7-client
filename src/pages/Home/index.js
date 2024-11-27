@@ -14,7 +14,7 @@ import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
 import EBISurvey from 'components/home/EBISurvey';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
-import { PrintedInterPro2022 } from 'components/Help/Publication';
+import { InterProCitation } from 'components/Help/Publication';
 import Tip from 'components/Tip';
 import Toast from 'components/Toast/Toast';
 
@@ -164,14 +164,10 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
 );
 
 const CitingInterPro = () => (
-  <details className={f('citing-details')} open>
-    <summary>Citing InterPro</summary>
-    <div>
-      If you find InterPro useful, please cite the reference that describes this
-      work:
-      <PrintedInterPro2022 />
-    </div>
-  </details>
+  <p className={f('cite')}>
+    If you use InterPro, please cite our latest publication:
+    <InterProCitation />
+  </p>
 );
 
 const description = `
@@ -314,12 +310,15 @@ class Home extends PureComponent {
             <div className={f('pp-browse-by')}>
               <Tabs>
                 <div
-                  title="Member Database"
+                  title="Member Databases"
                   data-testid="home-member-database-button"
                 >
                   <ByMemberDatabase />
                 </div>
-                <div title="Entry type" data-testid="home-entry-type-button">
+                <div
+                  title="InterPro types"
+                  data-testid="home-entry-type-button"
+                >
                   <ByEntryType />
                 </div>
                 <div title="Species" data-testid="home-species-button">
@@ -377,7 +376,7 @@ class Home extends PureComponent {
         <ToolCards />
 
         <div className={f('row')}>
-          <span className={f('elixir-title')}>This service funded by</span>
+          <span className={f('elixir-title')}>This service is funded by</span>
           <img src={embl} className={f('image-funding')} alt="EMBL logo" />
           <img
             src={wellcome}

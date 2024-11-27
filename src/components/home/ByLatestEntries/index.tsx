@@ -59,7 +59,7 @@ export const ByLatestEntries = ({ data }: LoadedProps) => {
               }}
               buttonType="primary"
             >
-              View all new entries
+              Browse all new entries
             </Link>
           </div>
         </div>

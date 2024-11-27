@@ -1,13 +1,13 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import Documentation from '.';
+import Help from '.';
 
 const renderer = new ShallowRenderer();
 
-describe('<Documentation />', () => {
+describe('<Help />', () => {
   test('should render', () => {
-    renderer.render(<Documentation />);
+    renderer.render(<Help />);
     expect(renderer.getRenderOutput()).toMatchSnapshot();
   });
 });

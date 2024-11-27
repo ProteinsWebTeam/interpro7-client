@@ -19,19 +19,22 @@ const ResidueLabel = ({ entry, expandedTrack }: Props) => {
     <>
       {entry.residues.map((residue) =>
         residue.locations.map((r, i) => (
-          <div
-            key={`res_${r.accession}_${i}`}
-            className={css('track-accession-child', {
-              hide: !expandedTrack,
-            })}
-          >
-            <span>
-              {r.description
-                ? r.description.charAt(0).toUpperCase() + r.description.slice(1)
-                : r.accession}
-            </span>
+          <div className={css('residue-accession-container')}>
+            <div
+              key={`res_${r.accession}_${i}`}
+              className={css('residue-accession-child', {
+                hide: !expandedTrack,
+              })}
+            >
+              <span>
+                {r.description
+                  ? r.description.charAt(0).toUpperCase() +
+                    r.description.slice(1)
+                  : r.accession}
+              </span>
+            </div>
           </div>
-        ))
+        )),
       )}
     </>
   );

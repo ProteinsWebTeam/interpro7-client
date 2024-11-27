@@ -9,13 +9,15 @@ import { changeSettingsRaw } from 'actions/creators';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ToggleSwitch from 'components/ToggleSwitch';
 import Exporter from 'components/Table/Exporter';
-import APIViewButton from 'components/Table/Exporter/APIViewButton';
+
+import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
 import AllIDADownload from './AllIDADownload';
 
 import cssBinder from 'styles/cssBinder';
 
 import exporterStyle from 'components/Table/Exporter/style.css';
 import local from './style.css';
+import { toPublicAPI } from 'utils/url';
 
 const css = cssBinder(local, exporterStyle);
 
@@ -71,13 +73,13 @@ const IDAOptions = ({
       {showExporter && (
         <Exporter includeSettings={false}>
           <div className={css('menu-grid')}>
-            <label htmlFor="json">JSON</label>
             <AllIDADownload count={count} fileType="json" />
-            <label htmlFor="json">TSV</label>
             <AllIDADownload count={count} fileType="tsv" />
-            <label htmlFor="api">API</label>
             {api && (
-              <APIViewButton url={getAPIURL(api, entryLocation, search)} />
+              <ExternalExportButton
+                type={'api'}
+                url={toPublicAPI(getAPIURL(api, entryLocation, search))}
+              />
             )}
           </div>
         </Exporter>
