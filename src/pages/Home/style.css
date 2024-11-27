@@ -1,4 +1,4 @@
-@import '../../styles/colors.css';
+@import "../../styles/colors.css";
 
 .ida-logo {
   margin-left: 40px;
@@ -24,4 +24,8 @@ span.link {
     opacity: 0.7;
     text-decoration: none;
   }
+}
+
+.cite {
+  margin-top: 0.5rem;
 }

@@ -9,15 +9,6 @@ import local from './style.css';
 import cssBinder from 'styles/cssBinder';
 const css = cssBinder(fonts, local);
 
-/*
-const f = foundationPartial(ebiGlobalStyles, ipro);
-const Tutorials = () => <ContentFromRTD page="tutorials_webinars.rst" />;
-const Faqs = () => <ContentFromRTD page="faq.rst" format="faq" />;
-const Training = () => <ContentFromRTD page="training.rst" />;
-const Game = () => (
-  <ContentFromRTD page="protein_families_game.rst" format="faq" />
-);*/
-
 const Help = () => {
   return (
     <div className={css('help-flex')}>
@@ -58,7 +49,7 @@ const Help = () => {
             className={css('icon', 'icon-common', 'xl')}
             data-icon="&#xf300;"
           />{' '}
-          <h5>Training</h5>
+          <h5>Training & outreach</h5>
           <li>
             <ul>
               <li>
@@ -81,6 +72,13 @@ const Help = () => {
                   Pfam
                 </Link>
               </li>
+              <Link
+                to={{
+                  description: { other: ['help', 'protein_families_game'] },
+                }}
+              >
+                Protein families game
+              </Link>
             </ul>
           </li>
         </div>

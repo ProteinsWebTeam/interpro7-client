@@ -1,12 +1,11 @@
 import React from 'react';
 import cssBinder from 'styles/cssBinder';
 import styles from './style.css';
-
-import tooltip from 'components/SimpleCommonComponents/Tooltip/style.css';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import { hide } from '@floating-ui/react-dom';
+import { SettingsAction } from 'src/actions/types';
 
-const css = cssBinder(styles, fonts, tooltip);
+const css = cssBinder(styles, fonts);
 
 type CategoryVisibility = { [name: string]: boolean };
 
@@ -20,44 +19,75 @@ type Props = {
     name: string[],
     hide: boolean,
   ) => CategoryVisibility;
+  changeSettingsRaw: (
+    category: string,
+    key: string,
+    value: string | number | boolean | LabelUISettings,
+  ) => SettingsAction;
 };
 
-{
-  /* Button to show/hide all secondary tracks (maintains internal view/show state of the specific track)*/
-}
 const ShowMoreTracks = ({
   showMore,
   hideCategory,
   showMoreChanged,
   setHideCategory,
   switchCategoryVisibilityShowMore,
+  changeSettingsRaw,
 }: Props) => {
+  const handleClick = (view: boolean) => {
+    const newHideCategory = switchCategoryVisibilityShowMore(
+      hideCategory,
+      ['families', 'domains'],
+      view,
+    );
+    setHideCategory(newHideCategory);
+    showMoreChanged(view);
+    changeSettingsRaw('ui', 'showMoreSettings', view);
+  };
+
   return (
-    <div>
-      <button
-        style={{
-          boxShadow: 'none',
-          transform: 'none',
-        }}
-        className={css(
-          'vf-button',
-          'vf-button--secondary',
-          'vf-button--sm',
-          'showmore-btn',
-        )}
-        onClick={() => {
-          setHideCategory(
-            switchCategoryVisibilityShowMore(
-              hideCategory,
-              ['families', 'domains'],
-              !showMore ? false : true,
-            ),
-          );
-          showMoreChanged(!showMore);
-        }}
-      >
-        {showMore ? 'Show summary view' : 'Show all annotations'}
-      </button>
+    <div className={css('view-mode-option-container')}>
+      <div className={css('no-margin', 'view-mode-option-label')}>
+        <b>Feature Display Mode</b>{' '}
+        <Tooltip
+          html={`
+        <b style = "text-align:left" > Change which annotations are displayed</b>
+        <ul style = "text-align:left" >
+          <li> Overview: representative features only </li>
+          <li> Full: all available features </li>
+        </ul> `}
+        >
+          <span className={css('icon', 'icon-common')} data-icon="&#xf059;" />
+        </Tooltip>
+      </div>
+      <div className={css('view-mode-checkboxes')}>
+        <div className={css('view-mode-checkbox')}>
+          <div>
+            <input
+              type="radio"
+              name="featureDisplay"
+              value="overview"
+              checked={!showMore}
+              className={css('no-margin')}
+              onChange={() => handleClick(false)}
+            />
+          </div>
+          <div className={css('checkbox-label')}>Summary</div>
+        </div>
+        <div className={css('view-mode-checkbox')}>
+          <div>
+            <input
+              type="radio"
+              name="featureDisplay"
+              value="overview"
+              checked={showMore}
+              className={css('no-margin')}
+              onChange={() => handleClick(true)}
+            />
+          </div>
+          <div className={css('checkbox-label')}>Full</div>
+        </div>
+      </div>
     </div>
   );
 };

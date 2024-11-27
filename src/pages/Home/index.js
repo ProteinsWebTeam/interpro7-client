@@ -14,7 +14,7 @@ import CurrentVersion from 'components/home/CurrentVersion';
 import GeneralWarning from 'components/home/GeneralWarning';
 import EBISurvey from 'components/home/EBISurvey';
 import InterProGraphicAnim from 'components/home/InterProGraphicAnim';
-import { PrintedInterPro2022 } from 'components/Help/Publication';
+import { InterProCitation } from 'components/Help/Publication';
 import Tip from 'components/Tip';
 import Toast from 'components/Toast/Toast';
 
@@ -164,14 +164,10 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
 );
 
 const CitingInterPro = () => (
-  <details className={f('citing-details')} open>
-    <summary>Citing InterPro</summary>
-    <div>
-      If you find InterPro useful, please cite the reference that describes this
-      work:
-      <PrintedInterPro2022 />
-    </div>
-  </details>
+  <p className={f('cite')}>
+    If you use InterPro, please cite our latest publication:
+    <InterProCitation />
+  </p>
 );
 
 const description = `

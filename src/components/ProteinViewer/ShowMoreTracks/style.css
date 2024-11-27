@@ -1,3 +1,34 @@
-.showmore-btn {
-  margin: 0;
+.view-mode-option-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 0.5rem;
+  margin-left: 0.7rem;
+  gap: 15px;
+}
+
+.view-mode-checkboxes {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.view-mode-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.no-margin {
+  margin: 0px;
+  padding: 0px;
+}
+
+.view-mode-option-label {
+  font-size: 1rem;
+}
+
+.checkbox-label {
+  margin-top: 1px;
+  font-size: 0.95rem;
 }

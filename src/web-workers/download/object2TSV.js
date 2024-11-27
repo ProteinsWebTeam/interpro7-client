@@ -143,21 +143,6 @@ export const columns /*: {
     { name: 'Number of Entries', selector: 'extra_fields.counters.entries' },
     { name: 'Number of Proteins', selector: 'extra_fields.counters.proteins' },
   ],
-  genome3d: [
-    { name: 'Protein', selector: 'accession' },
-    { name: 'Description', selector: 'tooltipContent' },
-    { name: 'Evidence Code', selector: 'metadata.evidences.code' },
-    {
-      name: 'Evidence Source name',
-      selector: 'metadata.evidences.source.name',
-    },
-    { name: 'Evidence Source url', selector: 'metadata.evidences.source.url' },
-    {
-      name: 'Locations',
-      selector: 'locations',
-      serializer: locationsToString,
-    },
-  ],
   ebisearch: [
     { name: 'Accession', selector: 'id' },
     { name: 'Name', selector: 'fields.name[0]' },

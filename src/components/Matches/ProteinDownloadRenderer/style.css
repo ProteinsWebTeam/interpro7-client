@@ -17,10 +17,15 @@
   opacity: 0.8;
 }
 
+.view-link {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
 body:global(.interpro) .view-link {
   font-size: 160%;
   border: none;
-  padding: 0.3em;
 
   &:hover {
     text-decoration: none;
@@ -28,4 +33,8 @@ body:global(.interpro) .view-link {
       text-decoration: none;
     }
   }
+}
+
+.match-proteins-link {
+  font-size: 14px;
 }

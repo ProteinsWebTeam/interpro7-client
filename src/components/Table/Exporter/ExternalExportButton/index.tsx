@@ -63,8 +63,8 @@ const ExternalExportButton = ({ url, type, search, subpath }: Props) => {
               <div
                 className={css(
                   'icon',
-                  'icon-common',
-                  `icon-${type === 'api' ? 'globe' : 'code'}`,
+                  `icon-${type === 'api' ? 'generic' : 'common'}`,
+                  `icon-${type === 'api' ? 'news' : 'code'}`,
                 )}
               ></div>
             </div>

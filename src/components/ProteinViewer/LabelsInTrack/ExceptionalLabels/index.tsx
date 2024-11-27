@@ -3,10 +3,7 @@ import React from 'react';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import Link from 'components/generic/Link';
 
-import {
-  Genome3dLink,
-  AlphafoldLink,
-} from 'components/ExtLink/patternLinkWrapper';
+import { AlphafoldLink } from 'components/ExtLink/patternLinkWrapper';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { FunFamLink } from 'subPages/Subfamilies';
@@ -175,24 +172,19 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
       </Tooltip>
     );
   }
-  if (entry.accession && entry.accession.startsWith('G3D:')) {
-    return isPrinting ? (
-      <span>Genome3D: {entry.source_database} </span>
-    ) : (
-      <Genome3dLink id={entry.protein || ''}>
-        Genome3D: [{entry.type}] {entry.source_database}
-      </Genome3dLink>
-    );
-  }
+
   if (entry.accession && entry.accession.startsWith('REPEAT:')) {
     return isPrinting ? (
-      <span>RepeatsDB consensus</span>
+      <span>RepeatsDB</span>
     ) : (
       <Link
-        href={`https://repeatsdb.bio.unipd.it/protein/${entry.protein}`}
+        href={`https://repeatsdb.org/annotations/source/AlphaFoldDB/structure/${
+          entry.accession.split(':')[1]
+        }/chain/A`}
         target="_blank"
+        className={css('ext')}
       >
-        RepeatsDB consensus
+        RepeatsDB
       </Link>
     );
   }
