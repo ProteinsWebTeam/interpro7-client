@@ -329,6 +329,12 @@ export const ProteinViewer = ({
                     );
                   }
 
+                  // Handle camel case for AlphaFold without touching the logic (all in lower case) behind
+                  // hide categories and tracks' names: they're used for much more than display purposes.
+                  const displayType = type.includes('alphafold')
+                    ? 'AlphaFold Confidence'
+                    : type;
+
                   // Show only the main tracks unless button "Show more" is clicked
                   let hideDiv: string = '';
                   if (!showMore && !mainTracks.includes(type)) {
@@ -367,7 +373,7 @@ export const ProteinViewer = ({
                                 : 'icon-caret-down',
                             )}
                           />{' '}
-                          {type}
+                          {displayType}
                         </button>
                       </header>
                       {component && (

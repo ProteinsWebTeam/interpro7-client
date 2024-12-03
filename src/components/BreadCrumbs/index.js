@@ -201,7 +201,13 @@ const BreadCrumbForEntityDetail = (
     filters = [],
   } /*: {location: Location, detail?: string, filters: Array<string>} */,
 ) => {
-  const detailToRender = !filters.length && !detail ? ' Overview' : detail;
+  let detailToRender = !filters.length && !detail ? ' Overview' : detail;
+
+  // Handle camel case for AlphaFold
+  detailToRender = detailToRender.includes('alphafold')
+    ? 'AlphaFold'
+    : detailToRender;
+
   return (
     <section className={f('detail')}>
       {detailToRender && (
@@ -299,7 +305,7 @@ const BreadCrumbsForBrowse = ({ location } /*: {location: Location} */) => {
               },
             }}
           >
-            {accession}{' '}
+            {accession}
           </BreadCrumb>
         )}
       </section>
