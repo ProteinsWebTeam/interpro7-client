@@ -191,6 +191,30 @@ export const ProteinViewer = ({
     ],
   });
 
+  const typeNameToSectionName: Record<string, string> = {
+    'alphafold confidence': 'AlphaFold Confidence',
+    families: 'Families',
+    domains: 'Domains',
+    'pathogenic and likely pathogenic variants':
+      'Pathogenic and Likely Pathogenic Variants',
+    'intrinsically disordered regions': 'Intrinsically Disordered Regions',
+    'spurious proteins': 'Spurious Proteins',
+    'conserved residues': 'Conserved Residues',
+    unintegrated: 'Unintegrated',
+    'other features': 'Other Features',
+    'other residues': 'Other Residues',
+    'conserved site': 'Conserved Site',
+    'active site': 'Active Site',
+    'binding site': 'Binding Site',
+    PTM: 'PTMs',
+    'match conservation': 'Match Conservation',
+    'coiled-coils, signal peptides, transmembrane regions':
+      'Coiled-coils, Signal Peptides and Transmembrane Regions',
+    'short linear motifs': 'Short Linear Motifs',
+    'pfam-n': 'Pfam-N',
+    funfam: 'FunFam',
+  };
+
   useEffect(() => {
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
@@ -329,11 +353,9 @@ export const ProteinViewer = ({
                     );
                   }
 
-                  // Handle camel case for AlphaFold without touching the logic (all in lower case) behind
-                  // hide categories and tracks' names: they're used for much more than display purposes.
-                  const displayType = type.includes('alphafold')
-                    ? 'AlphaFold Confidence'
-                    : type;
+                  // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
+                  // This dict is used to go from type to section name
+                  const sectionName = typeNameToSectionName[type];
 
                   // Show only the main tracks unless button "Show more" is clicked
                   let hideDiv: string = '';
@@ -373,7 +395,7 @@ export const ProteinViewer = ({
                                 : 'icon-caret-down',
                             )}
                           />{' '}
-                          {displayType}
+                          {sectionName}
                         </button>
                       </header>
                       {component && (
