@@ -199,6 +199,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
               openTooltip(
                 detail.target,
                 <ProtVistaPopup
+                  sequence={sequence || ''}
                   detail={detail as unknown as PopupDetail}
                   sourceDatabase={sourceDatabase}
                   currentLocation={customLocation}
