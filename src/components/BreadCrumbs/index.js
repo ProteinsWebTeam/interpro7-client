@@ -305,7 +305,7 @@ const BreadCrumbsForBrowse = ({ location } /*: {location: Location} */) => {
               },
             }}
           >
-            {accession}
+            {accession}{' '}
           </BreadCrumb>
         )}
       </section>
