@@ -20,26 +20,18 @@ export type PopupDetail = (
   type?: string;
 };
 type Props = {
-  sequence?: string;
   sourceDatabase: string;
   currentLocation: InterProLocation;
   detail: PopupDetail;
 };
 
-const ProtVistaPopup = ({
-  sequence,
-  detail,
-  sourceDatabase,
-  currentLocation,
-}: Props) => {
+const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   // comes from PTMTrack
-  if ((detail as PTMDetail)?.feature?.type == 'ptm') {
-    return (
-      <ProtVistaPTMPopup
-        sequence={sequence || ''}
-        detail={detail as PTMDetail}
-      />
-    );
+  if (
+    (detail as PTMDetail)?.feature?.type == 'ptm' &&
+    !(detail as PTMDetail).feature?.accession?.startsWith('IPR')
+  ) {
+    return <ProtVistaPTMPopup detail={detail as PTMDetail} />;
   }
 
   // comes from the conservation track

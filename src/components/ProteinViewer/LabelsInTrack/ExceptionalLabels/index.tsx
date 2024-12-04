@@ -35,7 +35,9 @@ const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (
-    EXCEPTIONAL_TYPES.includes(entry.type || '') ||
+    // Exceptional types coming from InterPro (e.g PTMs), should not result in an ExceptionalLabel.
+    (EXCEPTIONAL_TYPES.includes(entry.type || '') &&
+      entry.source_database !== 'interpro') ||
     NOT_MEMBER_DBS.has(entry.source_database || '') ||
     EXCEPTIONAL_PREFIXES.some((prefix) => entry.accession.startsWith(prefix))
   );
