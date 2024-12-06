@@ -223,7 +223,7 @@ const BreadCrumbForEntityDetail = ({
   detail,
   filters = [],
 }: BreadCrumbForEntityDetailProps) => {
-  let detailToRender = !filters.length && !detail ? ' Overview' : detail;
+  let detailToRender = filters.length > 0 || detail ? detail : ' Overview';
 
   // Handle camel case for AlphaFold
   detailToRender =
