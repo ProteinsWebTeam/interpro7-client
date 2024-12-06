@@ -395,31 +395,36 @@ export const ProteinViewer = ({
                   }
 
                   // Transform PTM data to track-like data
-                  if (type == 'PTM') {
+                  if (type == 'ptm') {
                     const ptmFragmentsGroupedByModification: {
                       [type: string]: PTMFragment[];
                     } = {};
 
-                    entries.map((entry) => {
-                      const fragments = ptmFeaturesFragments(
-                        (entry.data as PTMData).features,
-                      );
-                      fragments.map((fragment) => {
-                        if (
-                          ptmFragmentsGroupedByModification[
-                            fragment.ptm_type as string
-                          ]
-                        ) {
-                          ptmFragmentsGroupedByModification[
-                            fragment.ptm_type as string
-                          ].push(fragment);
-                        } else {
-                          ptmFragmentsGroupedByModification[
-                            fragment.ptm_type as string
-                          ] = [fragment];
-                        }
+                    // PTMs coming from APIs
+                    entries
+                      .filter(
+                        (entry) => entry.source_database === 'proteinsAPI',
+                      )
+                      .map((entry) => {
+                        const fragments = ptmFeaturesFragments(
+                          (entry.data as PTMData).features,
+                        );
+                        fragments.map((fragment) => {
+                          if (
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ]
+                          ) {
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ].push(fragment);
+                          } else {
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ] = [fragment];
+                          }
+                        });
                       });
-                    });
 
                     const ptmsEntriesGroupedByModification: ExtendedFeature[] =
                       [];
@@ -439,7 +444,12 @@ export const ProteinViewer = ({
                       },
                     );
 
-                    entries = ptmsEntriesGroupedByModification;
+                    // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
+                    entries = ptmsEntriesGroupedByModification.concat(
+                      entries.filter(
+                        (entry) => entry.source_database === 'interpro',
+                      ),
+                    );
                   }
 
                   return (

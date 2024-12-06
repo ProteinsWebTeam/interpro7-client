@@ -250,8 +250,8 @@ export const addPTMTrack = (
   tracks: ProteinViewerDataObject,
 ) => {
   if (proteomicsPayload?.features?.length) {
-    tracks['PTM'] = [];
-    tracks['PTM'][0] = {
+    tracks['ptm'] = [];
+    tracks['ptm'][0] = {
       accession: `ptm_${protein}`,
       data: proteomicsPayload,
       type: 'ptm',
