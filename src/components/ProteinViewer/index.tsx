@@ -90,6 +90,30 @@ export type ExtendedFeature = Feature & {
   warnings?: Array<string>;
 };
 
+type PTM = {
+  position: number;
+  name: string;
+  sources: string[];
+};
+
+type PTMFeature = {
+  begin: string;
+  end: string;
+  peptide: string;
+  ptms: PTM[];
+};
+
+type PTMData = {
+  accession: string;
+  features: PTMFeature[];
+};
+
+export type PTMFragment = {
+  [annotation: string]: unknown;
+  start: number;
+  end: number;
+};
+
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
@@ -238,6 +262,42 @@ export const ProteinViewer = ({
     }
   };
 
+  const residuesToLocations = (
+    residues: Residue[] | undefined,
+  ): ExtendedFeatureLocation[] => {
+    const newLocations: ExtendedFeatureLocation[] = [];
+    if (residues) {
+      residues.map((residue) => {
+        residue.locations.map((location) => {
+          newLocations.push(location);
+        });
+      });
+    }
+    return newLocations;
+  };
+
+  const ptmFeaturesFragments = (features: PTMFeature[]): PTMFragment[] => {
+    const ptmFragments: PTMFragment[] = [];
+
+    features.map((feature) => {
+      feature.ptms.map((ptm) => {
+        const ptmFragment: PTMFragment = {
+          start: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
+          end: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
+          relative_pos: ptm.position - 1,
+          ptm_type: ptm.name,
+          peptide: feature.peptide,
+          peptide_start: parseInt(feature.begin),
+          peptide_end: parseInt(feature.end),
+          source: ptm.sources.join(', '),
+        };
+
+        ptmFragments.push(ptmFragment);
+      });
+    });
+    return ptmFragments;
+  };
+
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
       {/* Tooltip */}
@@ -333,6 +393,64 @@ export const ProteinViewer = ({
                   let hideDiv: string = '';
                   if (!showMore && !mainTracks.includes(type)) {
                     hideDiv = 'none';
+                  }
+
+                  // Transform PTM data to track-like data
+                  if (type == 'ptm') {
+                    const ptmFragmentsGroupedByModification: {
+                      [type: string]: PTMFragment[];
+                    } = {};
+
+                    // PTMs coming from APIs
+                    entries
+                      .filter(
+                        (entry) => entry.source_database === 'proteinsAPI',
+                      )
+                      .map((entry) => {
+                        const fragments = ptmFeaturesFragments(
+                          (entry.data as PTMData).features,
+                        );
+                        fragments.map((fragment) => {
+                          if (
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ]
+                          ) {
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ].push(fragment);
+                          } else {
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ] = [fragment];
+                          }
+                        });
+                      });
+
+                    const ptmsEntriesGroupedByModification: ExtendedFeature[] =
+                      [];
+                    Object.entries(ptmFragmentsGroupedByModification).map(
+                      (ptmData) => {
+                        const modificationType: string = ptmData[0]; // Key
+                        const fragments: PTMFragment[] = ptmData[1]; // Key
+                        const newFeature: ExtendedFeature = {
+                          accession: protein.accession,
+                          name: modificationType,
+                          type: 'ptm',
+                          source_database: 'ptm',
+                          locations: [{ fragments: fragments }],
+                        };
+
+                        ptmsEntriesGroupedByModification.push(newFeature);
+                      },
+                    );
+
+                    // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
+                    entries = ptmsEntriesGroupedByModification.concat(
+                      entries.filter(
+                        (entry) => entry.source_database === 'interpro',
+                      ),
+                    );
                   }
 
                   return (

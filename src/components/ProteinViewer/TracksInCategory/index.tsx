@@ -55,6 +55,7 @@ const OTHER_TRACK_TYPES = [
   'Domain',
   'consensus majority',
   'variation',
+  'ptm',
 ];
 
 const MARGIN_CHANGE_TRACKS = [
@@ -383,7 +384,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           protein-api
                         />
                       )}
-                      {(['secondary_structure', 'residue'].includes(
+                      {(['secondary_structure', 'residue', 'ptm'].includes(
                         entry.type || '',
                       ) ||
                         isExternalSource) && (

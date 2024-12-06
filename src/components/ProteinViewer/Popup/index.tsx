@@ -6,6 +6,7 @@ import ProtVistaVariationPopup, { VariationDetail } from './Variation';
 import ProtVistaEntryPopup, { EntryDetail } from './Entry';
 import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
+import ProtVistaPTMPopup, { PTMDetail } from './PTM';
 import DisProtPopup, { DisProtDetail } from './DisProt';
 import { ExtendedFeature } from '..';
 
@@ -25,6 +26,14 @@ type Props = {
 };
 
 const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
+  // comes from PTMTrack
+  if (
+    (detail as PTMDetail)?.feature?.type == 'ptm' &&
+    !(detail as PTMDetail).feature?.accession?.startsWith('IPR')
+  ) {
+    return <ProtVistaPTMPopup detail={detail as PTMDetail} />;
+  }
+
   // comes from the conservation track
   if (detail.type === 'conservation') {
     return <ProtVistaConservationPopup detail={detail as ConservationDetail} />;
