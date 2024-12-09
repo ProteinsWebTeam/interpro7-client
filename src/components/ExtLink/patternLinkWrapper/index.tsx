@@ -19,6 +19,11 @@ UniProtLink.displayName = 'UniProtLink';
 export const DOILink = patternLinkWrapper('{id}');
 DOILink.displayName = 'DOILink';
 
+export const PTMLink = patternLinkWrapper(
+  'https://www.uniprot.org/uniprotkb/{id}/entry#ptm_processing',
+);
+PTMLink.displayName = 'PTMLink';
+
 export const AlphafoldLink = patternLinkWrapper(
   'https://alphafold.ebi.ac.uk/entry/{id}',
 );

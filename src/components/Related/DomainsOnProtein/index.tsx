@@ -360,7 +360,7 @@ const getVariationURL = createSelector(
   },
 );
 
-/*const getPTMPayload = createSelector(
+const getPTMPayload = createSelector(
   (state: GlobalState) => state.settings.proteinsAPI,
   (state: GlobalState) =>
     state.customLocation.description.protein?.accession || '',
@@ -369,18 +369,11 @@ const getVariationURL = createSelector(
       protocol,
       hostname,
       port,
-      pathname: root + 'proteomics-ptm/' + accession,
+      pathname: root + 'proteomics/ptm/' + accession,
     });
     return url;
   },
-);*/
-
-/* To add then PTM data is complete
-* as LoadDataParameters)(
-loadData<ProteinsAPIProteomics, 'Proteomics'>({
-  getUrl: getPTMPayload,
-  propNamespace: 'Proteomics', 
-} */
+);
 
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
@@ -399,12 +392,17 @@ export default loadExternalSources(
           getUrl: getExtraURL('residues'),
           propNamespace: 'Residues',
         } as LoadDataParameters)(
-          loadData<ProteinsAPIVariation, 'Variation'>({
-            getUrl: getVariationURL,
-            propNamespace: 'Variation',
+          loadData<ProteinsAPIProteomics, 'Proteomics'>({
+            getUrl: getPTMPayload,
+            propNamespace: 'Proteomics',
           } as LoadDataParameters)(
-            loadData(getRelatedEntriesURL as LoadDataParameters)(
-              DomainOnProteinWithoutData,
+            loadData<ProteinsAPIVariation, 'Variation'>({
+              getUrl: getVariationURL,
+              propNamespace: 'Variation',
+            } as LoadDataParameters)(
+              loadData(getRelatedEntriesURL as LoadDataParameters)(
+                DomainOnProteinWithoutData,
+              ),
             ),
           ),
         ),
