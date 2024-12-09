@@ -206,7 +206,7 @@ export const ProteinViewer = ({
     'conserved site': 'Conserved Site',
     'active site': 'Active Site',
     'binding site': 'Binding Site',
-    PTM: 'PTMs',
+    PTM: 'Post-translational Modifications',
     'match conservation': 'Match Conservation',
     'coiled-coils, signal peptides, transmembrane regions':
       'Coiled-coils, Signal Peptides and Transmembrane Regions',
