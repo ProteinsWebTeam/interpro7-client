@@ -9,6 +9,7 @@ import Switch from 'components/generic/Switch';
 import Redirect from 'components/generic/Redirect';
 import loadable from 'higherOrder/loadable';
 
+// $FlowFixMe
 import BreadCrumbs from 'components/BreadCrumbs';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
