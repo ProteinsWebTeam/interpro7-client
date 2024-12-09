@@ -15,40 +15,6 @@ import config from 'config';
 import cssBinder from 'styles/cssBinder';
 const css = cssBinder(fonts, styles);
 
-/*
-BreadCrumbs.propTypes = {
-location: locationType,
-hash: T.string,
-};
-BreadCrumb.propTypes = {
-to: T.oneOfType([T.func, T.object]),
-children: T.any,
-};
-
-BreadCrumbsForOther.propTypes = {
-other: T.arrayOcss(T.string),
-};
-    
-type SearchLocation = {
-type: string,
-value: string,
-accession: string,
-isFilter: boolean,
-order: number,
-}
-type Location = {
-main: {
-key: string,
-isFilter: boolean,
-order: number,
-},
-search: SearchLocation,
-result: SearchLocation,
-entry: Endpoint,
-other: Array<string>,
-}
-*/
-
 type OnlyLocationProps = {
   location: InterProDescription;
 };
@@ -231,7 +197,6 @@ const BreadCrumbForEntityDetail = ({
       ? 'AlphaFold'
       : detailToRender;
 
-  console.log(detailToRender);
   return (
     <section className={css('detail')}>
       {detailToRender && (
