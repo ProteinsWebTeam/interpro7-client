@@ -70,6 +70,7 @@ interface LoadedProps
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<ProteinsAPIProteomics, 'Proteomics'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
+    LoadDataProps<InterProNMatches, 'InterProNMatches'>,
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}
@@ -82,6 +83,7 @@ const DomainOnProteinWithoutData = ({
   dataConfidence,
   dataVariation,
   dataProteomics,
+  dataInterProNMatches,
   onMatchesLoaded,
   onFamiliesFound,
   children,
@@ -170,6 +172,14 @@ const DomainOnProteinWithoutData = ({
 
   if (dataResidues && !dataResidues.loading && dataResidues.payload) {
     mergeResidues(mergedData, dataResidues.payload);
+  }
+
+  if (
+    dataInterProNMatches &&
+    !dataInterProNMatches.loading &&
+    dataInterProNMatches.payload
+  ) {
+    // Handle InterPro-N matches
   }
 
   const getFeature = (
@@ -375,6 +385,29 @@ const getPTMPayload = createSelector(
   },
 );
 
+const getInterProNMatches = createSelector(
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.description.protein.accession,
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
+    const newDesc: InterProPartialDescription = {
+      main: { key: 'protein' },
+      protein: { db: 'uniprot', accession },
+    };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDesc),
+      query: {
+        interpro_n: '',
+      },
+    });
+  },
+);
+
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getAlphaFoldPredictionURL,
@@ -400,8 +433,13 @@ export default loadExternalSources(
               getUrl: getVariationURL,
               propNamespace: 'Variation',
             } as LoadDataParameters)(
-              loadData(getRelatedEntriesURL as LoadDataParameters)(
-                DomainOnProteinWithoutData,
+              loadData<InterProNMatches, 'InterProNMatches'>({
+                getUrl: getInterProNMatches,
+                propNamespace: 'InterProNMatches',
+              } as LoadDataParameters)(
+                loadData(getRelatedEntriesURL as LoadDataParameters)(
+                  DomainOnProteinWithoutData,
+                ),
               ),
             ),
           ),
