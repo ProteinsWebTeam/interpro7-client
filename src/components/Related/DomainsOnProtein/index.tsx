@@ -174,14 +174,6 @@ const DomainOnProteinWithoutData = ({
     mergeResidues(mergedData, dataResidues.payload);
   }
 
-  if (
-    dataInterProNMatches &&
-    !dataInterProNMatches.loading &&
-    dataInterProNMatches.payload
-  ) {
-    // Handle InterPro-N matches
-  }
-
   const getFeature = (
     filter: string | string[],
     mergedData: ProteinViewerDataObject,
@@ -268,6 +260,13 @@ const DomainOnProteinWithoutData = ({
       },
     );
 
+    if (
+      dataInterProNMatches &&
+      !dataInterProNMatches.loading &&
+      dataInterProNMatches.payload
+    ) {
+      mergedData['interpro_n'] = Object.values(dataInterProNMatches.payload);
+    }
     /* End of logic for splitting "other_features" */
   }
 
