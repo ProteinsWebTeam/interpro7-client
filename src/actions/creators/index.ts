@@ -100,7 +100,7 @@ export const changePageSize = (pageSize: number) =>
 export const changeSettingsRaw = (
   category: string,
   key: string,
-  value: string | number | boolean | LabelUISettings,
+  value: string | number | boolean | LabelUISettings | MatchTypeUISettings,
 ) =>
   ({
     type: types.CHANGE_SETTINGS,

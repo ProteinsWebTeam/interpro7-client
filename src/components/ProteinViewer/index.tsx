@@ -134,6 +134,7 @@ type Props = PropsWithChildren<{
 
   changeSettingsRaw: typeof changeSettingsRaw;
   showMoreSettings: boolean;
+  matchTypeSettings: MatchTypeUISettings;
 
   mainTracks: string[];
 
@@ -177,6 +178,7 @@ export const ProteinViewer = ({
   showConservationButton,
   changeSettingsRaw,
   showMoreSettings,
+  matchTypeSettings,
   handleConservationLoad,
   conservationError,
   dataBase,
@@ -480,6 +482,13 @@ export const ProteinViewer = ({
                       ),
                     );
                   }
+
+                  /*
+                    Filter HMMs and Deep Learning, 
+                    default choice on Options is HMMs only but
+                    data coming from both is always available because
+                    it's loaded before this component is rendered
+                  */
 
                   return (
                     <div

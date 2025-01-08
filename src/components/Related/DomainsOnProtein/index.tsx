@@ -53,6 +53,35 @@ export const groupByEntryType = (
   return groups;
 };
 
+// InterPro-N matches handling logic
+function mergeMatches(nType: any, normalMatches: any[], interproNMatches: any) {
+  const test = interproNMatches.reduce(
+    (merged: { locations: any[] }[], iMatch: any) => {
+      // Check for the ones already existing
+      for (let i = 0; i < normalMatches.length; i++) {
+        let newMatch: { locations: any[]; [key: string]: any } = {
+          ...normalMatches[i],
+        };
+        if (iMatch['accession'] === newMatch['accession']) {
+          if (newMatch['locations'] !== undefined) {
+            if (iMatch['accession'] == 'PTHR43245') {
+            }
+            newMatch['locations'] = [...iMatch['locations']];
+          } else if (newMatch['entry_protein_locations'] !== undefined) {
+            newMatch['entry_protein_locations'] = [...iMatch['locations']];
+          }
+          newMatch['accession'] = `${newMatch['accession']}:nMatch`;
+          merged.push(newMatch);
+          return merged;
+        }
+      }
+
+      return merged;
+    },
+    normalMatches,
+  );
+}
+
 type Props = PropsWithChildren<{
   mainData: { metadata: ProteinMetadata };
   onMatchesLoaded?: (
@@ -166,6 +195,18 @@ const DomainOnProteinWithoutData = ({
     representativeDomains: representativeDomains as Array<MinimalFeature>,
     representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
+
+  if (
+    dataInterProNMatches &&
+    !dataInterProNMatches.loading &&
+    dataInterProNMatches.payload
+  ) {
+    const data = Object.values(dataInterProNMatches.payload);
+    Object.entries(mergedData).map((track) => {
+      mergeMatches(track[0], track[1], data);
+    });
+  }
+
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
   }
@@ -259,15 +300,6 @@ const DomainOnProteinWithoutData = ({
         return !toRemove.some((item) => entry.source_database?.includes(item));
       },
     );
-
-    if (
-      dataInterProNMatches &&
-      !dataInterProNMatches.loading &&
-      dataInterProNMatches.payload
-    ) {
-      mergedData['interpro_n'] = Object.values(dataInterProNMatches.payload);
-    }
-    /* End of logic for splitting "other_features" */
   }
 
   if (

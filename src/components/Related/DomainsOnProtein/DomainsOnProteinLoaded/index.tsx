@@ -8,6 +8,7 @@ import {
   ExtendedFeatureLocation,
 } from 'components/ProteinViewer';
 import { sleep } from 'timing-functions';
+import { merge } from 'node_modules/@types/lodash';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -390,6 +391,7 @@ const DomainsOnProteinLoaded = ({
   let mainTracks: string[] = [];
   let hideCategories: Record<string, boolean> = {};
 
+  // InterPro Scan Search results
   if (protein.accession.startsWith('iprscan')) {
     const homologous_superfamily = sortedData.filter(
       (entry) => entry[0] == 'homologous superfamily',
