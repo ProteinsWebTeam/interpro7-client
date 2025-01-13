@@ -8,6 +8,7 @@ import React, {
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { changeSettingsRaw } from 'actions/creators';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
@@ -402,9 +403,29 @@ export const ProteinViewer = ({
                     entry.protein = protein.accession;
                   });
 
+                  /*
+                    - Filter HMMs and Deep Learning, 
+                    - Default choice on Options is HMMs only 
+                    - Data coming from both types is always available because it's loaded before this component is rendered
+                    - Exclude according to what's selected
+                  */
+
                   const LabelComponent = component?.component || 'span';
+
                   let representativeEntries: ExtendedFeature[] | null = null;
                   let nonRepresentativeEntries: ExtendedFeature[] | null = null;
+
+                  if (!matchTypeSettings['nn']) {
+                    entries = entries.filter(
+                      (entry) => !entry.accession.includes('nMatch'),
+                    );
+                  }
+
+                  if (!matchTypeSettings['hmm']) {
+                    entries = entries.filter((entry) =>
+                      entry.accession.includes('nMatch'),
+                    );
+                  }
 
                   if (type === 'domains' || type === 'families') {
                     representativeEntries = entries.filter(
@@ -482,13 +503,6 @@ export const ProteinViewer = ({
                       ),
                     );
                   }
-
-                  /*
-                    Filter HMMs and Deep Learning, 
-                    default choice on Options is HMMs only but
-                    data coming from both is always available because
-                    it's loaded before this component is rendered
-                  */
 
                   return (
                     <div
@@ -597,6 +611,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
   (ui) => ({
     showMoreSettings: ui.showMoreSettings,
+    matchTypeSettings: ui.matchTypeSettings,
   }),
 );
 

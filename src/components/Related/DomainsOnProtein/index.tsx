@@ -55,31 +55,26 @@ export const groupByEntryType = (
 
 // InterPro-N matches handling logic
 function mergeMatches(nType: any, normalMatches: any[], interproNMatches: any) {
-  const test = interproNMatches.reduce(
-    (merged: { locations: any[] }[], iMatch: any) => {
-      // Check for the ones already existing
-      for (let i = 0; i < normalMatches.length; i++) {
-        let newMatch: { locations: any[]; [key: string]: any } = {
-          ...normalMatches[i],
-        };
-        if (iMatch['accession'] === newMatch['accession']) {
-          if (newMatch['locations'] !== undefined) {
-            if (iMatch['accession'] == 'PTHR43245') {
-            }
-            newMatch['locations'] = [...iMatch['locations']];
-          } else if (newMatch['entry_protein_locations'] !== undefined) {
-            newMatch['entry_protein_locations'] = [...iMatch['locations']];
-          }
-          newMatch['accession'] = `${newMatch['accession']}:nMatch`;
-          merged.push(newMatch);
-          return merged;
+  interproNMatches.reduce((merged: { locations: any[] }[], iMatch: any) => {
+    // Check for the ones already existing
+    for (let i = 0; i < normalMatches.length; i++) {
+      let newMatch: { locations: any[]; [key: string]: any } = {
+        ...normalMatches[i],
+      };
+      if (iMatch['accession'] === newMatch['accession']) {
+        if (newMatch['locations'] !== undefined) {
+          newMatch['locations'] = [...iMatch['locations']];
+        } else if (newMatch['entry_protein_locations'] !== undefined) {
+          newMatch['entry_protein_locations'] = [...iMatch['locations']];
         }
+        newMatch['accession'] = `${newMatch['accession']}:nMatch`;
+        merged.push(newMatch);
+        return merged;
       }
+    }
 
-      return merged;
-    },
-    normalMatches,
-  );
+    return merged;
+  }, normalMatches);
 }
 
 type Props = PropsWithChildren<{

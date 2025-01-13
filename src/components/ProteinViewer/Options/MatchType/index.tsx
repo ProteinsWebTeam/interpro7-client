@@ -21,7 +21,6 @@ const matchMap: Array<[matchTypes, string]> = [
   ['hmm', 'InterPro'],
   ['nn', 'DeepMind'],
 ];
-
 const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
   const id = useId();
   const updateMatch = (evt: React.FormEvent) => {
@@ -42,28 +41,35 @@ const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
     <section>
       <ul className={css('nested-list', 'no-bullet')}>
         <header>Match Type</header>
-        {matchMap.map(([key, label]) => (
-          <li key={key}>
-            <div
-              className={css('vf-form__item', 'vf-form__item--checkbox')}
-              style={{
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <input
-                className="vf-form__checkbox"
-                type="checkbox"
-                onChange={updateMatch}
-                value={key}
-                checked={matchTypeSettings[key]}
-                id={`${id}-${key}`}
-              />
-              <label className={css('vf-form__label')} htmlFor={`${id}-${key}`}>
-                {label}
-              </label>
-            </div>
-          </li>
-        ))}
+        {matchMap.map(([key, label]) => {
+          return (
+            <>
+              <li key={key}>
+                <div
+                  className={css('vf-form__item', 'vf-form__item--checkbox')}
+                  style={{
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <input
+                    className="vf-form__checkbox"
+                    type="checkbox"
+                    onChange={updateMatch}
+                    value={key}
+                    checked={matchTypeSettings[key]}
+                    id={`${id}-${key}`}
+                  />
+                  <label
+                    className={css('vf-form__label')}
+                    htmlFor={`${id}-${key}`}
+                  >
+                    {label}
+                  </label>
+                </div>
+              </li>
+            </>
+          );
+        })}
       </ul>
     </section>
   );
