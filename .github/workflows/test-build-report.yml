@@ -21,29 +21,11 @@ jobs:
           npm run deploy:production
       
       - name: Upload Build Artifact
+        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: dist/ 
-
-      # - name: 📈 - Create Reports
-      #   run: |
-      #     npm run report
-      #   env:
-      #     LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-      # - name: 💾 Archive reports
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: reports
-      #     path: |
-      #       reports/
-      #       .lighthouseci/
-      # - name: 🧥‍ - Coveralls
-      #   uses: coverallsapp/github-action@master
-      #   continue-on-error: true
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     path-to-lcov: './reports/jest-coverage/lcov.info'
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
@@ -59,29 +41,52 @@ jobs:
           MSG_MINIMAL: Actions URL
 
   commit-artifact:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v4
-          with:
-            ref: dev_deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: dev_deploy
 
-        - name: Download Build Artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: build-artifact
-            path: dist/
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/
 
-        - name: Move Artifact
-          run: |
-            mkdir -p output
-            mv dist/* output/
+      - name: Move Artifact
+        run: |
+          BRANCH_NAME=$(echo "${GITHUB_REF##*/}")
+          mkdir -p $BRANCH_NAME
+          mv dist/* $BRANCH_NAME/
 
-        - name: Commit and Push Artifact
-          uses: stefanzweifel/git-auto-commit-action@v4
-          with:
-            commit_message: "Add build artifact"
-            branch: dev_deploy
-            file_pattern: output/ # Adjust to match the files or directories you want to commit
-            token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and Push Artifact
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Add build artifact for ${GITHUB_REF##*/}"
+          branch: dev_deploy
+          file_pattern: "${GITHUB_REF##*/}/" # Adjust to match the files or directories you want to commit
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+# - name: 📈 - Create Reports
+#   run: |
+#     npm run report
+#   env:
+#     LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+# - name: 💾 Archive reports
+#   uses: actions/upload-artifact@v4
+#   with:
+#     name: reports
+#     path: |
+#       reports/
+#       .lighthouseci/
+# - name: 🧥‍ - Coveralls
+#   uses: coverallsapp/github-action@master
+#   continue-on-error: true
+#   with:
+#     github-token: ${{ secrets.GITHUB_TOKEN }}
+#     path-to-lcov: './reports/jest-coverage/lcov.info'
