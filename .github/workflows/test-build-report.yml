@@ -48,7 +48,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          ref: dev_deploy
+          ref: deploy
 
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
@@ -67,10 +67,9 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Add build artifact for ${{ github.ref_name }}"
-          branch: dev_deploy
+          branch: deploy
           file_pattern: "${{ github.ref_name }}/" # Adjust to match the files or directories you want to commit
           token: ${{ secrets.GITHUB_TOKEN }}
-
 
 
 # - name: 📈 - Create Reports
