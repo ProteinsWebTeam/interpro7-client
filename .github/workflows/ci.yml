@@ -19,7 +19,7 @@ jobs:
         with:
           clean: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1 
+          fetch-depth: 0
 
       - name: Release 
         run: |
