@@ -26,16 +26,18 @@ jobs:
 
             source ~/miniforge3/etc/profile.d/conda.sh
             conda activate base
-            
-            # Release to dev if changes detected in the 'dev' folder
-            if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^dev/'; then
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
-              export VM_NAME="wp-np3-bd";
-            # Release to runner if changes detected in the 'runner' folder
-            elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^runner/'; then
-              echo "Runner changed"
-            # Release to master if changes detected in the 'master' folder
-            elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^master/'; then
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
-              export VM_NAME="wp-np3-bd";
-            fi
+            diff_result=$(git diff --name-only b117b061449e2f1b66c9baba00f120ecf0c9c50d 87c72ec928bb21c2937b6f41bc8b20d01f93ebda)
+            echo "$diff_result"
+
+            # # Release to dev if changes detected in the 'dev' folder
+            # if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^dev/'; then
+            #   export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
+            #   export VM_NAME="wp-np3-bd";
+            # # Release to runner if changes detected in the 'runner' folder
+            # elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^runner/'; then
+            #   echo "Runner changed"
+            # # Release to master if changes detected in the 'master' folder
+            # elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^master/'; then
+            #   export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
+            #   export VM_NAME="wp-np3-bd";
+            # fi
