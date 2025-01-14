@@ -1,0 +1,1 @@
+{"version":3,"file":"css/3322.854.css","mappings":"AAAA,kCACE,iBAAkB,CAClB,kBAMF,CAJE,wEACE,cAAe,CACf,gBACF,C","sources":["webpack://interpro7-client/./src/components/EBIFooter/styles.css"],"sourcesContent":[".vf-footer {\n  padding-left: 1rem;\n  padding-right: 1rem;\n\n  & .vf-list__item {\n    font-size: 16px;\n    line-height: 1.71;\n  }\n}\n"],"names":[],"sourceRoot":""}
