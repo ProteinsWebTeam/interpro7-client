@@ -1,0 +1,1 @@
+{"version":3,"file":"css/4693.e82.css","mappings":"AAAA,+BACE,yCAA0C,CAE1C,+BAAgC,CADhC,mBAEF,C","sources":["webpack://interpro7-client/./src/components/Accession/style.css"],"sourcesContent":[".tag-sqc {\n  background-color: var(--colors-other-main);\n  padding: 0.3rem 0.5rem;\n  color: var(--colors-light-title);\n}\n"],"names":[],"sourceRoot":""}
