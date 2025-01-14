@@ -24,7 +24,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: build_artifact/ 
+          path: dist/ 
 
       # - name: 📈 - Create Reports
       #   run: |
@@ -71,12 +71,12 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: build-artifact
-            path: build_artifact/
+            path: dist/
 
         - name: Move Artifact
           run: |
             mkdir -p output
-            mv build_artifact/* output/
+            mv dist/* output/
 
         - name: Commit and Push Artifact
           uses: stefanzweifel/git-auto-commit-action@v4
