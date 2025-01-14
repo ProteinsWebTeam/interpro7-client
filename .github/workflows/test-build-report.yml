@@ -58,9 +58,11 @@ jobs:
 
       - name: Move Artifact
         run: |
-          BRANCH_NAME=$(echo "${GITHUB_REF##*/}")
-          mkdir -p $BRANCH_NAME
-          mv dist/* $BRANCH_NAME/
+          BRANCH_NAME="${GITHUB_REF##*/}"
+          mkdir -p "$BRANCH_NAME"
+          mv dist/* "$BRANCH_NAME/"
+        shell: bash
+
 
       - name: Commit and Push Artifact
         uses: stefanzweifel/git-auto-commit-action@v4
