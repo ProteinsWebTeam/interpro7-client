@@ -75,12 +75,12 @@ jobs:
         - name: Move Artifact
           run: |
             mkdir -p output
-            mv build-artifact/* output/
+            mv dist/* output/
 
         - name: Commit and Push Artifact
           uses: stefanzweifel/git-auto-commit-action@v4
           with:
             commit_message: "Add build artifact"
-            branch: deploy_dev
+            branch: dev_deploy
             file_pattern: output/ # Adjust to match the files or directories you want to commit
             token: ${{ secrets.GITHUB_TOKEN }}
