@@ -33,7 +33,7 @@ jobs:
               export VM_NAME="wp-np3-bd";
             elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^runner/'; then
               export DEPLOY_BRANCH="runner"
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/runner/website/releases/";
+              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
             elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^master/'; then
               export DEPLOY_BRANCH="master"
