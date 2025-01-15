@@ -59,8 +59,8 @@ jobs:
       - name: Move Artifact
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
-          mkdir -p "$BRANCH_NAME"
-          rm -rf "$BRANCH_NAME/*"
+          rm -rf "$BRANCH_NAME"
+          mkdir "$BRANCH_NAME"
           mv dist/* "$BRANCH_NAME/"
         shell: bash
 
