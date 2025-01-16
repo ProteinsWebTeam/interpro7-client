@@ -12,7 +12,7 @@ jobs:
       - name: Create Temp File in Runner Folder
         run: |
           mkdir -p runner
-          TEMP_FILE="runner/temp_${{ github.ref_name }}10.txt"
+          TEMP_FILE="runner/temp_${{ github.ref_name }}11.txt"
           echo "Temporary file for ${{ github.ref_name }} branch" > $TEMP_FILE
 
       - name: Commit and Push Temp File
@@ -22,7 +22,7 @@ jobs:
           branch: deploy
           commit_user_name: ${{ github.actor }}
           commit_user_email: ${{ github.actor }}@users.noreply.github.com
-          file_pattern: "runner/temp_${{ github.ref_name }}10.txt"
+          file_pattern: "runner/temp_${{ github.ref_name }}11.txt"
           token: ${{ secrets.MY_TOKEN }}
 
 
