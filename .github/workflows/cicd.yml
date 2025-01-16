@@ -24,17 +24,20 @@ jobs:
             conda activate base
             export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 
+            commit_hash=$(git log -1 --pretty=format:"%H")
+            changed_files=$(git show --name-only --pretty="" $commit_hash)
+
             # Determine the deployment branch and set paths accordingly
-            if git diff --name-only ${{ github.event.before }} $(git rev-parse origin/deploy) | grep -q '^dev/'; then
+            if echo "$changed_files" | grep -q '^dev/'; then
               export DEPLOY_BRANCH="dev"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
-            elif git diff --name-only ${{ github.event.before }} $(git rev-parse origin/deploy) | grep -q '^runner/'; then
+            elif echo "$changed_files" | grep -q '^runner/'; then
               export DEPLOY_BRANCH="runner"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
               echo "Runner changed"
-            elif git diff --name-only ${{ github.event.before }} $(git rev-parse origin/deploy) | grep -q '^master/'; then
+            elif echo "$changed_files" | grep -q '^master/'; then
               export DEPLOY_BRANCH="master"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
               export VM_NAME="wp-np3-bd";
