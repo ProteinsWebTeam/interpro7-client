@@ -15,8 +15,8 @@ jobs:
         with:
           clean: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 1  # Only fetch the latest commit
-          ref: refs/heads/deploy  # Specify the deploy branch
+          fetch-depth: 0
+          ref: deploy
 
       - name: Release 
         run: |
