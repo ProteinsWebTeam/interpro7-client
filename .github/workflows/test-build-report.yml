@@ -23,7 +23,7 @@ jobs:
           git commit -m "Add temp file for ${{ github.ref_name }}"
           git push origin deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
