@@ -2,6 +2,10 @@ name: test_and_build
 
 on: [push, pull_request]
 
+name: test_and_build
+
+on: [push, pull_request]
+
 jobs:
   quick-push:
     runs-on: ubuntu-latest
@@ -10,9 +14,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Create Temp File
+      - name: Create Temp File in Runner Folder
         run: |
-          TEMP_FILE="temp_${{ github.ref_name }}.txt"
+          mkdir -p runner
+          TEMP_FILE="runner/temp_${{ github.ref_name }}.txt"
           echo "Temporary file for ${{ github.ref_name }} branch" > $TEMP_FILE
 
       - name: Commit and Push Temp File
@@ -20,8 +25,29 @@ jobs:
         with:
           commit_message: "Add temp file for ${{ github.ref_name }}"
           branch: deploy
-          file_pattern: "temp_${{ github.ref_name }}.txt"
+          file_pattern: "runner/temp_${{ github.ref_name }}.txt"
           token: ${{ secrets.MY_TOKEN }}
+
+
+# - name: 📈 - Create Reports
+#   run: |
+#     npm run report
+#   env:
+#     LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+# - name: 💾 Archive reports
+#   uses: actions/upload-artifact@v4
+#   with:
+#     name: reports
+#     path: |
+#       reports/
+#       .lighthouseci/
+# - name: 🧥‍ - Coveralls
+#   uses: coverallsapp/github-action@master
+#   continue-on-error: true
+#   with:
+#     github-token: ${{ secrets.GITHUB_TOKEN }}
+#     path-to-lcov: './reports/jest-coverage/lcov.info'
+
 
 
 
