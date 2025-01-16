@@ -1,11 +1,11 @@
 name: CI Pipeline
 
 on:
-  push:
+  workflow_run:
+    workflows: ["test_and_build"]
+    types: [completed]
     branches:
-      - deploy  # Trigger only for the deploy branch
-    paths:
-      - 'runner/**'
+      - 'runner'
 
 jobs:
   build:
