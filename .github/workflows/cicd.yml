@@ -18,32 +18,23 @@ jobs:
           fetch-depth: 0  # Fetch the full history to get the commit history of the deploy branch
           ref: deploy
 
-      - name: Get head commit of deploy branch
-        run: |
-          # Get the latest commit SHA of the deploy branch
-          DEPLOY_HEAD_SHA=$(git rev-parse origin/deploy)
-          echo "DEPLOY_HEAD_SHA=${DEPLOY_HEAD_SHA}" >> $GITHUB_ENV 
-
       - name: Release 
         run: |
             source ~/miniforge3/etc/profile.d/conda.sh
             conda activate base
             export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 
-            # Get the commit SHA of the previous commit from the workflow event
-            PREVIOUS_COMMIT_SHA="${{ github.event.before }}"
-
             # Determine the deployment branch and set paths accordingly
-            if git diff --name-only $PREVIOUS_COMMIT_SHA $DEPLOY_HEAD_SHA | grep -q '^dev/'; then
+            if git diff --name-only ${{ github.event.before }} $(git rev-parse origin/deploy) | grep -q '^dev/'; then
               export DEPLOY_BRANCH="dev"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
-            elif git diff --name-only $PREVIOUS_COMMIT_SHA $DEPLOY_HEAD_SHA | grep -q '^runner/'; then
+            elif git diff --name-only ${{ github.event.before }} $(git rev-parse origin/deploy) | grep -q '^runner/'; then
               export DEPLOY_BRANCH="runner"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
               echo "Runner changed"
-            elif git diff --name-only $PREVIOUS_COMMIT_SHA $DEPLOY_HEAD_SHA | grep -q '^master/'; then
+            elif git diff --name-only ${{ github.event.before }} $(git rev-parse origin/deploy) | grep -q '^master/'; then
               export DEPLOY_BRANCH="master"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
               export VM_NAME="wp-np3-bd";
