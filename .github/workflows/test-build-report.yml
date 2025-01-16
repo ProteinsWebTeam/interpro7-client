@@ -14,6 +14,7 @@ jobs:
         run: |
           mkdir -p runner
           TEMP_FILE="runner/temp_${{ github.ref_name }}.txt"
+          rm -f $TEMP_FILE
           echo "Temporary file for ${{ github.ref_name }} branch" > $TEMP_FILE
 
       - name: Commit and Push Temp File as User
