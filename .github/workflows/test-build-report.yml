@@ -1,4 +1,5 @@
 name: test_and_build
+
 on: [push, pull_request]
 
 jobs:
@@ -16,14 +17,15 @@ jobs:
           echo "Temporary file for ${{ github.ref_name }} branch" > $TEMP_FILE
 
       - name: Commit and Push Temp File as User
-        run: |
-          git config user.name "${{ secrets.COMMIT_USER_NAME }}"
-          git config user.email "${{ secrets.COMMIT_USER_EMAIL }}"
-          git add runner/temp_${{ github.ref_name }}.txt
-          git commit -m "Add temp file for ${{ github.ref_name }}"
-          git push origin deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Add temp file for ${{ github.ref_name }}"
+          branch: deploy
+          file_pattern: "runner/temp_${{ github.ref_name }}.txt"
+          token: ${{ secrets.MY_TOKEN }}
+          commit_user_name: ${{ secrets.COMMIT_USER_NAME }}
+          commit_user_email: ${{ secrets.COMMIT_USER_EMAIL }}
+
 
 
 
