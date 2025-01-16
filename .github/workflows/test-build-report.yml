@@ -46,9 +46,6 @@ jobs:
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/runner'
     steps:
       
-      - env:
-        GH_TOKEN: ${{ secrets.MY_TOKEN }}
-
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
@@ -74,7 +71,7 @@ jobs:
           commit_message: "Add build artifact for ${{ github.ref_name }}"
           branch: deploy
           file_pattern: "${{ github.ref_name }}/" # Adjust to match the files or directories you want to commit
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MY_TOKEN }}
 
 
 # - name: 📈 - Create Reports
