@@ -70,6 +70,7 @@ jobs:
           commit_message: "Add build artifact for ${{ github.ref_name }}"
           branch: deploy
           commit_user_name: ${{ secrets.COMMIT_USER_NAME }}
+          commit_user_email: ${{ secrets.COMMIT_USER_EMAIL }}
           file_pattern: "${{ github.ref_name }}/" # Adjust to match the files or directories you want to commit
           token: ${{ secrets.GITHUB_TOKEN }}
 
