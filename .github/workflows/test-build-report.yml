@@ -12,18 +12,16 @@ jobs:
       - name: Create Temp File in Runner Folder
         run: |
           mkdir -p runner
-          TEMP_FILE="runner/temp_${{ github.ref_name }}2.txt"
+          TEMP_FILE="runner/temp_${{ github.ref_name }}3.txt"
           echo "Temporary file for ${{ github.ref_name }} branch" > $TEMP_FILE
 
-      - name: Commit and Push Temp File as User
-        run: |
-          git config user.name "${{ secrets.COMMIT_USER_NAME }}"
-          git config user.email "${{ secrets.COMMIT_USER_EMAIL }}"
-          git add runner/temp_${{ github.ref_name }}2.txt
-          git commit -m "Add temp file for ${{ github.ref_name }}"
-          git push origin deploy
-        token: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Commit and Push Temp File
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Add temp file for ${{ github.ref_name }}"
+          branch: deploy
+          file_pattern: "runner/temp_${{ github.ref_name }}3.txt"
+          token: ${{ secrets.MY_TOKEN }}
 
 
 # - name: 📈 - Create Reports
