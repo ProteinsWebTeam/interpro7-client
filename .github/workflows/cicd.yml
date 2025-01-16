@@ -1,22 +1,22 @@
 name: CI Pipeline
 
 on:
-  push:
-    branches:
-      - deploy  # Trigger only for the deploy branch
-    paths:
-      - 'runner/**'
+  workflow_run:
+    workflows: [test_and_build]
+    types: [completed]
+    branches: [runner]
 
 jobs:
   build:
     runs-on: self-hosted 
     steps:
-      - name: Checkout code
+      - name: Checkout deploy branch
         uses: actions/checkout@v3
         with:
           clean: false
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+          fetch-depth: 1  # Only fetch the latest commit
+          ref: refs/heads/deploy  # Specify the deploy branch
 
       - name: Release 
         run: |
