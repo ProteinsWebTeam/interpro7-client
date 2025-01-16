@@ -3,75 +3,26 @@ name: test_and_build
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '19.2.0'
-          cache: 'npm'
-      - name: 🔧 - Install
-        run: |
-          cp config.yml.example config.yml
-          npm i -g npm@9.3.1
-          npm ci
-      - name: 🧪 | 🏗 - Test and Build
-        run: |
-          npm run deploy:production
-      
-      - name: Upload Build Artifact
-        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/runner'
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: dist/ 
-
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2
-        continue-on-error: true
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
-        env:
-          SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
-          SLACK_USERNAME: 'Github Actions'
-          SLACK_ICON_EMOJI: ':octocat:'
-          SLACK_TITLE: 'CI results in GitHub Actions'
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: '#interpro7'
-          MSG_MINIMAL: Actions URL
-
-  commit-artifact:
-    needs: build
+  quick-push:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/runner'
     steps:
-      
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          ref: deploy
 
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifact
-          path: dist/
-
-      - name: Move Artifact
+      - name: Create Temp File
         run: |
-          BRANCH_NAME="${{ github.ref_name }}"
-          rm -rf "$BRANCH_NAME"
-          mkdir "$BRANCH_NAME"
-          mv dist/* "$BRANCH_NAME/"
-        shell: bash
+          TEMP_FILE="temp_${{ github.ref_name }}.txt"
+          echo "Temporary file for ${{ github.ref_name }} branch" > $TEMP_FILE
 
-      - name: Commit and Push Artifact
+      - name: Commit and Push Temp File
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "Add build artifact for ${{ github.ref_name }}"
+          commit_message: "Add temp file for ${{ github.ref_name }}"
           branch: deploy
-          file_pattern: "${{ github.ref_name }}/" # Adjust to match the files or directories you want to commit
+          file_pattern: "temp_${{ github.ref_name }}.txt"
           token: ${{ secrets.MY_TOKEN }}
+
 
 
 # - name: 📈 - Create Reports
