@@ -5,9 +5,7 @@ on:
     branches:
       - deploy  # Trigger only for the deploy branch
     paths:
-      - 'dev/**'  # Changes in the 'dev' folder
-      - 'runner/**'  # Changes in the 'runner' folder
-      - 'master/**'  # Changes in the 'master' folder
+      - '**'
 
 jobs:
   build:
