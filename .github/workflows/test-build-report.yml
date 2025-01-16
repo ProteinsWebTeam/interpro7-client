@@ -64,6 +64,11 @@ jobs:
           mv dist/* "$BRANCH_NAME/"
         shell: bash
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ secrets.COMMIT_USER_NAME }}"
+          git config --global user.email "${{ secrets.COMMIT_USER_EMAIL }}"
+
       - name: Commit and Push Artifact
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
