@@ -45,6 +45,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/runner'
     steps:
+      
+      - env:
+        GH_TOKEN: ${{ secrets.MY_TOKEN }}
+
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
@@ -64,18 +68,11 @@ jobs:
           mv dist/* "$BRANCH_NAME/"
         shell: bash
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "${{ secrets.COMMIT_USER_NAME }}"
-          git config --global user.email "${{ secrets.COMMIT_USER_EMAIL }}"
-
       - name: Commit and Push Artifact
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Add build artifact for ${{ github.ref_name }}"
           branch: deploy
-          commit_user_name: ${{ secrets.COMMIT_USER_NAME }}
-          commit_user_email: ${{ secrets.COMMIT_USER_EMAIL }}
           file_pattern: "${{ github.ref_name }}/" # Adjust to match the files or directories you want to commit
           token: ${{ secrets.GITHUB_TOKEN }}
 
