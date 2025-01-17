@@ -166,7 +166,7 @@ type UISettings = {
   colorDomainsBy: 'ACCESSION' | 'MEMBER_DB' | 'DOMAIN_RELATIONSHIP';
   showMoreSettings: boolean;
   labelContent: LabelUISettings;
-  matchTypeSettings: MatchTypeUISettings;
+  matchTypeSettings: 'hmm' | 'dl' | 'hmm_and_dl';
   structureViewer: boolean;
   shouldHighlight: boolean;
   idaAccessionDB: string;
@@ -178,10 +178,7 @@ type LabelUISettings = {
   short: boolean;
 };
 
-type MatchTypeUISettings = {
-  hmm: boolean;
-  nn: boolean;
-};
+type MatchTypeUISettings = 'hmm' | 'dl' | 'hmm_and_dl';
 
 type CacheSettings = {
   enabled: boolean;

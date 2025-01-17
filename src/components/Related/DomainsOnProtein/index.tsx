@@ -68,7 +68,7 @@ function mergeMatches(nType: any, normalMatches: any[], interproNMatches: any) {
           newMatch['entry_protein_locations'] = [...iMatch['locations']];
         }
         newMatch['accession'] = `${newMatch['accession']}:nMatch`;
-        merged.push(newMatch);
+        merged.splice(i + 1, 0, newMatch);
         return merged;
       }
     }

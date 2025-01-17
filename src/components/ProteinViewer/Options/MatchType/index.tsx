@@ -16,31 +16,27 @@ type Props = {
   changeSettingsRaw: typeof changeSettingsRaw;
 };
 
-type matchTypes = 'hmm' | 'nn';
+type matchTypes = 'hmm' | 'dl' | 'hmm_and_dl';
 const matchMap: Array<[matchTypes, string]> = [
   ['hmm', 'InterPro'],
-  ['nn', 'DeepMind'],
+  ['dl', 'IntePro-N'],
+  ['hmm_and_dl', 'InterPro & IntePro-N'],
 ];
 const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
   const id = useId();
   const updateMatch = (evt: React.FormEvent) => {
-    const opt = (evt.target as HTMLInputElement).value;
-    if (['hmm', 'nn'].includes(opt)) {
-      const next = {
-        ...matchTypeSettings,
-        [opt]: !matchTypeSettings?.[opt as matchTypes],
-      };
-      if (!next.hmm && !next.nn) {
-        next.hmm = true;
-      }
-      changeSettingsRaw('ui', 'matchTypeSettings', next);
-    }
+    if (changeSettingsRaw)
+      changeSettingsRaw(
+        'ui',
+        'matchTypeSettings',
+        (evt.target as HTMLInputElement)?.value,
+      );
   };
 
   return (
     <section>
       <ul className={css('nested-list', 'no-bullet')}>
-        <header>Match Type</header>
+        <header>Display matches from </header>
         {matchMap.map(([key, label]) => {
           return (
             <>
@@ -52,11 +48,11 @@ const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
                   }}
                 >
                   <input
-                    className="vf-form__checkbox"
-                    type="checkbox"
+                    className="vf-form__radio"
+                    type="radio"
                     onChange={updateMatch}
                     value={key}
-                    checked={matchTypeSettings[key]}
+                    checked={key == matchTypeSettings}
                     id={`${id}-${key}`}
                   />
                   <label
