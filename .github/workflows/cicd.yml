@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: self-hosted 
     steps:
+      - name: Clean up repo
+      - run: | 
+            rm -rf ~/release-procedures/v2/frontend-runner/_work/interpro7-client
+
       - name: Checkout deploy branch
         uses: actions/checkout@v3
         with:
