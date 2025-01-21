@@ -197,9 +197,6 @@ const SummarySet = ({ data, loading }: Props) => {
         description={metadata?.description}
       />
       <SetLiterature literature={metadata?.literature} />
-      <div className={css('vf-stack', 'vf-stack-400')}>
-        <ClanViewer data={data} loading={loading} />
-      </div>
       {hasWiki && (
         <section>
           <h4>Wikipedia</h4>
@@ -216,6 +213,10 @@ const SummarySet = ({ data, loading }: Props) => {
           </Tabs>
         </section>
       )}
+      <div className={css('vf-stack', 'vf-stack-400')}>
+        <h4> Clan Viewer </h4>
+        <ClanViewer data={data} loading={loading} />
+      </div>
     </div>
   );
 };
