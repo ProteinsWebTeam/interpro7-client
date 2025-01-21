@@ -13,14 +13,14 @@ jobs:
 
       - name: Clean up frontend-runner folder
         run: |
-          rm -rf ~/release-procedures/v2/frontend-runner
+          rm -rf ~/release-procedures/v2/frontend-runner/_work/interpro7-client
 
       - name: Checkout deploy branch
         uses: actions/checkout@v3
         with:
           clean: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0  # Fetch the full history to get the commit history of the deploy branch
+          fetch-depth: 0
           ref: deploy
 
       - name: Release 
