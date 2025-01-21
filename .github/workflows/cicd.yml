@@ -13,7 +13,7 @@ jobs:
 
       - name: Clean up frontend-runner folder
         run: |
-          rm -rf ~/release-procedures/v2/frontend-runner/_work/interpro7-client
+          rm -rf ~/release-procedures/v2/frontend-runner/_work/interpro7-client/interpro7-client/*
 
       - name: Checkout deploy branch
         uses: actions/checkout@v3
