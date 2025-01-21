@@ -13,7 +13,7 @@ jobs:
       - name: Checkout deploy branch
         uses: actions/checkout@v3
         with:
-          clean: false
+          clean: true
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0  # Fetch the full history to get the commit history of the deploy branch
           ref: deploy
@@ -55,7 +55,7 @@ jobs:
             # Create the release folder on the remote server
             ssh $VM_NAME "cd $VM_BASE_PATH; mkdir -p "${IPRO_RELEASE_FOLDER}""
             echo "${IPRO_RELEASE_FOLDER}" > ~/release-procedures/v2/scripts/"$DEPLOY_BRANCH-release"
-                        
+
             # Copy the deployment artifacts
             scp -q -r $DIST_PATH/* $VM_NAME:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
 
