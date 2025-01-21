@@ -61,5 +61,4 @@ jobs:
 
             # Copy the deployment artifacts
             scp -q -r $DIST_PATH/* $VM_NAME:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
-            ssh $VM_NAME "ln -s '$VM_BASE_PATH/$IPRO_RELEASE_FOLDER' /nfs/www-prod/web_hx2/interpro/dev/website/interpro7-client"
-            
+            ssh $VM_NAME "ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" /nfs/www-prod/web_hx2/interpro/dev/website/interpro7-client"
