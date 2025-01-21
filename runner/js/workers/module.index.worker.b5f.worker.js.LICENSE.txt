@@ -1,8 +1,0 @@
-/* @license
-Papa Parse
-v5.4.1
-https://github.com/mholt/PapaParse
-License: MIT
-*/
-
-/*! https://mths.be/punycode v1.4.1 by @mathias */
