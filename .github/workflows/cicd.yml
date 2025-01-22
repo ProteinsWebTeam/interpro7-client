@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   workflow_run:
@@ -11,15 +11,13 @@ jobs:
     runs-on: self-hosted 
     steps:
 
-      - name: Conda, git and clean up
+      - name: Checkout deploy branch
+        uses: actions/checkout@v3
         run: |
           source ~/miniforge3/etc/profile.d/conda.sh
           conda activate base
           export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
           rm -rf ~/release-procedures/v2/frontend-runner/_work/interpro7-client/interpro7-client/*
-
-      - name: Checkout deploy branch
-        uses: actions/checkout@v3
         with:
           clean: true
           token: ${{ secrets.GITHUB_TOKEN }}
