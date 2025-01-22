@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 14.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 43363)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="144.123px" height="144.123px" viewBox="0 0 144.123 144.123" enable-background="new 0 0 144.123 144.123"
+	 xml:space="preserve">
+<g id="Layer_4">
+</g>
+<g id="colum1">
+	<rect x="9.533" y="18.289" display="none" fill="#B3D335" width="34.667" height="118.5"/>
+	<text transform="matrix(0.5054 0 0 1 8.2559 108.2827)" font-family="'Lato-Bold'" font-size="94.9792">G</text>
+	<text transform="matrix(1.6848 0 0 1 10.4917 132.0879)" font-family="'HelveticaNeueLTPro-MdEx'" font-size="25.8159">A</text>
+	<text transform="matrix(4.4713 0 0 1 9 140.8315)" font-family="'HelveticaNeueLTPro-Ex'" font-size="10.2232">C</text>
+	<line fill="none" stroke="#000000" stroke-width="2" x1="47.866" y1="0" x2="47.866" y2="145.123"/>
+	<line fill="none" stroke="#000000" stroke-width="2" x1="91.866" y1="1" x2="91.866" y2="145.123"/>
+</g>
+<g id="col2">
+	<rect x="54.533" y="18.289" display="none" fill="#B3D335" width="34.667" height="118.5"/>
+	<text transform="matrix(1.4745 0 0 1 50.833 112.9312)" font-family="'HelveticaNeueLTPro-Md'" font-size="37.8251">D</text>
+	<text transform="matrix(4.0178 0 0 1 50.7749 128.1929)" font-family="'HelveticaNeueLTPro-Md'" font-size="15.0634">E</text>
+	<text transform="matrix(6.2489 0 0 1 50.7739 137.8345)" font-family="'HelveticaNeueLTPro-Md'" font-size="8.7689">N</text>
+</g>
+<g id="col3">
+	<rect x="100.533" y="18.289" display="none" fill="#B3D335" width="34.667" height="118.5"/>
+	<text transform="matrix(0.3236 0 0 1 99.8652 115.4248)" font-family="'HelveticaNeueLTPro-Md'" font-size="152.5968">C</text>
+	<text transform="matrix(4.633 0 0 1 99.2559 138.3467)" font-family="'HelveticaNeueLTPro-MdEx'" font-size="9.6647">G</text>
+	<text transform="matrix(4.3103 0 0 1 100.8257 129.9194)" font-family="'HelveticaNeueLTPro-MdEx'" font-size="10.0911">A</text>
+</g>
+</svg>
