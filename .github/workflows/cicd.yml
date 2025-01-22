@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: [test_and_build]
     types: [completed]
-    branches: [runner]
+    branches: [runner, dev]
 
 jobs:
   build:
@@ -36,11 +36,6 @@ jobs:
               export DEPLOY_BRANCH="dev"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
-            elif echo "$changed_files" | grep -q '^runner/'; then
-              export DEPLOY_BRANCH="runner"
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
-              export VM_NAME="wp-np3-bd";
-              echo "Runner changed"
             elif echo "$changed_files" | grep -q '^master/'; then
               export DEPLOY_BRANCH="master"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
