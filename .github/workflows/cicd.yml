@@ -30,7 +30,10 @@ jobs:
         run: |            
 
             # Retrieve the most recent commit hash from the event payload
-            commit_hash=$(jq -r '.workflow_run.head_commit.id' $GITHUB_EVENT_PATH)
+            commit_hash=$(curl -s \
+                          -H "Accept: application/vnd.github+json" \
+                          -H "Authorization: Bearer $GITHUB_TOKEN" \
+                          https://api.github.com/repos/ProteinsWebTeam/interpro7-client/commits?sha=deploy&per_page=1 | jq -r '.[].sha')
             api_url="https://api.github.com/repos/ProteinsWebTeam/interpro7-client/commits/$commit_hash"
             changed_files=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" "$api_url" | jq -r '.files[1].filename')
 
