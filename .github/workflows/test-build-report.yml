@@ -72,3 +72,4 @@ jobs:
           branch: deploy
           file_pattern: "${{ github.ref_name }}/" 
           token: ${{ secrets.MY_TOKEN }}
+          
