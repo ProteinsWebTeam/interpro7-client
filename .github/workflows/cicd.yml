@@ -48,6 +48,9 @@ jobs:
               export VM_NAME="wp-np3-bd";
             else
               echo "No matching changes detected. Exiting."
+              echo $changed_files
+              echo $api_url
+              echo $commit_hash
               exit 0
             fi
 
