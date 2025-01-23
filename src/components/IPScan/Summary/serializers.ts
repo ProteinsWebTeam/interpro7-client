@@ -1,8 +1,12 @@
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { iproscan2urlDB } from 'utils/url-patterns';
+import {
+  proteinViewerReorganization,
+  sectionsReorganization,
+} from 'components/Related/DomainsOnProtein';
 
-const OTHER_FEATURES_DBS = ['funfam'];
-const OTHER_RESIDUES_DBS = ['pirsr'];
+const OTHER_FEATURES_DBS = [''];
+const OTHER_RESIDUES_DBS = [''];
 
 type IpScanEntry = {
   accession: string;
@@ -212,7 +216,7 @@ export const mergeData = (
       if (residues[0] && residues[0].locations.length !== 0)
         mergedData.other_residues.push(residues[0]);
     } else {
-      unintegrated[mergedMatch.accession] = mergedMatch;
+      // unintegrated[mergedMatch.accession] = mergedMatch;
     }
 
     const representativeLocations = processedMatch.locations.filter(
