@@ -38,11 +38,11 @@ jobs:
             changed_files=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" "$api_url" | jq -r '.files[1].filename')
 
             # Determine the deployment branch and set paths accordingly
-            if echo "$changed_files" | grep 'dev'; then
+            if echo "$changed_files" | grep -q 'dev'; then
               export DEPLOY_BRANCH="dev"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
-            elif echo "$changed_files" | grep 'master'; then
+            elif echo "$changed_files" | grep -q 'master'; then
               export DEPLOY_BRANCH="master"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
               export VM_NAME="wp-np3-bd";
