@@ -25,18 +25,21 @@ jobs:
           ref: deploy
 
       - name: Release 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |            
-            
-            export PATH="$CONDA_PREFIX/bin:$PATH"
-            commit_hash=$(git log -1 --pretty=format:"%H")
-            changed_files=$(git show --name-only --pretty="" $commit_hash)
+
+            # Retrieve the most recent commit hash from the event payload
+            commit_hash=$(jq -r '.workflow_run.head_commit.id' $GITHUB_EVENT_PATH)
+            api_url="https://api.github.com/repos/ProteinsWebTeam/interpro7-client/commits/$commit_hash"
+            changed_files=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" -H "Accept: application/vnd.github.v3+json" "$api_url" | jq -r '.files[1].filename')
 
             # Determine the deployment branch and set paths accordingly
-            if echo "$changed_files" | grep -q '^dev/'; then
+            if echo "$changed_files" | grep 'dev'; then
               export DEPLOY_BRANCH="dev"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
               export VM_NAME="wp-np3-bd";
-            elif echo "$changed_files" | grep -q '^master/'; then
+            elif echo "$changed_files" | grep 'master'; then
               export DEPLOY_BRANCH="master"
               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
               export VM_NAME="wp-np3-bd";
