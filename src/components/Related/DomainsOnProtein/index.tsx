@@ -56,8 +56,58 @@ export const groupByEntryType = (
   return groups;
 };
 
+export const getFeature = (
+  filter: string | string[],
+  mergedData: ProteinViewerDataObject,
+): ExtendedFeature[] => {
+  if (mergedData['other_features']) {
+    return (mergedData['other_features'] as ExtendedFeature[]).filter(
+      (entry) => {
+        const entryDB = entry.source_database;
+        if (entryDB) {
+          if (Array.isArray(filter))
+            return filter.some((item) => entryDB.includes(item));
+          else return filter.includes(entryDB);
+        }
+      },
+    );
+  }
+  return [];
+};
+
+export const filterMobiDBLiteFeatures = (
+  mergedData: ProteinViewerDataObject,
+): ExtendedFeature[] => {
+  const mobiDBLiteEntries: ExtendedFeature[] = (
+    mergedData['other_features'] as ExtendedFeature[]
+  ).filter((k) =>
+    (k as ExtendedFeature).accession.toLowerCase().includes('mobidblt'),
+  );
+
+  const mobiDBLiteConsensusWithChildren: ExtendedFeature[] =
+    mobiDBLiteEntries.filter((entry) =>
+      entry.accession.toLowerCase().includes('consensus'),
+    );
+  const mobiDBLiteChildren: ExtendedFeature[] = mobiDBLiteEntries.filter(
+    (entry) => !entry.accession.toLowerCase().includes('consensus'),
+  );
+
+  if (mobiDBLiteConsensusWithChildren.length > 0) {
+    mobiDBLiteChildren.map((child) => {
+      child.protein = child.accession;
+    });
+    mobiDBLiteConsensusWithChildren[0].children = mobiDBLiteChildren;
+  }
+
+  return mobiDBLiteConsensusWithChildren;
+};
+
 type Props = PropsWithChildren<{
-  mainData: { metadata: ProteinMetadata };
+  mainData: {
+    metadata:
+      | ProteinMetadata
+      | (MinimalProteinMetadata & { name?: NameObject });
+  };
   onMatchesLoaded?: (
     results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[],
   ) => void;
