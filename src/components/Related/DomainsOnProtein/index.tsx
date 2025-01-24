@@ -77,7 +77,7 @@ interface LoadedProps
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}
 
-const getFeature = (
+export const getFeature = (
   filter: string | string[],
   mergedData: ProteinViewerDataObject,
 ): ExtendedFeature[] => {
@@ -96,7 +96,7 @@ const getFeature = (
   return [];
 };
 
-const filterMobiDBLiteFeatures = (
+export const filterMobiDBLiteFeatures = (
   mergedData: ProteinViewerDataObject,
 ): ExtendedFeature[] => {
   const mobiDBLiteEntries: ExtendedFeature[] = (
