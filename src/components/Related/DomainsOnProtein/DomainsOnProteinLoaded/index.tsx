@@ -424,6 +424,7 @@ const DomainsOnProteinLoaded = ({
       funfam: false,
     };
   } else {
+    
     mainTracks = [
       'alphafold confidence',
       'families',
