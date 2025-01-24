@@ -73,10 +73,14 @@ function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
   let accession = undefined;
 
   if (Array.isArray(item)) {
-    fragment = item[0].entry_protein_locations?.[0].fragments?.[0];
+    if (item[0].entry_protein_locations)
+      fragment = item[0].entry_protein_locations?.[0].fragments?.[0];
+    else fragment = item[0].locations?.[0].fragments?.[0];
     accession = item[0].accession;
   } else {
-    fragment = item.entry_protein_locations?.[0].fragments?.[0];
+    if (item.entry_protein_locations)
+      fragment = item.entry_protein_locations?.[0].fragments?.[0];
+    else fragment = item.locations?.[0].fragments?.[0];
     accession = item.accession;
   }
   if (fragment && accession) {
@@ -383,19 +387,24 @@ const DomainsOnProteinLoaded = ({
   if (dataMerged.family) dataMerged.families = dataMerged.family.slice();
 
   const renamedTracks = ['domain', 'family', 'residues'];
-  const sortedData = flattenTracksObject(dataMerged).filter(
+  const flattenedData = flattenTracksObject(dataMerged).filter(
     (track) => !renamedTracks.includes(track[0]),
   );
 
   let mainTracks: string[] = [];
   let hideCategories: Record<string, boolean> = {};
 
+  // Protein Viewer data for InterProScan Search Results needs to be handled differently
   if (protein.accession.startsWith('iprscan')) {
-    const homologous_superfamily = sortedData.filter(
+    const homologous_superfamily = flattenedData.filter(
       (entry) => entry[0] == 'homologous superfamily',
     )[0];
-    const representative_domains = sortedData.filter(
+    const representative_domains = flattenedData.filter(
       (entry) => entry[0] == 'representative domains',
+    )[0];
+
+    const representative_families = flattenedData.filter(
+      (entry) => entry[0] == 'representative families',
     )[0];
 
     if (representative_domains) {
@@ -406,7 +415,17 @@ const DomainsOnProteinLoaded = ({
       });
     }
 
-    sortedData.map((entry) => {
+    console.log(representative_families);
+
+    if (representative_families) {
+      representative_families[1].map((family) => {
+        if (typeof family === 'object' && family !== null) {
+          (family as { representative?: boolean })['representative'] = true;
+        }
+      });
+    }
+
+    flattenedData.map((entry) => {
       if (entry[0] === 'domains') {
         if (homologous_superfamily) {
           entry[1] = entry[1].concat(homologous_superfamily[1]);
@@ -416,7 +435,13 @@ const DomainsOnProteinLoaded = ({
           entry[1] = entry[1].concat(representative_domains[1]);
         }
       }
+
+      if (entry[0] === 'homologous superfamily') {
+        entry[1] = [];
+      }
     });
+
+    // Remove sections
 
     mainTracks = [
       'alphafold confidence',
@@ -447,9 +472,11 @@ const DomainsOnProteinLoaded = ({
       funfam: false,
     };
 
-    sortedData.map((entry) => {
+    flattenedData.map((entry) => {
       (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
     });
+
+    console.log(flattenedData);
   } else {
     mainTracks = [
       'alphafold confidence',
@@ -481,7 +508,7 @@ const DomainsOnProteinLoaded = ({
   return (
     <ProteinViewer
       protein={protein}
-      data={sortedData}
+      data={flattenedData}
       title={title}
       show
       ervationButton={showConservationButton}
