@@ -48,9 +48,11 @@ jobs:
 
             # Determine the deployment branch
             if echo "$changed_files" | grep -q 'dev'; then
+              DIST_PATH="dev"
               DEPLOY_BRANCH=("dev" "stage")
               VM_NAME=("wp-np3-bd")
             elif echo "$changed_files" | grep -q 'master'; then
+              DIST_PATH="master"
               DEPLOY_BRANCH=("master")
               VM_NAME=("wp-p1m-aa" "wp-p2m-aa")
             else
@@ -60,16 +62,16 @@ jobs:
             # Create the release folder, copy files, and update symbolic link on each VM
             IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)"
 
-            for BRANCH in "${DEPLOY_BRANCH[@]}"; do
-              DIST_PATH="$BRANCH"
-              VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/releases/"
-              SYMLINK="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/interpro7-client"
+            for VM in "${VM_NAME[@]}"; do
+              for BRANCH in "${DEPLOY_BRANCH[@]}"; do
+                VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/releases/"
+                SYMLINK="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/interpro7-client"
 
-              for VM in "${VM_NAME[@]}"; do
                 ssh $VM "cd $VM_BASE_PATH; mkdir -p \"${IPRO_RELEASE_FOLDER}\""
                 scp -q -r $DIST_PATH/* $VM:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
                 ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
               done
             done
+
 
 
