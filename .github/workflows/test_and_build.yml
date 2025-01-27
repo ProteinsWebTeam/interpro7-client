@@ -73,5 +73,3 @@ jobs:
           file_pattern: "${{ github.ref_name }}/" 
           token: ${{ secrets.MY_TOKEN }}
           
-
-      
