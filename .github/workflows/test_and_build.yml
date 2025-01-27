@@ -18,25 +18,15 @@ jobs:
           npm ci
       - name: 🧪 | 🏗 - Test and Build
         run: |
-          npm run deploy:production
-      - name: 📈 - Create Reports
-        run: |
-          npm run report
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-      - name: 💾 Archive reports
+          npm run release:production
+      
+      - name: Upload Build Artifact
+        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
-          name: reports
-          path: |
-            reports/
-            .lighthouseci/
-      - name: 🧥‍ - Coveralls
-        uses: coverallsapp/github-action@master
-        continue-on-error: true
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: './reports/jest-coverage/lcov.info'
+          name: build-artifact
+          path: dist/ 
+
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         continue-on-error: true
@@ -49,3 +39,91 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: '#interpro7'
           MSG_MINIMAL: Actions URL
+
+  commit-artifact:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master' 
+    steps:
+      
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: deploy
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/
+
+      - name: Move Artifact
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          rm -rf "$BRANCH_NAME"
+          mkdir "$BRANCH_NAME"
+          mv dist/* "$BRANCH_NAME/"
+        shell: bash
+
+      - name: Commit and Push Artifact
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Add build artifact for ${{ github.ref_name }}"
+          branch: deploy
+          file_pattern: "${{ github.ref_name }}/" 
+          token: ${{ secrets.MY_TOKEN }}
+          
+
+
+# Previois version
+# name: test_and_build
+
+# on: [push, pull_request]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: '19.2.0'
+#           cache: 'npm'
+#       - name: 🔧 - Install
+#         run: |
+#           cp config.yml.example config.yml
+#           npm i -g npm@9.3.1
+#           npm ci
+#       - name: 🧪 | 🏗 - Test and Build
+#         run: |
+#           npm run deploy:production
+#       - name: 📈 - Create Reports
+#         run: |
+#           npm run report
+#         env:
+#           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+#       - name: 💾 Archive reports
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: reports
+#           path: |
+#             reports/
+#             .lighthouseci/
+#       - name: 🧥‍ - Coveralls
+#         uses: coverallsapp/github-action@master
+#         continue-on-error: true
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           path-to-lcov: './reports/jest-coverage/lcov.info'
+#       - name: Slack Notification
+#         uses: rtCamp/action-slack-notify@v2
+#         continue-on-error: true
+#         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+#         env:
+#           SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
+#           SLACK_USERNAME: 'Github Actions'
+#           SLACK_ICON_EMOJI: ':octocat:'
+#           SLACK_TITLE: 'CI results in GitHub Actions'
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: '#interpro7'
+#           MSG_MINIMAL: Actions URL

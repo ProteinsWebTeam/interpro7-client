@@ -46,19 +46,19 @@ jobs:
               "$api_url" | \
               jq -r '.files[1].filename')
 
-            # Determine the deployment branch and set paths accordingly
+            # Determine the deployment branch
             if echo "$changed_files" | grep -q 'dev'; then
               DEPLOY_BRANCH="dev"
-              VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/"
               VM_NAME=("wp-np3-bd")
             elif echo "$changed_files" | grep -q 'master'; then
               DEPLOY_BRANCH="master"
-              VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/"
               VM_NAME=("wp-p1m-aa" "wp-p2m-aa")
             else
-              echo "No matching changes detected. Exiting."
               exit 0
             fi
+
+            # Set the base path based on the deployment branch
+            VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/${DEPLOY_BRANCH}/website/releases/"
 
             # Adjust the dist/ path based on the deploy branch
             DIST_PATH="$DEPLOY_BRANCH"
@@ -71,10 +71,5 @@ jobs:
               scp -q -r $DIST_PATH/* $VM:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
               ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
             done
-
-
-
-
-
 
 
