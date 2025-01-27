@@ -21,7 +21,7 @@ jobs:
           npm run release:production
       
       - name: Upload Build Artifact
-        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/runner'
+        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
@@ -43,7 +43,7 @@ jobs:
   commit-artifact:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/runner'
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master' 
     steps:
       
       - name: Checkout Repository
