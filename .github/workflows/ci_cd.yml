@@ -48,28 +48,28 @@ jobs:
 
             # Determine the deployment branch
             if echo "$changed_files" | grep -q 'dev'; then
-              DEPLOY_BRANCH="dev"
+              DEPLOY_BRANCH=("dev" "stage")
               VM_NAME=("wp-np3-bd")
             elif echo "$changed_files" | grep -q 'master'; then
-              DEPLOY_BRANCH="master"
+              DEPLOY_BRANCH=("master")
               VM_NAME=("wp-p1m-aa" "wp-p2m-aa")
             else
               exit 0
             fi
 
-            # Set the base path based on the deployment branch
-            VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/${DEPLOY_BRANCH}/website/releases/"
-
-            # Adjust the dist/ path based on the deploy branch
-            DIST_PATH="$DEPLOY_BRANCH"
-            IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)"
-            SYMLINK="/nfs/www-prod/web_hx2/interpro/dev/website/interpro7-client"
-
             # Create the release folder, copy files, and update symbolic link on each VM
-            for VM in "${VM_NAME[@]}"; do
-              ssh $VM "cd $VM_BASE_PATH; mkdir -p \"${IPRO_RELEASE_FOLDER}\""
-              scp -q -r $DIST_PATH/* $VM:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
-              ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
+            IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)"
+
+            for BRANCH in "${DEPLOY_BRANCH[@]}"; do
+              DIST_PATH="$BRANCH"
+              VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/releases/"
+              SYMLINK="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/interpro7-client"
+
+              for VM in "${VM_NAME[@]}"; do
+                ssh $VM "cd $VM_BASE_PATH; mkdir -p \"${IPRO_RELEASE_FOLDER}\""
+                scp -q -r $DIST_PATH/* $VM:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
+                ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
+              done
             done
 
 
