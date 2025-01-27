@@ -365,7 +365,6 @@ export const ProteinViewer = ({
                 {children}
               </Options>
               {protein.accession &&
-                !protein.accession.startsWith('iprscan') &&
                 mainTracks.length !== Object.entries(hideCategories).length && (
                   <ShowMoreTracks
                     showMore={showMore}
@@ -418,8 +417,16 @@ export const ProteinViewer = ({
                   const sectionName = typeNameToSectionName[type];
 
                   // Show only the main tracks unless button "Show more" is clicked
+
+                  // TEMPORARY: The second condition in OR is for the special case of families in the Interpro Scan result section: hide the div
+                  // insummary view because representative families are not available, so it'd be empty.
                   let hideDiv: string = '';
-                  if (!showMore && !mainTracks.includes(type)) {
+                  if (
+                    (!showMore && !mainTracks.includes(type)) ||
+                    (type === 'families' &&
+                      !showMore &&
+                      protein.accession.includes('iprscan'))
+                  ) {
                     hideDiv = 'none';
                   }
 
