@@ -11,26 +11,58 @@ jobs:
         with:
           node-version: '19.2.0'
           cache: 'npm'
+      
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
           npm i -g npm@9.3.1
           npm ci
-      - name: 🧪 | 🏗 - Test and Build
-        run: |
-          npm run release:production
       
+      - name: 🔄 - Copy Config File
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "Using production_config.yml"
+            cp config/production_config.yml config.yml
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            echo "Using dev_config.yml"
+            cp config/dev_config.yml config.yml
+          fi
+      
+      - name: 🧪 - Test
+        run: |
+          npm-run-all test clean
+
+      - name: 🏗 - Build
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+
+            # Build production bundle
+            cp config/production_config.yml config.yml
+            npm run deploy -- --output-path=dist/master
+
+            # Build staging bundle
+            cp config/staging_config.yml config.yml
+            npm run deploy -- --output-path=dist/staging
+  
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            cp config/dev_config.yml config.yml
+            npm run deploy -- --output-path=dist/dev
+        
       - name: Upload Build Artifact
-        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+        if: |
+          github.ref == 'refs/heads/dev' || \
+          github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: dist/ 
+          path: dist/**
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         continue-on-error: true
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+        if: |
+          github.ref == 'refs/heads/master' || \
+          github.ref == 'refs/heads/dev'
         env:
           SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
           SLACK_USERNAME: 'Github Actions'
@@ -43,9 +75,10 @@ jobs:
   commit-artifact:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master' 
+    if: |
+      github.ref == 'refs/heads/dev' || \
+      github.ref == 'refs/heads/master'
     steps:
-      
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
@@ -59,10 +92,17 @@ jobs:
 
       - name: Move Artifact
         run: |
-          BRANCH_NAME="${{ github.ref_name }}"
-          rm -rf "$BRANCH_NAME"
-          mkdir "$BRANCH_NAME"
-          mv dist/* "$BRANCH_NAME/"
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            echo "Copying artifacts for production and staging"
+            rm -rf staging master
+            mkdir staging master
+            cp -r dist/staging/* staging/
+            cp -r dist/master/* master/
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            echo "Copying artifacts for dev"
+            rm -rf dev
+            mkdir dev
+            cp -r dist/dev/* dev/
         shell: bash
 
       - name: Commit and Push Artifact
@@ -72,5 +112,3 @@ jobs:
           branch: deploy
           file_pattern: "${{ github.ref_name }}/" 
           token: ${{ secrets.MY_TOKEN }}
-          
-          

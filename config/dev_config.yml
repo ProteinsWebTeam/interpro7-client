@@ -1,0 +1,115 @@
+googleAnalytics: G-N098XBK8Q7
+
+root:
+  website: //wp-np3-bd.ebi.ac.uk/interpro/
+  API: //wp-np3-bc.ebi.ac.uk/interpro/api/
+  EBIsearch: https://wwwdev.ebi.ac.uk/ebisearch/ws/rest/interpro7
+  IPScan: //wwwdev.ebi.ac.uk/Tools/services/rest/iprscan5/
+  genome3d: //www.genome3d.net/api/v1/
+  wikipedia: https://en.wikipedia.org/w/api.php
+  readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
+  alphafold: https://alphafold.ebi.ac.uk/
+  repeatsDB: https://repeatsdb.org/api/production/annotations/
+  disprot: https://disprot.org/api/
+  LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
+  Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
+  UniProt: https://rest.uniprot.org/
+  proteinsAPI: https://www.ebi.ac.uk/proteins/api/
+
+title: InterPro
+
+github:
+  InterProClient:
+    owner: ProteinsWebTeam
+    repo: interpro7-client
+  InterProAPI:
+    owner: ProteinsWebTeam
+    repo: interpro7-api
+  IPScan:
+    owner: ebi-pf-team
+    repo: interproscan
+  ReadTheDocs:
+    owner: ProteinsWebTeam
+    repo: interpro-docs
+    branch: dev
+
+IPScan:
+  contactEmail: interpro-team@ebi.ac.uk
+pages:
+  entry:
+    plural: entries
+    subPages:
+      - protein
+      - domain_architecture
+      - structure
+      - taxonomy
+      - proteome
+      - model
+      - alphafold
+      - logo
+      - entry_alignments
+      - interactions
+      - pathways
+      - genome3d
+      - curation
+      - subfamilies
+      - feedback
+  protein:
+    subPages:
+      - entry
+      - structure
+      - sequence
+      - alphafold
+      - similar_proteins
+  structure:
+    subPages:
+      - entry
+      - protein
+  taxonomy:
+    plural: taxa
+    subPages:
+      - entry
+      - protein
+      - structure
+      - proteome
+  proteome:
+    subPages:
+      - entry
+      - protein
+      - structure
+  sequence:
+    subPages:
+      - entry
+      - sequence
+  set:
+    subPages:
+      - entry
+      - protein
+      - structure
+      - taxonomy
+      - proteome
+  result:
+pagination:
+  pageSize: 20
+cache:
+  enabled: true
+colors:
+  fallback: '#718189'
+  cathgene3d: '#a88cc3'
+  cdd: '#addc58'
+  hamap: '#2cd6d6'
+  mobidblt: '#d6dc94'
+  panther: '#bfac92'
+  pfam: '#6287b1'
+  pirsf: '#fbbddd'
+  prints: '#54c75f'
+  profile: '#f69f74'
+  prosite: '#f3c766'
+  sfld: '#00b1d3'
+  smart: '#ff8d8d'
+  ssf: '#686868'
+  tigrfams: '#56b9a6'
+  ncbifam: '#56b9a6'
+  interpro: '#2daec1'
+  antifam: '#d8a4a4'
+  pdb: '#74b360'
