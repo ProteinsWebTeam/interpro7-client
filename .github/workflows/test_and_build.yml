@@ -17,6 +17,10 @@ jobs:
           cp config.yml.example config.yml
           npm i -g npm@9.3.1
           npm ci
+          
+      - name: 🧪 - Test
+        run: |
+          npm-run-all test clean
       
       - name: 🔄 - Copy Config File
         run: |
@@ -27,10 +31,6 @@ jobs:
             echo "Using dev_config.yml"
             cp config/dev_config.yml config.yml
           fi
-      
-      - name: 🧪 - Test
-        run: |
-          npm-run-all test clean
 
       - name: 🏗 - Build
         run: |
