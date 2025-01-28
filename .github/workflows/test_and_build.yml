@@ -47,6 +47,8 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
             cp config/dev_config.yml config.yml
             npm run deploy -- --output-path=dist/dev
+          
+          fi
         
       - name: Upload Build Artifact
         if: |
@@ -100,6 +102,7 @@ jobs:
             rm -rf dev
             mkdir dev
             cp -r dist/dev/* dev/
+          fi 
         shell: bash
 
       - name: Commit and Push Artifact
