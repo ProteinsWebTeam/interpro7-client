@@ -50,8 +50,7 @@ jobs:
         
       - name: Upload Build Artifact
         if: |
-          github.ref == 'refs/heads/dev' || \
-          github.ref == 'refs/heads/master'
+          github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
@@ -61,8 +60,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         continue-on-error: true
         if: |
-          github.ref == 'refs/heads/master' || \
-          github.ref == 'refs/heads/dev'
+          github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
         env:
           SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
           SLACK_USERNAME: 'Github Actions'
