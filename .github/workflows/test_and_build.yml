@@ -20,7 +20,7 @@ jobs:
           
       - name: 🧪 - Test
         run: |
-          npm-run-all test clean
+          npm run test
       
       - name: 🔄 - Copy Config File
         run: |
