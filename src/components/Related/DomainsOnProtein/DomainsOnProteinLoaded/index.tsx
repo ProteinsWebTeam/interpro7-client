@@ -1,4 +1,9 @@
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, {
+  PropsWithChildren,
+  useEffect,
+  useState,
+  useLayoutEffect,
+} from 'react';
 import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import loadable from 'higherOrder/loadable';
 import {
@@ -314,38 +319,6 @@ const DomainsOnProteinLoaded = ({
   const renamedTracks = ['domain', 'family', 'residues'];
   let flattenedData = undefined;
 
-  useEffect(() => {
-    // Move matches from unintegrated section to the correct one
-    if (protein.accession.startsWith('iprscan')) {
-      const dbToSection: Record<string, string> = {
-        cathgene3d: 'homologous_superfamily',
-        cdd: 'domain',
-        hamap: 'family',
-        panther: 'family',
-        pirsf: 'family',
-        pirsr: 'residue',
-        sfld: 'family',
-        smart: 'domain',
-        sff: 'homologous_superfamily',
-      };
-
-      if (dataMerged.unintegrated) {
-        for (let i = 0; i < dataMerged.unintegrated.length; i++) {
-          const sourcedb = (dataMerged.unintegrated[i] as ExtendedFeature)
-            .source_database;
-          if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
-            if (dataMerged[dbToSection[sourcedb]]) {
-              dataMerged[dbToSection[sourcedb]] = dataMerged[
-                dbToSection[sourcedb]
-              ].concat([dataMerged.unintegrated[i]]);
-            }
-            delete dataMerged.unintegrated[i];
-          }
-        }
-      }
-    }
-  }, [dataMerged]);
-
   if (dataConfidence)
     addConfidenceTrack(dataConfidence, protein.accession, dataMerged);
 
@@ -414,6 +387,18 @@ const DomainsOnProteinLoaded = ({
       });
     }
 
+    const dbToSection: Record<string, string> = {
+      cathgene3d: 'homologous_superfamily',
+      cdd: 'domain',
+      hamap: 'family',
+      panther: 'family',
+      pirsf: 'family',
+      pirsr: 'residue',
+      sfld: 'family',
+      smart: 'domain',
+      sff: 'homologous_superfamily',
+    };
+
     flattenedData.map((entry) => {
       if (entry[0] === 'domains') {
         if (representative_domains) {
@@ -424,7 +409,29 @@ const DomainsOnProteinLoaded = ({
       } else if (entry[0] === 'representative domains') {
         entry[1] = [];
       }
+
+      // Move entries from unintegrated section to the correct one
+      else if (entry[0] === 'unintegrated') {
+        const tempUnintegrated = entry[1];
+        for (let i = 0; i < tempUnintegrated.length; i++) {
+          if (tempUnintegrated[i]) {
+            const sourcedb = (tempUnintegrated[i] as ExtendedFeature)
+              .source_database;
+            if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
+              if (dataMerged[dbToSection[sourcedb]]) {
+                dataMerged[dbToSection[sourcedb]] = dataMerged[
+                  dbToSection[sourcedb]
+                ].concat([tempUnintegrated[i]]);
+              }
+              tempUnintegrated.splice(i, 1);
+            }
+          } else {
+            console.log('here', tempUnintegrated, tempUnintegrated[i]);
+          }
+        }
+      }
     });
+
     // End of skipped reorganization steps
 
     mainTracks = [

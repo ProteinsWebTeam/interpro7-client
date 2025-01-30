@@ -179,9 +179,7 @@ export const mergeData = (
       signature: undefined,
     };
 
-    console.log(match);
     const residues = match2residues(match);
-    console.log(residues);
 
     if (
       residues.length > 0 &&

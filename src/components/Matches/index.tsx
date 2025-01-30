@@ -401,30 +401,33 @@ const Matches = ({
       </Column>
       <Column
         dataKey="counters.extra_fields.short_name"
-        displayIf={primary === 'entry'}
+        displayIf={true}
         renderer={(
           name: string,
           {
             accession,
             source_database: sourceDatabase,
           }: { accession: string; source_database: string },
-        ) => (
-          <Link
-            to={
-              primary && {
-                description: {
-                  main: { key: primary },
-                  [primary]: { db: sourceDatabase, accession },
-                },
+        ) => {
+          console.log(name);
+          return (
+            <Link
+              to={
+                primary && {
+                  description: {
+                    main: { key: primary },
+                    [primary]: { db: sourceDatabase, accession },
+                  },
+                }
               }
-            }
-          >
-            <HighlightedText
-              text={name}
-              textToHighlight={search?.search as string}
-            />
-          </Link>
-        )}
+            >
+              <HighlightedText
+                text={name}
+                textToHighlight={search?.search as string}
+              />
+            </Link>
+          );
+        }}
       >
         Short Name
       </Column>

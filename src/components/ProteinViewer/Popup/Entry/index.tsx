@@ -18,7 +18,7 @@ export type EntryDetail = {
     type: string;
     entry: string;
     protein?: string;
-    parent?: { protein?: string };
+    parent?: { protein?: string; accession: string };
     locations: Array<ProtVistaLocation>;
     confidence?: string;
   };
@@ -55,7 +55,8 @@ const ProtVistaEntryPopup = ({
     confidence,
   } = detail?.feature || {};
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
-  const integrated = detail.feature?.integrated;
+  const integrated =
+    detail.feature?.integrated || detail.feature?.parent?.accession;
 
   // To include the type of fragment of the secondary structure
   let type = originalType;
