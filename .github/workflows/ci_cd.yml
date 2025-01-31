@@ -26,8 +26,8 @@ jobs:
 
       - name: Download artifact
         uses: actions/download-artifact@v4
-        run-id: ${{ github.event.workflow_run.id }}
         with:
+          run-id: ${{ github.event.workflow_run.id }}
           pattern: "*-build-artifact"
           path: ~/release-procedures/v2/builds/
 
