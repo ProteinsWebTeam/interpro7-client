@@ -50,19 +50,35 @@ jobs:
           
           fi
         
+      - name: 🏗 - Build
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+            # Build production bundle
+            cp config/production_config.yml config.yml
+            npm run deploy -- --output-path=dist/master
+
+            # Build staging bundle
+            cp config/staging_config.yml config.yml
+            npm run deploy -- --output-path=dist/staging
+
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            cp config/dev_config.yml config.yml
+            npm run deploy -- --output-path=dist/dev
+          fi
+
       - name: Upload Master Build Artifact
         if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: master-build-artifact
-          path: dist/master_build/**
+          path: dist/master/**
 
       - name: Upload Staging Build Artifact
         if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: staging-build-artifact
-          path: dist/staging_build/**
+          path: dist/staging/**
 
       - name: Upload Dev Build Artifact
         if: github.ref == 'refs/heads/dev'
@@ -70,6 +86,7 @@ jobs:
         with:
           name: dev-build-artifact
           path: dist/dev/**
+
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
