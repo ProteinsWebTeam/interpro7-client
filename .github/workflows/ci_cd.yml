@@ -30,7 +30,7 @@ jobs:
         run: |            
 
           # Get the list of build artifact directories
-          BUILD_PATH="~/release-procedures/v2/builds/"
+          BUILD_PATH="$HOME/release-procedures/v2/builds/"
           CHANGED_FILES=$(ls -d ${BUILD_PATH}*-build-artifact/ 2>/dev/null)
 
           # If no build artifacts are found, exit
