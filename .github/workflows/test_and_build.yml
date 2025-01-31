@@ -12,28 +12,28 @@ jobs:
           node-version: '19.2.0'
           cache: 'npm'
       
-      - name: 🔧 - Install
-        run: |
-          cp config.yml.example config.yml
-          npm i -g npm@9.3.1
-          npm ci
+      # - name: 🔧 - Install
+      #   run: |
+      #     cp config.yml.example config.yml
+      #     npm i -g npm@9.3.1
+      #     npm ci
           
       # # - name: 🧪 - Test
       # #   run: |
       # #     npm run test
       
-      - name: 🏗 - Build dev
-        if: github.ref == 'refs/heads/dev'
-        run: |
-            cp config/dev_config.yml config.yml
-            npm run deploy -- -- --output-path=dist/dev/
+      # - name: 🏗 - Build dev
+      #   if: github.ref == 'refs/heads/dev'
+      #   run: |
+      #       cp config/dev_config.yml config.yml
+      #       npm run deploy -- -- --output-path=dist/dev/
 
       - name: Upload Dev Build Artifact
         if: github.ref == 'refs/heads/dev'
         uses: actions/upload-artifact@v4
         with:
           name: dev-build-artifact
-          path: dist/dev/**
+          path: config/**
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
