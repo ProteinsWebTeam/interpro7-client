@@ -50,13 +50,26 @@ jobs:
           
           fi
         
-      - name: Upload Build Artifact
-        if: |
-          github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+      - name: Upload Master Build Artifact
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact
-          path: dist/**
+          name: master-build-artifact
+          path: dist/master_build/**
+
+      - name: Upload Staging Build Artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-build-artifact
+          path: dist/staging_build/**
+
+      - name: Upload Dev Build Artifact
+        if: github.ref == 'refs/heads/dev'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-build-artifact
+          path: dist/dev/**
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
