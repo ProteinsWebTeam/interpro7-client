@@ -425,8 +425,6 @@ const DomainsOnProteinLoaded = ({
               }
               tempUnintegrated.splice(i, 1);
             }
-          } else {
-            console.log('here', tempUnintegrated, tempUnintegrated[i]);
           }
         }
       }
