@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dev-build-artifact
-          path: config/**
+          path: dist/dev/**
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
