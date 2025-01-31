@@ -11,26 +11,48 @@ jobs:
         with:
           node-version: '19.2.0'
           cache: 'npm'
+      
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
           npm i -g npm@9.3.1
           npm ci
-      - name: 🧪 | 🏗 - Test and Build
-        run: |
-          npm run release:production
+          
+      # # - name: 🧪 - Test
+      # #   run: |
+      # #     npm run test
       
-      - name: Upload Build Artifact
-        if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+      - name: 🏗 - Build dev
+        if: github.ref == 'refs/heads/dev'
+        run: |
+            cp config/dev_config.yml config.yml
+            npm run deploy -- -- --output-path=dist/dev/
+
+      - name: Upload Dev Build Artifact
+        if: github.ref == 'refs/heads/dev'
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifact
-          path: dist/ 
+          name: dev-build-artifact
+          path: dist/dev/**
+
+      - name: 🏗 - Build master
+        if: github.ref == 'refs/heads/master'
+        run: |
+            cp config/master_config.yml config.yml
+            npm run deploy -- -- --output-path=dist/master/
+
+      - name: Upload Master Build Artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-build-artifact
+          path: dist/master/**
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
         continue-on-error: true
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+        if: |
+          github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
         env:
           SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
           SLACK_USERNAME: 'Github Actions'
