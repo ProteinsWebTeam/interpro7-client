@@ -48,6 +48,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: '#interpro7'
           MSG_MINIMAL: Actions URL
+          
 
   # commit-artifact:
   #   needs: build
