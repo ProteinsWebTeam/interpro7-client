@@ -30,7 +30,7 @@ jobs:
         run: |            
 
           # Get the list of build artifact directories
-          BUILD_PATH="/release-procedures/v2/builds/"
+          BUILD_PATH="~/release-procedures/v2/builds/"
           CHANGED_FILES=$(ls -d ${BUILD_PATH}*-build-artifact/ 2>/dev/null)
 
           # If no build artifacts are found, exit
@@ -70,13 +70,13 @@ jobs:
 
                 ssh $VM "cd $VM_BASE_PATH; mkdir -p \"${IPRO_RELEASE_FOLDER}\""
                 scp -q -r $DIST_PATH/* $VM:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
-                ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
               done
             done
           done
 
 
 # commit_hash=$(curl -s \
+# ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
 #   -H "Accept: application/vnd.github+json" \
 #   -H "Authorization: Bearer $GITHUB_TOKEN" \
 #   "https://api.github.com/repos/ProteinsWebTeam/interpro7-client/commits?sha=deploy&per_page=1" | \
