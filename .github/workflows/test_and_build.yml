@@ -49,43 +49,43 @@ jobs:
           SLACK_CHANNEL: '#interpro7'
           MSG_MINIMAL: Actions URL
 
-  commit-artifact:
-    needs: build
-    runs-on: ubuntu-latest
-    if: |
-      github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          ref: deploy
+  # commit-artifact:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: |
+  #     github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         ref: deploy
 
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifact
-          path: dist/
+  #     - name: Download Build Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: build-artifact
+  #         path: dist/
 
-      - name: Move Artifact
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            echo "Copying artifacts for production and staging"
-            rm -rf staging master
-            mkdir staging master
-            cp -r dist/staging/* staging/
-            cp -r dist/master/* master/
-          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            echo "Copying artifacts for dev"
-            rm -rf dev
-            mkdir dev
-            cp -r dist/dev/* dev/
-          fi 
-        shell: bash
+  #     - name: Move Artifact
+  #       run: |
+  #         if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
+  #           echo "Copying artifacts for production and staging"
+  #           rm -rf staging master
+  #           mkdir staging master
+  #           cp -r dist/staging/* staging/
+  #           cp -r dist/master/* master/
+  #         elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+  #           echo "Copying artifacts for dev"
+  #           rm -rf dev
+  #           mkdir dev
+  #           cp -r dist/dev/* dev/
+  #         fi 
+  #       shell: bash
 
-      - name: Commit and Push Artifact
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Add build artifact for ${{ github.ref_name }}"
-          branch: deploy
-          file_pattern: "${{ github.ref_name }}/" 
-          token: ${{ secrets.MY_TOKEN }}
+  #     - name: Commit and Push Artifact
+  #       uses: stefanzweifel/git-auto-commit-action@v4
+  #       with:
+  #         commit_message: "Add build artifact for ${{ github.ref_name }}"
+  #         branch: deploy
+  #         file_pattern: "${{ github.ref_name }}/" 
+  #         token: ${{ secrets.MY_TOKEN }}
