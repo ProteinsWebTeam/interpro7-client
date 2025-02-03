@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: [test_and_build]
     types: [completed]
-    branches: [dev, master]
+    branches: [dev]
 
 jobs:
   build:
@@ -47,10 +47,10 @@ jobs:
               DIST_PATH="$ARTIFACT_PATH"
               DEPLOY_BRANCH=("dev")
               VM_NAME=("wp-np3-bd")
-            elif [[ "$ARTIFACT_NAME" == "master-build-artifact" ]]; then
-              DIST_PATH="$ARTIFACT_PATH"
-              DEPLOY_BRANCH=("master")
-              VM_NAME=("wp-p1m-aa" "wp-p2m-aa")
+            # elif [[ "$ARTIFACT_NAME" == "master-build-artifact" ]]; then
+            #   DIST_PATH="$ARTIFACT_PATH"
+            #   DEPLOY_BRANCH=("master")
+            #   VM_NAME=("wp-p1m-aa" "wp-p2m-aa")
             elif [[ "$ARTIFACT_NAME" == "staging-build-artifact" ]]; then
               DIST_PATH="$ARTIFACT_PATH"
               DEPLOY_BRANCH=("stage")
