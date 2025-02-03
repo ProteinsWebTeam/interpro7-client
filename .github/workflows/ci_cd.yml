@@ -16,7 +16,7 @@ jobs:
         run: |
           rm -rf ~/release-procedures/v2/builds/*
 
-      - name: Download artifact (s)
+      - name: Download artifact(s)
         uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,11 +63,10 @@ jobs:
             # Create the release folder, copy files, and update symbolic link on each VM
             IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)"
 
+            # Cycle through VMs (live case)
             for VM in "${VM_NAME[@]}"; do
-              for BRANCH in "${DEPLOY_BRANCH[@]}"; do
-                VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/releases/"
-                SYMLINK="/nfs/www-prod/web_hx2/interpro/${BRANCH}/website/interpro7-client"
-
+                VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/${DEPLOY_BRANCH}/website/releases/"
+                SYMLINK="/nfs/www-prod/web_hx2/interpro/${DEPLOY_BRANCH}/website/interpro7-client"
                 ssh $VM "cd $VM_BASE_PATH; mkdir -p \"${IPRO_RELEASE_FOLDER}\""
                 scp -q -r $DIST_PATH/* $VM:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
                 ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
