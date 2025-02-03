@@ -242,7 +242,9 @@ export const ProteinViewer = ({
   useEffect(() => {
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
-      ['families', 'domains'],
+      protein.accession.startsWith('iprscan')
+        ? ['domains']
+        : ['families', 'domains'],
       showMoreSettings ? false : true,
     );
     setHideCategory(newHideCategory);
@@ -418,15 +420,8 @@ export const ProteinViewer = ({
 
                   // Show only the main tracks unless button "Show more" is clicked
 
-                  // TEMPORARY: The second condition in OR is for the special case of families in the Interpro Scan result section: hide the div
-                  // insummary view because representative families are not available, so it'd be empty.
                   let hideDiv: string = '';
-                  if (
-                    (!showMore && !mainTracks.includes(type)) ||
-                    (type === 'families' &&
-                      !showMore &&
-                      protein.accession.includes('iprscan'))
-                  ) {
+                  if (!showMore && !mainTracks.includes(type)) {
                     hideDiv = 'none';
                   }
 
