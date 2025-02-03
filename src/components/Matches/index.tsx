@@ -406,8 +406,9 @@ const Matches = ({
           name: string,
           {
             accession,
+            short_name,
             source_database: sourceDatabase,
-          }: { accession: string; source_database: string },
+          }: { short_name: string; accession: string; source_database: string },
         ) => (
           <Link
             to={
@@ -420,7 +421,10 @@ const Matches = ({
             }
           >
             <HighlightedText
-              text={name}
+              // If name is != ∅, short_name in the counter was found (Protein page case)
+              // If name is ∅, it means that the short name from the counters was not found (InterProScan results page case), so display short_name from renderer
+              // If short_name from renderer is null, then leave the cell blank
+              text={name == '∅' ? (short_name ? short_name : '') : name}
               textToHighlight={search?.search as string}
             />
           </Link>

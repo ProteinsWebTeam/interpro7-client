@@ -18,6 +18,7 @@ const flatMatchesFromIPScanPayload = function* (
       yield {
         accession: match.signature.entry.accession,
         name: match.signature.entry.description,
+        short_name: match.signature.entry.name,
         source_database: 'InterPro',
         matches: [
           {
