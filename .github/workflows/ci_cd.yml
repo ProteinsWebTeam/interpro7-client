@@ -71,7 +71,6 @@ jobs:
                 scp -q -r $DIST_PATH/* $VM:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
                 ssh $VM "rm -f \"$SYMLINK\"; ln -s \"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER\" \"$SYMLINK\""
               done
-            done
           done
 
 
