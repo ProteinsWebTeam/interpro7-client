@@ -17,11 +17,11 @@ jobs:
           cp config.yml.example config.yml
           npm i -g npm@9.3.1
           npm ci
-          
-      # - name: 🧪 - Test
-      #   run: |
-      #     npm run test
-      
+
+      # Conditional execution of building steps for the different branches
+      # dev -> dev 
+      # master -> staging, master
+
       - name: 🏗 - Build dev
         if: github.ref == 'refs/heads/dev'
         run: |
@@ -34,6 +34,32 @@ jobs:
         with:
           name: dev-build-artifact
           path: dist/dev/**
+
+      - name: 🏗 - Build staging
+        if: github.ref == 'refs/heads/master'
+        run: |
+            cp config/staging_config.yml config.yml
+            npm run deploy -- -- --output-path=dist/staging/
+
+      - name: Upload Staging Build Artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-build-artifact
+          path: dist/staging/**
+
+      - name: 🏗 - Build master
+        if: github.ref == 'refs/heads/master'
+        run: |
+            cp config/master_config.yml config.yml
+            npm run deploy -- -- --output-path=dist/master/
+
+      - name: Upload Master Build Artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-build-artifact
+          path: dist/master/**
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
@@ -49,44 +75,3 @@ jobs:
           SLACK_CHANNEL: '#interpro7'
           MSG_MINIMAL: Actions URL
           
-
-  # commit-artifact:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: |
-  #     github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         ref: deploy
-
-  #     - name: Download Build Artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: build-artifact
-  #         path: dist/
-
-  #     - name: Move Artifact
-  #       run: |
-  #         if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-  #           echo "Copying artifacts for production and staging"
-  #           rm -rf staging master
-  #           mkdir staging master
-  #           cp -r dist/staging/* staging/
-  #           cp -r dist/master/* master/
-  #         elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-  #           echo "Copying artifacts for dev"
-  #           rm -rf dev
-  #           mkdir dev
-  #           cp -r dist/dev/* dev/
-  #         fi 
-  #       shell: bash
-
-  #     - name: Commit and Push Artifact
-  #       uses: stefanzweifel/git-auto-commit-action@v4
-  #       with:
-  #         commit_message: "Add build artifact for ${{ github.ref_name }}"
-  #         branch: deploy
-  #         file_pattern: "${{ github.ref_name }}/" 
-  #         token: ${{ secrets.MY_TOKEN }}
