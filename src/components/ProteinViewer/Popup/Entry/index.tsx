@@ -56,7 +56,9 @@ const ProtVistaEntryPopup = ({
   } = detail?.feature || {};
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
   const integrated =
-    detail.feature?.integrated || detail.feature?.parent?.accession;
+    detail.feature?.integrated ||
+    (detail.feature?.parent?.accession &&
+      detail.feature?.parent?.accession.startsWith('IPR'));
 
   // To include the type of fragment of the secondary structure
   let type = originalType;
