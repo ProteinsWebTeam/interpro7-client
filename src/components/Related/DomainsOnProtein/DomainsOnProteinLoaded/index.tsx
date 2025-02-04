@@ -473,8 +473,8 @@ const DomainsOnProteinLoaded = ({
 
     hideCategories = {
       'secondary structure': false,
-      families: true,
-      domains: true,
+      families: false,
+      domains: false,
       repeat: false,
       'conserved site': false,
       'active site': false,

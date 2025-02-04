@@ -242,15 +242,33 @@ export const ProteinViewer = ({
   };
 
   useEffect(() => {
+    /* 
+      Logic to handle default display settings for families and domains.
+      There's cases where representative families or representative domains are not available.
+      Examples: representative families still not supported in InterPro Scan, or there's just no representative match found in the data.
+      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown. 
+      If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
+    */
+
+    // Set which section needs to have its visibility changed based on the availability of represetative data
+    const changeVisibilityFor: string[] = [];
+    ['families', 'domains'].forEach((type) => {
+      const entries = data.find(([entryType]) => entryType === type)?.[1] || [];
+      const hasRep = (entries as ExtendedFeature[]).some(
+        (entry) => entry.representative === true,
+      );
+      if (hasRep) changeVisibilityFor.push(type);
+    });
+
+    // If in summary view, use changeVisibilityFor
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
-      protein.accession && protein.accession.startsWith('iprscan')
-        ? ['domains']
-        : ['families', 'domains'],
+      !showMoreSettings ? changeVisibilityFor : ['families', 'domains'],
       showMoreSettings ? false : true,
     );
+
     setHideCategory(newHideCategory);
-  }, [showMoreSettings]);
+  }, [showMoreSettings, data]);
 
   const openTooltip = (
     element: HTMLElement | undefined,
@@ -288,20 +306,6 @@ export const ProteinViewer = ({
     for (const category of categoryRefs.current) {
       category?.setExpandedAllTracks(expanded);
     }
-  };
-
-  const residuesToLocations = (
-    residues: Residue[] | undefined,
-  ): ExtendedFeatureLocation[] => {
-    const newLocations: ExtendedFeatureLocation[] = [];
-    if (residues) {
-      residues.map((residue) => {
-        residue.locations.map((location) => {
-          newLocations.push(location);
-        });
-      });
-    }
-    return newLocations;
   };
 
   const ptmFeaturesFragments = (features: PTMFeature[]): PTMFragment[] => {
@@ -415,8 +419,6 @@ export const ProteinViewer = ({
                       (entry) => entry.representative !== true,
                     );
                   }
-
-                  console.log(type);
 
                   // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
                   // This dict is used to go from type to section name
