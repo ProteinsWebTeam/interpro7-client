@@ -416,8 +416,6 @@ export const ProteinViewer = ({
                     );
                   }
 
-                  console.log(type);
-
                   // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
                   // This dict is used to go from type to section name
                   const sectionName = typeNameToSectionName[type];
