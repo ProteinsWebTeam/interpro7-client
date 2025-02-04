@@ -86,6 +86,7 @@ const ProtVistaEntryPopup = ({
     currentLocation?.description?.protein?.accession ||
     detail?.feature?.protein ||
     detail?.feature?.parent?.protein;
+
   return (
     <section className={css('entry-popup')}>
       <h6>
@@ -103,7 +104,7 @@ const ProtVistaEntryPopup = ({
           <div>
             {accession?.startsWith('residue:')
               ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
-              : accession}
+              : accession?.replace('Mobidblt-', '')}
           </div>
         </div>{' '}
       </h6>
