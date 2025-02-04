@@ -231,18 +231,20 @@ export const ProteinViewer = ({
     'active site': 'Active Site',
     'binding site': 'Binding Site',
     PTM: 'Post-translational Modifications',
+    ptm: 'Post-translational Modifications',
     'match conservation': 'Match Conservation',
     'coiled-coils, signal peptides, transmembrane regions':
       'Coiled-coils, Signal Peptides and Transmembrane Regions',
     'short linear motifs': 'Short Linear Motifs',
     'pfam-n': 'Pfam-N',
     funfam: 'FunFam',
+    'external sources': 'External Sources',
   };
 
   useEffect(() => {
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
-      protein.accession.startsWith('iprscan')
+      protein.accession && protein.accession.startsWith('iprscan')
         ? ['domains']
         : ['families', 'domains'],
       showMoreSettings ? false : true,
@@ -413,6 +415,8 @@ export const ProteinViewer = ({
                       (entry) => entry.representative !== true,
                     );
                   }
+
+                  console.log(type);
 
                   // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
                   // This dict is used to go from type to section name
