@@ -231,18 +231,22 @@ export const ProteinViewer = ({
     'active site': 'Active Site',
     'binding site': 'Binding Site',
     PTM: 'Post-translational Modifications',
+    ptm: 'Post-translational Modifications',
     'match conservation': 'Match Conservation',
     'coiled-coils, signal peptides, transmembrane regions':
       'Coiled-coils, Signal Peptides and Transmembrane Regions',
     'short linear motifs': 'Short Linear Motifs',
     'pfam-n': 'Pfam-N',
     funfam: 'FunFam',
+    'external sources': 'External Sources',
   };
 
   useEffect(() => {
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
-      ['families', 'domains'],
+      protein.accession && protein.accession.startsWith('iprscan')
+        ? ['domains']
+        : ['families', 'domains'],
       showMoreSettings ? false : true,
     );
     setHideCategory(newHideCategory);
@@ -412,21 +416,16 @@ export const ProteinViewer = ({
                     );
                   }
 
+                  console.log(type);
+
                   // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
                   // This dict is used to go from type to section name
                   const sectionName = typeNameToSectionName[type];
 
                   // Show only the main tracks unless button "Show more" is clicked
 
-                  // TEMPORARY: The second condition in OR is for the special case of families in the Interpro Scan result section: hide the div
-                  // insummary view because representative families are not available, so it'd be empty.
                   let hideDiv: string = '';
-                  if (
-                    (!showMore && !mainTracks.includes(type)) ||
-                    (type === 'families' &&
-                      !showMore &&
-                      protein.accession.includes('iprscan'))
-                  ) {
+                  if (!showMore && !mainTracks.includes(type)) {
                     hideDiv = 'none';
                   }
 

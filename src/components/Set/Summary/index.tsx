@@ -214,7 +214,7 @@ const SummarySet = ({ data, loading }: Props) => {
         </section>
       )}
       <div className={css('vf-stack', 'vf-stack-400')}>
-        <h4> Clan Viewer </h4>
+        <h4>Clan Viewer</h4>
         <ClanViewer data={data} loading={loading} />
       </div>
     </div>
