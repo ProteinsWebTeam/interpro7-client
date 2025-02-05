@@ -57,7 +57,7 @@ const ProtVistaEntryPopup = ({
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
 
   let integrated = null;
-  let parentAccession = detail.feature?.parent?.accession;
+  const parentAccession = detail.feature?.parent?.accession;
 
   // Handle cases where parent is not an InterPro Entry, like MobiDB lite matches
   if (parentAccession && parentAccession.startsWith('IPR'))
