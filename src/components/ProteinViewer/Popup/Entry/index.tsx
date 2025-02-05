@@ -57,12 +57,12 @@ const ProtVistaEntryPopup = ({
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
 
   let integrated = null;
-  if (
-    detail.feature?.parent?.accession &&
-    detail.feature?.parent?.accession.startsWith('IPR')
-  )
-    integrated = detail.feature?.parent?.accession;
-  else detail.feature?.integrated;
+  let parentAccession = detail.feature?.parent?.accession;
+
+  // Handle cases where parent is not an InterPro Entry, like MobiDB lite matches
+  if (parentAccession && parentAccession.startsWith('IPR'))
+    integrated = parentAccession;
+  else integrated = detail.feature?.integrated;
 
   // To include the type of fragment of the secondary structure
   let type = originalType;
