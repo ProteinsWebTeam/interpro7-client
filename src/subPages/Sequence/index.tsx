@@ -52,7 +52,7 @@ const SequenceSubPage = ({ data, localPayload, localTitle, orf }: Props) => {
   return (
     <>
       <Sequence accession={accession} sequence={sequence} name={name} />
-      {hasORF && protein && (
+      {hasORF && protein ? (
         <section id="nucleotides">
           <h5>Nucleotide Sequence</h5>
           <InnerSequence
@@ -62,6 +62,8 @@ const SequenceSubPage = ({ data, localPayload, localTitle, orf }: Props) => {
             name={protein.xref[0].name}
           />
         </section>
+      ) : (
+        ''
       )}
     </>
   );

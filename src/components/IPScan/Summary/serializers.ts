@@ -1,8 +1,12 @@
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { iproscan2urlDB } from 'utils/url-patterns';
+import {
+  proteinViewerReorganization,
+  sectionsReorganization,
+} from 'components/Related/DomainsOnProtein';
 
-const OTHER_FEATURES_DBS = ['funfam'];
-const OTHER_RESIDUES_DBS = ['pirsr'];
+const OTHER_FEATURES_DBS = [''];
+const OTHER_RESIDUES_DBS = [''];
 
 type IpScanEntry = {
   accession: string;
@@ -54,7 +58,7 @@ const integrateSignature = (
 const match2residues = (match: Iprscan5Match | IpScanMatch) => {
   return match.locations
     .map(({ sites }) =>
-      sites
+      sites?.length && sites?.length > 0
         ? {
             accession: match?.signature?.accession || match?.accession,
             locations: sites.map((site) => ({
@@ -176,6 +180,7 @@ export const mergeData = (
     };
 
     const residues = match2residues(match);
+
     if (
       residues.length > 0 &&
       !OTHER_RESIDUES_DBS.includes(residues?.[0]?.source_database || '')

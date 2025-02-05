@@ -3,7 +3,7 @@ import React from 'react';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import Link from 'components/generic/Link';
 
-import { AlphafoldLink } from 'components/ExtLink/patternLinkWrapper';
+import { AlphafoldLink, PTMLink } from 'components/ExtLink/patternLinkWrapper';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { FunFamLink } from 'subPages/Subfamilies';
@@ -29,12 +29,15 @@ const EXCEPTIONAL_TYPES = [
   'chain',
   'secondary_structure',
   'variation',
+  'ptm',
 ];
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (
-    EXCEPTIONAL_TYPES.includes(entry.type || '') ||
+    // Exceptional types coming from InterPro (e.g PTMs), should not result in an ExceptionalLabel.
+    (EXCEPTIONAL_TYPES.includes(entry.type || '') &&
+      entry.source_database !== 'interpro') ||
     NOT_MEMBER_DBS.has(entry.source_database || '') ||
     EXCEPTIONAL_PREFIXES.some((prefix) => entry.accession.startsWith(prefix))
   );
@@ -96,6 +99,17 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
       </AlphafoldLink>
     );
   }
+
+  if (entry.source_database === 'ptm') {
+    return isPrinting ? (
+      <span>UniProt</span>
+    ) : (
+      <PTMLink id={entry.accession || ''} className={css('ext')}>
+        {entry.name}
+      </PTMLink>
+    );
+  }
+
   if (entry.source_database === 'elm')
     return isPrinting ? (
       <span>{label}</span>

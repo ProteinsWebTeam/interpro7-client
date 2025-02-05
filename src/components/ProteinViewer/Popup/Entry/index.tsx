@@ -18,7 +18,7 @@ export type EntryDetail = {
     type: string;
     entry: string;
     protein?: string;
-    parent?: { protein?: string };
+    parent?: { protein?: string; accession: string };
     locations: Array<ProtVistaLocation>;
     confidence?: string;
   };
@@ -55,7 +55,14 @@ const ProtVistaEntryPopup = ({
     confidence,
   } = detail?.feature || {};
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
-  const integrated = detail.feature?.integrated;
+
+  let integrated = null;
+  const parentAccession = detail.feature?.parent?.accession;
+
+  // Handle cases where parent is not an InterPro Entry, like MobiDB lite matches
+  if (parentAccession && parentAccession.startsWith('IPR'))
+    integrated = parentAccession;
+  else integrated = detail.feature?.integrated;
 
   // To include the type of fragment of the secondary structure
   let type = originalType;
@@ -83,6 +90,7 @@ const ProtVistaEntryPopup = ({
     currentLocation?.description?.protein?.accession ||
     detail?.feature?.protein ||
     detail?.feature?.parent?.protein;
+
   return (
     <section className={css('entry-popup')}>
       <h6>
@@ -100,7 +108,7 @@ const ProtVistaEntryPopup = ({
           <div>
             {accession?.startsWith('residue:')
               ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
-              : accession}
+              : accession?.replace('Mobidblt-', '')}
           </div>
         </div>{' '}
       </h6>

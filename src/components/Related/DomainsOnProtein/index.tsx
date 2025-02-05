@@ -25,7 +25,10 @@ import mergeResidues from './mergeResidues';
 import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
-import { ExtendedFeature } from 'src/components/ProteinViewer';
+import {
+  ExtendedFeature,
+  ExtendedFeatureLocation,
+} from 'src/components/ProteinViewer';
 
 export const orderByAccession = (
   a: { accession: string },
@@ -54,7 +57,11 @@ export const groupByEntryType = (
 };
 
 type Props = PropsWithChildren<{
-  mainData: { metadata: ProteinMetadata };
+  mainData: {
+    metadata:
+      | ProteinMetadata
+      | (MinimalProteinMetadata & { name?: NameObject });
+  };
   onMatchesLoaded?: (
     results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[],
   ) => void;
@@ -73,6 +80,195 @@ interface LoadedProps
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}
+
+export const getFeature = (
+  filter: string | string[],
+  mergedData: ProteinViewerDataObject,
+): ExtendedFeature[] => {
+  if (mergedData['other_features']) {
+    return (mergedData['other_features'] as ExtendedFeature[]).filter(
+      (entry) => {
+        const entryDB = entry.source_database?.toLowerCase();
+        if (entryDB) {
+          if (Array.isArray(filter))
+            return filter.some((item) => entryDB.includes(item));
+          else return filter.includes(entryDB);
+        }
+      },
+    );
+  }
+  return [];
+};
+
+export const filterMobiDBLiteFeatures = (
+  mergedData: ProteinViewerDataObject,
+): ExtendedFeature[] => {
+  const mobiDBLiteEntries: ExtendedFeature[] = (
+    mergedData['other_features'] as ExtendedFeature[]
+  ).filter((k) =>
+    (k as ExtendedFeature).accession.toLowerCase().includes('mobidb'),
+  );
+
+  const mobiDBLiteConsensusWithChildren: ExtendedFeature[] =
+    mobiDBLiteEntries.filter(
+      (entry) =>
+        entry.accession.toLowerCase().includes('consensus') ||
+        entry.name?.toLowerCase().includes('consensus'),
+    );
+
+  const mobiDBLiteChildren: ExtendedFeature[] = mobiDBLiteEntries.filter(
+    (entry) =>
+      !entry.accession.toLowerCase().includes('consensus') &&
+      !entry.name?.toLowerCase().includes('consensus'),
+  );
+
+  if (mobiDBLiteConsensusWithChildren.length > 0) {
+    mobiDBLiteChildren.map((child) => {
+      child.protein = child.accession;
+    });
+    mobiDBLiteConsensusWithChildren[0].children = mobiDBLiteChildren;
+  }
+
+  return mobiDBLiteConsensusWithChildren;
+};
+
+export const sectionsReorganization = (mergedData: ProteinViewerDataObject) => {
+  // Domain and family as empty objects, to cancat other object later
+  if (!mergedData.domain) {
+    mergedData.domain = [];
+  }
+
+  if (!mergedData.family) {
+    mergedData.family = [];
+  }
+
+  // Add repeats and homologous superfamilies to domain
+  if (mergedData.homologous_superfamily) {
+    mergedData.domain = mergedData.domain.concat(
+      mergedData.homologous_superfamily,
+    );
+    mergedData.homologous_superfamily = [];
+  }
+
+  if (mergedData.repeat) {
+    mergedData.domain = mergedData.domain.concat(mergedData.repeat);
+    mergedData.repeat = [];
+  }
+};
+
+export const proteinViewerReorganization = (
+  dataFeatures: RequestedData<ExtraFeaturesPayload> | undefined,
+  dataMerged: ProteinViewerDataObject,
+) => {
+  if (
+    (dataFeatures && !dataFeatures.loading && dataFeatures.payload) ||
+    dataMerged['other_features']
+  ) {
+    dataMerged['intrinsically_disordered_regions'] = filterMobiDBLiteFeatures(
+      dataMerged,
+    ) as MinimalFeature[];
+  }
+
+  // Splitting the "other features" section in mulitple subsets.
+  // Using this logic we can go back to having the "other_features" section again.
+
+  // Create a section for each of the following types
+  const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
+  dataMerged['coiled-coils,_signal_peptides,_transmembrane_regions'] =
+    getFeature(CPST, dataMerged) as MinimalFeature[];
+  dataMerged['pfam-n'] = getFeature('pfam-n', dataMerged) as MinimalFeature[];
+  dataMerged['short_linear_motifs'] = getFeature(
+    'elm',
+    dataMerged,
+  ) as MinimalFeature[];
+  dataMerged['funfam'] = getFeature('funfam', dataMerged) as MinimalFeature[];
+
+  if (Object.keys(dataMerged).includes('region')) {
+    dataMerged['spurious_proteins'] = dataMerged['region'];
+    delete dataMerged['region'];
+  }
+
+  // Filter the types above out of the "other_features" section
+  const toRemove = CPST.concat([
+    'pfam-n',
+    'short_linear_motifs',
+    'mobidblt',
+    'funfam',
+    'elm',
+  ]);
+
+  if (dataMerged['other_features']) {
+    dataMerged['other_features'] = dataMerged['other_features'].filter(
+      (entry) => {
+        return !toRemove.some(
+          (item) => (entry as ExtendedFeature).source_database?.includes(item),
+        );
+      },
+    );
+  }
+
+  const uniqueResidues: Record<string, ExtendedFeature> = {};
+
+  // Group PIRSR residue by description and position
+  let pirsrFound = false;
+  for (let i = 0; i < dataMerged.residues?.length; i++) {
+    const currentResidue = dataMerged.residues[i] as ExtendedFeature;
+    if (currentResidue.source_database === 'pirsr') {
+      currentResidue.accession = currentResidue.accession.replace(
+        'residue:',
+        '',
+      );
+      if (!pirsrFound) pirsrFound = true;
+      const residueStart =
+        currentResidue.locations?.[0].fragments?.[0].start || 0;
+      const residueEnd = currentResidue.locations?.[0].fragments?.[0].end || 0;
+      const residueDescription =
+        currentResidue.locations?.[0].description?.replace('.', '');
+
+      const dictKey =
+        residueStart.toString() + residueEnd.toString() + residueDescription;
+
+      if (!uniqueResidues[dictKey]) uniqueResidues[dictKey] = currentResidue;
+    } else {
+      uniqueResidues[currentResidue.accession] = currentResidue;
+    }
+  }
+
+  // Create fake PIRSR object to display group label
+  if (pirsrFound)
+    uniqueResidues['PIRSR'] = {
+      accession: 'PIRSR_GROUP',
+      source_database: 'pirsr',
+      type: 'residue',
+      locations: [
+        {
+          description: 'PIRSR',
+          fragments: [{ residues: '', start: -10, end: 0 }],
+        } as ExtendedFeatureLocation,
+      ],
+    };
+
+  dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
+    // If comparing two entries from different DBs, put the non-pirsr always first (a) OR if source database is pirsr and first element is fake label, put fake label first
+    if (
+      (a.source_database !== 'pirsr' && b.source_database === 'pirsr') ||
+      (a.source_database === b.source_database && a.accession === 'PIRSR_GROUP')
+    )
+      return -1;
+    // If comparing two entries from different DBs, put the non-pirsr always first (b) OR if source database is pirsr and second element is fake label, put fake label first
+    else if (
+      (a.source_database === 'pirsr' && b.source_database !== 'pirsr') ||
+      (a.source_database === b.source_database && b.accession === 'PIRSR_GROUP')
+    )
+      return 1;
+    // All other cases
+    else return a.accession.localeCompare(b.accession);
+  });
+
+  if (dataMerged.domain) dataMerged.domains = dataMerged.domain.slice();
+
+  if (dataMerged.family) dataMerged.families = dataMerged.family.slice();
+};
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -172,94 +368,11 @@ const DomainOnProteinWithoutData = ({
     mergeResidues(mergedData, dataResidues.payload);
   }
 
-  const getFeature = (
-    filter: string | string[],
-    mergedData: ProteinViewerDataObject,
-  ): ExtendedFeature[] => {
-    if (mergedData['other_features']) {
-      return (mergedData['other_features'] as ExtendedFeature[]).filter(
-        (entry) => {
-          const entryDB = entry.source_database;
-          if (entryDB) {
-            if (Array.isArray(filter))
-              return filter.some((item) => entryDB.includes(item));
-            else return filter.includes(entryDB);
-          }
-        },
-      );
-    }
-    return [];
-  };
-
-  const filterMobiDBLiteFeatures = (
-    mergedData: ProteinViewerDataObject,
-  ): ExtendedFeature[] => {
-    const mobiDBLiteEntries: ExtendedFeature[] = (
-      mergedData['other_features'] as ExtendedFeature[]
-    ).filter((k) => (k as ExtendedFeature).accession.includes('Mobidblt'));
-
-    const mobiDBLiteConsensusWithChildren: ExtendedFeature[] =
-      mobiDBLiteEntries.filter((entry) =>
-        entry.accession.includes('Consensus'),
-      );
-    const mobiDBLiteChildren: ExtendedFeature[] = mobiDBLiteEntries.filter(
-      (entry) => !entry.accession.includes('Consensus'),
-    );
-
-    if (mobiDBLiteConsensusWithChildren.length > 0) {
-      mobiDBLiteChildren.map((child) => {
-        child.protein = child.accession;
-      });
-      mobiDBLiteConsensusWithChildren[0].children = mobiDBLiteChildren;
-    }
-
-    return mobiDBLiteConsensusWithChildren;
-  };
-
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
-    mergedData['intrinsically_disordered_regions'] = filterMobiDBLiteFeatures(
-      mergedData,
-    ) as MinimalFeature[];
-
-    /* Splitting the "other features" section in mulitple subsets.
-       Using this logic we can go back to having the "other_features" section again.
-    */
-
-    // Create a section for each of the following types
-    const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
-    mergedData['coiled-coils,_signal_peptides,_transmembrane_regions'] =
-      getFeature(CPST, mergedData) as MinimalFeature[];
-    mergedData['pfam-n'] = getFeature('pfam-n', mergedData) as MinimalFeature[];
-    mergedData['short_linear_motifs'] = getFeature(
-      'elm',
-      mergedData,
-    ) as MinimalFeature[];
-    mergedData['funfam'] = getFeature('funfam', mergedData) as MinimalFeature[];
-
-    if (Object.keys(mergedData).includes('region')) {
-      mergedData['spurious_proteins'] = mergedData['region'];
-      delete mergedData['region'];
-    }
-
-    //
-
-    // Filter the types above out of the "other_features" section
-    const toRemove = CPST.concat([
-      'pfam-n',
-      'short_linear_motifs',
-      'mobidblt',
-      'funfam',
-      'elm',
-    ]);
-    mergedData['other_features'] = mergedData['other_features'].filter(
-      (entry) => {
-        return !toRemove.some((item) => entry.source_database?.includes(item));
-      },
-    );
-
-    /* End of logic for splitting "other_features" */
   }
+
+  proteinViewerReorganization(dataFeatures, mergedData);
 
   if (
     (!Object.keys(mergedData).length ||
@@ -282,6 +395,7 @@ const DomainOnProteinWithoutData = ({
         dataConfidence={dataConfidence}
         dataVariation={dataVariation}
         dataProteomics={dataProteomics}
+        dataFeatures={dataFeatures}
         loading={
           data?.loading ||
           dataFeatures?.loading ||
@@ -360,7 +474,7 @@ const getVariationURL = createSelector(
   },
 );
 
-/*const getPTMPayload = createSelector(
+const getPTMPayload = createSelector(
   (state: GlobalState) => state.settings.proteinsAPI,
   (state: GlobalState) =>
     state.customLocation.description.protein?.accession || '',
@@ -369,18 +483,11 @@ const getVariationURL = createSelector(
       protocol,
       hostname,
       port,
-      pathname: root + 'proteomics-ptm/' + accession,
+      pathname: root + 'proteomics/ptm/' + accession,
     });
     return url;
   },
-);*/
-
-/* To add then PTM data is complete
-* as LoadDataParameters)(
-loadData<ProteinsAPIProteomics, 'Proteomics'>({
-  getUrl: getPTMPayload,
-  propNamespace: 'Proteomics', 
-} */
+);
 
 export default loadExternalSources(
   loadData<AlphafoldPayload, 'Prediction'>({
@@ -399,12 +506,17 @@ export default loadExternalSources(
           getUrl: getExtraURL('residues'),
           propNamespace: 'Residues',
         } as LoadDataParameters)(
-          loadData<ProteinsAPIVariation, 'Variation'>({
-            getUrl: getVariationURL,
-            propNamespace: 'Variation',
+          loadData<ProteinsAPIProteomics, 'Proteomics'>({
+            getUrl: getPTMPayload,
+            propNamespace: 'Proteomics',
           } as LoadDataParameters)(
-            loadData(getRelatedEntriesURL as LoadDataParameters)(
-              DomainOnProteinWithoutData,
+            loadData<ProteinsAPIVariation, 'Variation'>({
+              getUrl: getVariationURL,
+              propNamespace: 'Variation',
+            } as LoadDataParameters)(
+              loadData(getRelatedEntriesURL as LoadDataParameters)(
+                DomainOnProteinWithoutData,
+              ),
             ),
           ),
         ),

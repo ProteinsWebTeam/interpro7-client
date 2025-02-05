@@ -37,7 +37,7 @@ const ShowMoreTracks = ({
   const handleClick = (view: boolean) => {
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
-      ['families', 'domains'],
+      ['domains', 'family'],
       view,
     );
     setHideCategory(newHideCategory);

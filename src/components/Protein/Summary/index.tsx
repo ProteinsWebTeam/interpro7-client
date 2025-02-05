@@ -77,7 +77,7 @@ const FamilyHierarchy = ({
 
 type Props = {
   data: {
-    metadata: ProteinMetadata;
+    metadata: ProteinMetadata & { name?: NameObject };
   };
   loading: boolean;
   isoform?: string;

@@ -259,6 +259,7 @@ interface SetMetadata extends Omit<Metadata, 'description'> {
   };
   authors: Array<string> | null;
   literature: Array<Reference>;
+  wikipedia: Array<WikipediaEntry>;
 }
 
 type ProtVistaFragment = {

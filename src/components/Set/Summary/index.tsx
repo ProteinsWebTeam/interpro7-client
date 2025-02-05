@@ -5,11 +5,13 @@ import Description from 'components/Description';
 import BaseLink from 'components/ExtLink/BaseLink';
 import { setDBs } from 'utils/processDescription/handlers';
 import Literature from 'components/Entry/Literature';
+import Tabs from 'components/Tabs';
 
 import loadable from 'higherOrder/loadable';
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import ClanViewer from '../ClanViewer';
+import Wikipedia from 'components/Entry/Summary/Wikipedia';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -124,6 +126,7 @@ const SummarySet = ({ data, loading }: Props) => {
             nodes: [],
             links: [],
           },
+          wikipedia: [],
         }
       : data.metadata;
   let currentSet = null;
@@ -134,6 +137,9 @@ const SummarySet = ({ data, loading }: Props) => {
     if (metadata.source_database === 'panther')
       metadata.description = metadata.name.name;
   }
+
+  const hasWiki =
+    metadata.source_database === 'pfam' && !!metadata.wikipedia?.length;
 
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
@@ -191,7 +197,24 @@ const SummarySet = ({ data, loading }: Props) => {
         description={metadata?.description}
       />
       <SetLiterature literature={metadata?.literature} />
+      {hasWiki && (
+        <section>
+          <h4>Wikipedia</h4>
+          <Tabs>
+            {(metadata.wikipedia || []).map((wiki, key) => (
+              <div key={key} title={wiki.title.replaceAll('_', ' ')}>
+                <Wikipedia
+                  title={wiki.title}
+                  extract={wiki.extract}
+                  thumbnail={wiki.thumbnail}
+                />
+              </div>
+            ))}
+          </Tabs>
+        </section>
+      )}
       <div className={css('vf-stack', 'vf-stack-400')}>
+        <h4>Clan Viewer</h4>
         <ClanViewer data={data} loading={loading} />
       </div>
     </div>

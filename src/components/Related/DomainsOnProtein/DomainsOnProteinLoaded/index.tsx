@@ -1,13 +1,22 @@
-import React, { PropsWithChildren } from 'react';
+import React, {
+  PropsWithChildren,
+  useEffect,
+  useState,
+  useLayoutEffect,
+} from 'react';
 import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import loadable from 'higherOrder/loadable';
-import { groupByEntryType } from 'components/Related/DomainsOnProtein';
+import {
+  groupByEntryType,
+  sectionsReorganization,
+} from 'components/Related/DomainsOnProtein';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
 } from 'components/ProteinViewer';
-import { sleep } from 'timing-functions';
+import { proteinViewerReorganization } from 'components/Related/DomainsOnProtein';
+import { FeatureLocation } from 'node_modules/@nightingale-elements/nightingale-track/dist';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -73,10 +82,14 @@ function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
   let accession = undefined;
 
   if (Array.isArray(item)) {
-    fragment = item[0].entry_protein_locations?.[0].fragments?.[0];
+    if (item[0].entry_protein_locations)
+      fragment = item[0].entry_protein_locations?.[0].fragments?.[0];
+    else fragment = item[0].locations?.[0].fragments?.[0];
     accession = item[0].accession;
   } else {
-    fragment = item.entry_protein_locations?.[0].fragments?.[0];
+    if (item.entry_protein_locations)
+      fragment = item.entry_protein_locations?.[0].fragments?.[0];
+    else fragment = item.locations?.[0].fragments?.[0];
     accession = item.accession;
   }
   if (fragment && accession) {
@@ -105,18 +118,71 @@ export function sortTracks(
   return 0;
 }
 
-const getMemberDBMatches = (
-  interpro: Array<MinimalFeature>,
-): Array<MinimalFeature> => {
-  const dbMatches: Array<MinimalFeature> = [];
-  interpro.forEach((entry) => {
-    if (entry.children) {
-      entry.children.forEach((memberDBMatch) => {
-        dbMatches.push(memberDBMatch);
-      });
-    }
+const standardizeResidueStructure = (
+  residues: Array<ExtendedFeature>,
+): Array<ExtendedFeature> => {
+  const newResidues: Array<ExtendedFeature> = [];
+  residues.map((residueParentObj) => {
+    const tempResidue: ExtendedFeature = residueParentObj;
+    tempResidue.type = 'residue';
+    tempResidue.locations = residueParentObj.residues?.[0].locations;
+    newResidues.push(tempResidue);
   });
-  return dbMatches;
+  return newResidues;
+};
+
+const standardizeMobiDBFeatureStructure = (
+  features: Array<ExtendedFeature>,
+): Array<ExtendedFeature> => {
+  const newFeatures: Array<ExtendedFeature> = [];
+  features.map((feature) => {
+    const tempFeature = { ...feature };
+    const slicedTempFeatureLocations: Array<ExtendedFeatureLocation> = [];
+    tempFeature.accession = 'Mobidblt-Consensus Disorder Prediction';
+    tempFeature.source_database = 'mobidblt';
+    tempFeature.protein = '';
+    tempFeature.locations?.map(
+      (
+        location: ExtendedFeatureLocation & {
+          'sequence-feature'?: string;
+          start?: number;
+          end?: number;
+        },
+        idx: number,
+      ) => {
+        if (
+          location['sequence-feature'] &&
+          location['sequence-feature'] !== ''
+        ) {
+          if (location.start && location.end) {
+            const restructuredLocation: ExtendedFeatureLocation[] = [
+              {
+                fragments: [
+                  {
+                    start: location.start,
+                    end: location.end,
+                    seq_feature: location['sequence-feature'],
+                  },
+                ],
+              },
+            ];
+
+            const tempChild: ExtendedFeature = {
+              accession: location['sequence-feature'],
+              source_database: 'mobidblt',
+              locations: restructuredLocation,
+            };
+            tempFeature.children?.push(tempChild);
+          }
+        } else {
+          slicedTempFeatureLocations.push(location);
+        }
+      },
+    );
+    tempFeature.locations = slicedTempFeatureLocations;
+    newFeatures.push(tempFeature);
+  });
+  return newFeatures;
 };
 
 export const makeTracks = ({
@@ -132,42 +198,7 @@ export const makeTracks = ({
       2. Merge unintegrated with result from (1.);
       3. Sort matches in tracks based on their position but, if integrated,
       maintaining grouping for the same InterPro entry.
-
-  // 1. and 2.
-  const integratedMatches = getMemberDBMatches(interpro);
-  const allMatches = integratedMatches.concat(unintegrated);
-
-  // this was 
-  const groups = groupByEntryType(
-    allMatches as { accession: string; type: string }[],
-  );
-
-  /* 3.
-        Group matches of the same type (e.g domain) by IntePro accession
-        sort matches by position within the same group,
-        sort all the groups based on first fragment of group.
-
-  Object.keys(groups).map((key) => {
-    const uniqueInterproAccessions = [
-      ...new Set(groups[key].map((match: ExtendedFeature) => match.integrated)),
-    ];
-    const allMatchesGroupedByEntry = [];
-
-    for (let i = 0; i < uniqueInterproAccessions.length; i++) {
-      const groupedEntry = groups[key].filter(
-        (match: ExtendedFeature) =>
-          match.integrated == uniqueInterproAccessions[i],
-      );
-      // Sort non-integrated and those appearing just once for an Interpro accession, independently from the grouped ones
-      if (uniqueInterproAccessions[i] === null || groupedEntry.length == 1) {
-        groupedEntry.map((entry) => allMatchesGroupedByEntry.push(entry));
-      } else {
-        allMatchesGroupedByEntry.push(groupedEntry.sort(sortTracks));
-      }
-    }
-    groups[key] = allMatchesGroupedByEntry.sort(sortTracks).flat();
-  });*/
-
+  */
   const groups = groupByEntryType(
     interpro.concat(unintegrated as { accession: string; type: string }[]),
   );
@@ -175,27 +206,7 @@ export const makeTracks = ({
   // Merge domain and families into respective representative ones. Merge homologous superfamily into domains.
   const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
 
-  // Domain and family as empty objects, to cancat other object later
-  if (!mergedData.domain) {
-    mergedData.domain = [];
-  }
-
-  if (!mergedData.family) {
-    mergedData.family = [];
-  }
-
-  // Add repeats and homologous superfamilies to domain
-  if (mergedData.homologous_superfamily) {
-    mergedData.domain = mergedData.domain.concat(
-      mergedData.homologous_superfamily,
-    );
-    mergedData.homologous_superfamily = [];
-  }
-
-  if (mergedData.repeat) {
-    mergedData.domain = mergedData.domain.concat(mergedData.repeat);
-    mergedData.repeat = [];
-  }
+  sectionsReorganization(mergedData);
 
   // Add representative data
   if (representativeFamilies?.length)
@@ -221,10 +232,7 @@ export const flattenTracksObject = (
     Object.entries(tracksObject)
       .sort(byEntryType)
       // “Binding_site” -> “Binding site”
-      .map(([key, value]) => [
-        key === 'ptm' ? 'PTM' : key.replace(UNDERSCORE, ' '),
-        value,
-      ])
+      .map(([key, value]) => [key.replace(UNDERSCORE, ' '), value])
   );
 };
 
@@ -250,22 +258,19 @@ export const addVariationTrack = (
 export const addPTMTrack = (
   proteomicsPayload: ProteinsAPIProteomics,
   protein: string,
-  tracks: ProteinViewerData,
+  tracks: ProteinViewerDataObject,
 ) => {
   if (proteomicsPayload?.features?.length) {
-    const proteomicsTrack: [string, Array<unknown>] = [
-      'PTM Data',
-      [
-        {
-          accession: `ptm_${protein}`,
-          data: proteomicsPayload,
-          type: 'ptm',
-          protein,
-          source_database: 'proteinsAPI',
-        },
-      ],
-    ];
-    tracks.push(proteomicsTrack);
+    if (!tracks['ptm']) {
+      tracks['ptm'] = [];
+    }
+    tracks['ptm'].push({
+      accession: `ptm_${protein}`,
+      data: proteomicsPayload,
+      type: 'ptm',
+      protein,
+      source_database: 'proteinsAPI',
+    });
   }
 };
 
@@ -283,6 +288,7 @@ type Props = PropsWithChildren<{
   dataConfidence?: RequestedData<AlphafoldConfidencePayload>;
   dataVariation?: RequestedData<ProteinsAPIVariation>;
   dataProteomics?: RequestedData<ProteinsAPIProteomics>;
+  dataFeatures?: RequestedData<ExtraFeaturesPayload>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
@@ -296,6 +302,7 @@ const DomainsOnProteinLoaded = ({
   dataConfidence,
   dataVariation,
   dataProteomics,
+  dataFeatures,
   conservationError,
   showConservationButton,
   handleConservationLoad,
@@ -307,10 +314,11 @@ const DomainsOnProteinLoaded = ({
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;
 
-  /*
-  Special tracks are now added to the dataMerged object before being sorted based on FIRST_IN_ORDER.
-  Adding the tracks to the dataSorted object, caused the Alphafold track and variants track to be displayed always at the first/last position.
-  */
+  let mainTracks: string[] = [];
+  let hideCategories: Record<string, boolean> = {};
+  const renamedTracks = ['domain', 'family', 'residues'];
+  let flattenedData = undefined;
+
   if (dataConfidence)
     addConfidenceTrack(dataConfidence, protein.accession, dataMerged);
 
@@ -326,81 +334,48 @@ const DomainsOnProteinLoaded = ({
 
   if (dataProteomics?.ok && dataProteomics.payload) {
     if (dataProteomics.payload.features.length > 0) {
-      /*addPTMTrack(dataProteomics.payload, protein.accession, sortedData);*/
+      addPTMTrack(dataProteomics.payload, protein.accession, dataMerged);
     }
   }
 
-  const uniqueResidues: Record<string, ExtendedFeature> = {};
-
-  // Group PIRSR residue by description and position
-  let pirsrFound = false;
-  for (let i = 0; i < dataMerged.residues?.length; i++) {
-    const currentResidue = dataMerged.residues[i] as ExtendedFeature;
-    if (currentResidue.source_database === 'pirsr') {
-      if (!pirsrFound) pirsrFound = true;
-      const residueStart =
-        currentResidue.locations?.[0].fragments?.[0].start || 0;
-      const residueEnd = currentResidue.locations?.[0].fragments?.[0].end || 0;
-      const residueDescription =
-        currentResidue.locations?.[0].description?.replace('.', '');
-
-      const dictKey =
-        residueStart.toString() + residueEnd.toString() + residueDescription;
-
-      if (!uniqueResidues[dictKey]) uniqueResidues[dictKey] = currentResidue;
-    } else {
-      uniqueResidues[currentResidue.accession] = currentResidue;
-    }
-  }
-
-  // Create fake PIRSR object to display group label
-  if (pirsrFound)
-    uniqueResidues['PIRSR'] = {
-      accession: 'PIRSR_GROUP',
-      source_database: 'pirsr',
-      type: 'residue',
-      locations: [
-        {
-          description: 'PIRSR',
-          fragments: [{ residues: '', start: -10, end: 0 }],
-        } as ExtendedFeatureLocation,
-      ],
-    };
-
-  dataMerged.conserved_residues = Object.values(uniqueResidues).sort((a, b) => {
-    // If comparing two entries from different DBs, put the non-pirsr always first (a) OR if source database is pirsr and first element is fake label, put fake label first
-    if (
-      (a.source_database !== 'pirsr' && b.source_database === 'pirsr') ||
-      (a.source_database === b.source_database && a.accession === 'PIRSR_GROUP')
-    )
-      return -1;
-    // If comparing two entries from different DBs, put the non-pirsr always first (b) OR if source database is pirsr and second element is fake label, put fake label first
-    else if (
-      (a.source_database === 'pirsr' && b.source_database !== 'pirsr') ||
-      (a.source_database === b.source_database && b.accession === 'PIRSR_GROUP')
-    )
-      return 1;
-    // All other cases
-    else return a.accession.localeCompare(b.accession);
-  });
-
-  if (dataMerged.domain) dataMerged.domains = dataMerged.domain.slice();
-
-  if (dataMerged.family) dataMerged.families = dataMerged.family.slice();
-
-  const renamedTracks = ['domain', 'family', 'residues'];
-  const sortedData = flattenTracksObject(dataMerged).filter(
-    (track) => !renamedTracks.includes(track[0]),
-  );
-
-  let mainTracks: string[] = [];
-  let hideCategories: Record<string, boolean> = {};
-
+  // Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
+  // and the ProteinViewer components are used in a different way in the InterproScan results section.
   if (protein.accession.startsWith('iprscan')) {
-    const homologous_superfamily = sortedData.filter(
-      (entry) => entry[0] == 'homologous superfamily',
-    )[0];
-    const representative_domains = sortedData.filter(
+    // What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
+    // InterProScan results section, because the DomainsOnProteinLoaded is used right away.
+    // Executing those steps here below. KEEP THIS ORDER OF OPERATIONS
+
+    // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
+    if (dataMerged['conserved_residues']) {
+      dataMerged['conserved_residues'] = standardizeResidueStructure(
+        dataMerged['conserved_residues'] as ExtendedFeature[],
+      );
+    }
+
+    proteinViewerReorganization(dataFeatures, dataMerged);
+    sectionsReorganization(dataMerged);
+
+    if (dataMerged['intrinsically_disordered_regions']) {
+      dataMerged['intrinsically_disordered_regions'] =
+        standardizeMobiDBFeatureStructure(
+          dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
+        );
+    }
+
+    // Sort data by match position, but exclude PIRSR, which is sorted in proteinViewerReorganization
+    Object.entries(dataMerged as ProteinViewerDataObject<ExtendedFeature>).map(
+      (group) => {
+        if (group[0] !== 'conserved_residues') group[1].sort(sortTracks).flat();
+      },
+    );
+
+    // Handle MobiDB-lite different format
+
+    flattenedData = flattenTracksObject(dataMerged).filter(
+      (track) => !renamedTracks.includes(track[0]),
+    );
+
+    const representative_domains = flattenedData.filter(
       (entry) => entry[0] == 'representative domains',
     )[0];
 
@@ -412,17 +387,50 @@ const DomainsOnProteinLoaded = ({
       });
     }
 
-    sortedData.map((entry) => {
-      if (entry[0] === 'domains') {
-        if (homologous_superfamily) {
-          entry[1] = entry[1].concat(homologous_superfamily[1]);
-        }
+    const dbToSection: Record<string, string> = {
+      cathgene3d: 'homologous_superfamily',
+      cdd: 'domain',
+      hamap: 'family',
+      panther: 'family',
+      pirsf: 'family',
+      pirsr: 'residue',
+      sfld: 'family',
+      smart: 'domain',
+      sff: 'homologous_superfamily',
+    };
 
+    flattenedData.map((entry) => {
+      if (entry[0] === 'domains') {
         if (representative_domains) {
           entry[1] = entry[1].concat(representative_domains[1]);
         }
+      } else if (entry[0] === 'other features') {
+        entry[1] = [];
+      } else if (entry[0] === 'representative domains') {
+        entry[1] = [];
+      }
+
+      // Move entries from unintegrated section to the correct one
+      else if (entry[0] === 'unintegrated') {
+        const tempUnintegrated = entry[1];
+        for (let i = 0; i < tempUnintegrated.length; i++) {
+          if (tempUnintegrated[i]) {
+            const sourcedb = (tempUnintegrated[i] as ExtendedFeature)
+              .source_database;
+            if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
+              if (dataMerged[dbToSection[sourcedb]]) {
+                dataMerged[dbToSection[sourcedb]] = dataMerged[
+                  dbToSection[sourcedb]
+                ].concat([tempUnintegrated[i]]);
+              }
+              tempUnintegrated.splice(i, 1);
+            }
+          }
+        }
       }
     });
+
+    // End of skipped reorganization steps
 
     mainTracks = [
       'alphafold confidence',
@@ -452,10 +460,6 @@ const DomainsOnProteinLoaded = ({
       'pfam-n': false,
       funfam: false,
     };
-
-    sortedData.map((entry) => {
-      (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
-    });
   } else {
     mainTracks = [
       'alphafold confidence',
@@ -469,8 +473,8 @@ const DomainsOnProteinLoaded = ({
 
     hideCategories = {
       'secondary structure': false,
-      families: true,
-      domains: true,
+      families: false,
+      domains: false,
       repeat: false,
       'conserved site': false,
       'active site': false,
@@ -482,23 +486,29 @@ const DomainsOnProteinLoaded = ({
       'pfam-n': false,
       funfam: false,
     };
+
+    flattenedData = flattenTracksObject(dataMerged).filter(
+      (track) => !renamedTracks.includes(track[0]),
+    );
   }
 
   return (
-    <ProteinViewer
-      protein={protein}
-      data={sortedData}
-      title={title}
-      show
-      ervationButton={showConservationButton}
-      handleConservationLoad={handleConservationLoad}
-      conservationError={conservationError}
-      loading={loading}
-      mainTracks={mainTracks}
-      hideCategories={hideCategories}
-    >
-      {children}
-    </ProteinViewer>
+    <>
+      <ProteinViewer
+        protein={protein}
+        data={flattenedData}
+        title={title}
+        show
+        ervationButton={showConservationButton}
+        handleConservationLoad={handleConservationLoad}
+        conservationError={conservationError}
+        loading={loading}
+        mainTracks={mainTracks}
+        hideCategories={hideCategories}
+      >
+        {children}
+      </ProteinViewer>
+    </>
   );
 };
 

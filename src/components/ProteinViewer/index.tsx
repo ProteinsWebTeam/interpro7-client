@@ -90,6 +90,30 @@ export type ExtendedFeature = Feature & {
   warnings?: Array<string>;
 };
 
+type PTM = {
+  position: number;
+  name: string;
+  sources: string[];
+};
+
+type PTMFeature = {
+  begin: string;
+  end: string;
+  peptide: string;
+  ptms: PTM[];
+};
+
+type PTMData = {
+  accession: string;
+  features: PTMFeature[];
+};
+
+export type PTMFragment = {
+  [annotation: string]: unknown;
+  start: number;
+  end: number;
+};
+
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
@@ -191,14 +215,60 @@ export const ProteinViewer = ({
     ],
   });
 
+  const typeNameToSectionName: Record<string, string> = {
+    'alphafold confidence': 'AlphaFold Confidence',
+    families: 'Families',
+    domains: 'Domains',
+    'pathogenic and likely pathogenic variants':
+      'Pathogenic and Likely Pathogenic Variants',
+    'intrinsically disordered regions': 'Intrinsically Disordered Regions',
+    'spurious proteins': 'Spurious Proteins',
+    'conserved residues': 'Conserved Residues',
+    unintegrated: 'Unintegrated',
+    'other features': 'Other Features',
+    'other residues': 'Other Residues',
+    'conserved site': 'Conserved Site',
+    'active site': 'Active Site',
+    'binding site': 'Binding Site',
+    PTM: 'Post-translational Modifications',
+    ptm: 'Post-translational Modifications',
+    'match conservation': 'Match Conservation',
+    'coiled-coils, signal peptides, transmembrane regions':
+      'Coiled-coils, Signal Peptides and Transmembrane Regions',
+    'short linear motifs': 'Short Linear Motifs',
+    'pfam-n': 'Pfam-N',
+    funfam: 'FunFam',
+    'external sources': 'External Sources',
+  };
+
   useEffect(() => {
+    /* 
+      Logic to handle default display settings for families and domains.
+      There's cases where representative families or representative domains are not available.
+      Examples: representative families still not supported in InterPro Scan, or there's just no representative match found in the data.
+      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown. 
+      If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
+    */
+
+    // Set which section needs to have its visibility changed based on the availability of represetative data
+    const changeVisibilityFor: string[] = [];
+    ['families', 'domains'].forEach((type) => {
+      const entries = data.find(([entryType]) => entryType === type)?.[1] || [];
+      const hasRep = (entries as ExtendedFeature[]).some(
+        (entry) => entry.representative === true,
+      );
+      if (hasRep) changeVisibilityFor.push(type);
+    });
+
+    // If in summary view, use changeVisibilityFor
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
-      ['families', 'domains'],
+      !showMoreSettings ? changeVisibilityFor : ['families', 'domains'],
       showMoreSettings ? false : true,
     );
+
     setHideCategory(newHideCategory);
-  }, [showMoreSettings]);
+  }, [showMoreSettings, data]);
 
   const openTooltip = (
     element: HTMLElement | undefined,
@@ -236,6 +306,28 @@ export const ProteinViewer = ({
     for (const category of categoryRefs.current) {
       category?.setExpandedAllTracks(expanded);
     }
+  };
+
+  const ptmFeaturesFragments = (features: PTMFeature[]): PTMFragment[] => {
+    const ptmFragments: PTMFragment[] = [];
+
+    features.map((feature) => {
+      feature.ptms.map((ptm) => {
+        const ptmFragment: PTMFragment = {
+          start: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
+          end: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
+          relative_pos: ptm.position - 1,
+          ptm_type: ptm.name,
+          peptide: feature.peptide,
+          peptide_start: parseInt(feature.begin),
+          peptide_end: parseInt(feature.end),
+          source: ptm.sources.join(', '),
+        };
+
+        ptmFragments.push(ptmFragment);
+      });
+    });
+    return ptmFragments;
   };
 
   return (
@@ -281,7 +373,6 @@ export const ProteinViewer = ({
                 {children}
               </Options>
               {protein.accession &&
-                !protein.accession.startsWith('iprscan') &&
                 mainTracks.length !== Object.entries(hideCategories).length && (
                   <ShowMoreTracks
                     showMore={showMore}
@@ -329,10 +420,73 @@ export const ProteinViewer = ({
                     );
                   }
 
+                  // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
+                  // This dict is used to go from type to section name
+                  const sectionName = typeNameToSectionName[type];
+
                   // Show only the main tracks unless button "Show more" is clicked
+
                   let hideDiv: string = '';
                   if (!showMore && !mainTracks.includes(type)) {
                     hideDiv = 'none';
+                  }
+
+                  // Transform PTM data to track-like data
+                  if (type == 'ptm') {
+                    const ptmFragmentsGroupedByModification: {
+                      [type: string]: PTMFragment[];
+                    } = {};
+
+                    // PTMs coming from APIs
+                    entries
+                      .filter(
+                        (entry) => entry.source_database === 'proteinsAPI',
+                      )
+                      .map((entry) => {
+                        const fragments = ptmFeaturesFragments(
+                          (entry.data as PTMData).features,
+                        );
+                        fragments.map((fragment) => {
+                          if (
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ]
+                          ) {
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ].push(fragment);
+                          } else {
+                            ptmFragmentsGroupedByModification[
+                              fragment.ptm_type as string
+                            ] = [fragment];
+                          }
+                        });
+                      });
+
+                    const ptmsEntriesGroupedByModification: ExtendedFeature[] =
+                      [];
+                    Object.entries(ptmFragmentsGroupedByModification).map(
+                      (ptmData) => {
+                        const modificationType: string = ptmData[0]; // Key
+                        const fragments: PTMFragment[] = ptmData[1]; // Key
+                        const newFeature: ExtendedFeature = {
+                          accession: protein.accession,
+                          name: modificationType,
+                          type: 'ptm',
+                          source_database: 'ptm',
+                          locations: [{ fragments: fragments }],
+                        };
+
+                        ptmsEntriesGroupedByModification.push(newFeature);
+                      },
+                    );
+
+                    // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
+                    entries = ptmsEntriesGroupedByModification.concat(
+                      entries.filter(
+                        (entry) => entry.source_database === 'interpro',
+                      ),
+                    );
                   }
 
                   return (
@@ -367,7 +521,7 @@ export const ProteinViewer = ({
                                 : 'icon-caret-down',
                             )}
                           />{' '}
-                          {type}
+                          {sectionName}
                         </button>
                       </header>
                       {component && (
