@@ -352,6 +352,35 @@ const DomainsOnProteinLoaded = ({
       );
     }
 
+    const dbToSection: Record<string, string> = {
+      cathgene3d: 'homologous_superfamily',
+      cdd: 'domain',
+      hamap: 'family',
+      panther: 'family',
+      pirsf: 'family',
+      pirsr: 'residue',
+      sfld: 'family',
+      smart: 'domain',
+      sff: 'homologous_superfamily',
+    };
+
+    // Move entries from unintegrated section to the correct one
+    if (dataMerged['unintegrated']) {
+      for (let i = 0; i < dataMerged['unintegrated'].length; i++) {
+        const unintegratedEntry = dataMerged['unintegrated'][
+          i
+        ] as ExtendedFeature;
+        const sourcedb = unintegratedEntry.source_database;
+        if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
+          if (dataMerged[dbToSection[sourcedb]]) {
+            dataMerged[dbToSection[sourcedb]] =
+              dataMerged[dbToSection[sourcedb]].concat(unintegratedEntry);
+          }
+          dataMerged['unintegrated'].splice(i, 1);
+        }
+      }
+    }
+
     proteinViewerReorganization(dataFeatures, dataMerged);
     sectionsReorganization(dataMerged);
 
@@ -369,8 +398,6 @@ const DomainsOnProteinLoaded = ({
       },
     );
 
-    // Handle MobiDB-lite different format
-
     flattenedData = flattenTracksObject(dataMerged).filter(
       (track) => !renamedTracks.includes(track[0]),
     );
@@ -387,18 +414,6 @@ const DomainsOnProteinLoaded = ({
       });
     }
 
-    const dbToSection: Record<string, string> = {
-      cathgene3d: 'homologous_superfamily',
-      cdd: 'domain',
-      hamap: 'family',
-      panther: 'family',
-      pirsf: 'family',
-      pirsr: 'residue',
-      sfld: 'family',
-      smart: 'domain',
-      sff: 'homologous_superfamily',
-    };
-
     flattenedData.map((entry) => {
       if (entry[0] === 'domains') {
         if (representative_domains) {
@@ -408,25 +423,6 @@ const DomainsOnProteinLoaded = ({
         entry[1] = [];
       } else if (entry[0] === 'representative domains') {
         entry[1] = [];
-      }
-
-      // Move entries from unintegrated section to the correct one
-      else if (entry[0] === 'unintegrated') {
-        const tempUnintegrated = entry[1];
-        for (let i = 0; i < tempUnintegrated.length; i++) {
-          if (tempUnintegrated[i]) {
-            const sourcedb = (tempUnintegrated[i] as ExtendedFeature)
-              .source_database;
-            if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
-              if (dataMerged[dbToSection[sourcedb]]) {
-                dataMerged[dbToSection[sourcedb]] = dataMerged[
-                  dbToSection[sourcedb]
-                ].concat([tempUnintegrated[i]]);
-              }
-              tempUnintegrated.splice(i, 1);
-            }
-          }
-        }
       }
     });
 

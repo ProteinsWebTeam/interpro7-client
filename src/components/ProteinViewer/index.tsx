@@ -400,153 +400,172 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-              {(data as unknown as ProteinViewerData<ExtendedFeature>)
-                .filter(([_, tracks]) => tracks && tracks.length)
-                .map(([type, entries, component]) => {
-                  entries.forEach((entry: ExtendedFeature) => {
-                    entry.protein = protein.accession;
-                  });
+              {data &&
+                (data as unknown as ProteinViewerData<ExtendedFeature>)
+                  .filter(([_, tracks]) => tracks && tracks.length)
+                  .map(([type, entries, component]) => {
+                    entries.forEach((entry: ExtendedFeature) => {
+                      entry.protein = protein.accession;
+                    });
 
-                  const LabelComponent = component?.component || 'span';
-                  let representativeEntries: ExtendedFeature[] | null = null;
-                  let nonRepresentativeEntries: ExtendedFeature[] | null = null;
+                    const LabelComponent = component?.component || 'span';
+                    let representativeEntries: ExtendedFeature[] | null = null;
+                    let nonRepresentativeEntries: ExtendedFeature[] | null =
+                      null;
 
-                  if (type === 'domains' || type === 'families') {
-                    representativeEntries = entries.filter(
-                      (entry) => entry.representative === true,
-                    );
-                    nonRepresentativeEntries = entries.filter(
-                      (entry) => entry.representative !== true,
-                    );
-                  }
+                    if (type === 'domains' || type === 'families') {
+                      representativeEntries = entries.filter(
+                        (entry) => entry.representative === true,
+                      );
+                      nonRepresentativeEntries = entries.filter(
+                        (entry) => entry.representative !== true,
+                      );
+                    }
 
-                  // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
-                  // This dict is used to go from type to section name
-                  const sectionName = typeNameToSectionName[type];
+                    // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
+                    // This dict is used to go from type to section name
+                    const sectionName = typeNameToSectionName[type];
 
-                  // Show only the main tracks unless button "Show more" is clicked
+                    // Show only the main tracks unless button "Show more" is clicked
 
-                  let hideDiv: string = '';
-                  if (!showMore && !mainTracks.includes(type)) {
-                    hideDiv = 'none';
-                  }
+                    let hideDiv: string = '';
+                    if (!showMore && !mainTracks.includes(type)) {
+                      hideDiv = 'none';
+                    }
 
-                  // Transform PTM data to track-like data
-                  if (type == 'ptm') {
-                    const ptmFragmentsGroupedByModification: {
-                      [type: string]: PTMFragment[];
-                    } = {};
+                    // Transform PTM data to track-like data
+                    if (type == 'ptm') {
+                      const ptmFragmentsGroupedByModification: {
+                        [type: string]: PTMFragment[];
+                      } = {};
 
-                    // PTMs coming from APIs
-                    entries
-                      .filter(
-                        (entry) => entry.source_database === 'proteinsAPI',
-                      )
-                      .map((entry) => {
-                        const fragments = ptmFeaturesFragments(
-                          (entry.data as PTMData).features,
-                        );
-                        fragments.map((fragment) => {
-                          if (
-                            ptmFragmentsGroupedByModification[
-                              fragment.ptm_type as string
-                            ]
-                          ) {
-                            ptmFragmentsGroupedByModification[
-                              fragment.ptm_type as string
-                            ].push(fragment);
-                          } else {
-                            ptmFragmentsGroupedByModification[
-                              fragment.ptm_type as string
-                            ] = [fragment];
-                          }
+                      // PTMs coming from APIs
+                      entries
+                        .filter(
+                          (entry) => entry.source_database === 'proteinsAPI',
+                        )
+                        .map((entry) => {
+                          const fragments = ptmFeaturesFragments(
+                            (entry.data as PTMData).features,
+                          );
+                          fragments.map((fragment) => {
+                            if (
+                              ptmFragmentsGroupedByModification[
+                                fragment.ptm_type as string
+                              ]
+                            ) {
+                              ptmFragmentsGroupedByModification[
+                                fragment.ptm_type as string
+                              ].push(fragment);
+                            } else {
+                              ptmFragmentsGroupedByModification[
+                                fragment.ptm_type as string
+                              ] = [fragment];
+                            }
+                          });
                         });
-                      });
 
-                    const ptmsEntriesGroupedByModification: ExtendedFeature[] =
-                      [];
-                    Object.entries(ptmFragmentsGroupedByModification).map(
-                      (ptmData) => {
-                        const modificationType: string = ptmData[0]; // Key
-                        const fragments: PTMFragment[] = ptmData[1]; // Key
-                        const newFeature: ExtendedFeature = {
-                          accession: protein.accession,
-                          name: modificationType,
-                          type: 'ptm',
-                          source_database: 'ptm',
-                          locations: [{ fragments: fragments }],
-                        };
+                      const ptmsEntriesGroupedByModification: ExtendedFeature[] =
+                        [];
+                      Object.entries(ptmFragmentsGroupedByModification).map(
+                        (ptmData) => {
+                          const modificationType: string = ptmData[0]; // Key
+                          const fragments: PTMFragment[] = ptmData[1]; // Key
+                          const newFeature: ExtendedFeature = {
+                            accession: protein.accession,
+                            name: modificationType,
+                            type: 'ptm',
+                            source_database: 'ptm',
+                            locations: [{ fragments: fragments }],
+                          };
 
-                        ptmsEntriesGroupedByModification.push(newFeature);
-                      },
-                    );
-
-                    // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
-                    entries = ptmsEntriesGroupedByModification.concat(
-                      entries.filter(
-                        (entry) => entry.source_database === 'interpro',
-                      ),
-                    );
-                  }
-
-                  return (
-                    <div
-                      key={type}
-                      // Conditioanally display the div containing the track
-                      style={{ display: hideDiv }}
-                      className={css(
-                        'tracks-container',
-                        'track-sized',
-                        'protvista-grid',
-                        {
-                          printing: isPrinting,
+                          ptmsEntriesGroupedByModification.push(newFeature);
                         },
-                      )}
-                    >
-                      <header>
-                        <button
-                          onClick={() =>
-                            setHideCategory(
-                              switchCategoryVisibility(hideCategory, [type]),
-                            )
-                          }
-                          className={css('as-text')}
-                        >
-                          <span
-                            className={css(
-                              'icon',
-                              'icon-common',
-                              hideCategory[type]
-                                ? 'icon-caret-right'
-                                : 'icon-caret-down',
+                      );
+
+                      // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
+                      entries = ptmsEntriesGroupedByModification.concat(
+                        entries.filter(
+                          (entry) => entry.source_database === 'interpro',
+                        ),
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={type}
+                        // Conditioanally display the div containing the track
+                        style={{ display: hideDiv }}
+                        className={css(
+                          'tracks-container',
+                          'track-sized',
+                          'protvista-grid',
+                          {
+                            printing: isPrinting,
+                          },
+                        )}
+                      >
+                        <header>
+                          <button
+                            onClick={() =>
+                              setHideCategory(
+                                switchCategoryVisibility(hideCategory, [type]),
+                              )
+                            }
+                            className={css('as-text')}
+                          >
+                            <span
+                              className={css(
+                                'icon',
+                                'icon-common',
+                                hideCategory[type]
+                                  ? 'icon-caret-right'
+                                  : 'icon-caret-down',
+                              )}
+                            />{' '}
+                            {sectionName}
+                          </button>
+                        </header>
+                        {component && (
+                          <div className={css('track-accession')}>
+                            <LabelComponent
+                              {...(component?.attributes || {})}
+                            />
+                          </div>
+                        )}{' '}
+                        {representativeEntries ? (
+                          <>
+                            {representativeEntries.length > 0 ? (
+                              <RepresentativeTrack
+                                type={type}
+                                hideCategory={false}
+                                highlightColor={highlightColor}
+                                entries={representativeEntries}
+                                length={protein.sequence.length}
+                                openTooltip={openTooltip}
+                                closeTooltip={closeTooltip}
+                                isPrinting={isPrinting}
+                              />
+                            ) : (
+                              ' '
                             )}
-                          />{' '}
-                          {sectionName}
-                        </button>
-                      </header>
-                      {component && (
-                        <div className={css('track-accession')}>
-                          <LabelComponent {...(component?.attributes || {})} />
-                        </div>
-                      )}{' '}
-                      {representativeEntries ? (
-                        <>
-                          {representativeEntries.length > 0 ? (
-                            <RepresentativeTrack
-                              type={type}
-                              hideCategory={false}
+                            <TracksInCategory
+                              entries={nonRepresentativeEntries || []}
+                              sequence={protein.sequence}
+                              hideCategory={hideCategory[type]}
                               highlightColor={highlightColor}
-                              entries={representativeEntries}
-                              length={protein.sequence.length}
                               openTooltip={openTooltip}
                               closeTooltip={closeTooltip}
                               isPrinting={isPrinting}
+                              ref={(ref: ExpandedHandle) =>
+                                categoryRefs.current.push(ref)
+                              }
+                              databases={dataBase?.payload?.databases}
                             />
-                          ) : (
-                            ' '
-                          )}
+                          </>
+                        ) : (
                           <TracksInCategory
-                            entries={nonRepresentativeEntries || []}
+                            entries={entries}
                             sequence={protein.sequence}
                             hideCategory={hideCategory[type]}
                             highlightColor={highlightColor}
@@ -558,25 +577,10 @@ export const ProteinViewer = ({
                             }
                             databases={dataBase?.payload?.databases}
                           />
-                        </>
-                      ) : (
-                        <TracksInCategory
-                          entries={entries}
-                          sequence={protein.sequence}
-                          hideCategory={hideCategory[type]}
-                          highlightColor={highlightColor}
-                          openTooltip={openTooltip}
-                          closeTooltip={closeTooltip}
-                          isPrinting={isPrinting}
-                          ref={(ref: ExpandedHandle) =>
-                            categoryRefs.current.push(ref)
-                          }
-                          databases={dataBase?.payload?.databases}
-                        />
-                      )}
-                    </div>
-                  );
-                })}
+                        )}
+                      </div>
+                    );
+                  })}
               <ConservationMockupTrack
                 showConservationButton={showConservationButton}
                 handleConservationLoad={handleConservationLoad}
