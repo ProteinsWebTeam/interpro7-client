@@ -45,6 +45,7 @@ export default (
           successful: null,
           blobURL: null,
           size: null,
+          originURL: action.originURL,
         },
       };
     case DOWNLOAD_ERROR:
@@ -70,6 +71,7 @@ export default (
           date: action.date,
           version: action.version,
           fileType: action.fileType,
+          originURL: action.originURL,
         },
       };
     case DOWNLOAD_DELETE:
@@ -80,7 +82,10 @@ export default (
     case SET_INITIAL_DOWNLOADS:
       const savedDownloads: Record<string, DownloadProgress> = {};
       Object.entries(action.downloads).forEach(
-        ([key, { blob, date, fileType, length, subset, version }]) => {
+        ([
+          key,
+          { blob, date, fileType, length, subset, version, originURL },
+        ]) => {
           savedDownloads[key] = {
             progress: 1,
             successful: true,
@@ -91,6 +96,7 @@ export default (
             fileType,
             date,
             version,
+            originURL,
           };
         },
       );

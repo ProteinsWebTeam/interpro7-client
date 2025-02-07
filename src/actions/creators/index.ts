@@ -224,6 +224,7 @@ export const downloadURL = (
   fileType: DownloadFileTypes,
   subset: boolean,
   endpoint: string,
+  originURL?: string,
 ) =>
   ({
     type: types.DOWNLOAD_URL,
@@ -231,6 +232,7 @@ export const downloadURL = (
     fileType,
     subset,
     endpoint,
+    originURL,
   }) as DownloadAction;
 
 export const downloadError = (
@@ -257,7 +259,14 @@ export const downloadSuccess = (
     length,
     date,
     version,
-  }: { blob: Blob; length: number; date: string; version: string },
+    originURL,
+  }: {
+    blob: Blob;
+    length: number;
+    date: string;
+    version: string;
+    originURL: string;
+  },
 ) =>
   ({
     type: types.DOWNLOAD_SUCCESS,
@@ -269,6 +278,7 @@ export const downloadSuccess = (
     length,
     date,
     version,
+    originURL,
   }) as DownloadAction;
 
 export const downloadProgress = (
