@@ -181,7 +181,7 @@ const ProteinViewerForAlphafold = ({
   return (
     <div ref={trackRef}>
       <ProteinViewer
-        type={'alphafold'}
+        viewerType={'alphafold'}
         protein={dataProtein.payload.metadata}
         data={tracks}
         mainTracks={mainTracks}

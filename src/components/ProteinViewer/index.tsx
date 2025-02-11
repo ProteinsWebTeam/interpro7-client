@@ -132,7 +132,7 @@ type Props = PropsWithChildren<{
   /** TO include loading animation in the header */
   loading: boolean;
 
-  type: string;
+  viewerType: string;
 
   changeSettingsRaw: typeof changeSettingsRaw;
   showMoreSettings: boolean;
@@ -172,7 +172,7 @@ const switchCategoryVisibilityShowMore = (
 
 export const ProteinViewer = ({
   mainTracks,
-  type,
+  viewerType,
   hideCategories,
   protein,
   title,
@@ -255,7 +255,7 @@ export const ProteinViewer = ({
 
     // Don't run this for the Alphafold Viewer, where the selection of a match
     // selects part of the 3D model and resets category visibilities. Improve in the future
-    if (type !== 'alphafold') {
+    if (viewerType !== 'alphafold') {
       // Set which section needs to have its visibility changed based on the availability of represetative data
       const changeVisibilityFor: string[] = [];
       ['families', 'domains'].forEach((type) => {
@@ -379,19 +379,21 @@ export const ProteinViewer = ({
               >
                 {children}
               </Options>
-              {protein.accession &&
-                mainTracks.length !== Object.entries(hideCategories).length && (
-                  <ShowMoreTracks
-                    showMore={showMore}
-                    changeSettingsRaw={changeSettingsRaw}
-                    showMoreChanged={setShowMore}
-                    setHideCategory={setHideCategory}
-                    switchCategoryVisibilityShowMore={
-                      switchCategoryVisibilityShowMore
-                    }
-                    hideCategory={hideCategory}
-                  />
-                )}
+
+              {/* Hide display mode switcher for alphafold viewer due to: 
+              see comment in UseEffect above*/}
+              {protein.accession && viewerType !== 'alphafold' && (
+                <ShowMoreTracks
+                  showMore={showMore}
+                  changeSettingsRaw={changeSettingsRaw}
+                  showMoreChanged={setShowMore}
+                  setHideCategory={setHideCategory}
+                  switchCategoryVisibilityShowMore={
+                    switchCategoryVisibilityShowMore
+                  }
+                  hideCategory={hideCategory}
+                />
+              )}
             </div>
           </div>
 
