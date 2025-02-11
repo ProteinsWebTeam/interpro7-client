@@ -14,9 +14,16 @@ type Props = {
   fixedHighlight?: string;
   id: string;
   protein: { accession: string; length: number; sequence: string };
+  viewerType?: string;
 };
 
-const ProteinViewerLoaded = ({ protein, tracks, chain, id }: Props) => {
+const ProteinViewerLoaded = ({
+  protein,
+  tracks,
+  chain,
+  id,
+  viewerType,
+}: Props) => {
   const protvistaEl = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -76,6 +83,7 @@ const ProteinViewerLoaded = ({ protein, tracks, chain, id }: Props) => {
         data={enrichedTracks}
         id={id}
         title="Domains in the chain"
+        viewerType={'structures'}
       />
     </div>
   );

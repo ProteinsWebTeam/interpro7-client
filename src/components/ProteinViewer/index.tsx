@@ -255,7 +255,7 @@ export const ProteinViewer = ({
 
     // Don't run this for the Alphafold Viewer, where the selection of a match
     // selects part of the 3D model and resets category visibilities. Improve in the future
-    if (viewerType !== 'alphafold') {
+    if (viewerType !== 'structures') {
       // Set which section needs to have its visibility changed based on the availability of represetative data
       const changeVisibilityFor: string[] = [];
       ['families', 'domains'].forEach((type) => {
@@ -382,7 +382,7 @@ export const ProteinViewer = ({
 
               {/* Hide display mode switcher for alphafold viewer due to: 
               see comment in UseEffect above*/}
-              {protein.accession && viewerType !== 'alphafold' && (
+              {protein.accession && viewerType !== 'structures' && (
                 <ShowMoreTracks
                   showMore={showMore}
                   changeSettingsRaw={changeSettingsRaw}
