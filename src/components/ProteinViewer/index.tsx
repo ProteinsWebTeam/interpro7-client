@@ -132,6 +132,8 @@ type Props = PropsWithChildren<{
   /** TO include loading animation in the header */
   loading: boolean;
 
+  type: string;
+
   changeSettingsRaw: typeof changeSettingsRaw;
   showMoreSettings: boolean;
 
@@ -170,6 +172,7 @@ const switchCategoryVisibilityShowMore = (
 
 export const ProteinViewer = ({
   mainTracks,
+  type,
   hideCategories,
   protein,
   title,
@@ -250,24 +253,28 @@ export const ProteinViewer = ({
       If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
     */
 
-    // Set which section needs to have its visibility changed based on the availability of represetative data
-    const changeVisibilityFor: string[] = [];
-    ['families', 'domains'].forEach((type) => {
-      const entries = data.find(([entryType]) => entryType === type)?.[1] || [];
-      const hasRep = (entries as ExtendedFeature[]).some(
-        (entry) => entry.representative === true,
+    // Don't run this for the Alphafold Viewer, where the selection of a match
+    // selects part of the 3D model and resets category visibilities. Improve in the future
+    if (type !== 'alphafold') {
+      // Set which section needs to have its visibility changed based on the availability of represetative data
+      const changeVisibilityFor: string[] = [];
+      ['families', 'domains'].forEach((type) => {
+        const entries =
+          data.find(([entryType]) => entryType === type)?.[1] || [];
+        const hasRep = (entries as ExtendedFeature[]).some(
+          (entry) => entry.representative === true,
+        );
+        if (hasRep) changeVisibilityFor.push(type);
+      });
+
+      // If in summary view, use changeVisibilityFor
+      const newHideCategory = switchCategoryVisibilityShowMore(
+        hideCategory,
+        !showMoreSettings ? changeVisibilityFor : ['families', 'domains'],
+        showMoreSettings ? false : true,
       );
-      if (hasRep) changeVisibilityFor.push(type);
-    });
-
-    // If in summary view, use changeVisibilityFor
-    const newHideCategory = switchCategoryVisibilityShowMore(
-      hideCategory,
-      !showMoreSettings ? changeVisibilityFor : ['families', 'domains'],
-      showMoreSettings ? false : true,
-    );
-
-    setHideCategory(newHideCategory);
+      setHideCategory(newHideCategory);
+    }
   }, [showMoreSettings, data]);
 
   const openTooltip = (
@@ -427,7 +434,6 @@ export const ProteinViewer = ({
                     const sectionName = typeNameToSectionName[type];
 
                     // Show only the main tracks unless button "Show more" is clicked
-
                     let hideDiv: string = '';
                     if (!showMore && !mainTracks.includes(type)) {
                       hideDiv = 'none';
