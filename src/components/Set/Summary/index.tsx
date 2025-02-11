@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Accession from 'components/Accession';
 import Description from 'components/Description';
@@ -19,6 +19,7 @@ import style from './style.css';
 import protvistaOptions from 'components/ProteinViewer/Options/style.css';
 import ipro from 'styles/interpro-vf.css';
 import summary from 'styles/summary.css';
+import description from 'src/reducers/custom-location/description';
 
 const css = cssBinder(style, summary, protvistaOptions, ipro);
 
@@ -50,8 +51,7 @@ export const schemaProcessData = ({
   },
 });
 
-const SetLiterature = ({ literature }: { literature: Array<Reference> }) => {
-  if (!literature) return null;
+const getLiterature = (literature: Array<Reference>): [string, Reference][] => {
   const literatureEntries: [string, Reference][] = literature.map((ref) => {
     const journalRegExp = /(.+) (\d{4});(\d+):(\d+-\d+)./;
     const matches = journalRegExp.exec(ref.journal || '');
@@ -69,6 +69,13 @@ const SetLiterature = ({ literature }: { literature: Array<Reference> }) => {
     }
     return [String(ref.PMID), ref];
   });
+
+  return literatureEntries;
+};
+
+const SetLiterature = ({ literature }: { literature: Array<Reference> }) => {
+  if (!literature) return null;
+  const literatureEntries = getLiterature(literature);
   return (
     <>
       <h4>References</h4>
@@ -80,15 +87,17 @@ const SetLiterature = ({ literature }: { literature: Array<Reference> }) => {
 const SetDescription = ({
   accession,
   description,
+  literature,
 }: {
   accession: string;
   description: string;
+  literature: [string, Reference][];
 }) => {
   if (!accession || !description) return null;
   return (
     <>
       <h4>Description</h4>
-      <Description textBlocks={[description]} />
+      <Description literature={literature} textBlocks={[description]} />
     </>
   );
 };
@@ -195,6 +204,7 @@ const SummarySet = ({ data, loading }: Props) => {
       <SetDescription
         accession={metadata.accession}
         description={metadata?.description}
+        literature={getLiterature(metadata.literature)}
       />
       <SetLiterature literature={metadata?.literature} />
       {hasWiki && (

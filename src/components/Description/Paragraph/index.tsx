@@ -5,7 +5,7 @@ import { ENTRY_DBS } from 'utils/url-patterns';
 
 import Link from 'components/generic/Link';
 
-import Citations, { CITATION_REGEX } from '../Citations';
+import Citations, { CITATION_REGEX, PMID_REGEX } from '../Citations';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -39,18 +39,35 @@ export const Paragraph = ({
 }: Props) => {
   let text = p;
   let match = null;
-  const parts = [];
-  while ((match = text.match(CITATIONS_REGEX))) {
+  let parts = [];
+
+  while (
+    (match = text.match(CITATIONS_REGEX)) ||
+    (match = text.match(PMID_REGEX))
+  ) {
     parts.push(...text.slice(0, match.index).split(TAG_REGEX));
     parts.push(match[0]);
     text = text.slice((match.index || 0) + match[0].length);
   }
   parts.push(...text.split(TAG_REGEX));
+  console.log(parts);
   return (
     <div>
-      {parts.map((part, i) => {
+      {parts?.map((part, i) => {
         if (part.match(CITATIONS_REGEX)) {
           const text = part.replace(REMOVE_TRAILING_COMMA_REGEX, '');
+          console.log(text);
+          return (
+            <Citations
+              text={text}
+              key={i}
+              literature={literature}
+              withoutIDs={withoutIDs}
+            />
+          );
+        } else if (part.match(PMID_REGEX)) {
+          const text = part.replaceAll('PMID', '[PMID').replaceAll(',', '], ');
+          console.log(text);
           return (
             <Citations
               text={text}

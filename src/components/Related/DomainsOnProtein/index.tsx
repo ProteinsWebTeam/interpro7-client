@@ -383,7 +383,29 @@ const DomainOnProteinWithoutData = ({
     !dataFeatures?.loading &&
     !dataResidues?.loading
   ) {
-    return <Callout type="info">No entries match this protein.</Callout>;
+    return (
+      <>
+        <Callout type="info">No entries match this protein.</Callout>
+        <DomainsOnProteinLoaded
+          title={'Alphafold Confidence'}
+          mainData={mainData}
+          dataMerged={mergedData}
+          dataConfidence={dataConfidence}
+          loading={
+            data?.loading ||
+            dataFeatures?.loading ||
+            dataResidues?.loading ||
+            false
+          }
+          // Disabling Conservation until hmmer is working
+          // conservationError={conservation.error}
+          // showConservationButton={showConservationButton}
+          // handleConservationLoad={fetchConservationData}
+        >
+          {children}
+        </DomainsOnProteinLoaded>
+      </>
+    );
   }
 
   return (
