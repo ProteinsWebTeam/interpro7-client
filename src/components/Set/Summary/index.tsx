@@ -52,7 +52,7 @@ export const schemaProcessData = ({
 });
 
 const getLiterature = (literature: Array<Reference>): [string, Reference][] => {
-  const literatureEntries: [string, Reference][] = literature.map((ref) => {
+  const literatureEntries: [string, Reference][] = literature?.map((ref) => {
     const journalRegExp = /(.+) (\d{4});(\d+):(\d+-\d+)./;
     const matches = journalRegExp.exec(ref.journal || '');
     if (matches) {

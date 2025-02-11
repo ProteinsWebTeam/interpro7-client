@@ -44,6 +44,7 @@ const ProteinViewerForStructure = ({
     representativeDomains,
     representativeFamilies,
   } = processedData;
+
   return (
     <div>
       <EntriesOnStructure

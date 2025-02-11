@@ -94,6 +94,7 @@ const mergeData = (
     if (!(entry.chain in out)) {
       out[entry.chain] = {};
     }
+
     if (!(entry.protein in out[entry.chain])) {
       // Merging the secondary structures data per chain
       const secondaryStructArray = [];
@@ -149,7 +150,6 @@ const mergeData = (
     if (!out[entry.chain][entry.protein].data[dataType as string]) {
       out[entry.chain][entry.protein].data[dataType as string] = [];
     }
-
     out[entry.chain][entry.protein].data[dataType as string].push({
       accession: entry.accession,
       name: entry.name,
