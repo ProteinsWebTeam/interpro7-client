@@ -10,6 +10,7 @@ import cssBinder from 'styles/cssBinder';
 
 import styles from './style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import description from 'src/reducers/custom-location/description';
 
 const css = cssBinder(styles, fonts);
 
@@ -79,6 +80,7 @@ class Description extends PureComponent<Props> {
                     ) : (
                       <BadgeCurated />
                     ))}
+
                   <Paragraph
                     key={`${i}.${j}`}
                     p={text}
