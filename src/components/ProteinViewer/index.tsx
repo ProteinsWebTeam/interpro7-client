@@ -242,6 +242,7 @@ export const ProteinViewer = ({
     'pfam-n': 'Pfam-N',
     funfam: 'FunFam',
     'external sources': 'External Sources',
+    'secondary structure': 'Secondary Structure',
   };
 
   useEffect(() => {
