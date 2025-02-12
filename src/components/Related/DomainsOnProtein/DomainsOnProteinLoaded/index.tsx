@@ -402,19 +402,26 @@ const DomainsOnProteinLoaded = ({
 
     flattenedData = flattenTracksObject(proteinViewerData);
 
-    // // Add representative data
-    // const representativeTracks: string[] = ['representative_domains', 'representative_families']
-    // const representativeToSection: Record<string, string> = {
-    //    "representative_domains": "domain",
-    //    "representative_families": "family"
-    // }
+    // Add representative data
+    const representativeTracks: string[] = [
+      'representative_domains',
+      'representative_families',
+    ];
+    const representativeToSection: Record<string, string> = {
+      representative_domains: 'domain',
+      representative_families: 'family',
+    };
 
-    // representativeTracks.map((track) => {
-    //   if (dataMerged[track]) {
-    //     (dataMerged[track] as ExtendedFeature[]).map((entry) => {entry.representative = true})
-    //     dataMerged[representativeToSection[track]] = dataMerged[representativeToSection[track]].concat(dataMerged[track])
-    //   }
-    // })
+    representativeTracks.map((track) => {
+      if (dataMerged[track]) {
+        (dataMerged[track] as ExtendedFeature[]).map((entry) => {
+          entry.representative = true;
+        });
+        dataMerged[representativeToSection[track]] = dataMerged[
+          representativeToSection[track]
+        ].concat(dataMerged[track]);
+      }
+    });
 
     mainTracks = [
       'alphafold confidence',
