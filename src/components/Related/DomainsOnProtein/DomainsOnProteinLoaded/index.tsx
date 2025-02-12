@@ -175,6 +175,7 @@ const standardizeMobiDBFeatureStructure = (
     tempFeature.locations = slicedTempFeatureLocations;
     newFeatures.push(tempFeature);
   });
+
   return newFeatures;
 };
 
@@ -307,8 +308,6 @@ const DomainsOnProteinLoaded = ({
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;
 
-  let mainTracks: string[] = [];
-  let hideCategories: Record<string, boolean> = {};
   let flattenedData = undefined;
 
   if (dataConfidence)
@@ -375,21 +374,21 @@ const DomainsOnProteinLoaded = ({
       dataMerged['unintegrated'] = [...filteredUnintegrated];
     }
 
-    console.log(accessionsToRemoveFromUnintegrated);
-
-    // Create PTM section
-    if (dataMerged['intrinsically_disordered_regions']) {
-      dataMerged['intrinsically_disordered_regions'] =
-        standardizeMobiDBFeatureStructure(
-          dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
-        );
-    }
-
     let proteinViewerData = proteinViewerReorganization(
       dataFeatures,
       dataMerged as ProteinViewerDataObject<MinimalFeature>,
     );
     proteinViewerData = sectionsReorganization(proteinViewerData);
+
+    // Create PTM section
+    if (proteinViewerData['intrinsically_disordered_regions']) {
+      proteinViewerData['intrinsically_disordered_regions'] =
+        standardizeMobiDBFeatureStructure(
+          proteinViewerData[
+            'intrinsically_disordered_regions'
+          ] as ExtendedFeature[],
+        );
+    }
 
     // Sort data by match position, but exclude PIRSR, which is sorted in proteinViewerReorganization
     Object.entries(
@@ -420,65 +419,12 @@ const DomainsOnProteinLoaded = ({
         dataMerged[representativeToSection[track]] = dataMerged[
           representativeToSection[track]
         ].concat(dataMerged[track]);
+
+        // Remove representative_x track
+        dataMerged[track] = [];
       }
     });
-
-    mainTracks = [
-      'alphafold confidence',
-      'family',
-      'domain',
-      'pathogenic and likely pathogenic variants',
-      'intrinsically disordered regions',
-      'spurious proteins',
-      'residues',
-      'unintegrated',
-      'other features',
-      'other residues',
-    ];
-
-    hideCategories = {
-      'secondary structure': false,
-      family: false,
-      domain: false,
-      repeat: false,
-      'conserved site': false,
-      'active site': false,
-      'binding site': false,
-      ptm: false,
-      'match conservation': false,
-      'coiled-coils, signal peptides, transmembrane regions': false,
-      'short linear motifs': false,
-      'pfam-n': false,
-      funfam: false,
-    };
   } else {
-    mainTracks = [
-      'alphafold confidence',
-      'family',
-      'domain',
-      'pathogenic and likely pathogenic variants',
-      'intrinsically disordered regions',
-      'spurious proteins',
-      'residues',
-    ];
-
-    hideCategories = {
-      'secondary structure': false,
-      family: false,
-      domain: false,
-      repeat: false,
-      'conserved site': false,
-      residues: false,
-      'active site': false,
-      'binding site': false,
-      ptm: false,
-      'match conservation': false,
-      'coiled-coils, signal peptides, transmembrane regions': false,
-      'short linear motifs': false,
-      'pfam-n': false,
-      funfam: false,
-    };
-
     flattenedData = flattenTracksObject(dataMerged);
   }
 
@@ -493,8 +439,6 @@ const DomainsOnProteinLoaded = ({
         handleConservationLoad={handleConservationLoad}
         conservationError={conservationError}
         loading={loading}
-        mainTracks={mainTracks}
-        hideCategories={hideCategories}
       >
         {children}
       </ProteinViewer>

@@ -151,22 +151,7 @@ const ProteinViewerForAlphafold = ({
   if (dataConfidence) addConfidenceTrack(dataConfidence, protein, groups);
   const tracks = flattenTracksObject(groups);
 
-  const mainTracks = [
-    'alphafold confidence',
-    'domain',
-    'family',
-    'active site',
-    'conserved site',
-  ];
-
   if (!dataProtein.payload?.metadata) return null;
-
-  const hideCategories = {
-    domain: false,
-    family: false,
-    'active site': false,
-    'conserved site': false,
-  };
 
   return (
     <div ref={trackRef}>
@@ -174,8 +159,6 @@ const ProteinViewerForAlphafold = ({
         viewerType={'structures'}
         protein={dataProtein.payload.metadata}
         data={tracks}
-        mainTracks={mainTracks}
-        hideCategories={hideCategories}
         title="Protein domains"
         showOptions={!isSplitScreen}
       />

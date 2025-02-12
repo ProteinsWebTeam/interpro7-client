@@ -30,6 +30,23 @@ export const typeNameToSectionName: Record<string, string> = {
   'external sources': 'External Sources',
 };
 
+export const firstHideCategories = {
+  'secondary structure': false,
+  family: false,
+  domain: false,
+  repeat: false,
+  'conserved site': false,
+  residues: false,
+  'active site': false,
+  'binding site': false,
+  ptm: false,
+  'match conservation': false,
+  'coiled-coils, signal peptides, transmembrane regions': false,
+  'short linear motifs': false,
+  'pfam-n': false,
+  funfam: false,
+};
+
 export type PTM = {
   position: number;
   name: string;
@@ -176,7 +193,7 @@ const processData = <M = Metadata>(
   };
 };
 
-const ptmFeaturesFragments = (features: PTMFeature[]): PTMFragment[] => {
+export const ptmFeaturesFragments = (features: PTMFeature[]): PTMFragment[] => {
   const ptmFragments: PTMFragment[] = [];
 
   features.map((feature) => {
@@ -236,13 +253,19 @@ export const standardizePTMData = (
       locations: [{ fragments: fragments }],
     };
 
+    console.log('f', newFeature);
+
     ptmsEntriesGroupedByModification.push(newFeature);
   });
+
+  console.log('here', ptmsEntriesGroupedByModification);
 
   // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
   entries = ptmsEntriesGroupedByModification.concat(
     entries.filter((entry) => entry.source_database === 'interpro'),
   );
+
+  console.log('final', entries);
 
   return [...entries];
 };

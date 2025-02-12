@@ -17,7 +17,11 @@ import {
   FeatureLocation,
 } from '@nightingale-elements/nightingale-track';
 
-import { typeNameToSectionName, standardizePTMData } from './utils';
+import {
+  typeNameToSectionName,
+  standardizePTMData,
+  firstHideCategories,
+} from './utils';
 
 import {
   useFloating,
@@ -111,16 +115,9 @@ type Props = PropsWithChildren<{
   conservationError?: string;
   /** TO include loading animation in the header */
   loading: boolean;
-
   viewerType: string;
-
   changeSettingsRaw: typeof changeSettingsRaw;
-
   showMoreSettings: boolean;
-
-  mainTracks: string[];
-
-  hideCategories: Record<string, boolean>;
 }>;
 
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
@@ -153,9 +150,7 @@ const switchCategoryVisibilityShowMore = (
 };
 
 export const ProteinViewer = ({
-  mainTracks,
   viewerType,
-  hideCategories,
   protein,
   title,
   data,
@@ -170,10 +165,19 @@ export const ProteinViewer = ({
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
 
+  const mainTracks = [
+    'alphafold confidence',
+    'domain',
+    'family',
+    'active site',
+    'conserved site',
+    'intrinsically disordered regions',
+  ];
+
   /// STATE
   const [showMore, setShowMore] = useState(showMoreSettings);
   const [hideCategory, setHideCategory] =
-    useState<CategoryVisibility>(hideCategories);
+    useState<CategoryVisibility>(firstHideCategories);
   const categoryRefs = useRef<ExpandedHandle[]>([]);
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
   const arrowRef = useRef(null);
@@ -245,7 +249,7 @@ export const ProteinViewer = ({
       If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
     */
     const changeVisibilityFor: string[] = [];
-    ['familiy', 'domain'].forEach((type) => {
+    ['family', 'domain'].forEach((type) => {
       const entries = data.find(([entryType]) => entryType === type)?.[1] || [];
       const hasRep = (entries as ExtendedFeature[]).some(
         (entry) => entry.representative === true,
@@ -357,7 +361,7 @@ export const ProteinViewer = ({
                     }
 
                     // Transform PTM data to track-like data
-                    else if (type == 'ptm') {
+                    if (type == 'ptm') {
                       entries = standardizePTMData(entries, protein);
                     }
 

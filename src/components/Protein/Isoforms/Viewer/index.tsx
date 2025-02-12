@@ -142,38 +142,10 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
   const { accession, length, sequence, features } = data.payload;
   const dataProtvista = features2protvista(features);
 
-  const mainTracks = [
-    'alphafold confidence',
-    'family',
-    'domain',
-    'pathogenic and likely pathogenic variants',
-    'intrinsically disordered regions',
-    'spurious proteins',
-    'residues',
-  ];
-
-  const hideCategories = {
-    'secondary structure': false,
-    family: false,
-    domain: false,
-    repeat: false,
-    'conserved site': false,
-    'active site': false,
-    'binding site': false,
-    ptm: false,
-    'match conservation': false,
-    'coiled-coils, signal peptides, transmembrane regions': false,
-    'short linear motifs': false,
-    'pfam-n': false,
-    funfam: false,
-  };
-
   return (
     <div className={css('isoform-panel')}>
       <IsoformHeader accession={accession} length={length} />
       <ProteinViewer
-        mainTracks={mainTracks}
-        hideCategories={hideCategories}
         protein={{ sequence, length: sequence.length }}
         data={dataProtvista}
         title="Entry matches to this isoform"
