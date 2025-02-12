@@ -64,7 +64,9 @@ const ProteinViewerForAlphafold = ({
   onChangeSelection,
   isSplitScreen = false,
 }: LoadedProps) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const isHovering = useRef(false);
+
   const [fixedSelection, _setFixedSelection] = useState<Selection[]>([]);
   const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
   const hoverSelectionRef = useRef(hoverSelection);
@@ -78,45 +80,52 @@ const ProteinViewerForAlphafold = ({
     hoverSelectionRef.current = data;
     _setHoverSelection(data);
   };
+
   useEffect(() => {
     const selection = [...hoverSelection, ...fixedSelection];
     onChangeSelection(selection.length ? selection : null);
   }, [fixedSelection, hoverSelection]);
   useEffect(() => {
-    containerRef.current?.addEventListener('change', (rawEvent: Event) => {
+    trackRef.current?.addEventListener('change', (rawEvent: Event) => {
       const event = rawEvent as CustomEvent;
       if (!event.detail) return;
       const { eventType, highlight } = event.detail;
-      switch (eventType) {
-        case 'click':
-          if (fixedSelectionRef.current.length) {
-            setFixedSelection([]);
-          } else {
-            setFixedSelection(hoverSelectionRef.current);
-          }
-          break;
-        case 'mouseover': {
-          const colour =
-            parseInt(event?.detail?.feature?.color?.substring(1), 16) || 0;
 
-          const selection =
-            highlight?.split(',').map((block: string) => {
-              const parts = block.split(':');
-              const start = Number(parts?.[0]) || 1;
-              const end = Number(parts?.[1]) || 1;
-              return { chain: 'A', start, end, colour };
-            }) || [];
-          setHoverSelection(selection);
-          break;
+      if (!isHovering.current) {
+        switch (eventType) {
+          case 'click':
+            if (fixedSelectionRef.current.length) {
+              setFixedSelection([]);
+            } else {
+              setFixedSelection(hoverSelectionRef.current);
+            }
+            break;
+
+          case 'mouseover': {
+            isHovering.current = true;
+            const colour =
+              parseInt(event?.detail?.feature?.color?.substring(1), 16) || 0;
+            const selection =
+              highlight?.split(',').map((block: string) => {
+                const parts = block.split(':');
+                const start = Number(parts?.[0]) || 1;
+                const end = Number(parts?.[1]) || 1;
+                return { chain: 'A', start, end, colour };
+              }) || [];
+            setHoverSelection(selection);
+            break;
+          }
+          default:
+            break;
         }
-        case 'mouseout':
+      } else {
+        if (eventType === 'mouseout') {
           setHoverSelection([]);
-          break;
-        default:
-          break;
+          isHovering.current = false;
+        }
       }
     });
-  }, [containerRef.current]);
+  }, [trackRef.current]);
   if (
     !data ||
     data.loading ||
@@ -160,18 +169,19 @@ const ProteinViewerForAlphafold = ({
     'conserved site',
   ];
 
+  if (!dataProtein.payload?.metadata) return null;
+
   const hideCategories = {
-    'alphafold confidence': false,
     domains: false,
     families: false,
     'active site': false,
     'conserved site': false,
   };
 
-  if (!dataProtein.payload?.metadata) return null;
   return (
-    <div ref={containerRef}>
+    <div ref={trackRef}>
       <ProteinViewer
+        viewerType={'structures'}
         protein={dataProtein.payload.metadata}
         data={tracks}
         mainTracks={mainTracks}
