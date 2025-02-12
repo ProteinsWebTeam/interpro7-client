@@ -104,7 +104,6 @@ const processData = <M = Metadata>(
 
   const interproMap = new Map(
     interpro.map((ipro) => {
-      console.log(ipro);
       return [
         `${ipro.accession}-${ipro.chain}-${
           endpoint === 'structure' ? ipro.structureAccession : ipro.protein
