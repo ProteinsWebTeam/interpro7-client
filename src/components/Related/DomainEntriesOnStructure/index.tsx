@@ -7,7 +7,7 @@ import ProteinViewerForStructure from './ProteinViewerLoaded';
 
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import { orderByAccession } from 'components/Related/DomainsOnProtein';
+import { orderByAccession } from 'components/Related/DomainsOnProtein/utils';
 import {
   flattenTracksObject,
   byEntryType,
@@ -264,7 +264,7 @@ const EntriesOnStructure = ({
 
           tracks.map((entry) => {
             if (entry[0] === 'domain') {
-              entry[0] = 'domains';
+              entry[0] = 'domain';
               if (representativesDomainsPerChain[e.chain]) {
                 entry[1] = entry[1].concat(
                   representativesDomainsPerChain[e.chain],
@@ -276,7 +276,7 @@ const EntriesOnStructure = ({
             }
 
             if (entry[0] === 'family') {
-              entry[0] = 'families';
+              entry[0] = 'family';
               if (representativesFamiliesPerChain[e.chain]) {
                 entry[1] = entry[1].concat(
                   representativesFamiliesPerChain[e.chain],

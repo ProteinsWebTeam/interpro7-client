@@ -1,9 +1,5 @@
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { iproscan2urlDB } from 'utils/url-patterns';
-import {
-  proteinViewerReorganization,
-  sectionsReorganization,
-} from 'components/Related/DomainsOnProtein';
 
 const OTHER_FEATURES_DBS = [''];
 const OTHER_RESIDUES_DBS = [''];

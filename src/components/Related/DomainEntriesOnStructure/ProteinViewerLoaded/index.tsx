@@ -58,16 +58,16 @@ const ProteinViewerLoaded = ({
   // List of "main" tracks to be displayed, the rest are hidden by default
   const mainTracks = [
     'secondary structure',
-    'families',
-    'domains',
+    'family',
+    'domain',
     'conserved site',
     'active site',
   ];
 
   const hideCategories = {
     'secondary structure': false,
-    families: false,
-    domains: false,
+    family: false,
+    domain: false,
     'conserved site': false,
     'active site': false,
   };
