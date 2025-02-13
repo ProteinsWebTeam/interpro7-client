@@ -155,7 +155,12 @@ const Wikipedia = ({ title, extract, thumbnail, data }: WikipediaProps) => {
                     </td>
                   </tr>
                   {identifiers.map((id) => {
-                    const value = typeof id.value === 'string' ? id.value : '';
+                    const value =
+                      typeof id.value === 'string'
+                        ? id.value
+                        : typeof id.value === 'number'
+                          ? (id.value as number).toString()
+                          : '';
                     return (
                       <tr key={id.name}>
                         <th scope="row" className={css('row-header')}>

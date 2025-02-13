@@ -8,6 +8,8 @@ import styles from '../style.css';
 const css = cssBinder(styles);
 
 export const CITATION_REGEX = '\\[cite:(PUB\\d+)\\](,\\s*)?';
+export const PMID_REGEX = '\\[PMID:\\d+(?:,PMID:\\d+)*\\]';
+export const PMID_REGEX_SINGLE = 'PMID:(\\d+)';
 
 type Props = {
   text: string;
@@ -18,10 +20,13 @@ const Citations = ({ text, literature = [], withoutIDs }: Props) => (
   <sup>
     [
     {text.split(',').map((cita, i, array) => {
-      const citMatch = cita.match(CITATION_REGEX);
+      const citMatch =
+        cita.match(PMID_REGEX_SINGLE) || cita.match(CITATION_REGEX);
+
       if (!citMatch || citMatch.length < 2) {
         return null;
       }
+
       const pubId = citMatch[1];
       const refCounter = literature.map((d) => d[0]).indexOf(pubId) + 1;
       return (

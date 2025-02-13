@@ -242,6 +242,7 @@ export const ProteinViewer = ({
     'pfam-n': 'Pfam-N',
     funfam: 'FunFam',
     'external sources': 'External Sources',
+    'secondary structure': 'Secondary Structure',
   };
 
   useEffect(() => {
@@ -275,7 +276,7 @@ export const ProteinViewer = ({
       );
       setHideCategory(newHideCategory);
     }
-  }, [showMoreSettings, data]);
+  }, [showMoreSettings]);
 
   const openTooltip = (
     element: HTMLElement | undefined,

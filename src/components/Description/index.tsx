@@ -79,6 +79,7 @@ class Description extends PureComponent<Props> {
                     ) : (
                       <BadgeCurated />
                     ))}
+
                   <Paragraph
                     key={`${i}.${j}`}
                     p={text}

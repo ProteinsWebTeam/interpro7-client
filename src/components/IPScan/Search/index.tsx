@@ -150,7 +150,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
       metadata: {
         localID,
         entries,
-        group: this.state.title,
+        localTitle: this.state.title,
         type: 'InterProScan',
         seqtype: isXChecked('seqtype')(this._formRef.current) ? 'n' : 'p',
       },
