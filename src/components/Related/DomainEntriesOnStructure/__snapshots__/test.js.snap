@@ -63,6 +63,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
             ],
           ]
         }
+        viewerType="structures"
       />
     </div>
   </div>
