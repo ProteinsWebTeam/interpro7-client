@@ -258,14 +258,10 @@ export const standardizePTMData = (
     ptmsEntriesGroupedByModification.push(newFeature);
   });
 
-  console.log('here', ptmsEntriesGroupedByModification);
-
   // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
   entries = ptmsEntriesGroupedByModification.concat(
     entries.filter((entry) => entry.source_database === 'interpro'),
   );
-
-  console.log('final', entries);
 
   return [...entries];
 };
