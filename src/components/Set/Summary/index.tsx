@@ -19,7 +19,6 @@ import style from './style.css';
 import protvistaOptions from 'components/ProteinViewer/Options/style.css';
 import ipro from 'styles/interpro-vf.css';
 import summary from 'styles/summary.css';
-import description from 'src/reducers/custom-location/description';
 
 const css = cssBinder(style, summary, protvistaOptions, ipro);
 
