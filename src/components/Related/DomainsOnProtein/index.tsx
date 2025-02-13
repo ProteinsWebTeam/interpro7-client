@@ -1,10 +1,12 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import { connect } from 'react-redux';
 
 import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
+import { changeSettingsRaw } from 'actions/creators';
 
 import {
   getAlphaFoldPredictionURL,
@@ -67,6 +69,7 @@ type Props = PropsWithChildren<{
   ) => void;
   onFamiliesFound?: (families: Record<string, unknown>[]) => void;
   title?: string;
+  showMoreSettings: boolean;
 }>;
 interface LoadedProps
   extends Props,
@@ -270,6 +273,15 @@ export const proteinViewerReorganization = (
   if (dataMerged.family) dataMerged.families = dataMerged.family.slice();
 };
 
+const dataIsEmpty = (data: ProteinViewerDataObject): boolean => {
+  return (
+    !Object.keys(data).length ||
+    !Object.values(data)
+      .map((x) => x.length)
+      .reduce((agg, v) => agg + v, 0)
+  );
+};
+
 const DomainOnProteinWithoutData = ({
   data,
   mainData,
@@ -280,6 +292,7 @@ const DomainOnProteinWithoutData = ({
   dataProteomics,
   onMatchesLoaded,
   onFamiliesFound,
+  showMoreSettings,
   children,
   externalSourcesData,
   title,
@@ -368,26 +381,40 @@ const DomainOnProteinWithoutData = ({
     mergeResidues(mergedData, dataResidues.payload);
   }
 
+  const dataIsEmptyBeforeMergingFeatures = dataIsEmpty(mergedData);
+  let extraFeaturesCount = 0;
+
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
+    extraFeaturesCount = Object.keys(dataFeatures?.payload).length;
   }
+
+  const onlyExtraFeatures =
+    dataIsEmptyBeforeMergingFeatures && extraFeaturesCount > 0;
 
   proteinViewerReorganization(dataFeatures, mergedData);
 
   if (
-    (!Object.keys(mergedData).length ||
-      !Object.values(mergedData)
-        .map((x) => x.length)
-        .reduce((agg, v) => agg + v, 0)) &&
-    !data?.loading &&
-    !dataFeatures?.loading &&
-    !dataResidues?.loading
+    // No entries and no extra features
+    (dataIsEmpty(mergedData) &&
+      !data?.loading &&
+      !dataResidues?.loading &&
+      !dataFeatures?.loading) ||
+    // No entries but extra features (e.g pfam-n)
+    (onlyExtraFeatures && !showMoreSettings)
   ) {
     return (
       <>
-        <Callout type="info">No entries match this protein.</Callout>
+        <Callout type="info">
+          {' '}
+          {onlyExtraFeatures && !showMoreSettings
+            ? `Additional matches are available, but not displayed in the summary display mode. 
+        Switch to the full display mode the see them.`
+            : 'No entry matches this protein'}
+        </Callout>
+
         <DomainsOnProteinLoaded
-          title={'Alphafold Confidence'}
+          title={'Entry matches to this protein'}
           mainData={mainData}
           dataMerged={mergedData}
           dataConfidence={dataConfidence}
@@ -397,10 +424,6 @@ const DomainOnProteinWithoutData = ({
             dataResidues?.loading ||
             false
           }
-          // Disabling Conservation until hmmer is working
-          // conservationError={conservation.error}
-          // showConservationButton={showConservationButton}
-          // handleConservationLoad={fetchConservationData}
         >
           {children}
         </DomainsOnProteinLoaded>
@@ -511,33 +534,42 @@ const getPTMPayload = createSelector(
   },
 );
 
-export default loadExternalSources(
-  loadData<AlphafoldPayload, 'Prediction'>({
-    getUrl: getAlphaFoldPredictionURL,
-    propNamespace: 'Prediction',
-  } as LoadDataParameters)(
-    loadData<AlphafoldConfidencePayload, 'Confidence'>({
-      getUrl: getConfidenceURLFromPayload('Prediction'),
-      propNamespace: 'Confidence',
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ui,
+  (ui) => ({
+    showMoreSettings: ui.showMoreSettings,
+  }),
+);
+
+export default connect(mapStateToProps, { changeSettingsRaw })(
+  loadExternalSources(
+    loadData<AlphafoldPayload, 'Prediction'>({
+      getUrl: getAlphaFoldPredictionURL,
+      propNamespace: 'Prediction',
     } as LoadDataParameters)(
-      loadData<ExtraFeaturesPayload, 'Features'>({
-        getUrl: getExtraURL('extra_features'),
-        propNamespace: 'Features',
+      loadData<AlphafoldConfidencePayload, 'Confidence'>({
+        getUrl: getConfidenceURLFromPayload('Prediction'),
+        propNamespace: 'Confidence',
       } as LoadDataParameters)(
-        loadData<ResiduesPayload, 'Residues'>({
-          getUrl: getExtraURL('residues'),
-          propNamespace: 'Residues',
+        loadData<ExtraFeaturesPayload, 'Features'>({
+          getUrl: getExtraURL('extra_features'),
+          propNamespace: 'Features',
         } as LoadDataParameters)(
-          loadData<ProteinsAPIProteomics, 'Proteomics'>({
-            getUrl: getPTMPayload,
-            propNamespace: 'Proteomics',
+          loadData<ResiduesPayload, 'Residues'>({
+            getUrl: getExtraURL('residues'),
+            propNamespace: 'Residues',
           } as LoadDataParameters)(
-            loadData<ProteinsAPIVariation, 'Variation'>({
-              getUrl: getVariationURL,
-              propNamespace: 'Variation',
+            loadData<ProteinsAPIProteomics, 'Proteomics'>({
+              getUrl: getPTMPayload,
+              propNamespace: 'Proteomics',
             } as LoadDataParameters)(
-              loadData(getRelatedEntriesURL as LoadDataParameters)(
-                DomainOnProteinWithoutData,
+              loadData<ProteinsAPIVariation, 'Variation'>({
+                getUrl: getVariationURL,
+                propNamespace: 'Variation',
+              } as LoadDataParameters)(
+                loadData(getRelatedEntriesURL as LoadDataParameters)(
+                  DomainOnProteinWithoutData,
+                ),
               ),
             ),
           ),
