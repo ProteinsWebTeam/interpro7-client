@@ -343,6 +343,7 @@ const EntriesOnStructure = ({
                 chain={e.chain}
                 id={`${e.chain}-${e.protein.accession}`}
                 protein={sequenceData}
+                viewerType={'structures'}
               />
             </div>
           );
