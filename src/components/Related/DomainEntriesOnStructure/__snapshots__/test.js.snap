@@ -13,9 +13,8 @@ exports[`<EntriesOnStructure /> should render 1`] = `
       >
         Chain 
         A
-         
+         (
         <small>
-          (
           <Memo(Connect(Link))
             to={
               {
@@ -31,15 +30,11 @@ exports[`<EntriesOnStructure /> should render 1`] = `
               }
             }
           >
-            <span
-              className="icon icon-conceptual"
-              data-icon="P"
-            />
-             
             P00735
           </Memo(Connect(Link))>
-          )
+          
         </small>
+        )
       </h4>
       <ProteinViewerLoaded
         chain="A"

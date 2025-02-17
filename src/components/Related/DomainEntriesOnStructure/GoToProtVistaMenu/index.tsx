@@ -2,7 +2,7 @@ import React from 'react';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Link from 'components/generic/Link';
 
-import { DataForProteinChain } from '../';
+import { DataForProteinChain } from '../utils';
 
 const scrollToElementByID = (id: string) => {
   document.getElementById(id)?.scrollIntoView();

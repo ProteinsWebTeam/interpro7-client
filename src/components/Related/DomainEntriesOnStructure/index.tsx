@@ -13,6 +13,8 @@ import {
   byEntryType,
 } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
+import { DataForProteinChain, mergeChimericProteins } from './utils';
+
 import { ExtendedFeature } from 'src/components/ProteinViewer';
 
 const css = cssBinder(fonts);
@@ -57,43 +59,17 @@ export function sortTracks(
 const toArrayStructure = (locations: Array<ProtVistaLocation>) =>
   locations.map((loc) => loc.fragments.map((fr) => [fr.start, fr.end]));
 
-export type DataForProteinChain = {
-  protein: {
-    accession: string;
-    length: number;
-  };
-  sequence: {
-    sequence: string;
-    length: number;
-  };
-  data: {
-    [key: string]: Array<{
-      accession: string;
-      name?: string;
-      short_name?: string;
-      coordinates?: number[][][];
-      source_database: string;
-      locations: ProtVistaLocation[];
-      link?: string;
-      children?: unknown;
-      chain: string;
-      protein?: string;
-      type: string;
-    }>;
-  };
-  chain: string;
-  isChimeric?: boolean;
-};
-
 const mergeData = (
   secondaryData: StructureLinkedObject[],
   secondaryStructures?: SecondaryStructure[],
 ) => {
   const out: Record<string, Record<string, DataForProteinChain>> = {};
+
   for (const entry of secondaryData) {
     if (!(entry.chain in out)) {
       out[entry.chain] = {};
     }
+
     if (!(entry.protein in out[entry.chain])) {
       // Merging the secondary structures data per chain
       const secondaryStructArray = [];
@@ -168,6 +144,14 @@ const mergeData = (
       protein: entry.protein,
       type: entry.type || entry.entry_type || '',
     });
+  }
+
+  // Logic to handle cases where a single chain maps to multiple UniPro accessions
+  // Leave the steps above as they are now, just in case we need to go back.
+  for (const entry of secondaryData) {
+    if (Object.keys(out[entry.chain]).length > 1) {
+      out[entry.chain] = { ...mergeChimericProteins(out[entry.chain]) };
+    }
   }
 
   const entries = [];
@@ -296,33 +280,37 @@ const EntriesOnStructure = ({
             (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
           });
 
+          let accessionList: string[] = [];
+          const processedAccession = e.protein?.accession;
+          if (processedAccession) accessionList = processedAccession.split(','); // Chimeric
+
           return (
             <div key={i} className={css('vf-stack')}>
               <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
-                Chain {e.chain}{' '}
-                {e.protein?.accession && (
-                  <small>
-                    (
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'protein' },
-                          protein: {
-                            db: 'uniprot',
-                            accession: e.protein.accession,
-                          },
-                        },
-                      }}
-                    >
-                      <span
-                        className={css('icon', 'icon-conceptual')}
-                        data-icon="&#x50;"
-                      />{' '}
-                      {(e.protein.accession || '').toUpperCase()}
-                    </Link>
-                    )
-                  </small>
-                )}
+                Chain {e.chain}
+                {accessionList.length > 0 && ' ('}
+                {accessionList &&
+                  accessionList.map((acc, idx) => {
+                    return (
+                      <small>
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'protein' },
+                              protein: {
+                                db: 'uniprot',
+                                accession: acc,
+                              },
+                            },
+                          }}
+                        >
+                          {(acc || '').toUpperCase()}
+                        </Link>
+                        {idx !== accessionList.length - 1 ? ', ' : ''}
+                      </small>
+                    );
+                  })}
+                {accessionList.length > 0 && ')'}
                 {e.isChimeric && (
                   <Tooltip title="This chain maps to a Chimeric protein consisting of two or more proteins">
                     <div className={css('tag')}>
