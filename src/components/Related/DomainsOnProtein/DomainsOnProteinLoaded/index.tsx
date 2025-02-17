@@ -7,59 +7,26 @@ import {
   proteinViewerReorganization,
   dbToSection,
 } from 'components/Related/DomainsOnProtein/utils';
-import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
+
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
-} from 'components/ProteinViewer';
+} from 'components/ProteinViewer/utils';
+
+import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
+import {
+  UNDERSCORE,
+  byEntryType,
+  sortTracks,
+  standardizeMobiDBFeatureStructure,
+  standardizeResidueStructure,
+} from './utils';
 
 const ProteinViewer = loadable({
   loader: () =>
     import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
   loading: null,
 });
-
-// 0A017SEX7 is a good example
-const UNDERSCORE = /_/g;
-
-const FIRST_IN_ORDER = [
-  'alphafold_confidence',
-  'secondary_structure',
-  'family',
-  'domain',
-  'intrinsically_disordered_regions',
-  'conserved_site',
-  'residues',
-  'spurious_proteins',
-  'pathogenic_and_likely_pathogenic_variants',
-  'repeat',
-  'active_site',
-  'binding_site',
-  'ptm',
-];
-
-const LASTS_IN_ORDER = [
-  'coiled-coils,_signal_peptides,_transmembrane_regions',
-  'short_linear_motifs',
-  'pfam-n',
-  'funfam',
-  'match_conservation',
-];
-
-export const byEntryType = (
-  [a, _]: [string, unknown],
-  [b, __]: [string, unknown],
-) => {
-  for (const label of FIRST_IN_ORDER) {
-    if (a.toLowerCase() === label) return -1;
-    if (b.toLowerCase() === label) return 1;
-  }
-  for (const l of LASTS_IN_ORDER) {
-    if (a.toLowerCase() === l) return -1;
-    if (b.toLowerCase() === l) return 1;
-  }
-  return a > b ? 1 : 0;
-};
 
 type tracksProps = {
   interpro: Array<{ accession: string; type: string }>;
@@ -68,115 +35,6 @@ type tracksProps = {
   representativeDomains?: Array<MinimalFeature>;
   representativeFamilies?: Array<MinimalFeature>;
   disorderedRegions?: Array<MinimalFeature>;
-};
-
-function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
-  let fragment = undefined;
-  let accession = undefined;
-
-  if (Array.isArray(item)) {
-    if (item[0].entry_protein_locations)
-      fragment = item[0].entry_protein_locations?.[0].fragments?.[0];
-    else fragment = item[0].locations?.[0].fragments?.[0];
-    accession = item[0].accession;
-  } else {
-    if (item.entry_protein_locations)
-      fragment = item.entry_protein_locations?.[0].fragments?.[0];
-    else fragment = item.locations?.[0].fragments?.[0];
-    accession = item.accession;
-  }
-  if (fragment && accession) {
-    return [accession, fragment.start, fragment.end];
-  }
-  return [0, 0];
-}
-
-export function sortTracks(
-  a: ExtendedFeature | ExtendedFeature[],
-  b: ExtendedFeature | ExtendedFeature[],
-) {
-  const [aAccession, aStart, aEnd] = getBoundaries(a);
-  const [bAccession, bStart, bEnd] = getBoundaries(b);
-
-  if (aStart > bStart) return 1;
-  if (aStart < bStart) return -1;
-  if (aStart === bStart) {
-    if (aEnd < bEnd) return 1;
-    if (aEnd > bEnd) return -1;
-    if (aEnd === bEnd) {
-      if (aAccession > bAccession) return 1;
-      else return -1;
-    }
-  }
-  return 0;
-}
-
-const standardizeResidueStructure = (
-  residues: Array<ExtendedFeature>,
-): Array<ExtendedFeature> => {
-  const newResidues: Array<ExtendedFeature> = [];
-  residues.map((residueParentObj) => {
-    const tempResidue: ExtendedFeature = residueParentObj;
-    tempResidue.type = 'residue';
-    tempResidue.locations = residueParentObj.residues?.[0].locations;
-    newResidues.push(tempResidue);
-  });
-  return newResidues;
-};
-
-const standardizeMobiDBFeatureStructure = (
-  features: Array<ExtendedFeature>,
-): Array<ExtendedFeature> => {
-  const newFeatures: Array<ExtendedFeature> = [];
-  features.map((feature) => {
-    const tempFeature = { ...feature };
-    const slicedTempFeatureLocations: Array<ExtendedFeatureLocation> = [];
-    tempFeature.accession = 'Mobidblt-Consensus Disorder Prediction';
-    tempFeature.source_database = 'mobidblt';
-    tempFeature.protein = '';
-    tempFeature.locations?.map(
-      (
-        location: ExtendedFeatureLocation & {
-          'sequence-feature'?: string;
-          start?: number;
-          end?: number;
-        },
-        idx: number,
-      ) => {
-        if (
-          location['sequence-feature'] &&
-          location['sequence-feature'] !== ''
-        ) {
-          if (location.start && location.end) {
-            const restructuredLocation: ExtendedFeatureLocation[] = [
-              {
-                fragments: [
-                  {
-                    start: location.start,
-                    end: location.end,
-                    seq_feature: location['sequence-feature'],
-                  },
-                ],
-              },
-            ];
-
-            const tempChild: ExtendedFeature = {
-              accession: location['sequence-feature'],
-              source_database: 'mobidblt',
-              locations: restructuredLocation,
-            };
-            tempFeature.children?.push(tempChild);
-          }
-        } else {
-          slicedTempFeatureLocations.push(location);
-        }
-      },
-    );
-    tempFeature.locations = slicedTempFeatureLocations;
-    newFeatures.push(tempFeature);
-  });
-
-  return newFeatures;
 };
 
 export const makeTracks = ({
@@ -281,6 +139,7 @@ type Props = PropsWithChildren<{
   dataMerged: ProteinViewerDataObject;
   dataConfidence?: RequestedData<AlphafoldConfidencePayload>;
   dataVariation?: RequestedData<ProteinsAPIVariation>;
+  dataInterProNMatches?: RequestedData<InterProNMatches>;
   dataProteomics?: RequestedData<ProteinsAPIProteomics>;
   dataFeatures?: RequestedData<ExtraFeaturesPayload>;
   conservationError?: string | null;
@@ -332,6 +191,7 @@ const DomainsOnProteinLoaded = ({
   // Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
   // and the ProteinViewer components are used in a different way in the InterproScan results section.
 
+  // InterPro Scan Search results
   if (protein.accession.startsWith('iprscan')) {
     // What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
     // InterProScan results section, because the DomainsOnProteinLoaded is used right away.

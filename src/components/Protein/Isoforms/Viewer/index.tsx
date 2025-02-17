@@ -7,7 +7,7 @@ import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
 import { groupByEntryType } from 'components/Related/DomainsOnProtein/utils';
-import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
 import { selectRepresentativeData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 

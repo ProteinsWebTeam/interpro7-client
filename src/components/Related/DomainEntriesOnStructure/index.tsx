@@ -8,12 +8,9 @@ import ProteinViewerForStructure from './ProteinViewerLoaded';
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import { orderByAccession } from 'components/Related/DomainsOnProtein/utils';
-import {
-  flattenTracksObject,
-  byEntryType,
-} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import { flattenTracksObject } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
-import { ExtendedFeature } from 'src/components/ProteinViewer';
+import { ExtendedFeature } from 'src/components/ProteinViewer/utils';
 
 const css = cssBinder(fonts);
 

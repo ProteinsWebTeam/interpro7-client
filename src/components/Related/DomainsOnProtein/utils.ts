@@ -1,7 +1,7 @@
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
-} from 'src/components/ProteinViewer';
+} from 'src/components/ProteinViewer/utils';
 
 export const orderByAccession = (
   a: { accession: string },

@@ -92,6 +92,18 @@ type ProteinsAPIProteomics = {
   features: [];
 };
 
+type InterProNMatches = Record<
+  string,
+  {
+    accession: string;
+    name: string;
+    short_name: string;
+    type: string;
+    source_database: string;
+    locations: Array<ProtVistaLocation>;
+  }
+>;
+
 type IprscanParameterValue = {
   label: string;
   value: string;

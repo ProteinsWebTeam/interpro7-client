@@ -21,6 +21,75 @@ import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 import { proteinViewerReorganization } from './utils';
+import { sortTracks } from './DomainsOnProteinLoaded/utils';
+import { connect } from 'react-redux';
+import { changeSettingsRaw } from 'actions/creators';
+
+// InterPro-N matches handling logic
+function mergeMatches(
+  type: string,
+  traditionalMatches: MinimalFeature[],
+  interproNMatches: Record<string, MinimalFeature>,
+  matchTypeSettings: MatchTypeUISettings,
+): MinimalFeature[] {
+  // Initialize new matches data with the traditional unintegrated matches
+  let mergedMatches = traditionalMatches.filter(
+    (match) => !match.accession.startsWith('IPR'),
+  );
+
+  if (matchTypeSettings === 'dl') {
+    // Append unintegrated Interpro-N matches
+    let unintegratedInterProNMatches = JSON.parse(
+      JSON.stringify(
+        Object.values(interproNMatches).filter(
+          (match: MinimalFeature & { integrated?: string; type?: string }) => {
+            return (
+              match.integrated === null && match.type == type.replace('_', ' ')
+            );
+          },
+        ),
+      ),
+    );
+
+    for (let i = 0; i < unintegratedInterProNMatches.length; i++) {
+      unintegratedInterProNMatches[i].accession =
+        unintegratedInterProNMatches[i].accession + ':nMatch';
+    }
+
+    mergedMatches = mergedMatches.concat(unintegratedInterProNMatches);
+  }
+
+  // // const mergedMatches = []
+  // // try {
+  // //   const interProMatches = traditionalMatches
+  // //     .filter(entry => entry.accession.startsWith("IPR"))
+  // //     .map(entry => JSON.parse(JSON.stringify(entry))); // Deep copy
+
+  // //   for (let i = 0; i < interProMatches.length; i++) {
+  // //     const interProMatchChildren: ExtendedFeature[] = [...interProMatches[i].children || []]
+  // //     for (let y = 0; y < interProMatchChildren.length; y++) {
+
+  // //       Get info from Interpro-N object
+  // //       const integratedEntryAccession = interProMatchChildren[y].accession
+  // //       const inteproNMatch = { ...interproNMatches[integratedEntryAccession] }
+
+  // //       Change accessions
+  // //       inteproNMatch.integrated = inteproNMatch.integrated.accession
+  // //       inteproNMatch.accession += ":nMatch"
+
+  // //       Append it to existing children
+  // //       interProMatches[i].children = interProMatches[i].children.concat([inteproNMatch]);
+  // //     }
+  // //   }
+
+  // //   console.log("asd", interProMatches)
+  // // }
+  // // catch {
+
+  // // }
+
+  return mergedMatches;
+}
 
 type Props = PropsWithChildren<{
   mainData: {
@@ -33,6 +102,7 @@ type Props = PropsWithChildren<{
   ) => void;
   onFamiliesFound?: (families: Record<string, unknown>[]) => void;
   title?: string;
+  matchTypeSettings: MatchTypeUISettings;
 }>;
 interface LoadedProps
   extends Props,
@@ -43,6 +113,7 @@ interface LoadedProps
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<ProteinsAPIProteomics, 'Proteomics'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
+    LoadDataProps<InterProNMatches, 'InterProNMatches'>,
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}
@@ -55,11 +126,13 @@ const DomainOnProteinWithoutData = ({
   dataConfidence,
   dataVariation,
   dataProteomics,
+  dataInterProNMatches,
   onMatchesLoaded,
   onFamiliesFound,
   children,
   externalSourcesData,
   title,
+  matchTypeSettings,
 }: LoadedProps) => {
   const [processedData, setProcessedData] = useState<{
     interpro: Record<string, unknown>[];
@@ -126,6 +199,26 @@ const DomainOnProteinWithoutData = ({
     representativeDomains: representativeDomains as Array<MinimalFeature>,
     representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
+
+  if (
+    dataInterProNMatches &&
+    !dataInterProNMatches.loading &&
+    dataInterProNMatches.payload
+  ) {
+    const interProNData = dataInterProNMatches.payload;
+    const tracks = Object.keys(mergedData);
+    tracks.map((track) => {
+      mergedData[track] = mergeMatches(
+        track,
+        mergedData[track],
+        interProNData,
+        matchTypeSettings,
+      );
+    });
+  }
+
+  Object.values(mergedData).map((group) => group.sort(sortTracks).flat());
+
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
   }
@@ -280,33 +373,70 @@ const getPTMPayload = createSelector(
   },
 );
 
-export default loadExternalSources(
-  loadData<AlphafoldPayload, 'Prediction'>({
-    getUrl: getAlphaFoldPredictionURL,
-    propNamespace: 'Prediction',
-  } as LoadDataParameters)(
-    loadData<AlphafoldConfidencePayload, 'Confidence'>({
-      getUrl: getConfidenceURLFromPayload('Prediction'),
-      propNamespace: 'Confidence',
+const getInterProNMatches = createSelector(
+  (state: GlobalState) => state.settings.api,
+  (state: GlobalState) => state.customLocation.description.protein.accession,
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
+    const newDesc: InterProPartialDescription = {
+      main: { key: 'protein' },
+      protein: { db: 'uniprot', accession },
+    };
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + descriptionToPath(newDesc),
+      query: {
+        interpro_n: '',
+      },
+    });
+  },
+);
+
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ui,
+  (ui: UISettings) => ({
+    matchTypeSettings: ui.matchTypeSettings,
+  }),
+);
+
+export default connect(mapStateToProps, { changeSettingsRaw })(
+  loadExternalSources(
+    loadData<AlphafoldPayload, 'Prediction'>({
+      getUrl: getAlphaFoldPredictionURL,
+      propNamespace: 'Prediction',
     } as LoadDataParameters)(
-      loadData<ExtraFeaturesPayload, 'Features'>({
-        getUrl: getExtraURL('extra_features'),
-        propNamespace: 'Features',
+      loadData<AlphafoldConfidencePayload, 'Confidence'>({
+        getUrl: getConfidenceURLFromPayload('Prediction'),
+        propNamespace: 'Confidence',
       } as LoadDataParameters)(
-        loadData<ResiduesPayload, 'Residues'>({
-          getUrl: getExtraURL('residues'),
-          propNamespace: 'Residues',
+        loadData<ExtraFeaturesPayload, 'Features'>({
+          getUrl: getExtraURL('extra_features'),
+          propNamespace: 'Features',
         } as LoadDataParameters)(
-          loadData<ProteinsAPIProteomics, 'Proteomics'>({
-            getUrl: getPTMPayload,
-            propNamespace: 'Proteomics',
+          loadData<ResiduesPayload, 'Residues'>({
+            getUrl: getExtraURL('residues'),
+            propNamespace: 'Residues',
           } as LoadDataParameters)(
-            loadData<ProteinsAPIVariation, 'Variation'>({
-              getUrl: getVariationURL,
-              propNamespace: 'Variation',
+            loadData<ProteinsAPIProteomics, 'Proteomics'>({
+              getUrl: getPTMPayload,
+              propNamespace: 'Proteomics',
             } as LoadDataParameters)(
-              loadData(getRelatedEntriesURL as LoadDataParameters)(
-                DomainOnProteinWithoutData,
+              loadData<ProteinsAPIVariation, 'Variation'>({
+                getUrl: getVariationURL,
+                propNamespace: 'Variation',
+              } as LoadDataParameters)(
+                loadData<InterProNMatches, 'InterProNMatches'>({
+                  getUrl: getInterProNMatches,
+                  propNamespace: 'InterProNMatches',
+                } as LoadDataParameters)(
+                  loadData(getRelatedEntriesURL as LoadDataParameters)(
+                    DomainOnProteinWithoutData,
+                  ),
+                ),
               ),
             ),
           ),

@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 
 import { getTextForLabel } from 'utils/text';
 
-import { ExtendedFeature } from '../..';
+import { ExtendedFeature } from '../../utils';
 
 type LabelProps = {
   entry: ExtendedFeature;
@@ -31,7 +31,7 @@ const Label = ({ entry, label }: LabelProps) => {
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
-  (ui: UISettings) => ({ label: ui.labelContent })
+  (ui: UISettings) => ({ label: ui.labelContent }),
 );
 
 export default connect(mapStateToProps)(Label);

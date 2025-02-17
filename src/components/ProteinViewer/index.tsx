@@ -12,15 +12,12 @@ import { changeSettingsRaw } from 'actions/creators';
 
 import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
-import {
-  Feature,
-  FeatureLocation,
-} from '@nightingale-elements/nightingale-track';
 
 import {
   typeNameToSectionName,
   standardizePTMData,
   firstHideCategories,
+  ExtendedFeature,
 } from './utils';
 
 import {
@@ -57,46 +54,6 @@ const css = cssBinder(style, grid, fonts, tooltip);
 
 const highlightColor = '#607D8B50';
 const TOOLTIP_DELAY = 300;
-
-export type Residue = {
-  locations: Array<
-    FeatureLocation & {
-      accession: string;
-      description: string;
-    }
-  >;
-};
-
-export type ExtendedFeatureLocation = {
-  fragments: Array<{
-    start: number;
-    end: number;
-    [annotation: string]: unknown;
-  }>;
-} & {
-  representative?: boolean;
-  confidence?: number;
-  description?: string;
-  seq_feature?: string;
-};
-
-export type ExtendedFeature = Feature & {
-  data?: unknown;
-  representative?: boolean;
-  entry_protein_locations?: Array<ExtendedFeatureLocation>;
-  locations?: Array<ExtendedFeatureLocation>;
-  name?: string;
-  short_name?: string;
-  source_database?: string;
-  entry_type?: string;
-  residues?: Array<Residue>;
-  location2residue?: unknown;
-  chain?: string;
-  protein?: string;
-  integrated?: string;
-  children?: Array<ExtendedFeature>;
-  warnings?: Array<string>;
-};
 
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 

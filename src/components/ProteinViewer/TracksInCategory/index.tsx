@@ -27,7 +27,7 @@ import cssBinder from 'styles/cssBinder';
 
 import style from '../style.css';
 import grid from '../grid.css';
-import { ExtendedFeature } from '..';
+import { ExtendedFeature } from '../utils';
 import LabelsInTrack from '../LabelsInTrack';
 
 import ProtVistaPopup, { PopupDetail } from '../Popup';
