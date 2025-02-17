@@ -178,7 +178,7 @@ type LabelUISettings = {
   short: boolean;
 };
 
-type MatchTypeUISettings = 'hmm' | 'dl' | 'hmm_and_dl';
+type MatchTypeUISettings = 'hmm' | 'dl' | 'hmm_and_dl' | 'best';
 
 type CacheSettings = {
   enabled: boolean;

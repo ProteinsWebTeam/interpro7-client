@@ -27,6 +27,8 @@ import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 import { ExtendedFeature } from 'src/components/ProteinViewer';
 
+import { sortTracks } from './DomainsOnProteinLoaded';
+
 export const orderByAccession = (
   a: { accession: string },
   b: { accession: string },
@@ -54,27 +56,66 @@ export const groupByEntryType = (
 };
 
 // InterPro-N matches handling logic
-function mergeMatches(nType: any, normalMatches: any[], interproNMatches: any) {
-  interproNMatches.reduce((merged: { locations: any[] }[], iMatch: any) => {
-    // Check for the ones already existing
-    for (let i = 0; i < normalMatches.length; i++) {
-      let newMatch: { locations: any[]; [key: string]: any } = {
-        ...normalMatches[i],
-      };
-      if (iMatch['accession'] === newMatch['accession']) {
-        if (newMatch['locations'] !== undefined) {
-          newMatch['locations'] = [...iMatch['locations']];
-        } else if (newMatch['entry_protein_locations'] !== undefined) {
-          newMatch['entry_protein_locations'] = [...iMatch['locations']];
-        }
-        newMatch['accession'] = `${newMatch['accession']}:nMatch`;
-        merged.splice(i + 1, 0, newMatch);
-        return merged;
-      }
-    }
+function mergeMatches(
+  type: string,
+  traditionalMatches: MinimalFeature[],
+  interproNMatches: Record<string, MinimalFeature>,
+): MinimalFeature[] {
+  // Initialize new matches data with the traditional unintegrated matches
+  let mergedMatches = traditionalMatches.filter(
+    (match) => !match.accession.startsWith('IPR'),
+  );
 
-    return merged;
-  }, normalMatches);
+  // Append unintegrated Interpro-N matches
+  let unintegratedInterProNMatches = JSON.parse(
+    JSON.stringify(
+      Object.values(interproNMatches).filter(
+        (match: MinimalFeature & { integrated?: string }) => {
+          return match.integrated === null;
+        },
+      ),
+    ),
+  );
+
+  for (let i = 0; i < unintegratedInterProNMatches.length; i++) {
+    unintegratedInterProNMatches[i].accession =
+      unintegratedInterProNMatches[i].accession + ':nMatch';
+  }
+
+  mergedMatches = mergedMatches.concat(unintegratedInterProNMatches);
+
+  // // const mergedMatches = []
+  // // try {
+  // //   const interProMatches = traditionalMatches
+  // //     .filter(entry => entry.accession.startsWith("IPR"))
+  // //     .map(entry => JSON.parse(JSON.stringify(entry))); // Deep copy
+
+  // //   for (let i = 0; i < interProMatches.length; i++) {
+  // //     const interProMatchChildren: ExtendedFeature[] = [...interProMatches[i].children || []]
+  // //     for (let y = 0; y < interProMatchChildren.length; y++) {
+
+  // //       Get info from Interpro-N object
+  // //       const integratedEntryAccession = interProMatchChildren[y].accession
+  // //       const inteproNMatch = { ...interproNMatches[integratedEntryAccession] }
+
+  // //       Change accessions
+  // //       inteproNMatch.integrated = inteproNMatch.integrated.accession
+  // //       inteproNMatch.accession += ":nMatch"
+
+  // //       Append it to existing children
+  // //       interProMatches[i].children = interProMatches[i].children.concat([inteproNMatch]);
+  // //     }
+  // //   }
+
+  // //   console.log("asd", interProMatches)
+  // // }
+  // // catch {
+
+  // // }
+
+  //console.log(type, mergedMatches)
+
+  return mergedMatches;
 }
 
 type Props = PropsWithChildren<{
@@ -196,11 +237,14 @@ const DomainOnProteinWithoutData = ({
     !dataInterProNMatches.loading &&
     dataInterProNMatches.payload
   ) {
-    const data = Object.values(dataInterProNMatches.payload);
-    Object.entries(mergedData).map((track) => {
-      mergeMatches(track[0], track[1], data);
+    const interProNData = dataInterProNMatches.payload;
+    const tracks = Object.keys(mergedData);
+    tracks.map((track) => {
+      mergedData[track] = mergeMatches(track, mergedData[track], interProNData);
     });
   }
+
+  Object.values(mergedData).map((group) => group.sort(sortTracks).flat());
 
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;

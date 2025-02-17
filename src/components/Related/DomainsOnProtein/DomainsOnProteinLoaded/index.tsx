@@ -277,6 +277,7 @@ type Props = PropsWithChildren<{
   dataMerged: ProteinViewerDataObject;
   dataConfidence?: RequestedData<AlphafoldConfidencePayload>;
   dataVariation?: RequestedData<ProteinsAPIVariation>;
+  dataInterProNMatches?: RequestedData<InterProNMatches>;
   dataProteomics?: RequestedData<ProteinsAPIProteomics>;
   conservationError?: string | null;
   showConservationButton?: boolean;
@@ -291,6 +292,7 @@ const DomainsOnProteinLoaded = ({
   dataConfidence,
   dataVariation,
   dataProteomics,
+  dataInterProNMatches,
   conservationError,
   showConservationButton,
   handleConservationLoad,

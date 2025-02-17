@@ -27,6 +27,7 @@ import {
 } from '@floating-ui/react';
 
 import useStateRef from 'utils/hooks/useStateRef';
+import { filterInterProN } from './utils';
 
 import NightingaleManager from 'components/Nightingale/Manager';
 import id from 'utils/cheap-unique-id';
@@ -203,6 +204,9 @@ export const ProteinViewer = ({
   const mainRef = useRef<HTMLDivElement>(null);
   const componentsRef = useRef<HTMLDivElement>(null);
   const intervalId = useRef<NodeJS.Timer | null>(null);
+  const [filteredData, setFilteredData] = useState<ProteinViewerData>(data);
+  const [previousMatchTypeSettings, matchTypeSettingsHaveChanged] =
+    useState(matchTypeSettings);
   const [tooltipEnabled, setTooltipEnabled, tooltipEnabledRef] =
     useStateRef(true);
   const [tooltipContent, setTooltipContent] = useState<ReactNode>(null);
@@ -243,13 +247,19 @@ export const ProteinViewer = ({
   };
 
   useEffect(() => {
+    if (matchTypeSettings !== previousMatchTypeSettings) {
+      matchTypeSettingsHaveChanged(matchTypeSettings);
+      setFilteredData([...filterInterProN(data, matchTypeSettings)]);
+    }
+
     const newHideCategory = switchCategoryVisibilityShowMore(
       hideCategory,
       ['families', 'domains'],
       showMoreSettings ? false : true,
     );
+
     setHideCategory(newHideCategory);
-  }, [showMoreSettings]);
+  }, [showMoreSettings, matchTypeSettings, data]);
 
   const openTooltip = (
     element: HTMLElement | undefined,
@@ -396,7 +406,7 @@ export const ProteinViewer = ({
                 highlightColor={highlightColor}
                 ref={navigationRef}
               />
-              {(data as unknown as ProteinViewerData<ExtendedFeature>)
+              {(filteredData as unknown as ProteinViewerData<ExtendedFeature>)
                 .filter(([_, tracks]) => tracks && tracks.length)
                 .map(([type, entries, component]) => {
                   entries.forEach((entry: ExtendedFeature) => {
@@ -415,18 +425,6 @@ export const ProteinViewer = ({
                   let representativeEntries: ExtendedFeature[] | null = null;
                   let nonRepresentativeEntries: ExtendedFeature[] | null = null;
 
-                  if (matchTypeSettings === 'hmm') {
-                    entries = entries.filter(
-                      (entry) => !entry.accession.includes('nMatch'),
-                    );
-                  }
-
-                  if (matchTypeSettings === 'dl') {
-                    entries = entries.filter((entry) =>
-                      entry.accession.includes('nMatch'),
-                    );
-                  }
-
                   if (type === 'domains' || type === 'families') {
                     representativeEntries = entries.filter(
                       (entry) => entry.representative === true,
@@ -439,8 +437,6 @@ export const ProteinViewer = ({
                   // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
                   // This dict is used to go from type to section name
                   const sectionName = typeNameToSectionName[type];
-
-                  console.log(entries);
 
                   // Show only the main tracks unless button "Show more" is clicked
                   let hideDiv: string = '';
@@ -546,7 +542,7 @@ export const ProteinViewer = ({
                           <LabelComponent {...(component?.attributes || {})} />
                         </div>
                       )}{' '}
-                      {representativeEntries ? (
+                      {representativeEntries && nonRepresentativeEntries ? (
                         <>
                           {representativeEntries.length > 0 ? (
                             <RepresentativeTrack
@@ -569,27 +565,26 @@ export const ProteinViewer = ({
                             highlightColor={highlightColor}
                             openTooltip={openTooltip}
                             closeTooltip={closeTooltip}
+                            isPrinting={false}
+                            databases={dataBase?.payload?.databases}
+                          />
+                        </>
+                      ) : (
+                        entries && (
+                          <TracksInCategory
+                            entries={entries}
+                            sequence={protein.sequence}
+                            hideCategory={hideCategory[type]}
+                            highlightColor={highlightColor}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
                             isPrinting={isPrinting}
                             ref={(ref: ExpandedHandle) =>
                               categoryRefs.current.push(ref)
                             }
                             databases={dataBase?.payload?.databases}
                           />
-                        </>
-                      ) : (
-                        <TracksInCategory
-                          entries={entries}
-                          sequence={protein.sequence}
-                          hideCategory={hideCategory[type]}
-                          highlightColor={highlightColor}
-                          openTooltip={openTooltip}
-                          closeTooltip={closeTooltip}
-                          isPrinting={isPrinting}
-                          ref={(ref: ExpandedHandle) =>
-                            categoryRefs.current.push(ref)
-                          }
-                          databases={dataBase?.payload?.databases}
-                        />
+                        )
                       )}
                     </div>
                   );

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { toPlural } from 'utils/pages/toPlural';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
+import { ExtendedFeature } from '.';
 
 export const selectRepresentativeData = (
   entries: Record<string, unknown>[],
@@ -123,4 +124,37 @@ const processData = <M = Metadata>(
     representativeFamilies,
     other: [],
   };
+};
+
+export const filterInterProN = (
+  data: ProteinViewerData,
+  option: MatchTypeUISettings,
+): ProteinViewerData => {
+  const typeToBool = {
+    hmm: false,
+    dl: true,
+    hmm_and_dl: true,
+    best: true,
+  };
+
+  let previousEntries: ProteinViewerData = [...data];
+  let newEntries: ProteinViewerData = [];
+
+  if (option == 'best') {
+    return [];
+  }
+
+  previousEntries
+    .filter(([_, tracks]) => tracks && tracks.length)
+    .map(([type, entries, component]) => {
+      let filteredEntries: ExtendedFeature[] = [
+        ...(entries as ExtendedFeature[]),
+      ];
+      filteredEntries = filteredEntries.filter(
+        (entry) => typeToBool[option] === entry.accession.includes('nMatch'),
+      );
+      newEntries.push([type, filteredEntries]);
+    });
+
+  return newEntries;
 };

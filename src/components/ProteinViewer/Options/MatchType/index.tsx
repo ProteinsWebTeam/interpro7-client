@@ -16,11 +16,12 @@ type Props = {
   changeSettingsRaw: typeof changeSettingsRaw;
 };
 
-type matchTypes = 'hmm' | 'dl' | 'hmm_and_dl';
+type matchTypes = 'hmm' | 'dl' | 'best' | 'hmm_and_dl';
 const matchMap: Array<[matchTypes, string]> = [
   ['hmm', 'InterPro'],
-  ['dl', 'IntePro-N'],
-  ['hmm_and_dl', 'InterPro & IntePro-N'],
+  ['dl', 'InterPro-N'],
+  ['best', 'Best match'],
+  ['hmm_and_dl', 'InterPro & InterPro-N'],
 ];
 const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
   const id = useId();
