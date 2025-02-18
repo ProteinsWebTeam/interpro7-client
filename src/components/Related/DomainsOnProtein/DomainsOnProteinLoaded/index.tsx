@@ -26,6 +26,7 @@ import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { changeSettingsRaw } from 'actions/creators';
 import { mergeMatches } from './utils';
+import { EntryColorMode } from 'src/utils/entry-color';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -158,6 +159,18 @@ type Props = PropsWithChildren<{
   changeSettingsRaw: typeof changeSettingsRaw;
 }>;
 
+const chooseDomainColor = (color: string): string => {
+  let colors = Object.values(EntryColorMode);
+  for (let i = 0; i < colors.length; i++) {
+    if (colors[i] !== color) {
+      return colors[i];
+    } else {
+      return '';
+    }
+  }
+  return '';
+};
+
 const DomainsOnProteinLoaded = ({
   mainData,
   dataMerged,
@@ -180,11 +193,26 @@ const DomainsOnProteinLoaded = ({
   const [previousColorType, setPreviousColorType] = useState(colorDomainsBy);
 
   useEffect(() => {
+    /* A currently unknown issue prevents tracks to be
+       re-rendered correctly (i.e. the label shows up, data is there, track not shown) 
+       after a state update  triggered by filtering of the data (i.e Interpro-N matches case),
+       unless coloring is changed.
+
+       Here we briefly changed the redux state related to domain colors and put it back 
+       to whatever the user choice is.
+    */
+
     if (currentMatchType !== matchTypeSettings) {
       setCurrentMatchType(matchTypeSettings);
       setPreviousColorType(colorDomainsBy);
       if (colorDomainsBy) {
-        changeSettingsRaw('ui', 'colorDomainsBy', 'ACCESSION');
+        if (previousColorType) {
+          changeSettingsRaw(
+            'ui',
+            'colorDomainsBy',
+            chooseDomainColor(previousColorType),
+          );
+        }
         if (previousColorType) {
           changeSettingsRaw('ui', 'colorDomainsBy', previousColorType);
         }
@@ -201,6 +229,7 @@ const DomainsOnProteinLoaded = ({
   if (dataConfidence)
     addConfidenceTrack(dataConfidence, protein.accession, dataMerged);
 
+  // InterPro-N matches filtering/addition logic
   if (
     dataInterProNMatches &&
     !dataInterProNMatches.loading &&
