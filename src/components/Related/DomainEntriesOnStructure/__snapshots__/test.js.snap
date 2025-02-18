@@ -9,7 +9,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
       className="vf-stack"
     >
       <h4
-        id="protvista-A-p00735"
+        id="protvista-A"
       >
         Chain 
         A
@@ -38,7 +38,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
       </h4>
       <ProteinViewerLoaded
         chain="A"
-        id="A-p00735"
+        id="A"
         protein={
           {
             "accession": "A-undefined",

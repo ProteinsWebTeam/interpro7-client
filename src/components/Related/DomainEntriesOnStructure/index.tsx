@@ -56,6 +56,13 @@ export function sortTracks(
   return 0;
 }
 
+const isAccessionIn = (
+  accession: string,
+  proteins: { accession: string; length: number }[],
+) => {
+  return proteins.some((proteinobj) => proteinobj.accession === accession);
+};
+
 const toArrayStructure = (locations: Array<ProtVistaLocation>) =>
   locations.map((loc) => loc.fragments.map((fr) => [fr.start, fr.end]));
 
@@ -104,11 +111,28 @@ const mergeData = (
         }
       }
 
+      let proteinObjs: { accession: string; length: number }[] = [];
+
+      proteinObjs = proteinObjs?.concat({
+        accession: entry.protein,
+        length: entry.protein_length,
+      });
+
+      entry.children?.map((child) => {
+        if (
+          child.protein &&
+          child.protein_length &&
+          !isAccessionIn(child.protein, proteinObjs)
+        ) {
+          proteinObjs.push({
+            accession: child.protein,
+            length: child.protein_length,
+          });
+        }
+      });
+
       out[entry.chain][entry.protein] = {
-        protein: {
-          accession: entry.protein,
-          length: entry.protein_length,
-        },
+        protein: proteinObjs,
         sequence: {
           sequence: entry.sequence,
           length: entry.sequence_length,
@@ -170,17 +194,6 @@ const mergeData = (
   return entries;
 };
 
-const tagChimericStructures = (data: DataForProteinChain[]) => {
-  const proteinsPerChain: Record<string, Array<string>> = {};
-  for (const e of data) {
-    if (!(e.chain in proteinsPerChain)) proteinsPerChain[e.chain] = [];
-    proteinsPerChain[e.chain].push(e.protein.accession);
-  }
-  for (const e of data) {
-    if (proteinsPerChain[e.chain].length > 1) e.isChimeric = true;
-  }
-};
-
 const getRepresentativesPerChain = (
   representativeDomains?: Record<string, unknown>[],
 ) => {
@@ -218,7 +231,6 @@ const EntriesOnStructure = ({
 }: Props) => {
   const merged = useMemo(() => {
     const data = mergeData(entries.concat(unintegrated), secondaryStructures);
-    tagChimericStructures(data);
     return data;
   }, [entries, unintegrated, secondaryStructures]);
 
@@ -281,12 +293,16 @@ const EntriesOnStructure = ({
           });
 
           let accessionList: string[] = [];
-          const processedAccession = e.protein?.accession;
-          if (processedAccession) accessionList = processedAccession.split(','); // Chimeric
+          const splitAccessions = e.protein
+            ?.map((p) => p.accession)
+            .map((pAccession) => pAccession.split(','))
+            .flat();
+          accessionList = accessionList.concat(splitAccessions);
+          accessionList = Array.from(new Set(accessionList));
 
           return (
             <div key={i} className={css('vf-stack')}>
-              <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
+              <h4 id={`protvista-${e.chain}`}>
                 Chain {e.chain}
                 {accessionList.length > 0 && ' ('}
                 {accessionList &&
@@ -329,7 +345,7 @@ const EntriesOnStructure = ({
                   tracks as Array<[string, Array<Record<string, unknown>>]>
                 }
                 chain={e.chain}
-                id={`${e.chain}-${e.protein.accession}`}
+                id={`${e.chain}`}
                 protein={sequenceData}
                 viewerType={'structures'}
               />

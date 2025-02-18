@@ -89,6 +89,22 @@ const processData = <M = Metadata>(
       'interpro',
   );
 
+  const interproMap = new Map();
+
+  interpro.map((ipro) => {
+    const integratedUnder = Object.values(ipro.member_databases as {}).map(
+      (entryDict) => Object.keys(entryDict as object)[0],
+    );
+    const interproK = integratedUnder.map((entryAccession) => {
+      return `${ipro.accession}-${entryAccession}-${ipro.chain}-${
+        endpoint === 'structure' ? ipro.structureAccession : ipro.protein
+      }`;
+    });
+    interproK.map((k) => {
+      interproMap.set(k, ipro);
+    });
+  });
+
   const locationKey =
     endpoint === 'structure'
       ? 'entry_structure_locations'
@@ -101,17 +117,6 @@ const processData = <M = Metadata>(
 
   const representativeDomains = representativeData['domains'];
   const representativeFamilies = representativeData['families'];
-
-  const interproMap = new Map(
-    interpro.map((ipro) => {
-      return [
-        `${ipro.accession}-${ipro.chain}-${
-          endpoint === 'structure' ? ipro.structureAccession : ipro.protein
-        }`,
-        ipro,
-      ];
-    }),
-  );
 
   const integrated = results.filter((entry) => entry.integrated);
 
@@ -128,7 +133,7 @@ const processData = <M = Metadata>(
       children?: Array<Record<string, unknown>>;
     } =
       interproMap.get(
-        `${entry.integrated}-${entry.chain}-${
+        `${entry.integrated}-${entry.accession}-${entry.chain}-${
           endpoint === 'structure' ? entry.structureAccession : entry.protein
         }`,
       ) || {};

@@ -2,7 +2,7 @@ export type DataForProteinChain = {
   protein: {
     accession: string;
     length: number;
-  };
+  }[];
   sequence: {
     sequence: string;
     length: number;
@@ -42,7 +42,8 @@ export const mergeChimericProteins = (
   newData[proteinViewerIdentifier] = JSON.parse(
     JSON.stringify(Object.values(data)[0]),
   ); //deep copy of first protein
-  newData[proteinViewerIdentifier]['protein'].accession =
+
+  newData[proteinViewerIdentifier]['protein'][0].accession =
     proteinViewerIdentifier;
   newData[proteinViewerIdentifier]['data'] = {};
 
