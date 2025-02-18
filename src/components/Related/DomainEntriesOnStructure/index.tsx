@@ -244,6 +244,47 @@ const EntriesOnStructure = ({
     [representativeFamilies],
   );
 
+  const reorganizeStructureViewer = (
+    chain: string,
+    tracks: ProteinViewerDataObject,
+  ): ProteinViewerDataObject => {
+    try {
+      const newTracks = JSON.parse(JSON.stringify(tracks));
+
+      if (!newTracks['domain']) newTracks.domains = [];
+      else newTracks.domains = [...newTracks.domain];
+
+      if (!newTracks['family']) newTracks.families = [];
+      else newTracks.families = [...newTracks.family];
+
+      // Move homologous superfamily to domains
+      const homologousSuperFamilies = newTracks['homologous_superfamily'];
+      if (newTracks['domains'] && homologousSuperFamilies) {
+        newTracks['domains'] = newTracks['domains'].concat(
+          homologousSuperFamilies,
+        );
+      }
+
+      const representativeDomains = representativesDomainsPerChain[chain];
+      if (newTracks['domains'] && representativeDomains)
+        newTracks['domains'] = newTracks['domains'].concat(
+          representativeDomains,
+        );
+
+      const representativeFamilies = representativesFamiliesPerChain[chain];
+      if (newTracks['families'] && representativeFamilies)
+        newTracks['families'] = newTracks['families'].concat(
+          representativeFamilies,
+        );
+
+      console.log(chain, newTracks);
+      return newTracks;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+  };
+
   return (
     <>
       <div className={css('vf-stack', 'vf-stack--400')}>
@@ -253,40 +294,8 @@ const EntriesOnStructure = ({
             ...e.sequence,
           };
 
-          const tracks = flattenTracksObject(e.data);
-          const homologous_superfamily = tracks.filter(
-            (entry) => entry[0] == 'homologous superfamily',
-          )[0];
-
-          tracks.map((entry) => {
-            if (entry[0] === 'domain') {
-              entry[0] = 'domains';
-              if (representativesDomainsPerChain[e.chain]) {
-                entry[1] = entry[1].concat(
-                  representativesDomainsPerChain[e.chain],
-                );
-              }
-              if (homologous_superfamily) {
-                entry[1] = entry[1].concat(homologous_superfamily[1]);
-              }
-            }
-
-            if (entry[0] === 'family') {
-              entry[0] = 'families';
-              if (representativesFamiliesPerChain[e.chain]) {
-                entry[1] = entry[1].concat(
-                  representativesFamiliesPerChain[e.chain],
-                );
-              }
-            }
-
-            if (
-              entry[0] === 'homologous superfamily' ||
-              entry[0] === 'unintegrated'
-            ) {
-              entry[1] = [];
-            }
-          });
+          const reorganizedTracks = reorganizeStructureViewer(e.chain, e.data);
+          const tracks = flattenTracksObject(reorganizedTracks);
 
           tracks.map((entry) => {
             (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
