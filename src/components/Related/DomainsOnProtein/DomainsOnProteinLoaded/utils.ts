@@ -164,7 +164,18 @@ export function mergeMatches(
   let baseTraditionalMatchesObj = JSON.parse(
     JSON.stringify(traditionalMatches),
   );
-  let baseNMatchesObj = JSON.parse(JSON.stringify(interproNMatches));
+
+  let baseNMatchesObj = JSON.parse(
+    JSON.stringify(
+      Object.values(interproNMatches).filter(
+        (match: MinimalFeature & { integrated?: string; type?: string }) => {
+          return (
+            match.integrated === null && match.type == type.replace('_', ' ')
+          );
+        },
+      ),
+    ),
+  );
 
   switch (matchTypeSettings) {
     case 'hmm':
