@@ -5,6 +5,7 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
+import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 
 import {
   getAlphaFoldPredictionURL,
@@ -25,72 +26,6 @@ import { sortTracks } from './DomainsOnProteinLoaded/utils';
 import { connect } from 'react-redux';
 import { changeSettingsRaw } from 'actions/creators';
 
-// InterPro-N matches handling logic
-function mergeMatches(
-  type: string,
-  traditionalMatches: MinimalFeature[],
-  interproNMatches: Record<string, MinimalFeature>,
-  matchTypeSettings: MatchTypeUISettings,
-): MinimalFeature[] {
-  // Initialize new matches data with the traditional unintegrated matches
-  let mergedMatches = traditionalMatches.filter(
-    (match) => !match.accession.startsWith('IPR'),
-  );
-
-  if (matchTypeSettings === 'dl') {
-    // Append unintegrated Interpro-N matches
-    let unintegratedInterProNMatches = JSON.parse(
-      JSON.stringify(
-        Object.values(interproNMatches).filter(
-          (match: MinimalFeature & { integrated?: string; type?: string }) => {
-            return (
-              match.integrated === null && match.type == type.replace('_', ' ')
-            );
-          },
-        ),
-      ),
-    );
-
-    for (let i = 0; i < unintegratedInterProNMatches.length; i++) {
-      unintegratedInterProNMatches[i].accession =
-        unintegratedInterProNMatches[i].accession + ':nMatch';
-    }
-
-    mergedMatches = mergedMatches.concat(unintegratedInterProNMatches);
-  }
-
-  // // const mergedMatches = []
-  // // try {
-  // //   const interProMatches = traditionalMatches
-  // //     .filter(entry => entry.accession.startsWith("IPR"))
-  // //     .map(entry => JSON.parse(JSON.stringify(entry))); // Deep copy
-
-  // //   for (let i = 0; i < interProMatches.length; i++) {
-  // //     const interProMatchChildren: ExtendedFeature[] = [...interProMatches[i].children || []]
-  // //     for (let y = 0; y < interProMatchChildren.length; y++) {
-
-  // //       Get info from Interpro-N object
-  // //       const integratedEntryAccession = interProMatchChildren[y].accession
-  // //       const inteproNMatch = { ...interproNMatches[integratedEntryAccession] }
-
-  // //       Change accessions
-  // //       inteproNMatch.integrated = inteproNMatch.integrated.accession
-  // //       inteproNMatch.accession += ":nMatch"
-
-  // //       Append it to existing children
-  // //       interProMatches[i].children = interProMatches[i].children.concat([inteproNMatch]);
-  // //     }
-  // //   }
-
-  // //   console.log("asd", interProMatches)
-  // // }
-  // // catch {
-
-  // // }
-
-  return mergedMatches;
-}
-
 type Props = PropsWithChildren<{
   mainData: {
     metadata:
@@ -103,6 +38,7 @@ type Props = PropsWithChildren<{
   onFamiliesFound?: (families: Record<string, unknown>[]) => void;
   title?: string;
   matchTypeSettings: MatchTypeUISettings;
+  colorDomainsBy: string;
 }>;
 interface LoadedProps
   extends Props,
@@ -133,6 +69,7 @@ const DomainOnProteinWithoutData = ({
   externalSourcesData,
   title,
   matchTypeSettings,
+  colorDomainsBy,
 }: LoadedProps) => {
   const [processedData, setProcessedData] = useState<{
     interpro: Record<string, unknown>[];
@@ -200,25 +137,6 @@ const DomainOnProteinWithoutData = ({
     representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
 
-  if (
-    dataInterProNMatches &&
-    !dataInterProNMatches.loading &&
-    dataInterProNMatches.payload
-  ) {
-    const interProNData = dataInterProNMatches.payload;
-    const tracks = Object.keys(mergedData);
-    tracks.map((track) => {
-      mergedData[track] = mergeMatches(
-        track,
-        mergedData[track],
-        interProNData,
-        matchTypeSettings,
-      );
-    });
-  }
-
-  Object.values(mergedData).map((group) => group.sort(sortTracks).flat());
-
   if (externalSourcesData.length) {
     mergedData.external_sources = externalSourcesData;
   }
@@ -280,6 +198,7 @@ const DomainOnProteinWithoutData = ({
         dataVariation={dataVariation}
         dataProteomics={dataProteomics}
         dataFeatures={dataFeatures}
+        dataInterProNMatches={dataInterProNMatches}
         loading={
           data?.loading ||
           dataFeatures?.loading ||
@@ -400,6 +319,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
   (ui: UISettings) => ({
     matchTypeSettings: ui.matchTypeSettings,
+    colorDomainsBy: ui.colorDomainsBy,
   }),
 );
 

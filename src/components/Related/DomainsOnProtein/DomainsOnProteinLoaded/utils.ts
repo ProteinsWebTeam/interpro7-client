@@ -152,3 +152,72 @@ export const standardizeMobiDBFeatureStructure = (
 
   return newFeatures;
 };
+
+// InterPro-N matches handling logic
+export function mergeMatches(
+  type: string,
+  traditionalMatches: MinimalFeature[],
+  interproNMatches: Record<string, MinimalFeature>,
+  matchTypeSettings: MatchTypeUISettings,
+  colorDomainsBy: string,
+): MinimalFeature[] {
+  // Initialize new matches data with the traditional unintegrated matches
+  let mergedMatches = traditionalMatches.filter(
+    (match) => !match.accession.startsWith('IPR'),
+  );
+
+  if (matchTypeSettings === 'dl') {
+    // // Append unintegrated Interpro-N matches
+    // let unintegratedInterProNMatches = JSON.parse(
+    //   JSON.stringify(
+    //     Object.values(interproNMatches).filter(
+    //       (match: MinimalFeature & { integrated?: string; type?: string }) => {
+    //         return (
+    //           match.integrated === null && match.type == type.replace('_', ' ')
+    //         );
+    //       },
+    //     ),
+    //   ),
+    // );
+
+    // for (let i = 0; i < unintegratedInterProNMatches.length; i++) {
+    //   unintegratedInterProNMatches[i].accession =
+    //     unintegratedInterProNMatches[i].accession + ':nMatch';
+    // }
+
+    mergedMatches = mergedMatches.concat(
+      traditionalMatches.filter((match) => match.accession.startsWith('IPR')),
+    );
+  }
+
+  // // const mergedMatches = []
+  // // try {
+  // //   const interProMatches = traditionalMatches
+  // //     .filter(entry => entry.accession.startsWith("IPR"))
+  // //     .map(entry => JSON.parse(JSON.stringify(entry))); // Deep copy
+
+  // //   for (let i = 0; i < interProMatches.length; i++) {
+  // //     const interProMatchChildren: ExtendedFeature[] = [...interProMatches[i].children || []]
+  // //     for (let y = 0; y < interProMatchChildren.length; y++) {
+
+  // //       Get info from Interpro-N object
+  // //       const integratedEntryAccession = interProMatchChildren[y].accession
+  // //       const inteproNMatch = { ...interproNMatches[integratedEntryAccession] }
+
+  // //       Change accessions
+  // //       inteproNMatch.integrated = inteproNMatch.integrated.accession
+  // //       inteproNMatch.accession += ":nMatch"
+
+  // //       Append it to existing children
+  // //       interProMatches[i].children = interProMatches[i].children.concat([inteproNMatch]);
+  // //     }
+  // //   }
+
+  // //   console.log("asd", interProMatches)
+  // // }
+  // // catch {
+
+  // // }
+
+  return mergedMatches;
+}

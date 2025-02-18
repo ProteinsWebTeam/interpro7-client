@@ -405,19 +405,21 @@ export const ProteinViewer = ({
                             />
                           </>
                         ) : (
-                          <TracksInCategory
-                            entries={entries}
-                            sequence={protein.sequence}
-                            hideCategory={hideCategory[type]}
-                            highlightColor={highlightColor}
-                            openTooltip={openTooltip}
-                            closeTooltip={closeTooltip}
-                            isPrinting={isPrinting}
-                            ref={(ref: ExpandedHandle) =>
-                              categoryRefs.current.push(ref)
-                            }
-                            databases={dataBase?.payload?.databases}
-                          />
+                          entries && (
+                            <TracksInCategory
+                              entries={entries}
+                              sequence={protein.sequence}
+                              hideCategory={hideCategory[type]}
+                              highlightColor={highlightColor}
+                              openTooltip={openTooltip}
+                              closeTooltip={closeTooltip}
+                              isPrinting={isPrinting}
+                              ref={(ref: ExpandedHandle) =>
+                                categoryRefs.current.push(ref)
+                              }
+                              databases={dataBase?.payload?.databases}
+                            />
+                          )
                         )}
                       </div>
                     );

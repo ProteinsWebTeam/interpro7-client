@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import loadable from 'higherOrder/loadable';
 import {
@@ -21,6 +21,11 @@ import {
   standardizeMobiDBFeatureStructure,
   standardizeResidueStructure,
 } from './utils';
+
+import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { changeSettingsRaw } from 'actions/creators';
+import { mergeMatches } from './utils';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -142,11 +147,15 @@ type Props = PropsWithChildren<{
   dataInterProNMatches?: RequestedData<InterProNMatches>;
   dataProteomics?: RequestedData<ProteinsAPIProteomics>;
   dataFeatures?: RequestedData<ExtraFeaturesPayload>;
+  dataInterproNMatches?: RequestedData<InterProNMatches>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
   loading: boolean;
   title?: string;
+  colorDomainsBy?: string;
+  matchTypeSettings?: MatchTypeUISettings;
+  changeSettingsRaw: typeof changeSettingsRaw;
 }>;
 
 const DomainsOnProteinLoaded = ({
@@ -156,13 +165,33 @@ const DomainsOnProteinLoaded = ({
   dataVariation,
   dataProteomics,
   dataFeatures,
+  dataInterProNMatches,
   conservationError,
   showConservationButton,
   handleConservationLoad,
   loading,
   children,
   title = 'Entry matches to this protein',
+  colorDomainsBy,
+  matchTypeSettings,
+  changeSettingsRaw,
 }: Props) => {
+  const [currentMatchType, setCurrentMatchType] = useState(matchTypeSettings);
+  const [previousColorType, setPreviousColorType] = useState(colorDomainsBy);
+
+  useEffect(() => {
+    if (currentMatchType !== matchTypeSettings) {
+      setCurrentMatchType(matchTypeSettings);
+      setPreviousColorType(colorDomainsBy);
+      if (colorDomainsBy) {
+        changeSettingsRaw('ui', 'colorDomainsBy', 'ACCESSION');
+        if (previousColorType) {
+          changeSettingsRaw('ui', 'colorDomainsBy', previousColorType);
+        }
+      }
+    }
+  }, [matchTypeSettings, previousColorType]);
+
   const protein =
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;
@@ -171,6 +200,27 @@ const DomainsOnProteinLoaded = ({
 
   if (dataConfidence)
     addConfidenceTrack(dataConfidence, protein.accession, dataMerged);
+
+  if (
+    dataInterProNMatches &&
+    !dataInterProNMatches.loading &&
+    dataInterProNMatches.payload
+  ) {
+    const interProNData = dataInterProNMatches.payload;
+    const tracks = Object.keys(dataMerged);
+
+    if (matchTypeSettings && colorDomainsBy) {
+      tracks.map((track) => {
+        dataMerged[track] = mergeMatches(
+          track,
+          dataMerged[track] as MinimalFeature[],
+          interProNData,
+          matchTypeSettings,
+          colorDomainsBy,
+        );
+      });
+    }
+  }
 
   if (dataVariation?.ok && dataVariation.payload) {
     const filteredVariationPayload = filterVariation(dataVariation.payload);
@@ -306,7 +356,6 @@ const DomainsOnProteinLoaded = ({
   );
 };
 
-export default DomainsOnProteinLoaded;
 function filterVariation(payload: ProteinsAPIVariation): ProteinsAPIVariation {
   const types = ['pathogenic', 'likely pathogenic'];
   const features = payload.features.filter(
@@ -322,3 +371,16 @@ function filterVariation(payload: ProteinsAPIVariation): ProteinsAPIVariation {
     features,
   };
 }
+
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ui,
+  (ui) => ({
+    showMoreSettings: ui.showMoreSettings,
+    colorDomainsBy: ui.colorDomainsBy,
+    matchTypeSettings: ui.matchTypeSettings,
+  }),
+);
+
+export default connect(mapStateToProps, { changeSettingsRaw })(
+  DomainsOnProteinLoaded,
+);
