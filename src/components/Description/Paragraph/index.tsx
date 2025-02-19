@@ -39,7 +39,7 @@ export const Paragraph = ({
 }: Props) => {
   let text = p;
   let match = null;
-  let parts = [];
+  const parts = [];
 
   while (
     (match = text.match(CITATIONS_REGEX)) ||
