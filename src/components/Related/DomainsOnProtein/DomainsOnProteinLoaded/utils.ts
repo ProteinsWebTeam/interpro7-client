@@ -153,98 +153,162 @@ export const standardizeMobiDBFeatureStructure = (
   return newFeatures;
 };
 
+function processInterPro_NMatches(
+  type: string,
+  interpro_NMatches: Record<string, IntePro_NMatch>,
+  bestMode: boolean,
+):
+  | MinimalFeature[]
+  | [MinimalFeature[], Map<string, ExtendedFeature>, string[]] {
+  let processedInterPro_NMatches: MinimalFeature[] = [];
+
+  // Get deep copy of unintegrated entries
+  const baseNMatchesObjUnintegrated = JSON.parse(
+    JSON.stringify(
+      Object.values(interpro_NMatches).filter((match: IntePro_NMatch) => {
+        return (
+          !match.integrated &&
+          match.type === type &&
+          (bestMode ? match.is_preferred : true)
+        );
+      }),
+    ),
+  );
+
+  // Get deep copy of integrated entries
+  const baseNMatchesObjIntegrated = JSON.parse(
+    JSON.stringify(
+      Object.values(interpro_NMatches).filter((match: IntePro_NMatch) => {
+        return (
+          match.integrated &&
+          match.type === type &&
+          (bestMode ? match.is_preferred : true)
+        );
+      }),
+    ),
+  );
+
+  // Create map <integrated_accession: integrated_entryobj> to append integrated matches as children later
+  let integratedMap: Map<string, ExtendedFeature> = new Map();
+  if (baseNMatchesObjIntegrated.length > 0) {
+    baseNMatchesObjIntegrated.map(
+      (entry: { integrated?: { accession: string } }) => {
+        integratedMap.set(
+          entry.integrated?.accession as string,
+          entry.integrated as ExtendedFeature,
+        );
+      },
+    );
+  }
+
+  if (integratedMap) {
+    for (let i = 0; i < baseNMatchesObjIntegrated.length; i++) {
+      // Edit base match entry obj so that the integrated field is just the integrated accession and not the whole entry
+      const tempNMatch = { ...baseNMatchesObjIntegrated[i] };
+      const integratedAccession: string = tempNMatch.integrated.accession;
+      tempNMatch.integrated = integratedAccession;
+
+      // Append that new match object to the children list of the integrated "parent" entry
+      const interproMapEntry: ExtendedFeature | null =
+        integratedMap.get(integratedAccession) || null;
+
+      if (interproMapEntry) {
+        interproMapEntry.entry_protein_locations =
+          tempNMatch.entry_protein_locations;
+        integratedMap.set(integratedAccession, interproMapEntry);
+        if (interproMapEntry?.children) {
+          interproMapEntry.children.push(tempNMatch);
+          integratedMap.set(integratedAccession, interproMapEntry);
+        } else {
+          interproMapEntry.children = [tempNMatch];
+          integratedMap.set(integratedAccession, interproMapEntry);
+        }
+      }
+    }
+  }
+
+  // Merge unintegrated and integrated
+  processedInterPro_NMatches = baseNMatchesObjUnintegrated.concat(
+    Array.from(integratedMap.values()),
+  );
+  if (bestMode) {
+    const bestMatches = Object.entries(interpro_NMatches).filter(
+      (match) => match[1].is_preferred && type == match[1].type,
+    );
+    return [
+      baseNMatchesObjUnintegrated,
+      integratedMap,
+      bestMatches.map((match) => match[0] /*accession*/),
+    ];
+  }
+  return processedInterPro_NMatches;
+}
+
+function chooseBestMatch(
+  type: string,
+  traditionalMatches: MinimalFeature[],
+  interproNMatches: Record<string, IntePro_NMatch>,
+): MinimalFeature[] {
+  const processingResult = processInterPro_NMatches(
+    type,
+    interproNMatches,
+    true,
+  );
+  const bestMatchesList = processingResult[2] as string[];
+  let processedUnintegratedInterPro_NMatches = JSON.parse(
+    JSON.stringify(processingResult[0]),
+  ) as MinimalFeature[];
+  let processedIntegratedMapInterPro_NMatches: Map<string, ExtendedFeature> =
+    processingResult[1] as Map<string, ExtendedFeature>;
+
+  const baseMatchesObjUnintegrated = JSON.parse(
+    JSON.stringify(
+      Object.values(traditionalMatches).filter((match: ExtendedFeature) => {
+        return (
+          match.type === type &&
+          !bestMatchesList.includes(match.accession) &&
+          !match.integrated &&
+          !match.accession.startsWith('IPR')
+        );
+      }),
+    ),
+  );
+
+  // TODO: combine integrated matches
+  // - Flatten object of traditional matches
+  // - if match is in the bestMatches list, avoid it
+  // - if match is not in the bestMatches list and the Interpro integrated accession is in the map, append to children
+  // - if match is not in the best matches and the intepro integrated accession is NOT in the matp, create map entry (reuse logic of processing function)
+
+  return JSON.parse(
+    JSON.stringify(
+      processedUnintegratedInterPro_NMatches.concat(baseMatchesObjUnintegrated),
+    ),
+  );
+}
+
 // InterPro-N matches handling logic
 export function mergeMatches(
   type: string,
   traditionalMatches: MinimalFeature[],
-  interproNMatches: Record<string, MinimalFeature>,
+  interproNMatches: Record<string, IntePro_NMatch>,
   matchTypeSettings: MatchTypeUISettings,
   colorDomainsBy: string,
 ): MinimalFeature[] {
-  let baseTraditionalMatchesObj = JSON.parse(
-    JSON.stringify(traditionalMatches),
-  );
-
-  let baseNMatchesObj = JSON.parse(
-    JSON.stringify(
-      Object.values(interproNMatches).filter(
-        (match: MinimalFeature & { integrated?: string; type?: string }) => {
-          return (
-            match.integrated === null && match.type == type.replace('_', ' ')
-          );
-        },
-      ),
-    ),
-  );
-
   switch (matchTypeSettings) {
     case 'hmm':
-      return baseTraditionalMatchesObj;
+      return JSON.parse(JSON.stringify(traditionalMatches));
     case 'dl':
-      return baseNMatchesObj;
+      return processInterPro_NMatches(
+        type,
+        interproNMatches,
+        false,
+      ) as MinimalFeature[];
     case 'best':
-      return [];
+      return chooseBestMatch(type, traditionalMatches, interproNMatches);
     case 'hmm_and_dl':
       return [];
     default:
       return [];
   }
 }
-
-// // Initialize new matches data with the traditional unintegrated matches
-// let mergedMatches = traditionalMatches.filter(
-//   (match) => !match.accession.startsWith('IPR'),
-// );
-
-// if (matchTypeSettings === 'dl') {
-//   // Append unintegrated Interpro-N matches
-//   let unintegratedInterProNMatches = JSON.parse(
-//     JSON.stringify(
-//       Object.values(interproNMatches).filter(
-//         (match: MinimalFeature & { integrated?: string; type?: string }) => {
-//           return (
-//             match.integrated === null && match.type == type.replace('_', ' ')
-//           );
-//         },
-//       ),
-//     ),
-//   );
-
-//   for (let i = 0; i < unintegratedInterProNMatches.length; i++) {
-//     unintegratedInterProNMatches[i].accession =
-//       unintegratedInterProNMatches[i].accession + ':nMatch';
-//   }
-
-//   mergedMatches = mergedMatches.concat(
-//     traditionalMatches.filter((match) => match.accession.startsWith('IPR')),
-//   );
-// }
-
-// // const mergedMatches = []
-// // try {
-// //   const interProMatches = traditionalMatches
-// //     .filter(entry => entry.accession.startsWith("IPR"))
-// //     .map(entry => JSON.parse(JSON.stringify(entry))); // Deep copy
-
-// //   for (let i = 0; i < interProMatches.length; i++) {
-// //     const interProMatchChildren: ExtendedFeature[] = [...interProMatches[i].children || []]
-// //     for (let y = 0; y < interProMatchChildren.length; y++) {
-
-// //       Get info from Interpro-N object
-// //       const integratedEntryAccession = interProMatchChildren[y].accession
-// //       const inteproNMatch = { ...interproNMatches[integratedEntryAccession] }
-
-// //       Change accessions
-// //       inteproNMatch.integrated = inteproNMatch.integrated.accession
-// //       inteproNMatch.accession += ":nMatch"
-
-// //       Append it to existing children
-// //       interProMatches[i].children = interProMatches[i].children.concat([inteproNMatch]);
-// //     }
-// //   }
-
-// //   console.log("asd", interProMatches)
-// // }
-// // catch {
-
-// // }

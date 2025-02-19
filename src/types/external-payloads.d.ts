@@ -92,17 +92,13 @@ type ProteinsAPIProteomics = {
   features: [];
 };
 
-type InterProNMatches = Record<
-  string,
-  {
-    accession: string;
-    name: string;
-    short_name: string;
-    type: string;
-    source_database: string;
-    locations: Array<ProtVistaLocation>;
-  }
->;
+type IntePro_NMatch = MinimalFeature & {
+  type: string;
+  is_preferred: boolean;
+  integrated: MinimalFeature | string;
+};
+
+type InterProNMatches = Record<string, IntePro_NMatch>;
 
 type IprscanParameterValue = {
   label: string;

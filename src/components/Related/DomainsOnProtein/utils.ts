@@ -3,6 +3,8 @@ import {
   ExtendedFeatureLocation,
 } from 'src/components/ProteinViewer/utils';
 
+import { sortTracks } from './DomainsOnProteinLoaded/utils';
+
 export const orderByAccession = (
   a: { accession: string },
   b: { accession: string },
@@ -111,6 +113,7 @@ export const sectionsReorganization = (
     }
     newData[section] = [];
   });
+
   return newData;
 };
 
