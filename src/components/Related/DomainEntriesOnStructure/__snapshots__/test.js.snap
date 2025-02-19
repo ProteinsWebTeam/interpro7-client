@@ -91,36 +91,7 @@ exports[`<EntriesOnStructure /> should render 1`] = `
             ],
             [
               "homologous superfamily",
-              [
-                {
-                  "accession": "IPR038178",
-                  "chain": "A",
-                  "coordinates": [
-                    [
-                      [
-                        44,
-                        199,
-                      ],
-                    ],
-                  ],
-                  "link": "/entry/interpro/IPR038178",
-                  "locations": [
-                    {
-                      "fragments": [
-                        {
-                          "dc-status": "CONTINUOUS",
-                          "end": 199,
-                          "start": 44,
-                        },
-                      ],
-                    },
-                  ],
-                  "name": "Kringle superfamily",
-                  "protein": "p00735",
-                  "source_database": "interpro",
-                  "type": "homologous_superfamily",
-                },
-              ],
+              [],
             ],
           ]
         }
