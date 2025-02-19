@@ -16,6 +16,7 @@ import { foundationPartial } from 'styles/foundation';
 import ipro from 'styles/interpro-new.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
+import { toPublicAPI } from 'utils/url';
 
 const f = foundationPartial(fonts, ipro, local);
 
@@ -54,27 +55,41 @@ class Actions extends PureComponent /*:: <Props> */ {
 
     return (
       <div id="dassd" style={{ whiteSpace: 'nowrap' }}>
-        <Tooltip title="Download job">
-          <Link
-            buttonType="hollow"
-            className={f('icon', 'icon-common', 'ico-neutral', 'icon-download')}
-            href={blobURL}
-            download={fileName}
-            disabled={!blobURL}
-            aria-label="Download job"
-            style={{ color: 'var(--colors-light-txt)' }}
-          />
-        </Tooltip>
-        <Tooltip title="Delete job">
-          <Button
-            type="hollow"
-            icon="icon-trash"
-            textColor="var(--colors-light-txt)"
-            className={f('margin-left-large')}
-            onClick={this._handleDelete}
-            aria-label="Delete job"
-          />
-        </Tooltip>
+        <Link
+          buttonType="hollow"
+          href={blobURL}
+          download={fileName}
+          disabled={!blobURL}
+          aria-label="Download results"
+          style={{ color: 'var(--colors-light-txt)' }}
+        >
+          <span
+            className={f('icon', 'icon-common', 'icon-download')}
+            data-icon="&#xf019;"
+          />{' '}
+          Download
+        </Link>
+        <Link
+          buttonType="hollow"
+          href={toPublicAPI(localID.split('|')[0])}
+          aria-label="Browsable API"
+          style={{ color: 'var(--colors-light-txt)' }}
+        >
+          <span
+            className={f('icon', 'icon-common', 'icon-code')}
+            data-icon="&#xf121;"
+          />{' '}
+          API
+        </Link>
+        <Button
+          type="hollow"
+          icon="icon-trash"
+          textColor="var(--colors-light-txt)"
+          onClick={this._handleDelete}
+          aria-label="Delete results"
+        >
+          <span>Delete</span>
+        </Button>
       </div>
     );
   }
