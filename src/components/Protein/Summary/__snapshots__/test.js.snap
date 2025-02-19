@@ -227,7 +227,7 @@ exports[`<SummaryProtein /> should render 1`] = `
   >
     <Memo(Connect(loadData(Viewer))) />
     <section>
-      <Memo(Connect(loadData(Connect(loadData(loadExternalSources(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData))))))))))))))))))))))
+      <Memo(Connect(Connect(loadData(Connect(loadData(loadExternalSources(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(Connect(loadData(DomainOnProteinWithoutData)))))))))))))))))))))))
         mainData={
           {
             "metadata": {
