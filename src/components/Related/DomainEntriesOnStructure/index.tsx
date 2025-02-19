@@ -252,10 +252,16 @@ const EntriesOnStructure = ({
       const newTracks = JSON.parse(JSON.stringify(tracks));
 
       if (!newTracks['domain']) newTracks.domains = [];
-      else newTracks.domains = [...newTracks.domain];
+      else {
+        newTracks.domains = [...newTracks.domain];
+        newTracks.domain = [];
+      }
 
       if (!newTracks['family']) newTracks.families = [];
-      else newTracks.families = [...newTracks.family];
+      else {
+        newTracks.families = [...newTracks.family];
+        newTracks.family = [];
+      }
 
       // Move homologous superfamily to domains
       const homologousSuperFamilies = newTracks['homologous_superfamily'];
@@ -263,6 +269,7 @@ const EntriesOnStructure = ({
         newTracks['domains'] = newTracks['domains'].concat(
           homologousSuperFamilies,
         );
+        newTracks['homologous_superfamily'] = [];
       }
 
       const representativeDomains = representativesDomainsPerChain[chain];
@@ -276,11 +283,8 @@ const EntriesOnStructure = ({
         newTracks['families'] = newTracks['families'].concat(
           representativeFamilies,
         );
-
-      console.log(chain, newTracks);
       return newTracks;
     } catch (err) {
-      console.log(err);
       return {};
     }
   };
