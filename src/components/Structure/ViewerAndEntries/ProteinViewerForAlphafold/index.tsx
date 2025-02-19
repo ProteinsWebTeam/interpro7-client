@@ -118,10 +118,14 @@ const ProteinViewerForAlphafold = ({
           default:
             break;
         }
-      } else {
-        if (eventType === 'mouseout') {
-          setHoverSelection([]);
-          isHovering.current = false;
+      } else if (eventType === 'mouseout') {
+        setHoverSelection([]);
+        isHovering.current = false;
+      } else if (eventType === 'click') {
+        if (fixedSelectionRef.current.length) {
+          setFixedSelection([]);
+        } else {
+          setFixedSelection(hoverSelectionRef.current);
         }
       }
     });
