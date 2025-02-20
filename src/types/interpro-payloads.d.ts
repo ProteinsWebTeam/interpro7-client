@@ -328,6 +328,7 @@ type StructureLinkedObject = {
     MinimalFeature & {
       entry_protein_locations: unknown;
       entry_structure_locations: unknown;
+      protein?: string;
     }
   >;
   sequence: string;

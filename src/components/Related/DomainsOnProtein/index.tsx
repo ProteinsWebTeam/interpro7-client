@@ -39,6 +39,7 @@ type Props = PropsWithChildren<{
   title?: string;
   matchTypeSettings: MatchTypeUISettings;
   colorDomainsBy: string;
+  showMoreSettings?: boolean;
 }>;
 interface LoadedProps
   extends Props,
@@ -53,6 +54,15 @@ interface LoadedProps
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}
+
+const dataIsEmpty = (data: ProteinViewerDataObject): boolean => {
+  return (
+    !Object.keys(data).length ||
+    !Object.values(data)
+      .map((x) => x.length)
+      .reduce((agg, v) => agg + v, 0)
+  );
+};
 
 const DomainOnProteinWithoutData = ({
   data,
@@ -70,6 +80,7 @@ const DomainOnProteinWithoutData = ({
   title,
   matchTypeSettings,
   colorDomainsBy,
+  showMoreSettings,
 }: LoadedProps) => {
   const [processedData, setProcessedData] = useState<{
     interpro: Record<string, unknown>[];
@@ -145,6 +156,9 @@ const DomainOnProteinWithoutData = ({
     mergeResidues(mergedData, dataResidues.payload);
   }
 
+  const dataIsEmptyBeforeMergingFeatures = dataIsEmpty(mergedData);
+  let extraFeaturesCount = 0;
+
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
   }
@@ -154,20 +168,30 @@ const DomainOnProteinWithoutData = ({
     mergedData,
   );
 
+  const onlyExtraFeatures =
+    dataIsEmptyBeforeMergingFeatures && extraFeaturesCount > 0;
+
   if (
-    (!Object.keys(mergedData).length ||
-      !Object.values(mergedData)
-        .map((x) => x.length)
-        .reduce((agg, v) => agg + v, 0)) &&
-    !data?.loading &&
-    !dataFeatures?.loading &&
-    !dataResidues?.loading
+    // No entries and no extra features
+    (dataIsEmpty(mergedData) &&
+      !data?.loading &&
+      !dataResidues?.loading &&
+      !dataFeatures?.loading) ||
+    // No entries but extra features (e.g pfam-n)
+    (onlyExtraFeatures && !showMoreSettings)
   ) {
     return (
       <>
-        <Callout type="info">No entries match this protein.</Callout>
+        <Callout type="info">
+          {' '}
+          {onlyExtraFeatures && !showMoreSettings
+            ? `Additional matches are available, but not displayed in the summary display mode. 
+        Switch to the full display mode the see them.`
+            : 'No entry matches this protein'}
+        </Callout>
+
         <DomainsOnProteinLoaded
-          title={'Alphafold Confidence'}
+          title={'Entry matches to this protein'}
           mainData={mainData}
           dataMerged={proteinViewerData}
           dataConfidence={dataConfidence}
@@ -177,10 +201,6 @@ const DomainOnProteinWithoutData = ({
             dataResidues?.loading ||
             false
           }
-          // Disabling Conservation until hmmer is working
-          // conservationError={conservation.error}
-          // showConservationButton={showConservationButton}
-          // handleConservationLoad={fetchConservationData}
         >
           {children}
         </DomainsOnProteinLoaded>
