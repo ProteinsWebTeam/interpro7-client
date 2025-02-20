@@ -20,10 +20,13 @@ const Citations = ({ text, literature = [], withoutIDs }: Props) => (
   <sup>
     [
     {text.split(',').map((cita, i, array) => {
-      const citMatch = cita.match(PMID_REGEX_SINGLE);
+      const citMatch =
+        cita.match(PMID_REGEX_SINGLE) || cita.match(CITATION_REGEX);
+
       if (!citMatch || citMatch.length < 2) {
         return null;
       }
+
       const pubId = citMatch[1];
       const refCounter = literature.map((d) => d[0]).indexOf(pubId) + 1;
       return (
