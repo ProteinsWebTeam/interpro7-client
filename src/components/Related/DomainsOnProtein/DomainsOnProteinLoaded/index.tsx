@@ -393,6 +393,9 @@ const DomainsOnProteinLoaded = ({
         );
     }
 
+    // Other restructured "residues" section already created and populated
+    dataMerged['residue'] = [];
+
     // Sort data by match position, but exclude PIRSR, which is sorted in proteinViewerReorganization
     Object.entries(dataMerged as ProteinViewerDataObject<ExtendedFeature>).map(
       (group) => {
