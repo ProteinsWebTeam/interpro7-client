@@ -375,6 +375,8 @@ const DomainsOnProteinLoaded = ({
           if (dataMerged[dbToSection[sourcedb]]) {
             dataMerged[dbToSection[sourcedb]] =
               dataMerged[dbToSection[sourcedb]].concat(unintegratedEntry);
+          } else {
+            dataMerged[dbToSection[sourcedb]] = [unintegratedEntry];
           }
           dataMerged['unintegrated'].splice(i, 1);
         }
