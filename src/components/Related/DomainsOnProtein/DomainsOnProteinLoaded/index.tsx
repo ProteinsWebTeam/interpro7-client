@@ -304,6 +304,7 @@ const DomainsOnProteinLoaded = ({
       dataMerged['unintegrated'] = [...filteredUnintegrated];
     }
 
+    // Reorganize viewer and sections
     let proteinViewerData = proteinViewerReorganization(
       dataFeatures,
       dataMerged as ProteinViewerDataObject<MinimalFeature>,
@@ -320,14 +321,14 @@ const DomainsOnProteinLoaded = ({
         );
     }
 
+    proteinViewerData['other_features'] = [];
+
     // Sort data by match position, but exclude PIRSR, which is sorted in proteinViewerReorganization
     Object.entries(
       proteinViewerData as ProteinViewerDataObject<ExtendedFeature>,
     ).map((group) => {
       if (group[0] !== 'residues') group[1].sort(sortTracks).flat();
     });
-
-    proteinViewerData['other_features'] = [];
 
     flattenedData = flattenTracksObject(proteinViewerData);
 
