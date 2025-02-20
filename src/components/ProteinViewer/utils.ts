@@ -71,6 +71,7 @@ export const typeNameToSectionName: Record<string, string> = {
   'pfam-n': 'Pfam-N',
   funfam: 'FunFam',
   'external sources': 'External Sources',
+  'secondary structure': 'Secondary Structure',
 };
 
 export const firstHideCategories = {
@@ -325,8 +326,6 @@ export const standardizePTMData = (
       source_database: 'ptm',
       locations: [{ fragments: fragments }],
     };
-
-    console.log('f', newFeature);
 
     ptmsEntriesGroupedByModification.push(newFeature);
   });
