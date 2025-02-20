@@ -9,13 +9,12 @@ exports[`<EntriesOnStructure /> should render 1`] = `
       className="vf-stack"
     >
       <h4
-        id="protvista-A-p00735"
+        id="protvista-A"
       >
         Chain 
         A
-         
+         (
         <small>
-          (
           <Memo(Connect(Link))
             to={
               {
@@ -31,19 +30,15 @@ exports[`<EntriesOnStructure /> should render 1`] = `
               }
             }
           >
-            <span
-              className="icon icon-conceptual"
-              data-icon="P"
-            />
-             
             P00735
           </Memo(Connect(Link))>
-          )
+          
         </small>
+        )
       </h4>
       <ProteinViewerLoaded
         chain="A"
-        id="A-p00735"
+        id="A"
         protein={
           {
             "accession": "A-undefined",
@@ -56,6 +51,43 @@ exports[`<EntriesOnStructure /> should render 1`] = `
             [
               "secondary structure",
               [],
+            ],
+            [
+              "families",
+              [],
+            ],
+            [
+              "domains",
+              [
+                {
+                  "accession": "IPR038178",
+                  "chain": "A",
+                  "coordinates": [
+                    [
+                      [
+                        44,
+                        199,
+                      ],
+                    ],
+                  ],
+                  "link": "/entry/interpro/IPR038178",
+                  "locations": [
+                    {
+                      "fragments": [
+                        {
+                          "dc-status": "CONTINUOUS",
+                          "end": 199,
+                          "start": 44,
+                        },
+                      ],
+                    },
+                  ],
+                  "name": "Kringle superfamily",
+                  "protein": "p00735",
+                  "source_database": "interpro",
+                  "type": "homologous_superfamily",
+                },
+              ],
             ],
             [
               "homologous superfamily",

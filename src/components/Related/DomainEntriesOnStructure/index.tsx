@@ -13,6 +13,8 @@ import {
   byEntryType,
 } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
+import { DataForProteinChain, mergeChimericProteins } from './utils';
+
 import { ExtendedFeature } from 'src/components/ProteinViewer';
 
 const css = cssBinder(fonts);
@@ -54,46 +56,27 @@ export function sortTracks(
   return 0;
 }
 
+const isAccessionIn = (
+  accession: string,
+  proteins: { accession: string; length: number }[],
+) => {
+  return proteins.some((proteinobj) => proteinobj.accession === accession);
+};
+
 const toArrayStructure = (locations: Array<ProtVistaLocation>) =>
   locations.map((loc) => loc.fragments.map((fr) => [fr.start, fr.end]));
-
-export type DataForProteinChain = {
-  protein: {
-    accession: string;
-    length: number;
-  };
-  sequence: {
-    sequence: string;
-    length: number;
-  };
-  data: {
-    [key: string]: Array<{
-      accession: string;
-      name?: string;
-      short_name?: string;
-      coordinates?: number[][][];
-      source_database: string;
-      locations: ProtVistaLocation[];
-      link?: string;
-      children?: unknown;
-      chain: string;
-      protein?: string;
-      type: string;
-    }>;
-  };
-  chain: string;
-  isChimeric?: boolean;
-};
 
 const mergeData = (
   secondaryData: StructureLinkedObject[],
   secondaryStructures?: SecondaryStructure[],
 ) => {
   const out: Record<string, Record<string, DataForProteinChain>> = {};
+
   for (const entry of secondaryData) {
     if (!(entry.chain in out)) {
       out[entry.chain] = {};
     }
+
     if (!(entry.protein in out[entry.chain])) {
       // Merging the secondary structures data per chain
       const secondaryStructArray = [];
@@ -128,11 +111,28 @@ const mergeData = (
         }
       }
 
+      let proteinObjs: { accession: string; length: number }[] = [];
+
+      proteinObjs = proteinObjs?.concat({
+        accession: entry.protein,
+        length: entry.protein_length,
+      });
+
+      entry.children?.map((child) => {
+        if (
+          child.protein &&
+          child.protein_length &&
+          !isAccessionIn(child.protein, proteinObjs)
+        ) {
+          proteinObjs.push({
+            accession: child.protein,
+            length: child.protein_length,
+          });
+        }
+      });
+
       out[entry.chain][entry.protein] = {
-        protein: {
-          accession: entry.protein,
-          length: entry.protein_length,
-        },
+        protein: proteinObjs,
         sequence: {
           sequence: entry.sequence,
           length: entry.sequence_length,
@@ -170,6 +170,14 @@ const mergeData = (
     });
   }
 
+  // Logic to handle cases where a single chain maps to multiple UniPro accessions
+  // Leave the steps above as they are now, just in case we need to go back.
+  for (const entry of secondaryData) {
+    if (Object.keys(out[entry.chain]).length > 1) {
+      out[entry.chain] = { ...mergeChimericProteins(out[entry.chain]) };
+    }
+  }
+
   const entries = [];
   const chains = Object.keys(out).sort((a, b) => (a ? a.localeCompare(b) : -1));
   for (const chain of chains) {
@@ -184,17 +192,6 @@ const mergeData = (
     }
   }
   return entries;
-};
-
-const tagChimericStructures = (data: DataForProteinChain[]) => {
-  const proteinsPerChain: Record<string, Array<string>> = {};
-  for (const e of data) {
-    if (!(e.chain in proteinsPerChain)) proteinsPerChain[e.chain] = [];
-    proteinsPerChain[e.chain].push(e.protein.accession);
-  }
-  for (const e of data) {
-    if (proteinsPerChain[e.chain].length > 1) e.isChimeric = true;
-  }
 };
 
 const getRepresentativesPerChain = (
@@ -234,7 +231,6 @@ const EntriesOnStructure = ({
 }: Props) => {
   const merged = useMemo(() => {
     const data = mergeData(entries.concat(unintegrated), secondaryStructures);
-    tagChimericStructures(data);
     return data;
   }, [entries, unintegrated, secondaryStructures]);
 
@@ -248,6 +244,51 @@ const EntriesOnStructure = ({
     [representativeFamilies],
   );
 
+  const reorganizeStructureViewer = (
+    chain: string,
+    tracks: ProteinViewerDataObject,
+  ): ProteinViewerDataObject => {
+    try {
+      const newTracks = JSON.parse(JSON.stringify(tracks));
+
+      if (!newTracks['domain']) newTracks.domains = [];
+      else {
+        newTracks.domains = [...newTracks.domain];
+        newTracks.domain = [];
+      }
+
+      if (!newTracks['family']) newTracks.families = [];
+      else {
+        newTracks.families = [...newTracks.family];
+        newTracks.family = [];
+      }
+
+      // Move homologous superfamily to domains
+      const homologousSuperFamilies = newTracks['homologous_superfamily'];
+      if (newTracks['domains'] && homologousSuperFamilies) {
+        newTracks['domains'] = newTracks['domains'].concat(
+          homologousSuperFamilies,
+        );
+        newTracks['homologous_superfamily'] = [];
+      }
+
+      const representativeDomains = representativesDomainsPerChain[chain];
+      if (newTracks['domains'] && representativeDomains)
+        newTracks['domains'] = newTracks['domains'].concat(
+          representativeDomains,
+        );
+
+      const representativeFamilies = representativesFamiliesPerChain[chain];
+      if (newTracks['families'] && representativeFamilies)
+        newTracks['families'] = newTracks['families'].concat(
+          representativeFamilies,
+        );
+      return newTracks;
+    } catch (err) {
+      return {};
+    }
+  };
+
   return (
     <>
       <div className={css('vf-stack', 'vf-stack--400')}>
@@ -257,72 +298,48 @@ const EntriesOnStructure = ({
             ...e.sequence,
           };
 
-          const tracks = flattenTracksObject(e.data);
-          const homologous_superfamily = tracks.filter(
-            (entry) => entry[0] == 'homologous superfamily',
-          )[0];
-
-          tracks.map((entry) => {
-            if (entry[0] === 'domain') {
-              entry[0] = 'domains';
-              if (representativesDomainsPerChain[e.chain]) {
-                entry[1] = entry[1].concat(
-                  representativesDomainsPerChain[e.chain],
-                );
-              }
-              if (homologous_superfamily) {
-                entry[1] = entry[1].concat(homologous_superfamily[1]);
-              }
-            }
-
-            if (entry[0] === 'family') {
-              entry[0] = 'families';
-              if (representativesFamiliesPerChain[e.chain]) {
-                entry[1] = entry[1].concat(
-                  representativesFamiliesPerChain[e.chain],
-                );
-              }
-            }
-
-            if (
-              entry[0] === 'homologous superfamily' ||
-              entry[0] === 'unintegrated'
-            ) {
-              entry[1] = [];
-            }
-          });
+          const reorganizedTracks = reorganizeStructureViewer(e.chain, e.data);
+          const tracks = flattenTracksObject(reorganizedTracks);
 
           tracks.map((entry) => {
             (entry[1] as ExtendedFeature[]).sort(sortTracks).flat();
           });
 
+          let accessionList: string[] = [];
+          const splitAccessions = e.protein
+            ?.map((p) => p.accession)
+            .map((pAccession) => pAccession.split(','))
+            .flat();
+          accessionList = accessionList.concat(splitAccessions);
+          accessionList = Array.from(new Set(accessionList));
+
           return (
             <div key={i} className={css('vf-stack')}>
-              <h4 id={`protvista-${e.chain}-${e.protein.accession}`}>
-                Chain {e.chain}{' '}
-                {e.protein?.accession && (
-                  <small>
-                    (
-                    <Link
-                      to={{
-                        description: {
-                          main: { key: 'protein' },
-                          protein: {
-                            db: 'uniprot',
-                            accession: e.protein.accession,
-                          },
-                        },
-                      }}
-                    >
-                      <span
-                        className={css('icon', 'icon-conceptual')}
-                        data-icon="&#x50;"
-                      />{' '}
-                      {(e.protein.accession || '').toUpperCase()}
-                    </Link>
-                    )
-                  </small>
-                )}
+              <h4 id={`protvista-${e.chain}`}>
+                Chain {e.chain}
+                {accessionList.length > 0 && ' ('}
+                {accessionList &&
+                  accessionList.map((acc, idx) => {
+                    return (
+                      <small>
+                        <Link
+                          to={{
+                            description: {
+                              main: { key: 'protein' },
+                              protein: {
+                                db: 'uniprot',
+                                accession: acc,
+                              },
+                            },
+                          }}
+                        >
+                          {(acc || '').toUpperCase()}
+                        </Link>
+                        {idx !== accessionList.length - 1 ? ', ' : ''}
+                      </small>
+                    );
+                  })}
+                {accessionList.length > 0 && ')'}
                 {e.isChimeric && (
                   <Tooltip title="This chain maps to a Chimeric protein consisting of two or more proteins">
                     <div className={css('tag')}>
@@ -341,7 +358,7 @@ const EntriesOnStructure = ({
                   tracks as Array<[string, Array<Record<string, unknown>>]>
                 }
                 chain={e.chain}
-                id={`${e.chain}-${e.protein.accession}`}
+                id={`${e.chain}`}
                 protein={sequenceData}
                 viewerType={'structures'}
               />
