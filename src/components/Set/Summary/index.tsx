@@ -51,28 +51,25 @@ export const schemaProcessData = ({
 });
 
 const getLiterature = (literature: Array<Reference>): [string, Reference][] => {
-  if (literature) {
-    const literatureEntries: [string, Reference][] = literature.map((ref) => {
-      const journalRegExp = /(.+) (\d{4});(\d+):(\d+-\d+)./;
-      const matches = journalRegExp.exec(ref.journal || '');
-      if (matches) {
-        return [
-          String(ref.PMID),
-          {
-            ...ref,
-            ISO_journal: matches[1],
-            year: Number(matches[2]),
-            volume: matches[3],
-            raw_pages: matches[4],
-          } as Reference,
-        ];
-      }
-      return [String(ref.PMID), ref];
-    });
+  const literatureEntries: [string, Reference][] = literature.map((ref) => {
+    const journalRegExp = /(.+) (\d{4});(\d+):(\d+-\d+)./;
+    const matches = journalRegExp.exec(ref.journal || '');
+    if (matches) {
+      return [
+        String(ref.PMID),
+        {
+          ...ref,
+          ISO_journal: matches[1],
+          year: Number(matches[2]),
+          volume: matches[3],
+          raw_pages: matches[4],
+        } as Reference,
+      ];
+    }
+    return [String(ref.PMID), ref];
+  });
 
-    return literatureEntries;
-  }
-  return [];
+  return literatureEntries;
 };
 
 const SetLiterature = ({ literature }: { literature: Array<Reference> }) => {
@@ -206,9 +203,9 @@ const SummarySet = ({ data, loading }: Props) => {
       <SetDescription
         accession={metadata.accession}
         description={metadata?.description}
-        literature={getLiterature(metadata.literature)}
+        literature={getLiterature(metadata?.literature || [])}
       />
-      <SetLiterature literature={metadata?.literature} />
+      <SetLiterature literature={metadata?.literature || []} />
       {hasWiki && (
         <section>
           <h4>Wikipedia</h4>
