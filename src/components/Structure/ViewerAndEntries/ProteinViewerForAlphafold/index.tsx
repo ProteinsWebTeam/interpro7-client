@@ -103,14 +103,14 @@ const ProteinViewerForAlphafold = ({
 
           case 'mouseover': {
             isHovering.current = true;
-            const colour =
+            const color =
               parseInt(event?.detail?.feature?.color?.substring(1), 16) || 0;
             const selection =
               highlight?.split(',').map((block: string) => {
                 const parts = block.split(':');
                 const start = Number(parts?.[0]) || 1;
                 const end = Number(parts?.[1]) || 1;
-                return { chain: 'A', start, end, colour };
+                return { chain: 'A', start, end, color };
               }) || [];
             setHoverSelection(selection);
             break;
@@ -118,10 +118,14 @@ const ProteinViewerForAlphafold = ({
           default:
             break;
         }
-      } else {
-        if (eventType === 'mouseout') {
-          setHoverSelection([]);
-          isHovering.current = false;
+      } else if (eventType === 'mouseout') {
+        setHoverSelection([]);
+        isHovering.current = false;
+      } else if (eventType === 'click') {
+        if (fixedSelectionRef.current.length) {
+          setFixedSelection([]);
+        } else {
+          setFixedSelection(hoverSelectionRef.current);
         }
       }
     });

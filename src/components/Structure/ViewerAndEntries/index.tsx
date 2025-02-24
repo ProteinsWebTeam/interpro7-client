@@ -50,8 +50,10 @@ type MinimalStructureFeature = MinimalFeature & {
 };
 type EntryHit = {
   struct_asym_id: string;
-  start_residue_number: number;
-  end_residue_number: number;
+  start: number;
+  end: number;
+  auth_start?: number;
+  auth_end?: number;
   accession: string;
   source_database: string;
   color?: string;
@@ -222,11 +224,13 @@ class StructureView extends PureComponent<Props, State> {
   _getChainMap(chain: string, locations: ProtVistaLocation[]) {
     const chainMap = [];
     for (const location of locations) {
-      for (const { start, end } of location.fragments) {
+      for (const { start, end, auth_start, auth_end } of location.fragments) {
         chainMap.push({
           struct_asym_id: chain,
-          start_residue_number: start,
-          end_residue_number: end,
+          start: start,
+          end: end,
+          auth_start: auth_start,
+          auth_end: auth_end,
           accession: chain,
           source_database: 'pdb',
         });
@@ -255,8 +259,10 @@ class StructureView extends PureComponent<Props, State> {
       for (const fragment of location.fragments) {
         map[chain].push({
           struct_asym_id: chain,
-          start_residue_number: Math.round(fragment.start),
-          end_residue_number: Math.round(fragment.end),
+          start: fragment.start,
+          end: fragment.end,
+          auth_start: fragment.auth_start,
+          auth_end: fragment.auth_end,
           accession: entry,
           source_database: db,
           parent: match.metadata.integrated
@@ -365,8 +371,8 @@ class StructureView extends PureComponent<Props, State> {
         const hexColour = parseInt(hit.color?.substring(1) || '', 16);
         selections.push({
           color: hexColour,
-          start: hit.start_residue_number,
-          end: hit.end_residue_number,
+          start: hit.auth_start || hit.start,
+          end: hit.auth_end || hit.end,
           chain: hit.struct_asym_id,
         });
       });
