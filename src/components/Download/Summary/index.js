@@ -51,6 +51,11 @@ const GoToNewDownload = () => (
   </Link>
 );
 
+function localIDtoOriginURL(url) {
+  const regex = /^https?:\/\/[^\/]+\/api\/|\|(?:json|tsv|fasta)$/g;
+  return url.replace(regex, '');
+}
+
 class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
   static propTypes = {
     download: T.arrayOf(T.object).isRequired,
@@ -58,6 +63,13 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
 
   render() {
     const { download } = this.props;
+
+    // Handle old saved download jobs that don't have an originURL
+    for (const downloadObj of download) {
+      if (!downloadObj.originURL)
+        downloadObj.originURL = localIDtoOriginURL(downloadObj.localID);
+    }
+
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
