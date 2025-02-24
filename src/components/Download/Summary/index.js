@@ -51,11 +51,6 @@ const GoToNewDownload = () => (
   </Link>
 );
 
-function localIDtoOriginURL(url) {
-  const regex = /^https?:\/\/[^\/]+\/api\/|\|(?:json|tsv|fasta)$/g;
-  return url.replace(regex, '');
-}
-
 class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
   static propTypes = {
     download: T.arrayOf(T.object).isRequired,
@@ -63,12 +58,6 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
 
   render() {
     const { download } = this.props;
-
-    // Handle old saved download jobs that don't have an originURL
-    for (const downloadObj of download) {
-      if (!downloadObj.originURL)
-        downloadObj.originURL = localIDtoOriginURL(downloadObj.localID);
-    }
 
     return (
       <div className={f('row')}>
@@ -93,13 +82,23 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
             <Column
               dataKey="originURL"
               renderer={(originURL /*: string */) => {
-                const url = new URL(originURL);
-                return (
-                  <Link target="_blank" href={originURL}>
-                    {url.pathname}
-                    {url.search}
-                  </Link>
-                );
+                /*
+                  originURL has been introduced later, causing the
+                  constructor to throw an error where the originURL is null.
+                  This happens for old saved downloads that just have the localID.
+                  This try catch block returns the ∅ symbol in that case.
+                */
+                try {
+                  const url = new URL(originURL);
+                  return (
+                    <Link target="_blank" href={originURL}>
+                      {url.pathname}
+                      {url.search}
+                    </Link>
+                  );
+                } catch {
+                  return originURL;
+                }
               }}
             >
               Source
