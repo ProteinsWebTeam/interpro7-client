@@ -272,6 +272,8 @@ type ProtVistaFragment = {
   fill?: string;
   protein_start?: number;
   protein_end?: number;
+  auth_start?: number;
+  auth_end?: number;
 };
 
 type ProtVistaLocation = {
