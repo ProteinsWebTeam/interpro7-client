@@ -203,9 +203,9 @@ const SummarySet = ({ data, loading }: Props) => {
       <SetDescription
         accession={metadata.accession}
         description={metadata?.description}
-        literature={getLiterature(metadata.literature)}
+        literature={getLiterature(metadata?.literature || [])}
       />
-      <SetLiterature literature={metadata?.literature} />
+      <SetLiterature literature={metadata?.literature || []} />
       {hasWiki && (
         <section>
           <h4>Wikipedia</h4>
