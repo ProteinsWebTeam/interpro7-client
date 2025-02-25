@@ -237,9 +237,6 @@ const DomainsOnProteinLoaded = ({
 
     // Reorganize sections and sort added matches
     dataMerged = sectionsReorganization(dataMerged);
-    Object.values(dataMerged as ProteinViewerDataObject<ExtendedFeature>).map(
-      (group) => group.sort(sortTracks).flat(),
-    );
   }
 
   if (dataVariation?.ok && dataVariation.payload) {

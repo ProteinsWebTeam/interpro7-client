@@ -126,9 +126,8 @@ export const ProteinViewer = ({
     'alphafold confidence',
     'domain',
     'family',
-    'active site',
-    'conserved site',
-    'intrinsically disordered regions',
+    'residues',
+    'pathogenic and likely pathogenic variants',
   ];
 
   /// STATE
