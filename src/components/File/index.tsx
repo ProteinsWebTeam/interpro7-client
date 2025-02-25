@@ -99,6 +99,7 @@ export class File extends PureComponent<Props, State> {
       this.props.fileType,
       !!this.props.subset,
       this.props.endpoint,
+      window.location.href,
     );
   });
 
