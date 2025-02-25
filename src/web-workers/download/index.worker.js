@@ -55,6 +55,7 @@ const saveInIndexedDB = async (
   fileType /*: FileType */,
   subset /*: boolean */,
   version /*: number */,
+  originURL /*: string */,
 ) => {
   const _content = fileType === 'json' ? [`[${content.join(',')}]`] : content;
   const blob = new Blob(_content, { type: lut.get(fileType) });
@@ -69,6 +70,7 @@ const saveInIndexedDB = async (
       blob,
       subset,
       version,
+      originURL,
     };
     await jobsDataTable.set(obj, key);
     return obj;
@@ -248,10 +250,9 @@ const postProgress = throttle(
 );
 
 // Download manager, send messages from there
-const download = async (url, fileType, subset, endpoint) => {
+const download = async (url, fileType, subset, endpoint, originURL) => {
   const action = createActionCallerFor(url, fileType, subset, endpoint);
   const onError = (error) => {
-    console.error(error);
     postProgress(action(downloadProgress, 1));
     postProgress.flush();
     self.postMessage(action(downloadError, error.message));
@@ -279,6 +280,7 @@ const download = async (url, fileType, subset, endpoint) => {
             fileType,
             subset,
             version,
+            originURL,
           );
           // OK, we have done everything, set progress to 1 and set success
           postProgress(action(downloadProgress, 1));
@@ -296,7 +298,13 @@ const download = async (url, fileType, subset, endpoint) => {
 const main = ({ data }) => {
   switch (data.type) {
     case DOWNLOAD_URL:
-      download(data.url, data.fileType, data.subset, data.endpoint);
+      download(
+        data.url,
+        data.fileType,
+        data.subset,
+        data.endpoint,
+        data.originURL,
+      );
       break;
     case DOWNLOAD_DELETE:
       canceled.add(
