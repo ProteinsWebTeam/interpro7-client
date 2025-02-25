@@ -6,9 +6,19 @@ import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
-import { groupByEntryType } from 'components/Related/DomainsOnProtein/utils';
-import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
-import { selectRepresentativeData } from 'components/ProteinViewer/utils';
+import {
+  groupByEntryType,
+  proteinViewerReorganization,
+  sectionsReorganization,
+} from 'components/Related/DomainsOnProtein/utils';
+import {
+  byEntryType,
+  sortTracks,
+} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
+import {
+  selectRepresentativeData,
+  ExtendedFeature,
+} from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -83,18 +93,8 @@ const features2protvista = (features: FeatureMap) => {
     'family',
   );
 
-  const homologous_superfamily = sortedCategories.filter(
-    (entry) => entry[0] == 'homologous superfamily',
-  )[0];
-
   sortedCategories.map((entry) => {
     if (entry[0] === 'domain') {
-      entry[0] = 'domain';
-      if (homologous_superfamily) {
-        if (Array.isArray(entry[1]))
-          entry[1] = entry[1].concat(homologous_superfamily[1]);
-      }
-
       if (representativeDomains) {
         if (Array.isArray(entry[1]))
           entry[1] = entry[1].concat(representativeDomains);
@@ -142,12 +142,20 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
   const { accession, length, sequence, features } = data.payload;
   const dataProtvista = features2protvista(features);
 
+  // Reorganize isoform viewer
+  let proteinDataRecord = Object.fromEntries(
+    dataProtvista,
+  ) as ProteinViewerDataObject;
+  proteinDataRecord = sectionsReorganization(proteinDataRecord);
+  proteinDataRecord = proteinViewerReorganization(undefined, proteinDataRecord);
+  const proteinViewerData = Object.entries(proteinDataRecord);
+
   return (
     <div className={css('isoform-panel')}>
       <IsoformHeader accession={accession} length={length} />
       <ProteinViewer
         protein={{ sequence, length: sequence.length }}
-        data={dataProtvista}
+        data={proteinViewerData}
         title="Entry matches to this isoform"
       />
     </div>
