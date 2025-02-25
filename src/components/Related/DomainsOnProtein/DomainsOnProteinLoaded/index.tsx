@@ -19,7 +19,6 @@ import {
   byEntryType,
   sortTracks,
   standardizeMobiDBFeatureStructure,
-  standardizeResidueStructure,
 } from './utils';
 
 import { createSelector } from 'reselect';
@@ -233,10 +232,17 @@ const DomainsOnProteinLoaded = ({
           colorDomainsBy,
         );
       });
-    }
 
-    // Reorganize sections and sort added matches
-    dataMerged = sectionsReorganization(dataMerged);
+      // Reorganize sections and sort added matches
+      dataMerged = sectionsReorganization(dataMerged);
+
+      // Sort data by match position, but exclude residues and PIRSR, which are sorted in proteinViewerReorganization
+      Object.entries(
+        dataMerged as ProteinViewerDataObject<ExtendedFeature>,
+      ).map((group) => {
+        if (group[0] !== 'residues') group[1].sort(sortTracks).flat();
+      });
+    }
   }
 
   if (dataVariation?.ok && dataVariation.payload) {
@@ -255,67 +261,22 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  // Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
-  // and the ProteinViewer components are used in a different way in the InterproScan results section.
+  /* Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
+     and the ProteinViewer components are used in a different way in the InterproScan results section. */
 
-  // InterPro Scan Search results
   if (protein.accession.startsWith('iprscan')) {
-    // What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
-    // InterProScan results section, because the DomainsOnProteinLoaded is used right away.
-    // Executing those steps here below. KEEP THIS ORDER OF OPERATIONS
+    /* 
+      What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
+      InterProScan results section, because the DomainsOnProteinLoaded is used right away.
+      Executing those steps here below. KEEP THIS ORDER OF OPERATIONS 
+    */
 
-    // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
-    if (dataMerged['residues']) {
-      dataMerged['residues'] = standardizeResidueStructure(
-        dataMerged['residues'] as ExtendedFeature[],
-      );
-    }
-
-    // Move entries from unintegrated section to the correct one
-    const accessionsToRemoveFromUnintegrated: string[] = [];
-    if (dataMerged['unintegrated']) {
-      for (let i = 0; i < dataMerged['unintegrated'].length; i++) {
-        const unintegratedEntry = {
-          ...(dataMerged['unintegrated'][i] as ExtendedFeature),
-        };
-        const sourcedb = unintegratedEntry.source_database;
-        if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
-          if (dataMerged[dbToSection[sourcedb]]) {
-            const previousSectionData = [
-              ...(dataMerged[dbToSection[sourcedb]] as ExtendedFeature[]),
-            ];
-            previousSectionData.push(unintegratedEntry);
-            dataMerged[dbToSection[sourcedb]] = [...previousSectionData];
-            accessionsToRemoveFromUnintegrated.push(
-              unintegratedEntry.accession,
-            );
-          }
-        }
-      }
-      const filteredUnintegrated = (
-        dataMerged['unintegrated'] as ExtendedFeature[]
-      ).filter(
-        (entry) =>
-          !accessionsToRemoveFromUnintegrated.includes(entry.accession),
-      );
-      dataMerged['unintegrated'] = [...filteredUnintegrated];
-    }
-
+    // Restructure viewer and sections
     let proteinViewerData = proteinViewerReorganization(
       dataFeatures,
       dataMerged as ProteinViewerDataObject<MinimalFeature>,
     );
     proteinViewerData = sectionsReorganization(proteinViewerData);
-
-    // Create PTM section
-    if (proteinViewerData['intrinsically_disordered_regions']) {
-      proteinViewerData['intrinsically_disordered_regions'] =
-        standardizeMobiDBFeatureStructure(
-          proteinViewerData[
-            'intrinsically_disordered_regions'
-          ] as ExtendedFeature[],
-        );
-    }
 
     // Sort data by match position, but exclude PIRSR, which is sorted in proteinViewerReorganization
     Object.entries(
@@ -324,8 +285,10 @@ const DomainsOnProteinLoaded = ({
       if (group[0] !== 'residues') group[1].sort(sortTracks).flat();
     });
 
+    // Empty other_features object. All the features are moved to the correct sections
     proteinViewerData['other_features'] = [];
 
+    // Flatten the record to be processed by the protein viewer
     flattenedData = flattenTracksObject(proteinViewerData);
 
     // Add representative data
