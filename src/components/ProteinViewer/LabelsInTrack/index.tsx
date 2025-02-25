@@ -2,7 +2,7 @@ import React from 'react';
 
 import Link from 'components/generic/Link';
 
-import { ExtendedFeature } from '..';
+import { ExtendedFeature } from '../utils';
 import Label from './Label';
 import ResidueLabel from './ResidueLabel';
 

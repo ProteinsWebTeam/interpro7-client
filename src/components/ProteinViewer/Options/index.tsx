@@ -37,6 +37,7 @@ import protvistaCSSastext from '!!raw-loader!../../ProteinViewer/style.css';
 import vfIproCSS from '!!raw-loader!styles/interpro-vf.css';
 import fontCSS from '!!raw-loader!styles/fonts.css';
 import colorsCSS from '!!raw-loader!styles/colors.css';
+import MatchType from './MatchType';
 
 // const ONE_SEC = 1000;
 
@@ -231,6 +232,7 @@ const ProteinViewerOptions = ({
             <hr />
             <LabelBy />
             <hr />
+            <MatchType />
             <li>
               <NightingaleSaver
                 element-id={componentsDivId}

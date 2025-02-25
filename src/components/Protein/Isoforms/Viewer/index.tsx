@@ -6,8 +6,8 @@ import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
-import { groupByEntryType } from 'components/Related/DomainsOnProtein';
-import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import { groupByEntryType } from 'components/Related/DomainsOnProtein/utils';
+import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
 import { selectRepresentativeData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -89,7 +89,7 @@ const features2protvista = (features: FeatureMap) => {
 
   sortedCategories.map((entry) => {
     if (entry[0] === 'domain') {
-      entry[0] = 'domains';
+      entry[0] = 'domain';
       if (homologous_superfamily) {
         if (Array.isArray(entry[1]))
           entry[1] = entry[1].concat(homologous_superfamily[1]);
@@ -102,7 +102,7 @@ const features2protvista = (features: FeatureMap) => {
     }
 
     if (entry[0] === 'family') {
-      entry[0] = 'families';
+      entry[0] = 'family';
       if (representativeFamilies) {
         if (Array.isArray(entry[1]))
           entry[1] = entry[1].concat(representativeFamilies);
@@ -142,38 +142,10 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
   const { accession, length, sequence, features } = data.payload;
   const dataProtvista = features2protvista(features);
 
-  const mainTracks = [
-    'alphafold confidence',
-    'families',
-    'domains',
-    'pathogenic and likely pathogenic variants',
-    'intrinsically disordered regions',
-    'spurious proteins',
-    'conserved residues',
-  ];
-
-  const hideCategories = {
-    'secondary structure': false,
-    families: true,
-    domains: true,
-    repeat: false,
-    'conserved site': false,
-    'active site': false,
-    'binding site': false,
-    ptm: false,
-    'match conservation': false,
-    'coiled-coils, signal peptides, transmembrane regions': false,
-    'short linear motifs': false,
-    'pfam-n': false,
-    funfam: false,
-  };
-
   return (
     <div className={css('isoform-panel')}>
       <IsoformHeader accession={accession} length={length} />
       <ProteinViewer
-        mainTracks={mainTracks}
-        hideCategories={hideCategories}
         protein={{ sequence, length: sequence.length }}
         data={dataProtvista}
         title="Entry matches to this isoform"

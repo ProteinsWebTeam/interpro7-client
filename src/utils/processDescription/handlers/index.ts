@@ -90,26 +90,25 @@ const templateHandler: Handler = {
 const memberDB = new Set([
   {
     name: 'cathgene3d',
-    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{1,5}$/i,
+    re: /^G3DSA:[0-9]{1}\.[0-9]{2,3}\.[0-9]{1,4}\.[0-9]{1,5}(?:\:nMatch)?$/i,
   },
-  { name: 'cdd', re: /^(?:[cs])d[0-9]{5}$/i },
-  { name: 'hamap', re: /^MF_[0-9]{5}(_([AB]){1})?$/i },
-  { name: 'panther', re: /^PTHR[0-9]{5}(:SF[0-9]{1,4})?$/i },
-  { name: 'pfam', re: /^PF[0-9]{5}$/i },
-  { name: 'pirsf', re: /^PIRSF[0-9]{6}$/i },
-  { name: 'prints', re: /^PR[0-9]{5}$/i },
-  { name: 'prosite', re: /^PS[0-9]{5}$/i },
-  { name: 'profile', re: /^PS[0-9]{5}$/i },
-  { name: 'sfld', re: /^sfld[gfs]\d{5}$/i },
-  { name: 'smart', re: /^SM[0-9]{5}$/i },
-  { name: 'ssf', re: /^SSF[0-9]{5,6}$/i },
-  // { name: 'tigrfams', re: /^TIGR[0-9]{5}$/i },
-  { name: 'tigrfams', re: /^(TIGR[0-9]{5})|(NF[0-9]{6})$/i },
-  { name: 'ncbifam', re: /^(TIGR[0-9]{5})|(NF[0-9]{6})$/i },
-  { name: 'mobidblt', re: /^(\w|-)+$/ },
-  { name: 'elm', re: /^ELME[0-9]{6}$/ },
-  { name: 'antifam', re: /^ANF[0-9]{5}$/ },
+  { name: 'cdd', re: /^(?:[cs])d[0-9]{5}(?:\:nMatch)?$/i },
+  { name: 'hamap', re: /^MF_[0-9]{5}(_([AB]){1})?(?:\:nMatch)?$/i },
+  { name: 'panther', re: /^PTHR[0-9]{5}(:SF[0-9]{1,4})?(?:\:nMatch)?$/i },
+  { name: 'pfam', re: /^PF[0-9]{5}(?:\:nMatch)?$/i },
+  { name: 'pirsf', re: /^PIRSF[0-9]{6}(?:\:nMatch)?$/i },
+  { name: 'prints', re: /^PR[0-9]{5}(?:\:nMatch)?$/i },
+  { name: 'prosite', re: /^PS[0-9]{5}(?:\:nMatch)?$/i },
+  { name: 'profile', re: /^PS[0-9]{5}(?:\:nMatch)?$/i },
+  { name: 'sfld', re: /^sfld[gfs]\d{5}(?:\:nMatch)?$/i },
+  { name: 'smart', re: /^SM[0-9]{5}(?:\:nMatch)?$/i },
+  { name: 'ssf', re: /^SSF[0-9]{5,6}(?:\:nMatch)?$/i },
+  { name: 'tigrfams', re: /^(TIGR[0-9]{5})|(NF[0-9]{6})(?:\:nMatch)?$/i },
+  { name: 'ncbifam', re: /^(TIGR[0-9]{5})|(NF[0-9]{6})(?:\:nMatch)?$/i },
+  { name: 'mobidblt', re: /^(\w|-)+(?:\:nMatch)?$/ },
+  { name: 'elm', re: /^ELME[0-9]{6}(?:\:nMatch)?$/ },
 ]);
+
 const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
 
 export const setDBs /*: Set<Object> */ = new Set([
@@ -278,7 +277,9 @@ export const memberDBAccessionHandler: Handler = handlerConstructor({
       const _mdb = db === 'InterPro' ? mdb : db;
       const _current = (this as Handler).cleanUp(current);
       for (const { name, re } of memberDB) {
-        if (name === _mdb && re.test(_current)) return true;
+        if (name === _mdb && re.test(_current)) {
+          return true;
+        }
       }
     },
   },

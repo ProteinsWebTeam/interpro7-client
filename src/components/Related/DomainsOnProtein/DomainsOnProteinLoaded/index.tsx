@@ -1,72 +1,38 @@
-import React, {
-  PropsWithChildren,
-  useEffect,
-  useState,
-  useLayoutEffect,
-} from 'react';
+import React, { PropsWithChildren, useState, useEffect } from 'react';
 import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import loadable from 'higherOrder/loadable';
 import {
   groupByEntryType,
   sectionsReorganization,
-} from 'components/Related/DomainsOnProtein';
-import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
+  proteinViewerReorganization,
+  dbToSection,
+} from 'components/Related/DomainsOnProtein/utils';
+
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
-} from 'components/ProteinViewer';
-import { proteinViewerReorganization } from 'components/Related/DomainsOnProtein';
-import { FeatureLocation } from 'node_modules/@nightingale-elements/nightingale-track/dist';
+} from 'components/ProteinViewer/utils';
+
+import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
+import {
+  UNDERSCORE,
+  byEntryType,
+  sortTracks,
+  standardizeMobiDBFeatureStructure,
+  standardizeResidueStructure,
+} from './utils';
+
+import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { changeSettingsRaw } from 'actions/creators';
+import { mergeMatches } from './utils';
+import { EntryColorMode } from 'utils/entry-color';
 
 const ProteinViewer = loadable({
   loader: () =>
     import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
   loading: null,
 });
-
-// 0A017SEX7 is a good example
-const UNDERSCORE = /_/g;
-
-const FIRST_IN_ORDER = [
-  'alphafold_confidence',
-  'secondary_structure',
-  'families',
-  'family',
-  'domains',
-  'domain',
-  'intrinsically_disordered_regions',
-  'conserved_site',
-  'conserved_residues',
-  'spurious_proteins',
-  'pathogenic_and_likely_pathogenic_variants',
-  'repeat',
-  'active_site',
-  'binding_site',
-  'ptm',
-];
-
-const LASTS_IN_ORDER = [
-  'coiled-coils,_signal_peptides,_transmembrane_regions',
-  'short_linear_motifs',
-  'pfam-n',
-  'funfam',
-  'match_conservation',
-];
-
-export const byEntryType = (
-  [a, _]: [string, unknown],
-  [b, __]: [string, unknown],
-) => {
-  for (const label of FIRST_IN_ORDER) {
-    if (a.toLowerCase() === label) return -1;
-    if (b.toLowerCase() === label) return 1;
-  }
-  for (const l of LASTS_IN_ORDER) {
-    if (a.toLowerCase() === l) return -1;
-    if (b.toLowerCase() === l) return 1;
-  }
-  return a > b ? 1 : 0;
-};
 
 type tracksProps = {
   interpro: Array<{ accession: string; type: string }>;
@@ -75,114 +41,6 @@ type tracksProps = {
   representativeDomains?: Array<MinimalFeature>;
   representativeFamilies?: Array<MinimalFeature>;
   disorderedRegions?: Array<MinimalFeature>;
-};
-
-function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
-  let fragment = undefined;
-  let accession = undefined;
-
-  if (Array.isArray(item)) {
-    if (item[0].entry_protein_locations)
-      fragment = item[0].entry_protein_locations?.[0].fragments?.[0];
-    else fragment = item[0].locations?.[0].fragments?.[0];
-    accession = item[0].accession;
-  } else {
-    if (item.entry_protein_locations)
-      fragment = item.entry_protein_locations?.[0].fragments?.[0];
-    else fragment = item.locations?.[0].fragments?.[0];
-    accession = item.accession;
-  }
-  if (fragment && accession) {
-    return [accession, fragment.start, fragment.end];
-  }
-  return [0, 0];
-}
-
-export function sortTracks(
-  a: ExtendedFeature | ExtendedFeature[],
-  b: ExtendedFeature | ExtendedFeature[],
-) {
-  const [aAccession, aStart, aEnd] = getBoundaries(a);
-  const [bAccession, bStart, bEnd] = getBoundaries(b);
-
-  if (aStart > bStart) return 1;
-  if (aStart < bStart) return -1;
-  if (aStart === bStart) {
-    if (aEnd < bEnd) return 1;
-    if (aEnd > bEnd) return -1;
-    if (aEnd === bEnd) {
-      if (aAccession > bAccession) return 1;
-      else return -1;
-    }
-  }
-  return 0;
-}
-
-const standardizeResidueStructure = (
-  residues: Array<ExtendedFeature>,
-): Array<ExtendedFeature> => {
-  const newResidues: Array<ExtendedFeature> = [];
-  residues.map((residueParentObj) => {
-    const tempResidue: ExtendedFeature = residueParentObj;
-    tempResidue.type = 'residue';
-    tempResidue.locations = residueParentObj.residues?.[0].locations;
-    newResidues.push(tempResidue);
-  });
-  return newResidues;
-};
-
-const standardizeMobiDBFeatureStructure = (
-  features: Array<ExtendedFeature>,
-): Array<ExtendedFeature> => {
-  const newFeatures: Array<ExtendedFeature> = [];
-  features.map((feature) => {
-    const tempFeature = { ...feature };
-    const slicedTempFeatureLocations: Array<ExtendedFeatureLocation> = [];
-    tempFeature.accession = 'Mobidblt-Consensus Disorder Prediction';
-    tempFeature.source_database = 'mobidblt';
-    tempFeature.protein = '';
-    tempFeature.locations?.map(
-      (
-        location: ExtendedFeatureLocation & {
-          'sequence-feature'?: string;
-          start?: number;
-          end?: number;
-        },
-        idx: number,
-      ) => {
-        if (
-          location['sequence-feature'] &&
-          location['sequence-feature'] !== ''
-        ) {
-          if (location.start && location.end) {
-            const restructuredLocation: ExtendedFeatureLocation[] = [
-              {
-                fragments: [
-                  {
-                    start: location.start,
-                    end: location.end,
-                    seq_feature: location['sequence-feature'],
-                  },
-                ],
-              },
-            ];
-
-            const tempChild: ExtendedFeature = {
-              accession: location['sequence-feature'],
-              source_database: 'mobidblt',
-              locations: restructuredLocation,
-            };
-            tempFeature.children?.push(tempChild);
-          }
-        } else {
-          slicedTempFeatureLocations.push(location);
-        }
-      },
-    );
-    tempFeature.locations = slicedTempFeatureLocations;
-    newFeatures.push(tempFeature);
-  });
-  return newFeatures;
 };
 
 export const makeTracks = ({
@@ -204,9 +62,9 @@ export const makeTracks = ({
   );
 
   // Merge domain and families into respective representative ones. Merge homologous superfamily into domains.
-  const mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
+  let mergedData: ProteinViewerDataObject<MinimalFeature> = groups;
 
-  sectionsReorganization(mergedData);
+  mergedData = sectionsReorganization(mergedData);
 
   // Add representative data
   if (representativeFamilies?.length)
@@ -287,14 +145,23 @@ type Props = PropsWithChildren<{
   dataMerged: ProteinViewerDataObject;
   dataConfidence?: RequestedData<AlphafoldConfidencePayload>;
   dataVariation?: RequestedData<ProteinsAPIVariation>;
+  dataInterProNMatches?: RequestedData<InterProNMatches>;
   dataProteomics?: RequestedData<ProteinsAPIProteomics>;
   dataFeatures?: RequestedData<ExtraFeaturesPayload>;
+  dataInterproNMatches?: RequestedData<InterProNMatches>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
   loading: boolean;
   title?: string;
+  colorDomainsBy?: string;
+  matchTypeSettings?: MatchTypeUISettings;
+  changeSettingsRaw: typeof changeSettingsRaw;
 }>;
+
+const chooseColor = (color: string) => {
+  return Object.values(EntryColorMode).find((c) => c !== color) || '';
+};
 
 const DomainsOnProteinLoaded = ({
   mainData,
@@ -303,24 +170,77 @@ const DomainsOnProteinLoaded = ({
   dataVariation,
   dataProteomics,
   dataFeatures,
+  dataInterProNMatches,
   conservationError,
   showConservationButton,
   handleConservationLoad,
   loading,
   children,
   title = 'Entry matches to this protein',
+  colorDomainsBy,
+  matchTypeSettings,
+  changeSettingsRaw,
 }: Props) => {
+  const [currentMatchType, setCurrentMatchType] = useState(matchTypeSettings);
+
+  useEffect(() => {
+    if (currentMatchType !== matchTypeSettings) {
+      setCurrentMatchType(matchTypeSettings);
+      if (colorDomainsBy) {
+        // Properly type the Promise
+        const applyFirstChange = () => {
+          return new Promise<void>((resolve) => {
+            changeSettingsRaw(
+              'ui',
+              'colorDomainsBy',
+              chooseColor(colorDomainsBy),
+            );
+            requestAnimationFrame(() => resolve());
+          });
+        };
+
+        applyFirstChange().then(() => {
+          changeSettingsRaw('ui', 'colorDomainsBy', colorDomainsBy);
+        });
+      }
+    }
+  }, [matchTypeSettings]);
+
   const protein =
     (mainData as ProteinEntryPayload).metadata ||
     (mainData as { payload: ProteinEntryPayload }).payload.metadata;
 
-  let mainTracks: string[] = [];
-  let hideCategories: Record<string, boolean> = {};
-  const renamedTracks = ['domain', 'family', 'residues'];
   let flattenedData = undefined;
 
   if (dataConfidence)
     addConfidenceTrack(dataConfidence, protein.accession, dataMerged);
+
+  if (
+    dataInterProNMatches &&
+    !dataInterProNMatches.loading &&
+    dataInterProNMatches.payload
+  ) {
+    const interProNData = dataInterProNMatches.payload;
+    const tracks = Object.keys(dataMerged);
+
+    if (matchTypeSettings && colorDomainsBy) {
+      tracks.map((track) => {
+        dataMerged[track] = mergeMatches(
+          track,
+          dataMerged[track] as MinimalFeature[],
+          interProNData,
+          matchTypeSettings,
+          colorDomainsBy,
+        );
+      });
+    }
+
+    // Reorganize sections and sort added matches
+    dataMerged = sectionsReorganization(dataMerged);
+    Object.values(dataMerged as ProteinViewerDataObject<ExtendedFeature>).map(
+      (group) => group.sort(sortTracks).flat(),
+    );
+  }
 
   if (dataVariation?.ok && dataVariation.payload) {
     const filteredVariationPayload = filterVariation(dataVariation.payload);
@@ -340,157 +260,102 @@ const DomainsOnProteinLoaded = ({
 
   // Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
   // and the ProteinViewer components are used in a different way in the InterproScan results section.
+
+  // InterPro Scan Search results
   if (protein.accession.startsWith('iprscan')) {
     // What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
     // InterProScan results section, because the DomainsOnProteinLoaded is used right away.
     // Executing those steps here below. KEEP THIS ORDER OF OPERATIONS
 
     // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
-    if (dataMerged['conserved_residues']) {
-      dataMerged['conserved_residues'] = standardizeResidueStructure(
-        dataMerged['conserved_residues'] as ExtendedFeature[],
+    if (dataMerged['residues']) {
+      dataMerged['residues'] = standardizeResidueStructure(
+        dataMerged['residues'] as ExtendedFeature[],
       );
     }
 
-    const dbToSection: Record<string, string> = {
-      cathgene3d: 'homologous_superfamily',
-      cdd: 'domain',
-      hamap: 'family',
-      panther: 'family',
-      pirsf: 'family',
-      pirsr: 'residue',
-      sfld: 'family',
-      smart: 'domain',
-      sff: 'homologous_superfamily',
-    };
-
     // Move entries from unintegrated section to the correct one
+    const accessionsToRemoveFromUnintegrated: string[] = [];
     if (dataMerged['unintegrated']) {
       for (let i = 0; i < dataMerged['unintegrated'].length; i++) {
-        const unintegratedEntry = dataMerged['unintegrated'][
-          i
-        ] as ExtendedFeature;
+        const unintegratedEntry = {
+          ...(dataMerged['unintegrated'][i] as ExtendedFeature),
+        };
         const sourcedb = unintegratedEntry.source_database;
         if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
           if (dataMerged[dbToSection[sourcedb]]) {
-            dataMerged[dbToSection[sourcedb]] =
-              dataMerged[dbToSection[sourcedb]].concat(unintegratedEntry);
-          } else {
-            dataMerged[dbToSection[sourcedb]] = [unintegratedEntry];
+            const previousSectionData = [
+              ...(dataMerged[dbToSection[sourcedb]] as ExtendedFeature[]),
+            ];
+            previousSectionData.push(unintegratedEntry);
+            dataMerged[dbToSection[sourcedb]] = [...previousSectionData];
+            accessionsToRemoveFromUnintegrated.push(
+              unintegratedEntry.accession,
+            );
           }
-          dataMerged['unintegrated'].splice(i, 1);
         }
       }
+      const filteredUnintegrated = (
+        dataMerged['unintegrated'] as ExtendedFeature[]
+      ).filter(
+        (entry) =>
+          !accessionsToRemoveFromUnintegrated.includes(entry.accession),
+      );
+      dataMerged['unintegrated'] = [...filteredUnintegrated];
     }
 
-    proteinViewerReorganization(dataFeatures, dataMerged);
-    sectionsReorganization(dataMerged);
+    let proteinViewerData = proteinViewerReorganization(
+      dataFeatures,
+      dataMerged as ProteinViewerDataObject<MinimalFeature>,
+    );
+    proteinViewerData = sectionsReorganization(proteinViewerData);
 
-    if (dataMerged['intrinsically_disordered_regions']) {
-      dataMerged['intrinsically_disordered_regions'] =
+    // Create PTM section
+    if (proteinViewerData['intrinsically_disordered_regions']) {
+      proteinViewerData['intrinsically_disordered_regions'] =
         standardizeMobiDBFeatureStructure(
-          dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
+          proteinViewerData[
+            'intrinsically_disordered_regions'
+          ] as ExtendedFeature[],
         );
     }
 
-    // Other restructured "residues" section already created and populated
-    dataMerged['residue'] = [];
-
     // Sort data by match position, but exclude PIRSR, which is sorted in proteinViewerReorganization
-    Object.entries(dataMerged as ProteinViewerDataObject<ExtendedFeature>).map(
-      (group) => {
-        if (group[0] !== 'conserved_residues') group[1].sort(sortTracks).flat();
-      },
-    );
-
-    flattenedData = flattenTracksObject(dataMerged).filter(
-      (track) => !renamedTracks.includes(track[0]),
-    );
-
-    const representative_domains = flattenedData.filter(
-      (entry) => entry[0] == 'representative domains',
-    )[0];
-
-    if (representative_domains) {
-      representative_domains[1].map((domain) => {
-        if (typeof domain === 'object' && domain !== null) {
-          (domain as { representative?: boolean })['representative'] = true;
-        }
-      });
-    }
-
-    flattenedData.map((entry) => {
-      if (entry[0] === 'domains') {
-        if (representative_domains) {
-          entry[1] = entry[1].concat(representative_domains[1]);
-        }
-      } else if (entry[0] === 'other features') {
-        entry[1] = [];
-      } else if (entry[0] === 'representative domains') {
-        entry[1] = [];
-      }
+    Object.entries(
+      proteinViewerData as ProteinViewerDataObject<ExtendedFeature>,
+    ).map((group) => {
+      if (group[0] !== 'residues') group[1].sort(sortTracks).flat();
     });
 
-    // End of skipped reorganization steps
+    proteinViewerData['other_features'] = [];
 
-    mainTracks = [
-      'alphafold confidence',
-      'families',
-      'domains',
-      'pathogenic and likely pathogenic variants',
-      'intrinsically disordered regions',
-      'spurious proteins',
-      'conserved residues',
-      'unintegrated',
-      'other features',
-      'other residues',
+    flattenedData = flattenTracksObject(proteinViewerData);
+
+    // Add representative data
+    const representativeTracks: string[] = [
+      'representative_domains',
+      'representative_families',
     ];
-
-    hideCategories = {
-      'secondary structure': false,
-      families: false,
-      domains: false,
-      repeat: false,
-      'conserved site': false,
-      'active site': false,
-      'binding site': false,
-      ptm: false,
-      'match conservation': false,
-      'coiled-coils, signal peptides, transmembrane regions': false,
-      'short linear motifs': false,
-      'pfam-n': false,
-      funfam: false,
+    const representativeToSection: Record<string, string> = {
+      representative_domains: 'domain',
+      representative_families: 'family',
     };
+
+    representativeTracks.map((track) => {
+      if (dataMerged[track]) {
+        (dataMerged[track] as ExtendedFeature[]).map((entry) => {
+          entry.representative = true;
+        });
+        dataMerged[representativeToSection[track]] = dataMerged[
+          representativeToSection[track]
+        ].concat(dataMerged[track]);
+
+        // Remove representative_x track
+        dataMerged[track] = [];
+      }
+    });
   } else {
-    mainTracks = [
-      'alphafold confidence',
-      'families',
-      'domains',
-      'pathogenic and likely pathogenic variants',
-      'intrinsically disordered regions',
-      'spurious proteins',
-      'conserved residues',
-    ];
-
-    hideCategories = {
-      'secondary structure': false,
-      families: false,
-      domains: false,
-      repeat: false,
-      'conserved site': false,
-      'active site': false,
-      'binding site': false,
-      ptm: false,
-      'match conservation': false,
-      'coiled-coils, signal peptides, transmembrane regions': false,
-      'short linear motifs': false,
-      'pfam-n': false,
-      funfam: false,
-    };
-
-    flattenedData = flattenTracksObject(dataMerged).filter(
-      (track) => !renamedTracks.includes(track[0]),
-    );
+    flattenedData = flattenTracksObject(dataMerged);
   }
 
   return (
@@ -504,8 +369,6 @@ const DomainsOnProteinLoaded = ({
         handleConservationLoad={handleConservationLoad}
         conservationError={conservationError}
         loading={loading}
-        mainTracks={mainTracks}
-        hideCategories={hideCategories}
       >
         {children}
       </ProteinViewer>
@@ -513,7 +376,6 @@ const DomainsOnProteinLoaded = ({
   );
 };
 
-export default DomainsOnProteinLoaded;
 function filterVariation(payload: ProteinsAPIVariation): ProteinsAPIVariation {
   const types = ['pathogenic', 'likely pathogenic'];
   const features = payload.features.filter(
@@ -529,3 +391,16 @@ function filterVariation(payload: ProteinsAPIVariation): ProteinsAPIVariation {
     features,
   };
 }
+
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ui,
+  (ui) => ({
+    showMoreSettings: ui.showMoreSettings,
+    colorDomainsBy: ui.colorDomainsBy,
+    matchTypeSettings: ui.matchTypeSettings,
+  }),
+);
+
+export default connect(mapStateToProps, { changeSettingsRaw })(
+  DomainsOnProteinLoaded,
+);
