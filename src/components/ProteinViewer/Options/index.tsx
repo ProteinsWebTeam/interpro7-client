@@ -135,6 +135,8 @@ const ProteinViewerOptions = ({
     )?.[0];
   }
 
+  console.log('parent', parentReferences);
+
   const changeColor = (evt: React.FormEvent) => {
     if (changeSettingsRaw)
       changeSettingsRaw(
@@ -232,7 +234,9 @@ const ProteinViewerOptions = ({
             <hr />
             <LabelBy />
             <hr />
-            <MatchType />
+            {!parentReferences.mainRef.current?.baseURI.includes(
+              'InterProScan',
+            ) && <MatchType />}
             <li>
               <NightingaleSaver
                 element-id={componentsDivId}

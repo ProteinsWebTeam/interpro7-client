@@ -180,6 +180,10 @@ function processInterProN_Matches(
     ),
   );
 
+  unintegratedInterProN_Matches.map((match: MinimalFeature) => {
+    match.accession = match.accession + ':nMatch';
+  });
+
   // Get deep copy of integrated entries
   const integratedInterProN_Matches = JSON.parse(
     JSON.stringify(
@@ -192,6 +196,10 @@ function processInterProN_Matches(
       }),
     ),
   );
+
+  integratedInterProN_Matches.map((match: MinimalFeature) => {
+    match.accession = match.accession + ':nMatch';
+  });
 
   // Create map <integrated_accession: integrated_entryobj> to append integrated matches as children later
   let integratedInterProN_Map: Map<string, ExtendedFeature> = new Map();
@@ -221,6 +229,7 @@ function processInterProN_Matches(
       if (interproMapEntry) {
         interproMapEntry.entry_protein_locations =
           tempInterproN_Match.entry_protein_locations;
+        interproMapEntry.accession = interproMapEntry.accession + ':nMatch';
         integratedInterProN_Map.set(integratedAccession, interproMapEntry);
         if (interproMapEntry?.children) {
           interproMapEntry.children.push(tempInterproN_Match);
@@ -299,11 +308,11 @@ function chooseBestMatch(
     ),
   );
 
-  // Rebuild integrated matches structure (including children), appending matches to already existing preferred Intepro-N matches or traditional matches.
-  // NOTES:
-
-  // In an integrated entry there could be a match coming from Interpro-N and one coming from traditional HMMs.
-  // That's why this logic is on a match basis and not on an integrated entry basis. (different objects, child vs parent)
+  /*  Rebuild integrated matches structure (including children), appending matches to already existing preferred Intepro-N matches or traditional matches.
+      NOTES:
+      In an integrated entry there could be a match coming from Interpro-N and one coming from traditional HMMs.
+      That's why this logic is on a match basis and not on an integrated entry basis. (different objects, child vs parent)
+  */
 
   baseMatchesObjIntegrated.map((integratedEntry: ExtendedFeature) => {
     integratedEntry.children?.map((integratedEntryMatch: ExtendedFeature) => {
@@ -338,6 +347,34 @@ function chooseBestMatch(
     ),
   );
 }
+
+function combineMatches(
+  type: string,
+  traditionalMatches: MinimalFeature[],
+  interproN_Matches: Record<string, InteProN_Match>,
+): ExtendedFeature[] {
+  // Get traditional unintegrated matches
+  const traditionalMatchesObj: ExtendedFeature[] = JSON.parse(
+    JSON.stringify(
+      Object.values(traditionalMatches).filter((match: ExtendedFeature) => {
+        return match.type === type;
+      }),
+    ),
+  );
+
+  // Return a combination of both (properly deep-cloned)
+  return JSON.parse(
+    JSON.stringify(
+      traditionalMatchesObj.concat(
+        processInterProN_Matches(
+          type,
+          interproN_Matches,
+          false,
+        ) as MinimalFeature[],
+      ),
+    ),
+  );
+}
 /* #### END INTEPRO_N FUNCTIONS #### */
 
 // Match type to display logic
@@ -360,7 +397,11 @@ export function mergeMatches(
     case 'best':
       return chooseBestMatch(type, traditionalMatches, interproNMatches);
     case 'hmm_and_dl':
-      return [];
+      return combineMatches(
+        type,
+        traditionalMatches,
+        interproNMatches,
+      ) as MinimalFeature[];
     default:
       return [];
   }

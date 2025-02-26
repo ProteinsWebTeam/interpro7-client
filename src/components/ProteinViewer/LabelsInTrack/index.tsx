@@ -53,7 +53,7 @@ const LabelsInTrack = ({
                 ) &&
                 !hideCategory && (
                   <div className={css('inner-track-label')}>
-                    <b>Unintegrated</b>
+                    <b> {entry.accession.includes(':nMatch')} Unintegrated</b>
                   </div>
                 )}
               <div

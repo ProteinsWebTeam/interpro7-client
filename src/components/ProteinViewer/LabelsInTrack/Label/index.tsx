@@ -21,6 +21,9 @@ const Label = ({ entry, label }: LabelProps) => {
         entry.accession.split('residue:')[1]
       ) : (
         <>
+          {entry.accession.includes(':nMatch') &&
+            !entry.accession.includes('IPR') &&
+            '✨'}
           {type}
           {getTextForLabel(entry, label)}
         </>

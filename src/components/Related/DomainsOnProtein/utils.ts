@@ -132,14 +132,6 @@ export const proteinViewerReorganization = (
     ) as MinimalFeature[];
   }
 
-  // Create PTM section
-  if (dataMerged['intrinsically_disordered_regions']) {
-    dataMerged['intrinsically_disordered_regions'] =
-      standardizeMobiDBFeatureStructure(
-        dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
-      );
-  }
-
   // Splitting the "other features" section in mulitple subsets.
   // Using this logic we can go back to having the "other_features" section again.
   const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
@@ -233,41 +225,6 @@ export const proteinViewerReorganization = (
     // All other cases
     else return a.accession.localeCompare(b.accession);
   });
-
-  // Create PTM section
-  if (dataMerged['intrinsically_disordered_regions']) {
-    dataMerged['intrinsically_disordered_regions'] =
-      standardizeMobiDBFeatureStructure(
-        dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
-      );
-  }
-
-  // Move entries from unintegrated section to the correct one
-  const accessionsToRemoveFromUnintegrated: string[] = [];
-  if (dataMerged['unintegrated']) {
-    for (let i = 0; i < dataMerged['unintegrated'].length; i++) {
-      const unintegratedEntry = {
-        ...(dataMerged['unintegrated'][i] as ExtendedFeature),
-      };
-      const sourcedb = unintegratedEntry.source_database;
-      if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
-        if (dataMerged[dbToSection[sourcedb]]) {
-          const previousSectionData = [
-            ...(dataMerged[dbToSection[sourcedb]] as ExtendedFeature[]),
-          ];
-          previousSectionData.push(unintegratedEntry);
-          dataMerged[dbToSection[sourcedb]] = [...previousSectionData];
-          accessionsToRemoveFromUnintegrated.push(unintegratedEntry.accession);
-        }
-      }
-    }
-    const filteredUnintegrated = (
-      dataMerged['unintegrated'] as ExtendedFeature[]
-    ).filter(
-      (entry) => !accessionsToRemoveFromUnintegrated.includes(entry.accession),
-    );
-    dataMerged['unintegrated'] = [...filteredUnintegrated];
-  }
 
   return { ...dataMerged };
 };

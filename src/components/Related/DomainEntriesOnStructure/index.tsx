@@ -275,7 +275,6 @@ const EntriesOnStructure = ({
           representativeFamilies,
         );
 
-      console.log(chain, 'fix', newTracks);
       return newTracks;
     } catch (err) {
       return {};
