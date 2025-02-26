@@ -4,7 +4,6 @@ import {
 } from 'src/components/ProteinViewer/utils';
 
 import { sortTracks } from './DomainsOnProteinLoaded/utils';
-import { standardizeMobiDBFeatureStructure } from './DomainsOnProteinLoaded/utils';
 
 export const orderByAccession = (
   a: { accession: string },

@@ -19,6 +19,7 @@ import {
   byEntryType,
   sortTracks,
   standardizeMobiDBFeatureStructure,
+  standardizeResidueStructure,
 } from './utils';
 
 import { createSelector } from 'reselect';
@@ -253,6 +254,9 @@ const DomainsOnProteinLoaded = ({
         }
       });
     }
+
+    // Reorganize sections and sort added matches
+    dataMerged = sectionsReorganization(dataMerged);
   }
 
   if (dataVariation?.ok && dataVariation.payload) {
@@ -275,22 +279,20 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  /* Results coming from InterProScan logic */
+  // Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
+  // and the ProteinViewer components are used in a different way in the InterproScan results section.
+
+  // InterPro Scan Search results
   if (protein.accession.startsWith('iprscan')) {
-    // Use processedDataMerged instead of dataMerged in all operations
+    // What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
+    // InterProScan results section, because the DomainsOnProteinLoaded is used right away.
+    // Executing those steps here below. KEEP THIS ORDER OF OPERATIONS
 
-    let proteinViewerData = proteinViewerReorganization(
-      dataFeatures,
-      processedDataMerged as ProteinViewerDataObject<MinimalFeature>,
-    );
-    proteinViewerData = sectionsReorganization(proteinViewerData);
-
-    // Create PTM section
-    if (dataMerged['intrinsically_disordered_regions']) {
-      dataMerged['intrinsically_disordered_regions'] =
-        standardizeMobiDBFeatureStructure(
-          dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
-        );
+    // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
+    if (dataMerged['residues']) {
+      dataMerged['residues'] = standardizeResidueStructure(
+        dataMerged['residues'] as ExtendedFeature[],
+      );
     }
 
     // Move entries from unintegrated section to the correct one
@@ -323,6 +325,21 @@ const DomainsOnProteinLoaded = ({
       dataMerged['unintegrated'] = [...filteredUnintegrated];
     }
 
+    let proteinViewerData = proteinViewerReorganization(
+      dataFeatures,
+      processedDataMerged as ProteinViewerDataObject<MinimalFeature>,
+    );
+    proteinViewerData = sectionsReorganization(proteinViewerData);
+
+    // Create PTM section
+    if (dataMerged['intrinsically_disordered_regions']) {
+      dataMerged['intrinsically_disordered_regions'] =
+        standardizeMobiDBFeatureStructure(
+          dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
+        );
+    }
+
+    // Sort entries but not residues and PIRSR, which are already grouped and sorted
     Object.entries(
       proteinViewerData as ProteinViewerDataObject<ExtendedFeature>,
     ).forEach(([key, group]) => {
@@ -332,6 +349,7 @@ const DomainsOnProteinLoaded = ({
     });
 
     proteinViewerData['other_features'] = [];
+
     flattenedData = flattenTracksObject(proteinViewerData);
 
     // Add representative data
