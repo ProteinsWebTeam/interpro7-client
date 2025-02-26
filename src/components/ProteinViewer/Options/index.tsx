@@ -135,8 +135,6 @@ const ProteinViewerOptions = ({
     )?.[0];
   }
 
-  console.log('parent', parentReferences);
-
   const changeColor = (evt: React.FormEvent) => {
     if (changeSettingsRaw)
       changeSettingsRaw(

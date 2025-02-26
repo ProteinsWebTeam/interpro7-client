@@ -40,31 +40,29 @@ const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
         <header>Display matches from </header>
         {matchMap.map(([key, label]) => {
           return (
-            <>
-              <li key={key}>
-                <div
-                  className={css('vf-form__item', 'vf-form__item--checkbox')}
-                  style={{
-                    whiteSpace: 'nowrap',
-                  }}
+            <li key={key}>
+              <div
+                className={css('vf-form__item', 'vf-form__item--checkbox')}
+                style={{
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <input
+                  className="vf-form__radio"
+                  type="radio"
+                  onChange={updateMatch}
+                  value={key}
+                  checked={key == matchTypeSettings}
+                  id={`${id}-${key}`}
+                />
+                <label
+                  className={css('vf-form__label')}
+                  htmlFor={`${id}-${key}`}
                 >
-                  <input
-                    className="vf-form__radio"
-                    type="radio"
-                    onChange={updateMatch}
-                    value={key}
-                    checked={key == matchTypeSettings}
-                    id={`${id}-${key}`}
-                  />
-                  <label
-                    className={css('vf-form__label')}
-                    htmlFor={`${id}-${key}`}
-                  >
-                    {label}
-                  </label>
-                </div>
-              </li>
-            </>
+                  {label}
+                </label>
+              </div>
+            </li>
           );
         })}
       </ul>

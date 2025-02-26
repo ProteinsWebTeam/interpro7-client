@@ -224,10 +224,23 @@ const DomainsOnProteinLoaded = ({
     dataInterProNMatches.payload
   ) {
     const interProNData = dataInterProNMatches.payload;
-    const tracks = Object.keys(processedDataMerged);
+    const allTracks = Object.keys(processedDataMerged);
+    const unaffectedTracks = [
+      'intrinsically_disordered_regions',
+      'funfam',
+      'conserved_residues',
+      'ptm',
+      'coiled-coils,_signal_peptides,_transmembrane_regions',
+      'short_linear_motifs',
+      'spurious_proteins',
+      'active_site',
+    ];
+    const tracksToProcess = allTracks.filter(
+      (track) => !unaffectedTracks.includes(track),
+    );
 
     if (matchTypeSettings && colorDomainsBy) {
-      tracks.forEach((track) => {
+      tracksToProcess.forEach((track) => {
         const traditionalMatches = JSON.parse(
           JSON.stringify(processedDataMerged[track]),
         ) as MinimalFeature[];
@@ -254,10 +267,10 @@ const DomainsOnProteinLoaded = ({
         }
       });
     }
-
-    // Reorganize sections and sort added matches
-    dataMerged = sectionsReorganization(dataMerged);
   }
+
+  // Reorganize sections and sort added matches
+  processedDataMerged = sectionsReorganization(processedDataMerged);
 
   if (dataVariation?.ok && dataVariation.payload) {
     const filteredVariationPayload = filterVariation(dataVariation.payload);
@@ -288,28 +301,25 @@ const DomainsOnProteinLoaded = ({
     // InterProScan results section, because the DomainsOnProteinLoaded is used right away.
     // Executing those steps here below. KEEP THIS ORDER OF OPERATIONS
 
-    // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
-    if (dataMerged['residues']) {
-      dataMerged['residues'] = standardizeResidueStructure(
-        dataMerged['residues'] as ExtendedFeature[],
-      );
-    }
-
     // Move entries from unintegrated section to the correct one
     const accessionsToRemoveFromUnintegrated: string[] = [];
-    if (dataMerged['unintegrated']) {
-      for (let i = 0; i < dataMerged['unintegrated'].length; i++) {
+    if (processedDataMerged['unintegrated']) {
+      for (let i = 0; i < processedDataMerged['unintegrated'].length; i++) {
         const unintegratedEntry = {
-          ...(dataMerged['unintegrated'][i] as ExtendedFeature),
+          ...(processedDataMerged['unintegrated'][i] as ExtendedFeature),
         };
         const sourcedb = unintegratedEntry.source_database;
         if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
-          if (dataMerged[dbToSection[sourcedb]]) {
+          if (processedDataMerged[dbToSection[sourcedb]]) {
             const previousSectionData = [
-              ...(dataMerged[dbToSection[sourcedb]] as ExtendedFeature[]),
+              ...(processedDataMerged[
+                dbToSection[sourcedb]
+              ] as ExtendedFeature[]),
             ];
             previousSectionData.push(unintegratedEntry);
-            dataMerged[dbToSection[sourcedb]] = [...previousSectionData];
+            processedDataMerged[dbToSection[sourcedb]] = [
+              ...previousSectionData,
+            ];
             accessionsToRemoveFromUnintegrated.push(
               unintegratedEntry.accession,
             );
@@ -317,40 +327,47 @@ const DomainsOnProteinLoaded = ({
         }
       }
       const filteredUnintegrated = (
-        dataMerged['unintegrated'] as ExtendedFeature[]
+        processedDataMerged['unintegrated'] as ExtendedFeature[]
       ).filter(
         (entry) =>
           !accessionsToRemoveFromUnintegrated.includes(entry.accession),
       );
-      dataMerged['unintegrated'] = [...filteredUnintegrated];
+      processedDataMerged['unintegrated'] = [...filteredUnintegrated];
     }
 
+    // Reorganize viewer and sections
     let proteinViewerData = proteinViewerReorganization(
       dataFeatures,
       processedDataMerged as ProteinViewerDataObject<MinimalFeature>,
     );
     proteinViewerData = sectionsReorganization(proteinViewerData);
 
+    // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
+    if (proteinViewerData['residues']) {
+      proteinViewerData['residues'] = standardizeResidueStructure(
+        proteinViewerData['residues'] as ExtendedFeature[],
+      );
+    }
+
     // Create PTM section
-    if (dataMerged['intrinsically_disordered_regions']) {
-      dataMerged['intrinsically_disordered_regions'] =
+    if (proteinViewerData['intrinsically_disordered_regions']) {
+      proteinViewerData['intrinsically_disordered_regions'] =
         standardizeMobiDBFeatureStructure(
-          dataMerged['intrinsically_disordered_regions'] as ExtendedFeature[],
+          proteinViewerData[
+            'intrinsically_disordered_regions'
+          ] as ExtendedFeature[],
         );
     }
 
-    // Sort entries but not residues and PIRSR, which are already grouped and sorted
+    // Sort data by match position, but exclude PIRSR, which is sorted in proteinViewerReorganization
     Object.entries(
       proteinViewerData as ProteinViewerDataObject<ExtendedFeature>,
-    ).forEach(([key, group]) => {
-      if (key !== 'residues') {
-        proteinViewerData[key] = group.sort(sortTracks).flat();
-      }
+    ).map((group) => {
+      if (group[0] !== 'residues') group[1].sort(sortTracks).flat();
     });
 
+    // All the other features have been moved to dedicated sections now
     proteinViewerData['other_features'] = [];
-
-    flattenedData = flattenTracksObject(proteinViewerData);
 
     // Add representative data
     const representativeTracks: string[] = [
@@ -362,19 +379,20 @@ const DomainsOnProteinLoaded = ({
       representative_families: 'family',
     };
 
-    representativeTracks.forEach((track) => {
-      if (processedDataMerged[track]) {
-        (processedDataMerged[track] as ExtendedFeature[]).forEach((entry) => {
+    representativeTracks.map((track) => {
+      if (proteinViewerData[track]) {
+        (proteinViewerData[track] as ExtendedFeature[]).map((entry) => {
           entry.representative = true;
         });
-        processedDataMerged[representativeToSection[track]] =
-          processedDataMerged[representativeToSection[track]].concat(
-            processedDataMerged[track],
-          );
-
-        processedDataMerged[track] = [];
+        proteinViewerData[representativeToSection[track]] = proteinViewerData[
+          representativeToSection[track]
+        ].concat(proteinViewerData[track]);
+        proteinViewerData[track] = [];
       }
     });
+
+    // Flatten data to be processed by ProteinViewer
+    flattenedData = flattenTracksObject(proteinViewerData);
   } else {
     flattenedData = flattenTracksObject(processedDataMerged);
   }

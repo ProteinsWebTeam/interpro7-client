@@ -107,6 +107,7 @@ const memberDB = new Set([
   { name: 'ncbifam', re: /^(TIGR[0-9]{5})|(NF[0-9]{6})(?:\:nMatch)?$/i },
   { name: 'mobidblt', re: /^(\w|-)+(?:\:nMatch)?$/ },
   { name: 'elm', re: /^ELME[0-9]{6}(?:\:nMatch)?$/ },
+  { name: 'antifam', re: /^ANF[0-9]{5}(?:\:nMatch)?$/ },
 ]);
 
 const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
