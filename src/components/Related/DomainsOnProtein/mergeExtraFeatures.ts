@@ -1,4 +1,4 @@
-import { ExtendedFeature } from 'components/ProteinViewer';
+import { ExtendedFeature } from 'components/ProteinViewer/utils';
 const mobiConsensus = 'Consensus Disorder Prediction';
 const splitMobiFeatures = (feature: ExtendedFeature) => {
   const newFeatures: Record<string, ExtendedFeature> = {};
@@ -24,18 +24,18 @@ const splitMobiFeatures = (feature: ExtendedFeature) => {
 
 const mergeExtraFeatures = (
   data: ProteinViewerDataObject,
-  extraFeatures: Record<string, ExtendedFeature>
+  extraFeatures: Record<string, ExtendedFeature>,
 ) => {
   if ('mobidb-lite' in extraFeatures) {
     data.other_features = data.other_features.concat(
-      splitMobiFeatures(extraFeatures['mobidb-lite'])
+      splitMobiFeatures(extraFeatures['mobidb-lite']),
     );
   }
   data.other_features = data.other_features
     .concat(
       Object.values(extraFeatures).filter(
-        ({ source_database: db }) => db !== 'mobidblt'
-      )
+        ({ source_database: db }) => db !== 'mobidblt',
+      ),
     )
     .sort((a, b) => {
       const { accession: accA, source_database: dbA } = a as Record<

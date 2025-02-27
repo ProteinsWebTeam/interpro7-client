@@ -8,7 +8,7 @@ import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 import ProtVistaPTMPopup, { PTMDetail } from './PTM';
 import DisProtPopup, { DisProtDetail } from './DisProt';
-import { ExtendedFeature } from '..';
+import { ExtendedFeature } from '../utils';
 
 export type PopupDetail = (
   | ConservationDetail
