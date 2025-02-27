@@ -228,7 +228,7 @@ const DomainsOnProteinLoaded = ({
     const unaffectedTracks = [
       'intrinsically_disordered_regions',
       'funfam',
-      'conserved_residues',
+      'residues',
       'ptm',
       'coiled-coils,_signal_peptides,_transmembrane_regions',
       'short_linear_motifs',
@@ -343,9 +343,9 @@ const DomainsOnProteinLoaded = ({
     proteinViewerData = sectionsReorganization(proteinViewerData);
 
     // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
-    if (proteinViewerData['residues']) {
-      proteinViewerData['residues'] = standardizeResidueStructure(
-        proteinViewerData['residues'] as ExtendedFeature[],
+    if (processedDataMerged['residues']) {
+      processedDataMerged['residues'] = standardizeResidueStructure(
+        processedDataMerged['residues'] as ExtendedFeature[],
       );
     }
 

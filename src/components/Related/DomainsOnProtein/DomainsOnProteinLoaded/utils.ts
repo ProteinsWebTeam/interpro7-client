@@ -94,7 +94,8 @@ export const standardizeResidueStructure = (
   residues.map((residueParentObj) => {
     const tempResidue: ExtendedFeature = residueParentObj;
     tempResidue.type = 'residue';
-    tempResidue.locations = residueParentObj.residues?.[0].locations;
+    tempResidue.locations =
+      residueParentObj.residues?.[0].locations || tempResidue.locations;
     newResidues.push(tempResidue);
   });
   return newResidues;
