@@ -102,7 +102,6 @@ const features2protvista = (features: FeatureMap) => {
     }
 
     if (entry[0] === 'family') {
-      entry[0] = 'family';
       if (representativeFamilies) {
         if (Array.isArray(entry[1]))
           entry[1] = entry[1].concat(representativeFamilies);

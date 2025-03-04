@@ -57,8 +57,6 @@ export const typeNameToSectionName: Record<string, string> = {
   'spurious proteins': 'Spurious Proteins',
   residues: 'Conserved Residues',
   unintegrated: 'Unintegrated',
-  'other features': 'Other Features',
-  'other residues': 'Other Residues',
   'conserved site': 'Conserved Site',
   'active site': 'Active Site',
   'binding site': 'Binding Site',

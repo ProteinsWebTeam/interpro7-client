@@ -102,7 +102,6 @@ export const changeSettingsRaw = (
   key: string,
   value: string | number | boolean | LabelUISettings | MatchTypeUISettings,
 ) => {
-  console.log(category, key, value);
   return {
     type: types.CHANGE_SETTINGS,
     category,

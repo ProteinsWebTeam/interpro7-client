@@ -258,7 +258,7 @@ const EntriesOnStructure = ({
 
       // Move homologous superfamily to domains
       const homologousSuperFamilies = newTracks['homologous_superfamily'];
-      if (newTracks['domain'] && homologousSuperFamilies) {
+      if (homologousSuperFamilies) {
         newTracks['domain'] = newTracks['domain'].concat(
           homologousSuperFamilies,
         );
@@ -266,11 +266,11 @@ const EntriesOnStructure = ({
       }
 
       const representativeDomains = representativesDomainsPerChain[chain];
-      if (newTracks['domain'] && representativeDomains)
+      if (representativeDomains)
         newTracks['domain'] = newTracks['domain'].concat(representativeDomains);
 
       const representativeFamilies = representativesFamiliesPerChain[chain];
-      if (newTracks['family'] && representativeFamilies)
+      if (representativeFamilies)
         newTracks['family'] = newTracks['family'].concat(
           representativeFamilies,
         );

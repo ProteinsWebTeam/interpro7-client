@@ -113,7 +113,6 @@ export default <T extends keyof SettingsState>(category: T) =>
   ) => {
     switch (action.type) {
       case CHANGE_SETTINGS:
-        console.log('redux', action.category, action.type, action.value);
         if (action.category !== category) return state;
         if ((action.key || '').includes('.')) {
           const parts = action.key!.split('.');

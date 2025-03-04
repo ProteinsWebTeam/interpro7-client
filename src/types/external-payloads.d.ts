@@ -95,7 +95,8 @@ type ProteinsAPIProteomics = {
 type InteProN_Match = MinimalFeature & {
   type: string;
   is_preferred: boolean;
-  integrated: MinimalFeature | string;
+  integrated: MinimalFeature | ExtendedFeature | string;
+  entry_protein_locations: FeatureLocation[];
 };
 
 type InterProNMatches = Record<string, InteProN_Match>;

@@ -165,11 +165,12 @@ export const ProteinViewer = ({
     if (element && tooltipEnabledRef.current) {
       refs.setReference(element);
       setTooltipContent((prevContent) => {
-        // Only update if content has changed
-        if (prevContent !== content) {
-          return content;
-        }
-        return prevContent; // No update, prevents re-render
+        return content;
+        // // Only update if content has changed
+        // if (prevContent !== content) {
+        //   return content;
+        // }
+        // return prevContent; // No update, prevents re-render
       });
       if (intervalId.current) {
         clearInterval(intervalId.current as unknown as number);

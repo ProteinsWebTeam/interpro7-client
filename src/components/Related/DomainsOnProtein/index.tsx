@@ -78,8 +78,6 @@ const DomainOnProteinWithoutData = ({
   children,
   externalSourcesData,
   title,
-  matchTypeSettings,
-  colorDomainsBy,
   showMoreSettings,
 }: LoadedProps) => {
   const [processedData, setProcessedData] = useState<{
@@ -161,6 +159,7 @@ const DomainOnProteinWithoutData = ({
 
   if (dataFeatures && !dataFeatures.loading && dataFeatures.payload) {
     mergeExtraFeatures(mergedData, dataFeatures?.payload);
+    extraFeaturesCount = Object.entries(dataFeatures?.payload).length;
   }
 
   const proteinViewerData = proteinViewerReorganization(
@@ -340,6 +339,7 @@ const mapStateToProps = createSelector(
   (ui: UISettings) => ({
     matchTypeSettings: ui.matchTypeSettings,
     colorDomainsBy: ui.colorDomainsBy,
+    showMoreSettings: ui.showMoreSettings,
   }),
 );
 

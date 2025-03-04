@@ -241,9 +241,7 @@ const DomainsOnProteinLoaded = ({
 
     if (matchTypeSettings && colorDomainsBy) {
       tracksToProcess.forEach((track) => {
-        const traditionalMatches = JSON.parse(
-          JSON.stringify(processedDataMerged[track]),
-        ) as MinimalFeature[];
+        const traditionalMatches = processedDataMerged[track];
 
         // Instead of modifying the original, assign to our copy
         processedDataMerged[track] = mergeMatches(
@@ -251,7 +249,6 @@ const DomainsOnProteinLoaded = ({
           traditionalMatches,
           interProNData,
           matchTypeSettings,
-          colorDomainsBy,
         );
       });
 
@@ -363,7 +360,7 @@ const DomainsOnProteinLoaded = ({
     Object.entries(
       proteinViewerData as ProteinViewerDataObject<ExtendedFeature>,
     ).map((group) => {
-      if (group[0] !== 'residues') group[1].sort(sortTracks).flat();
+      if (group[0] !== 'residues') group[1].sort(sortTracks);
     });
 
     // All the other features have been moved to dedicated sections now
@@ -379,9 +376,9 @@ const DomainsOnProteinLoaded = ({
       representative_families: 'family',
     };
 
-    representativeTracks.map((track) => {
+    representativeTracks.forEach((track) => {
       if (proteinViewerData[track]) {
-        (proteinViewerData[track] as ExtendedFeature[]).map((entry) => {
+        (proteinViewerData[track] as ExtendedFeature[]).forEach((entry) => {
           entry.representative = true;
         });
         proteinViewerData[representativeToSection[track]] = proteinViewerData[
