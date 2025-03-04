@@ -109,5 +109,8 @@ export const getTextForLabel = (
     text = entry.source_database.toUpperCase() + ': ' + text;
   }
 
+  // Use :nMatch to distiguish the tracks during rendering on PV, but don't show the suffix on labels and tooltips
+  text = text.replace(':nMatch', '');
+
   return text;
 };

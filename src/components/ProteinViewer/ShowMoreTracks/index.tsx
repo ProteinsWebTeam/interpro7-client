@@ -22,7 +22,7 @@ type Props = {
   changeSettingsRaw: (
     category: string,
     key: string,
-    value: string | number | boolean | LabelUISettings,
+    value: string | number | boolean | LabelUISettings | MatchTypeUISettings,
   ) => SettingsAction;
 };
 
