@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PTMFragment } from 'src/components/ProteinViewer';
+import type { PTMFragment } from '../../utils';
 
 export type PTMDetail = {
   target?: HTMLElement;

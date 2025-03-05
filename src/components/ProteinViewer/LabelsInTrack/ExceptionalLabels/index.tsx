@@ -8,7 +8,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { FunFamLink } from 'subPages/Subfamilies';
 
-import { ExtendedFeature } from '../..';
+import { ExtendedFeature } from '../../utils';
 
 import cssBinder from 'styles/cssBinder';
 

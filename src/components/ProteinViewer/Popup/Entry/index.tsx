@@ -6,6 +6,7 @@ import Link from 'components/generic/Link';
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import localCSS from './style.css';
+import { ExtendedFeature } from '../../utils';
 
 const css = cssBinder(ipro, localCSS);
 export type EntryDetail = {
@@ -57,7 +58,10 @@ const ProtVistaEntryPopup = ({
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
 
   let integrated = null;
-  const parentAccession = detail.feature?.parent?.accession;
+  let parentAccession = detail.feature?.parent?.accession;
+
+  // Use :nMatch to distiguish the tracks during rendering on PV, but don't show the suffix on labels and tooltips
+  parentAccession = parentAccession?.replace(':nMatch', '');
 
   // Handle cases where parent is not an InterPro Entry, like MobiDB lite matches
   if (parentAccession && parentAccession.startsWith('IPR'))

@@ -8,7 +8,7 @@ import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 import ProtVistaPTMPopup, { PTMDetail } from './PTM';
 import DisProtPopup, { DisProtDetail } from './DisProt';
-import { ExtendedFeature } from '..';
+import { ExtendedFeature } from '../utils';
 
 export type PopupDetail = (
   | ConservationDetail
@@ -26,6 +26,14 @@ type Props = {
 };
 
 const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
+  // Use :nMatch to distiguish the tracks during rendering on PV, but don't show the suffix on labels and tooltips
+  let accession = (detail.feature as ExtendedFeature).accession;
+
+  if (accession) {
+    accession = accession.replace(':nMatch', '✨');
+    (detail.feature as ExtendedFeature).accession = accession;
+  }
+
   // comes from PTMTrack
   if (
     (detail as PTMDetail)?.feature?.type == 'ptm' &&

@@ -53,11 +53,11 @@ exports[`<EntriesOnStructure /> should render 1`] = `
               [],
             ],
             [
-              "families",
+              "family",
               [],
             ],
             [
-              "domains",
+              "domain",
               [
                 {
                   "accession": "IPR038178",

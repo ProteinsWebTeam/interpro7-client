@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -14,6 +14,8 @@ type Props = PropsWithChildren<{
   type: 'info' | 'alert' | 'warning' | 'announcement';
   style?: React.CSSProperties;
   className?: string;
+  closable?: boolean;
+  onClose?: () => void;
 }>;
 
 const defaultIcons = {
@@ -22,6 +24,7 @@ const defaultIcons = {
   alert: 'icon-exclamation-circle',
   announcement: 'icon-announcement',
 };
+
 const Callout = ({
   type,
   icon,
@@ -29,23 +32,48 @@ const Callout = ({
   style = {},
   className = '',
   showIcon,
+  closable = false,
+  onClose,
   children,
 }: Props) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    onClose?.();
+  };
+
+  if (!isVisible) {
+    return null;
+  }
+
   const iconClass = icon ? icon : defaultIcons[type];
+
   return (
     <div
-      className={css('new-callout', type, className, { alt })}
+      className={css('new-callout', type, className, {
+        alt,
+        'with-close': closable,
+      })}
       style={{ ...style }}
     >
       {showIcon && (
-        <>
-          <span
-            className={css('icon', 'icon-common', 'icon-conceptual', iconClass)}
-          />
-        </>
+        <span
+          className={css('icon', 'icon-common', 'icon-conceptual', iconClass)}
+        />
       )}
-      <div>{children}</div>
+      <div className={css('callout-content')}>{children}</div>
+      {closable && (
+        <button
+          onClick={handleClose}
+          className={css('close-button', 'xs')}
+          aria-label="Close callout"
+        >
+          <span className={css('icon', 'icon-common', 'icon-close')} />
+        </button>
+      )}
     </div>
   );
 };
+
 export default Callout;
