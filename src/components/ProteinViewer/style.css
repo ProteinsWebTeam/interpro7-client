@@ -218,6 +218,8 @@ g:global(.feature-group):has(g:global(.residues-group))
 }
 
 svg:global(.container):has(g:global(.children-features))
-  > g:global(.sequence-features):has(g:global(.feature-group[id^="g_IPR"])) {
+  > g:global(.sequence-features):has(
+    g:global(.feature-group:is([id^="g_IPR"], [id^="g_parentUnintegrated"]))
+  ) {
   display: none;
 }

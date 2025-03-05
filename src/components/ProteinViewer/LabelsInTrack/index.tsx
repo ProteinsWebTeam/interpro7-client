@@ -53,7 +53,13 @@ const LabelsInTrack = ({
                 ) &&
                 !hideCategory && (
                   <div className={css('inner-track-label')}>
-                    <b> {entry.accession.includes(':nMatch')} Unintegrated</b>
+                    {/* Handle new type of parent track for stacked-view: unintegrated parent entry with matches coming from InterPro-N and HMMs */}
+                    <b>
+                      {' '}
+                      {!entry.accession.includes('parentUnintegrated')
+                        ? 'Unintegrated'
+                        : ''}
+                    </b>
                   </div>
                 )}
               <div

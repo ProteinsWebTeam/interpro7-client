@@ -27,9 +27,12 @@ type Props = {
 
 const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   // Use :nMatch to distiguish the tracks during rendering on PV, but don't show the suffix on labels and tooltips
-  (detail.feature as ExtendedFeature).accession = (
-    detail.feature as ExtendedFeature
-  ).accession.replace(':nMatch', '✨');
+  let accession = (detail.feature as ExtendedFeature).accession;
+
+  if (accession) {
+    accession = accession.replace(':nMatch', '✨');
+    (detail.feature as ExtendedFeature).accession = accession;
+  }
 
   // comes from PTMTrack
   if (

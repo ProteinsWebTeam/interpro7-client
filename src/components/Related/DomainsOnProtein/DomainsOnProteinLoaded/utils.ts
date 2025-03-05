@@ -162,7 +162,7 @@ export const standardizeMobiDBFeatureStructure = (
 
 function processInterProN_Matches(
   type: string,
-  interproN_Matches: Record<string, InteProN_Match>,
+  interproN_Matches: Record<string, InterProN_Match>,
   mode: string,
 ):
   | MinimalFeature[]
@@ -174,7 +174,7 @@ function processInterProN_Matches(
   // Get deep copy of unintegrated entries
   const unintegratedInterProN_Matches = JSON.parse(
     JSON.stringify(
-      Object.values(interproN_Matches).filter((match: InteProN_Match) => {
+      Object.values(interproN_Matches).filter((match: InterProN_Match) => {
         return (
           !match.integrated &&
           match.type === type &&
@@ -191,7 +191,7 @@ function processInterProN_Matches(
   // Get deep copy of integrated entries
   const integratedInterProN_Matches = JSON.parse(
     JSON.stringify(
-      Object.values(interproN_Matches).filter((match: InteProN_Match) => {
+      Object.values(interproN_Matches).filter((match: InterProN_Match) => {
         return (
           match.integrated &&
           match.type === type &&
@@ -206,7 +206,7 @@ function processInterProN_Matches(
   });
 
   const typeFilteredInterpro_NMatches = Object.values(interproN_Matches).filter(
-    (match: InteProN_Match) => match.type === type,
+    (match: InterProN_Match) => match.type === type,
   );
 
   // Representative data logic
@@ -309,7 +309,7 @@ function processInterProN_Matches(
 function chooseBestMatch(
   type: string,
   traditionalMatches: MinimalFeature[],
-  interproNMatches: Record<string, InteProN_Match>,
+  interproNMatches: Record<string, InterProN_Match>,
 ): MinimalFeature[] {
   const processingResult = processInterProN_Matches(
     type,
@@ -388,7 +388,7 @@ function chooseBestMatch(
 function combineMatches(
   type: string,
   traditionalMatches: MinimalFeature[],
-  interproN_Matches: Record<string, InteProN_Match>,
+  interproN_Matches: Record<string, InterProN_Match>,
 ): ExtendedFeature[] {
   // Get processed Interpro-N matches
   const processedResult = processInterProN_Matches(
@@ -398,22 +398,55 @@ function combineMatches(
   ) as [MinimalFeature[], Map<string, ExtendedFeature>];
 
   const unintegratedInterProN_Matches = processedResult[0];
-  const integratedInterProN_Map = processedResult[1];
+  const unintegratedInterProN_MatchesMap: Record<string, MinimalFeature> = {};
 
-  // Get traditional unintegrated matches
+  unintegratedInterProN_Matches.forEach((match) => {
+    const newMatch = JSON.parse(JSON.stringify(match));
+    const baseAccession = match.accession.replace(':nMatch', '');
+
+    unintegratedInterProN_MatchesMap[baseAccession] = {
+      accession: 'parentUnintegrated:' + baseAccession,
+      locations: (match as InterProN_Match).entry_protein_locations,
+      source_database: match.source_database,
+      children: [newMatch as { accession: string; source_database: string }],
+    };
+  });
+
+  // Unintegrated matches processing logic
   const unintegratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
     return match.type === type && !match.accession.startsWith('IPR');
   });
 
+  //Combine unintegrated matches from InterPro-N and HMMs under the same "Unintegrated" parent element
+  unintegratedTraditionalMatchesObj.forEach((match) => {
+    const newMatch = JSON.parse(JSON.stringify(match));
+    const baseAccession = match.accession.replace(':nMatch', '');
+
+    if (unintegratedInterProN_MatchesMap[match.accession]) {
+      unintegratedInterProN_MatchesMap[match.accession].children?.push(
+        newMatch as { accession: string; source_database: string },
+      );
+    } else {
+      unintegratedInterProN_MatchesMap[baseAccession] = {
+        accession: 'parentUnintegrated:' + baseAccession,
+        locations: (match as InterProN_Match).entry_protein_locations,
+        source_database: match.source_database,
+        children: [newMatch as { accession: string; source_database: string }],
+      };
+    }
+  });
+
+  // Integrated matches processing logic
+  const integratedInterProN_Map = processedResult[1];
+  let flatIntegratedTraditionalMatchesObj: ExtendedFeature[] = [];
+
   const integratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
     return match.type === type && match.accession.startsWith('IPR');
   });
-
-  let flatIntegratedTraditionalMatchesObj: ExtendedFeature[] = [];
 
   integratedTraditionalMatchesObj.forEach((match) => {
     if (match.children)
@@ -436,7 +469,9 @@ function combineMatches(
     }
   });
 
-  return Array.from(integratedInterProN_Map.values());
+  return Array.from(integratedInterProN_Map.values()).concat(
+    Object.values(unintegratedInterProN_MatchesMap),
+  );
 }
 /* #### END INTEPRO_N FUNCTIONS #### */
 
@@ -444,7 +479,7 @@ function combineMatches(
 export function mergeMatches(
   type: string,
   traditionalMatches: MinimalFeature[],
-  interproNMatches: Record<string, InteProN_Match>,
+  interproNMatches: Record<string, InterProN_Match>,
   matchTypeSettings: MatchTypeUISettings,
 ): MinimalFeature[] {
   switch (matchTypeSettings) {

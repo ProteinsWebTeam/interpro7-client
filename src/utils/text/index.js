@@ -109,8 +109,11 @@ export const getTextForLabel = (
     text = entry.source_database.toUpperCase() + ': ' + text;
   }
 
-  // Use :nMatch to distiguish the tracks during rendering on PV, but don't show the suffix on labels and tooltips
+  // Post process labels for Interpro-N, optimal and stacked mode
   text = text.replace(':nMatch', '');
+  if (text.includes('parentUnintegrated')) {
+    text = 'Unintegrated';
+  }
 
   return text;
 };

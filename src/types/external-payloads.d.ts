@@ -92,14 +92,14 @@ type ProteinsAPIProteomics = {
   features: [];
 };
 
-type InteProN_Match = MinimalFeature & {
+type InterProN_Match = MinimalFeature & {
   type: string;
   is_preferred: boolean;
   integrated: MinimalFeature | ExtendedFeature | string;
   entry_protein_locations: FeatureLocation[];
 };
 
-type InterProNMatches = Record<string, InteProN_Match>;
+type InterProNMatches = Record<string, InterProN_Match>;
 
 type IprscanParameterValue = {
   label: string;

@@ -143,6 +143,7 @@ type Props = {
   sequence: string;
   customLocation?: InterProLocation;
   colorDomainsBy?: string;
+  matchTypeSettings?: MatchTypeUISettings;
   databases?: DBsInfo;
 };
 const TracksInCategory = forwardRef<ExpandedHandle, Props>(
@@ -157,6 +158,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       openTooltip,
       closeTooltip,
       colorDomainsBy,
+      matchTypeSettings,
       databases,
     },
     ref,
@@ -393,7 +395,11 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                         id={getTrackAccession(entry.accession)}
                         show-label
                         margin-left={20}
-                        margin-top={trackTopMargin} // Space unintegrated
+                        margin-top={
+                          matchTypeSettings === 'hmm_and_dl'
+                            ? 2
+                            : trackTopMargin
+                        }
                         // @ts-ignore
                         samesize={entry.source_database !== 'mobidblt'}
                         shape="roundRectangle"
@@ -428,8 +434,10 @@ const mapStateToProps = createSelector(
     customLocation,
     colorDomainsBy:
       (ui.colorDomainsBy as string) || EntryColorMode.DOMAIN_RELATIONSHIP,
+    matchTypeSettings: ui.matchTypeSettings as MatchTypeUISettings,
   }),
 );
+
 export default connect(mapStateToProps, null, null, {
   forwardRef: true,
 })(TracksInCategory);

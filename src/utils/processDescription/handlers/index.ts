@@ -110,7 +110,11 @@ const memberDB = new Set([
   { name: 'antifam', re: /^ANF[0-9]{5}(?:\:nMatch)?$/ },
 ]);
 
-const interPro = { name: 'InterPro', re: /IPR[0-9]{6}/i };
+// Handle new type of parent track for stacked view: unintegrated parent entry with matches coming from InterPro-N and HMMs
+const interPro = {
+  name: 'InterPro',
+  re: /IPR[0-9]{6}|parentUnintegrated:\S*/i,
+};
 
 export const setDBs /*: Set<Object> */ = new Set([
   {
