@@ -236,6 +236,11 @@ function processInterProN_Matches(
     representativeFamilies,
   );
 
+  // Signal to PV that this match comes from InterPro-N for visualization purposes
+  representativeData.forEach(
+    (match) => (match.accession = match.accession + ':nMatch'),
+  );
+
   // Create map <integrated_accession: integrated_entryobj> to append integrated matches as children later
   let integratedInterProN_Map: Map<string, ExtendedFeature> = new Map();
   if (integratedInterProN_Matches.length > 0) {
@@ -459,8 +464,29 @@ function combineMatches(
       const existingIntegrated_NEntry = integratedInterProN_Map.get(
         match.integrated,
       );
+
       if (existingIntegrated_NEntry) {
-        existingIntegrated_NEntry.children?.push(match);
+        // Find the corresponding N-match and push the traditional next to it
+        const siblingMatchIndex = existingIntegrated_NEntry.children?.findIndex(
+          (elem) => {
+            const processedAccession = elem.accession.replace(':nMatch', '');
+            if (processedAccession === match.accession) {
+              return true;
+            }
+            return false;
+          },
+        );
+        if (siblingMatchIndex !== undefined && siblingMatchIndex >= 0) {
+          console.log('here');
+          existingIntegrated_NEntry.children?.splice(
+            siblingMatchIndex + 1,
+            0,
+            match,
+          );
+        } else {
+          existingIntegrated_NEntry.children?.push(match);
+        }
+
         integratedInterProN_Map.set(
           match.integrated,
           existingIntegrated_NEntry,

@@ -112,9 +112,15 @@ const ProtVistaEntryPopup = ({
           <div>
             {accession?.startsWith('residue:')
               ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
-              : accession?.replace('Mobidblt-', '')}
+              : accession?.replace('Mobidblt-', '').replace(':nMatch', ' ')}
+            {accession?.includes('nMatch') && (
+              <sup>
+                {' '}
+                <b>InterPro-N ✨</b>
+              </sup>
+            )}
           </div>
-        </div>{' '}
+        </div>
       </h6>
 
       {name && <h6 className={css('title')}>{name}</h6>}
@@ -137,7 +143,9 @@ const ProtVistaEntryPopup = ({
               },
             }}
           >
-            <span style={{ color: 'white' }}>{integrated}</span>
+            <span style={{ color: 'white' }}>
+              {integrated.replaceAll(':nMatch', '')}
+            </span>
           </Link>
         </h6>
       ) : null}

@@ -22,9 +22,9 @@ type Props = {
 
 type matchTypes = 'hmm' | 'dl' | 'best' | 'hmm_and_dl';
 const matchMap: Array<[matchTypes, string]> = [
+  ['best', 'Default'],
   ['hmm', 'InterPro'],
   ['dl', 'InterPro-N'],
-  ['best', 'Optimal'],
   ['hmm_and_dl', 'Stacked'],
 ];
 const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
@@ -54,7 +54,6 @@ const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
             <span
               className={css('small', 'icon', 'icon-common')}
               data-icon="&#xf129;"
-              aria-label="Provided By UniProt"
             />
           </Tooltip>
         </header>

@@ -30,7 +30,6 @@ const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   let accession = (detail.feature as ExtendedFeature).accession;
 
   if (accession) {
-    accession = accession.replace(':nMatch', '✨');
     (detail.feature as ExtendedFeature).accession = accession;
   }
 

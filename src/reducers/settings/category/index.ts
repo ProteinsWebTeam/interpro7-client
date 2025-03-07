@@ -34,7 +34,7 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
           name: true,
           short: true,
         },
-        matchTypeSettings: 'hmm',
+        matchTypeSettings: 'best',
         structureViewer: false,
         shouldHighlight: true,
         idaAccessionDB: 'interpro',
