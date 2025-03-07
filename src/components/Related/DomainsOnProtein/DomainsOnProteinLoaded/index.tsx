@@ -403,7 +403,8 @@ const DomainsOnProteinLoaded = ({
   return (
     <>
       {interpro_NMatchesCount > 0 && (
-        <Callout type="warning" closable={true}>
+        <>
+          {/*<Callout type="warning" closable={true}>
           This sequence includes additional matches predicted by{' '}
           <b>InterPro‑N</b>, an AI-powered deep learning model developed by
           Google DeepMind.
@@ -411,7 +412,8 @@ const DomainsOnProteinLoaded = ({
           To view these predictions, open the <b>Options</b> menu below and
           select your preferred display mode under <b>"Display matches from"</b>
           .
-        </Callout>
+        </Callout>*/}
+        </>
       )}
       <ProteinViewer
         protein={protein}

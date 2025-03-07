@@ -234,7 +234,7 @@ const ProteinViewerOptions = ({
             <hr />
             {!parentReferences.mainRef.current?.baseURI.includes(
               'InterProScan',
-            ) && <MatchType />}
+            ) && <>{/* <MatchType/> */}</>}
             <li>
               <NightingaleSaver
                 element-id={componentsDivId}
