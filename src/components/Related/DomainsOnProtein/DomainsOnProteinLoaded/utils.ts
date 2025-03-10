@@ -1,3 +1,4 @@
+import { match } from 'assert';
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
@@ -158,8 +159,53 @@ export const standardizeMobiDBFeatureStructure = (
 };
 /* #### END STANDARDIZATION FUNCTIONS #### */
 
-/* #### INTEPRO_N FUNCTIONS #### */
+// Support functions for representative data
+function isInterProN(
+  matches: ExtendedFeature[] | InterProN_Match[],
+): matches is InterProN_Match[] {
+  return true;
+}
 
+const processRepresentativeData = (
+  matches: ExtendedFeature[] | InterProN_Match[],
+): MinimalFeature[] => {
+  // Representative data logic
+  const representativeDomains = selectRepresentativeData(
+    matches,
+    'entry_protein_locations',
+    'domain',
+  );
+
+  representativeDomains.forEach((domain) => {
+    if (domain.integrated)
+      domain.integrated = (domain.integrated as ExtendedFeature).accession;
+  });
+
+  const representativeFamilies = selectRepresentativeData(
+    matches,
+    'entry_protein_locations',
+    'family',
+  );
+
+  representativeFamilies.forEach((family) => {
+    if (family.integrated)
+      family.integrated = (family.integrated as ExtendedFeature).accession;
+  });
+
+  const representativeData = representativeDomains.concat(
+    representativeFamilies,
+  );
+
+  // Signal to PV that this match comes from InterPro-N for visualization purposes
+  if (isInterProN(matches)) {
+    representativeData.forEach(
+      (match) => (match.accession = match.accession + ':nMatch'),
+    );
+  }
+  return representativeData as MinimalFeature[];
+};
+
+/* #### INTEPRO_N FUNCTIONS #### */
 function processInterProN_Matches(
   type: string,
   interproN_Matches: Record<string, InterProN_Match>,
@@ -168,7 +214,6 @@ function processInterProN_Matches(
   | MinimalFeature[]
   | [MinimalFeature[], Map<string, ExtendedFeature>, string[]]
   | [MinimalFeature[], Map<string, ExtendedFeature>] {
-  // stacked case
   let processedInterProN_Matches: MinimalFeature[] = [];
 
   // Get deep copy of unintegrated entries
@@ -205,40 +250,12 @@ function processInterProN_Matches(
     match.accession = match.accession + ':nMatch';
   });
 
+  // Add representative data, filtering only by type
   const typeFilteredInterpro_NMatches = Object.values(interproN_Matches).filter(
     (match: InterProN_Match) => match.type === type,
   );
-
-  // Representative data logic
-  const representativeDomains = selectRepresentativeData(
+  const representativeData = processRepresentativeData(
     typeFilteredInterpro_NMatches,
-    'entry_protein_locations',
-    'domain',
-  );
-
-  representativeDomains.forEach((domain) => {
-    if (domain.integrated)
-      domain.integrated = (domain.integrated as ExtendedFeature).accession;
-  });
-
-  const representativeFamilies = selectRepresentativeData(
-    typeFilteredInterpro_NMatches,
-    'entry_protein_locations',
-    'family',
-  );
-
-  representativeFamilies.forEach((family) => {
-    if (family.integrated)
-      family.integrated = (family.integrated as ExtendedFeature).accession;
-  });
-
-  const representativeData = representativeDomains.concat(
-    representativeFamilies,
-  );
-
-  // Signal to PV that this match comes from InterPro-N for visualization purposes
-  representativeData.forEach(
-    (match) => (match.accession = match.accession + ':nMatch'),
   );
 
   // Create map <integrated_accession: integrated_entryobj> to append integrated matches as children later
@@ -287,6 +304,7 @@ function processInterProN_Matches(
     Array.from(integratedInterProN_Map.values()),
   );
 
+  // Return n-match representative data, in all other cases the representative data is the one from HMMs
   if (mode === 'n-only') {
     processedInterProN_Matches = processedInterProN_Matches.concat(
       representativeData as MinimalFeature[],
@@ -333,7 +351,7 @@ function chooseBestMatch(
   // List of best matches (unintegrated and integrated)
   const bestMatchesList = processingResult[2] as string[];
 
-  // Retrieve traditional unintegrated matches that were not alredy in the InterproN matches and choosen as the preferred
+  // Retrieve traditional unintegrated matches that were not already in the InterproN matches and choosen as the preferred
   const baseMatchesObjUnintegrated: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
@@ -383,10 +401,37 @@ function chooseBestMatch(
     });
   });
 
+  // Add representative data. The unintegrated do not have to be filtered based on the best list in this case.
+  const unintegratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
+    traditionalMatches,
+  ).filter((match: ExtendedFeature) => {
+    return (
+      match.type === type &&
+      !match.integrated &&
+      !match.accession.startsWith('IPR')
+    );
+  });
+
+  let flatIntegratedTraditionalMatchesObj: ExtendedFeature[] = [];
+
+  baseMatchesObjIntegrated.forEach((match) => {
+    if (match.children)
+      flatIntegratedTraditionalMatchesObj =
+        flatIntegratedTraditionalMatchesObj.concat(match.children);
+  });
+
+  const representativeData = processRepresentativeData(
+    flatIntegratedTraditionalMatchesObj.concat(
+      unintegratedTraditionalMatchesObj,
+    ),
+  );
+
   return processedUnintegratedInterProN_Matches
     .concat(baseMatchesObjUnintegrated)
     .concat(
-      Array.from(processedIntegratedMapInterPro_NMatches.values()),
+      Array.from(processedIntegratedMapInterPro_NMatches.values()).concat(
+        representativeData,
+      ),
     ) as MinimalFeature[];
 }
 
@@ -417,14 +462,13 @@ function combineMatches(
     };
   });
 
-  // Unintegrated matches processing logic
+  // Unintegrated matches processing logic: combine unintegrated matches from InterPro-N and HMMs under the same "Unintegrated" parent element
   const unintegratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
     return match.type === type && !match.accession.startsWith('IPR');
   });
 
-  //Combine unintegrated matches from InterPro-N and HMMs under the same "Unintegrated" parent element
   unintegratedTraditionalMatchesObj.forEach((match) => {
     const newMatch = JSON.parse(JSON.stringify(match));
     const baseAccession = match.accession.replace(':nMatch', '');
@@ -443,7 +487,7 @@ function combineMatches(
     }
   });
 
-  // Integrated matches processing logic
+  // Integrated matches processing logic: combine integrated matches from InterPro-N and HMMs under the same InterPro entry parent element
   const integratedInterProN_Map = processedResult[1];
   let flatIntegratedTraditionalMatchesObj: ExtendedFeature[] = [];
 
@@ -477,7 +521,6 @@ function combineMatches(
           },
         );
         if (siblingMatchIndex !== undefined && siblingMatchIndex >= 0) {
-          console.log('here');
           existingIntegrated_NEntry.children?.splice(
             siblingMatchIndex + 1,
             0,
@@ -495,8 +538,15 @@ function combineMatches(
     }
   });
 
+  // Add representative data
+  const representativeData = processRepresentativeData(
+    flatIntegratedTraditionalMatchesObj.concat(
+      unintegratedTraditionalMatchesObj,
+    ),
+  );
+
   return Array.from(integratedInterProN_Map.values()).concat(
-    Object.values(unintegratedInterProN_MatchesMap),
+    Object.values(unintegratedInterProN_MatchesMap).concat(representativeData),
   );
 }
 /* #### END INTEPRO_N FUNCTIONS #### */
