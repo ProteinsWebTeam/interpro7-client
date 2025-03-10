@@ -7,15 +7,12 @@ import ProteinViewerForStructure from './ProteinViewerLoaded';
 
 import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
-import { orderByAccession } from 'components/Related/DomainsOnProtein';
-import {
-  flattenTracksObject,
-  byEntryType,
-} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import { orderByAccession } from 'components/Related/DomainsOnProtein/utils';
+import { flattenTracksObject } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 import { DataForProteinChain, mergeChimericProteins } from './utils';
 
-import { ExtendedFeature } from 'src/components/ProteinViewer';
+import { ExtendedFeature } from 'src/components/ProteinViewer/utils';
 
 const css = cssBinder(fonts);
 
@@ -251,38 +248,33 @@ const EntriesOnStructure = ({
     try {
       const newTracks = JSON.parse(JSON.stringify(tracks));
 
-      if (!newTracks['domain']) newTracks.domains = [];
-      else {
-        newTracks.domains = [...newTracks.domain];
-        newTracks.domain = [];
+      if (!newTracks['domain']) {
+        newTracks['domain'] = [];
       }
 
-      if (!newTracks['family']) newTracks.families = [];
-      else {
-        newTracks.families = [...newTracks.family];
-        newTracks.family = [];
+      if (!newTracks['family']) {
+        newTracks['family'] = [];
       }
 
       // Move homologous superfamily to domains
       const homologousSuperFamilies = newTracks['homologous_superfamily'];
-      if (newTracks['domains'] && homologousSuperFamilies) {
-        newTracks['domains'] = newTracks['domains'].concat(
+      if (homologousSuperFamilies) {
+        newTracks['domain'] = newTracks['domain'].concat(
           homologousSuperFamilies,
         );
         newTracks['homologous_superfamily'] = [];
       }
 
       const representativeDomains = representativesDomainsPerChain[chain];
-      if (newTracks['domains'] && representativeDomains)
-        newTracks['domains'] = newTracks['domains'].concat(
-          representativeDomains,
-        );
+      if (representativeDomains)
+        newTracks['domain'] = newTracks['domain'].concat(representativeDomains);
 
       const representativeFamilies = representativesFamiliesPerChain[chain];
-      if (newTracks['families'] && representativeFamilies)
-        newTracks['families'] = newTracks['families'].concat(
+      if (representativeFamilies)
+        newTracks['family'] = newTracks['family'].concat(
           representativeFamilies,
         );
+
       return newTracks;
     } catch (err) {
       return {};

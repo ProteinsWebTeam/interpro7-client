@@ -2,7 +2,7 @@ import React from 'react';
 
 import Link from 'components/generic/Link';
 
-import { ExtendedFeature } from '..';
+import { ExtendedFeature } from '../utils';
 import Label from './Label';
 import ResidueLabel from './ResidueLabel';
 
@@ -53,7 +53,13 @@ const LabelsInTrack = ({
                 ) &&
                 !hideCategory && (
                   <div className={css('inner-track-label')}>
-                    <b>Unintegrated</b>
+                    {/* Handle new type of parent track for stacked-view: unintegrated parent entry with matches coming from InterPro-N and HMMs */}
+                    <b>
+                      {' '}
+                      {!entry.accession.includes('parentUnintegrated')
+                        ? 'Unintegrated'
+                        : ''}
+                    </b>
                   </div>
                 )}
               <div

@@ -6,6 +6,7 @@ import Link from 'components/generic/Link';
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import localCSS from './style.css';
+import { ExtendedFeature } from '../../utils';
 
 const css = cssBinder(ipro, localCSS);
 export type EntryDetail = {
@@ -57,7 +58,10 @@ const ProtVistaEntryPopup = ({
   const isInterPro = sourceDatabase.toLowerCase() === 'interpro';
 
   let integrated = null;
-  const parentAccession = detail.feature?.parent?.accession;
+  let parentAccession = detail.feature?.parent?.accession;
+
+  // Use :nMatch to distiguish the tracks during rendering on PV, but don't show the suffix on labels and tooltips
+  parentAccession = parentAccession?.replace(':nMatch', '');
 
   // Handle cases where parent is not an InterPro Entry, like MobiDB lite matches
   if (parentAccession && parentAccession.startsWith('IPR'))
@@ -108,9 +112,15 @@ const ProtVistaEntryPopup = ({
           <div>
             {accession?.startsWith('residue:')
               ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
-              : accession?.replace('Mobidblt-', '')}
+              : accession?.replace('Mobidblt-', '').replace(':nMatch', ' ')}
+            {accession?.includes('nMatch') && (
+              <sup>
+                {' '}
+                <b>InterPro-N ✨</b>
+              </sup>
+            )}
           </div>
-        </div>{' '}
+        </div>
       </h6>
 
       {name && <h6 className={css('title')}>{name}</h6>}
@@ -133,7 +143,9 @@ const ProtVistaEntryPopup = ({
               },
             }}
           >
-            <span style={{ color: 'white' }}>{integrated}</span>
+            <span style={{ color: 'white' }}>
+              {integrated.replaceAll(':nMatch', '')}
+            </span>
           </Link>
         </h6>
       ) : null}

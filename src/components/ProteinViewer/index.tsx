@@ -5,6 +5,7 @@ import React, {
   PropsWithChildren,
   useEffect,
 } from 'react';
+
 import { createSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { changeSettingsRaw } from 'actions/creators';
@@ -13,9 +14,11 @@ import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import {
-  Feature,
-  FeatureLocation,
-} from '@nightingale-elements/nightingale-track';
+  typeNameToSectionName,
+  standardizePTMData,
+  firstHideCategories,
+  ExtendedFeature,
+} from './utils';
 
 import {
   useFloating,
@@ -52,68 +55,6 @@ const css = cssBinder(style, grid, fonts, tooltip);
 const highlightColor = '#607D8B50';
 const TOOLTIP_DELAY = 300;
 
-type Residue = {
-  locations: Array<
-    FeatureLocation & {
-      accession: string;
-      description: string;
-    }
-  >;
-};
-export type ExtendedFeatureLocation = {
-  fragments: Array<{
-    start: number;
-    end: number;
-    [annotation: string]: unknown;
-  }>;
-} & {
-  representative?: boolean;
-  confidence?: number;
-  description?: string;
-  seq_feature?: string;
-};
-export type ExtendedFeature = Feature & {
-  data?: unknown;
-  representative?: boolean;
-  entry_protein_locations?: Array<ExtendedFeatureLocation>;
-  locations?: Array<ExtendedFeatureLocation>;
-  name?: string;
-  short_name?: string;
-  source_database?: string;
-  entry_type?: string;
-  residues?: Array<Residue>;
-  location2residue?: unknown;
-  chain?: string;
-  protein?: string;
-  integrated?: string;
-  children?: Array<ExtendedFeature>;
-  warnings?: Array<string>;
-};
-
-type PTM = {
-  position: number;
-  name: string;
-  sources: string[];
-};
-
-type PTMFeature = {
-  begin: string;
-  end: string;
-  peptide: string;
-  ptms: PTM[];
-};
-
-type PTMData = {
-  accession: string;
-  features: PTMFeature[];
-};
-
-export type PTMFragment = {
-  [annotation: string]: unknown;
-  start: number;
-  end: number;
-};
-
 type Zoomable = { zoomIn: () => void; zoomOut: () => void };
 
 type Props = PropsWithChildren<{
@@ -131,16 +72,11 @@ type Props = PropsWithChildren<{
   conservationError?: string;
   /** TO include loading animation in the header */
   loading: boolean;
-
   viewerType: string;
-
   changeSettingsRaw: typeof changeSettingsRaw;
   showMoreSettings: boolean;
-
-  mainTracks: string[];
-
-  hideCategories: Record<string, boolean>;
 }>;
+
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
 
 type CategoryVisibility = { [name: string]: boolean };
@@ -171,9 +107,7 @@ const switchCategoryVisibilityShowMore = (
 };
 
 export const ProteinViewer = ({
-  mainTracks,
   viewerType,
-  hideCategories,
   protein,
   title,
   data,
@@ -188,14 +122,20 @@ export const ProteinViewer = ({
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
 
-  // State variable to show/hide "secondary" tracks
+  const mainTracks = [
+    'alphafold confidence',
+    'domain',
+    'family',
+    'residues',
+    'intrinsically disordered regions',
+    'pathogenic and likely pathogenic variants',
+  ];
+
+  /// STATE
   const [showMore, setShowMore] = useState(showMoreSettings);
-
   const [hideCategory, setHideCategory] =
-    useState<CategoryVisibility>(hideCategories);
-
+    useState<CategoryVisibility>(firstHideCategories);
   const categoryRefs = useRef<ExpandedHandle[]>([]);
-
   const [_, setOverTooltip, overTooltipRef] = useStateRef(false);
   const arrowRef = useRef(null);
   const navigationRef = useRef(null);
@@ -218,66 +158,7 @@ export const ProteinViewer = ({
     ],
   });
 
-  const typeNameToSectionName: Record<string, string> = {
-    'alphafold confidence': 'AlphaFold Confidence',
-    families: 'Families',
-    domains: 'Domains',
-    'pathogenic and likely pathogenic variants':
-      'Pathogenic and Likely Pathogenic Variants',
-    'intrinsically disordered regions': 'Intrinsically Disordered Regions',
-    'spurious proteins': 'Spurious Proteins',
-    'conserved residues': 'Conserved Residues',
-    unintegrated: 'Unintegrated',
-    'other features': 'Other Features',
-    'other residues': 'Other Residues',
-    'conserved site': 'Conserved Site',
-    'active site': 'Active Site',
-    'binding site': 'Binding Site',
-    PTM: 'Post-translational Modifications',
-    ptm: 'Post-translational Modifications',
-    'match conservation': 'Match Conservation',
-    'coiled-coils, signal peptides, transmembrane regions':
-      'Coiled-coils, Signal Peptides and Transmembrane Regions',
-    'short linear motifs': 'Short Linear Motifs',
-    'pfam-n': 'Pfam-N',
-    funfam: 'FunFam',
-    'external sources': 'External Sources',
-    'secondary structure': 'Secondary Structure',
-  };
-
-  useEffect(() => {
-    /* 
-      Logic to handle default display settings for families and domains.
-      There's cases where representative families or representative domains are not available.
-      Examples: representative families still not supported in InterPro Scan, or there's just no representative match found in the data.
-      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown. 
-      If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
-    */
-
-    // Don't run this for the Alphafold Viewer, where the selection of a match
-    // selects part of the 3D model and resets category visibilities. Improve in the future
-    if (viewerType !== 'structures') {
-      // Set which section needs to have its visibility changed based on the availability of represetative data
-      const changeVisibilityFor: string[] = [];
-      ['families', 'domains'].forEach((type) => {
-        const entries =
-          data.find(([entryType]) => entryType === type)?.[1] || [];
-        const hasRep = (entries as ExtendedFeature[]).some(
-          (entry) => entry.representative === true,
-        );
-        if (hasRep) changeVisibilityFor.push(type);
-      });
-
-      // If in summary view, use changeVisibilityFor
-      const newHideCategory = switchCategoryVisibilityShowMore(
-        hideCategory,
-        !showMoreSettings ? changeVisibilityFor : ['families', 'domains'],
-        showMoreSettings ? false : true,
-      );
-      setHideCategory(newHideCategory);
-    }
-  }, [showMoreSettings]);
-
+  // FUNCTIONS
   const openTooltip = (
     element: HTMLElement | undefined,
     content: ReactNode,
@@ -285,11 +166,12 @@ export const ProteinViewer = ({
     if (element && tooltipEnabledRef.current) {
       refs.setReference(element);
       setTooltipContent((prevContent) => {
-        // Only update if content has changed
-        if (prevContent !== content) {
-          return content;
-        }
-        return prevContent; // No update, prevents re-render
+        return content;
+        // // Only update if content has changed
+        // if (prevContent !== content) {
+        //   return content;
+        // }
+        // return prevContent; // No update, prevents re-render
       });
       if (intervalId.current) {
         clearInterval(intervalId.current as unknown as number);
@@ -316,27 +198,31 @@ export const ProteinViewer = ({
     }
   };
 
-  const ptmFeaturesFragments = (features: PTMFeature[]): PTMFragment[] => {
-    const ptmFragments: PTMFragment[] = [];
-
-    features.map((feature) => {
-      feature.ptms.map((ptm) => {
-        const ptmFragment: PTMFragment = {
-          start: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
-          end: parseInt(feature.begin) + ptm.position - 1, // Absolute modification pos
-          relative_pos: ptm.position - 1,
-          ptm_type: ptm.name,
-          peptide: feature.peptide,
-          peptide_start: parseInt(feature.begin),
-          peptide_end: parseInt(feature.end),
-          source: ptm.sources.join(', '),
-        };
-
-        ptmFragments.push(ptmFragment);
-      });
+  useEffect(() => {
+    /* 
+      Logic to handle default display settings for families and domains.
+      There's cases where representative families or representative domains are not available.
+      Examples: representative families still not supported in InterPro Scan, or there's just no representative match found in the data.
+      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown. 
+      If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
+    */
+    const changeVisibilityFor: string[] = [];
+    ['family', 'domain'].forEach((type) => {
+      const entries = data.find(([entryType]) => entryType === type)?.[1] || [];
+      const hasRep = (entries as ExtendedFeature[]).some(
+        (entry) => entry.representative === true,
+      );
+      if (hasRep) changeVisibilityFor.push(type);
     });
-    return ptmFragments;
-  };
+
+    // If in summary view, use changeVisibilityFor
+    const newHideCategory = switchCategoryVisibilityShowMore(
+      hideCategory,
+      !showMoreSettings ? changeVisibilityFor : ['family', 'domain'],
+      showMoreSettings ? false : true,
+    );
+    setHideCategory(newHideCategory);
+  }, [showMoreSettings]);
 
   return (
     <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
@@ -423,13 +309,18 @@ export const ProteinViewer = ({
                     let nonRepresentativeEntries: ExtendedFeature[] | null =
                       null;
 
-                    if (type === 'domains' || type === 'families') {
+                    if (type === 'domain' || type === 'family') {
                       representativeEntries = entries.filter(
                         (entry) => entry.representative === true,
                       );
                       nonRepresentativeEntries = entries.filter(
                         (entry) => entry.representative !== true,
                       );
+                    }
+
+                    // Transform PTM data to track-like data
+                    if (type == 'ptm') {
+                      entries = standardizePTMData(entries, protein);
                     }
 
                     // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
@@ -440,64 +331,6 @@ export const ProteinViewer = ({
                     let hideDiv: string = '';
                     if (!showMore && !mainTracks.includes(type)) {
                       hideDiv = 'none';
-                    }
-
-                    // Transform PTM data to track-like data
-                    if (type == 'ptm') {
-                      const ptmFragmentsGroupedByModification: {
-                        [type: string]: PTMFragment[];
-                      } = {};
-
-                      // PTMs coming from APIs
-                      entries
-                        .filter(
-                          (entry) => entry.source_database === 'proteinsAPI',
-                        )
-                        .map((entry) => {
-                          const fragments = ptmFeaturesFragments(
-                            (entry.data as PTMData).features,
-                          );
-                          fragments.map((fragment) => {
-                            if (
-                              ptmFragmentsGroupedByModification[
-                                fragment.ptm_type as string
-                              ]
-                            ) {
-                              ptmFragmentsGroupedByModification[
-                                fragment.ptm_type as string
-                              ].push(fragment);
-                            } else {
-                              ptmFragmentsGroupedByModification[
-                                fragment.ptm_type as string
-                              ] = [fragment];
-                            }
-                          });
-                        });
-
-                      const ptmsEntriesGroupedByModification: ExtendedFeature[] =
-                        [];
-                      Object.entries(ptmFragmentsGroupedByModification).map(
-                        (ptmData) => {
-                          const modificationType: string = ptmData[0]; // Key
-                          const fragments: PTMFragment[] = ptmData[1]; // Key
-                          const newFeature: ExtendedFeature = {
-                            accession: protein.accession,
-                            name: modificationType,
-                            type: 'ptm',
-                            source_database: 'ptm',
-                            locations: [{ fragments: fragments }],
-                          };
-
-                          ptmsEntriesGroupedByModification.push(newFeature);
-                        },
-                      );
-
-                      // PTMs coming from InterPro and external API should be in the same section but require different processing due to different structure (see above)
-                      entries = ptmsEntriesGroupedByModification.concat(
-                        entries.filter(
-                          (entry) => entry.source_database === 'interpro',
-                        ),
-                      );
                     }
 
                     return (
@@ -573,19 +406,21 @@ export const ProteinViewer = ({
                             />
                           </>
                         ) : (
-                          <TracksInCategory
-                            entries={entries}
-                            sequence={protein.sequence}
-                            hideCategory={hideCategory[type]}
-                            highlightColor={highlightColor}
-                            openTooltip={openTooltip}
-                            closeTooltip={closeTooltip}
-                            isPrinting={isPrinting}
-                            ref={(ref: ExpandedHandle) =>
-                              categoryRefs.current.push(ref)
-                            }
-                            databases={dataBase?.payload?.databases}
-                          />
+                          entries && (
+                            <TracksInCategory
+                              entries={entries}
+                              sequence={protein.sequence}
+                              hideCategory={hideCategory[type]}
+                              highlightColor={highlightColor}
+                              openTooltip={openTooltip}
+                              closeTooltip={closeTooltip}
+                              isPrinting={isPrinting}
+                              ref={(ref: ExpandedHandle) =>
+                                categoryRefs.current.push(ref)
+                              }
+                              databases={dataBase?.payload?.databases}
+                            />
+                          )
                         )}
                       </div>
                     );
