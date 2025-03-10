@@ -93,11 +93,15 @@ export const standardizeResidueStructure = (
   residues: Array<ExtendedFeature>,
 ): Array<ExtendedFeature> => {
   const newResidues: Array<ExtendedFeature> = [];
+
   residues.forEach((residueParentObj) => {
     const tempResidue: ExtendedFeature = residueParentObj;
-    tempResidue.type = 'residue';
-    tempResidue.locations =
-      residueParentObj.residues?.[0].locations || tempResidue.locations;
+    if (residueParentObj.accession.startsWith('PIRSR')) {
+      tempResidue.type = 'residue';
+      tempResidue.locations =
+        residueParentObj.residues?.[0].locations || tempResidue.locations;
+    } else if (residueParentObj.accession.startsWith('residue:')) {
+    }
     newResidues.push(tempResidue);
   });
   return newResidues;
@@ -110,9 +114,12 @@ export const standardizeMobiDBFeatureStructure = (
   features.forEach((feature) => {
     const tempFeature = { ...feature };
     const slicedTempFeatureLocations: Array<ExtendedFeatureLocation> = [];
+    const featureChildrenRecord: Record<string, ExtendedFeature> = {};
+
     tempFeature.accession = 'Mobidblt-Consensus Disorder Prediction';
     tempFeature.source_database = 'mobidblt';
     tempFeature.protein = '';
+
     tempFeature.locations?.forEach(
       (
         location: ExtendedFeatureLocation & {
@@ -127,24 +134,30 @@ export const standardizeMobiDBFeatureStructure = (
           location['sequence-feature'] !== ''
         ) {
           if (location.start && location.end) {
-            const restructuredLocation: ExtendedFeatureLocation[] = [
-              {
-                fragments: [
-                  {
-                    start: location.start,
-                    end: location.end,
-                    seq_feature: location['sequence-feature'],
-                  },
-                ],
-              },
-            ];
-
-            const tempChild: ExtendedFeature = {
-              accession: location['sequence-feature'],
-              source_database: 'mobidblt',
-              locations: restructuredLocation,
+            const restructuredLocation: ExtendedFeatureLocation = {
+              fragments: [
+                {
+                  start: location.start,
+                  end: location.end,
+                  seq_feature: location['sequence-feature'],
+                },
+              ],
             };
-            tempFeature.children?.push(tempChild);
+            if (
+              featureChildrenRecord[location['sequence-feature']] &&
+              restructuredLocation
+            ) {
+              featureChildrenRecord[
+                location['sequence-feature']
+              ].locations?.push(restructuredLocation);
+            } else {
+              const tempChild: ExtendedFeature = {
+                accession: location['sequence-feature'],
+                source_database: 'mobidblt',
+                locations: [restructuredLocation],
+              };
+              featureChildrenRecord[location['sequence-feature']] = tempChild;
+            }
           }
         } else {
           slicedTempFeatureLocations.push(location);
@@ -152,9 +165,9 @@ export const standardizeMobiDBFeatureStructure = (
       },
     );
     tempFeature.locations = slicedTempFeatureLocations;
+    tempFeature.children = Object.values(featureChildrenRecord);
     newFeatures.push(tempFeature);
   });
-
   return newFeatures;
 };
 /* #### END STANDARDIZATION FUNCTIONS #### */

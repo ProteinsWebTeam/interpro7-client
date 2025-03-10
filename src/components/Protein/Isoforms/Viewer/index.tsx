@@ -146,7 +146,11 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
     dataProtvista,
   ) as ProteinViewerDataObject;
   proteinDataRecord = sectionsReorganization(proteinDataRecord);
-  proteinDataRecord = proteinViewerReorganization(undefined, proteinDataRecord);
+  proteinDataRecord = proteinViewerReorganization(
+    undefined,
+    proteinDataRecord,
+    false,
+  );
   const proteinViewerData = Object.entries(proteinDataRecord);
 
   return (

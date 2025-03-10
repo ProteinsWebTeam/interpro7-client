@@ -120,6 +120,7 @@ export const sectionsReorganization = (
 export const proteinViewerReorganization = (
   dataFeatures: RequestedData<ExtraFeaturesPayload> | undefined,
   dataMerged: ProteinViewerDataObject,
+  iprscan: boolean,
 ): ProteinViewerDataObject => {
   // Create PTMs data section
   if (
@@ -168,6 +169,10 @@ export const proteinViewerReorganization = (
   }
 
   const uniqueResidues: Record<string, ExtendedFeature> = {};
+  const accessionAndDescriptionGroupedRedidues: Record<
+    string,
+    ExtendedFeature
+  > = {};
 
   // Group PIRSR residue by description and position
   let pirsrFound = false;
@@ -190,7 +195,69 @@ export const proteinViewerReorganization = (
 
       if (!uniqueResidues[dictKey]) uniqueResidues[dictKey] = currentResidue;
     } else {
-      uniqueResidues[currentResidue.accession] = currentResidue;
+      /* 
+        Results coming in from InterProScan 5 are splitted. We get a residue object for each "location" match. 
+        Normally we'd have a single residue object with multiple locations matches in the "locations" attribute.
+        The following logic is to group residues in a single object based on accession and the sites' description.
+      */
+
+      if (iprscan) {
+        const currentResidueLocations = currentResidue.residues?.[0].locations;
+        const currentResidueFragments = currentResidue.locations?.[0].fragments;
+
+        if (currentResidueLocations && currentResidueFragments) {
+          // Residue with that accession already added
+          if (
+            accessionAndDescriptionGroupedRedidues[currentResidue.accession]
+          ) {
+            // Residue with that accession already has locations with that description
+            const existingResidue =
+              accessionAndDescriptionGroupedRedidues[currentResidue.accession];
+            const existingResidueLocations =
+              existingResidue.residues?.[0].locations;
+            const existingDescriptionIndex =
+              existingResidueLocations?.findIndex(
+                (location) =>
+                  location.description ===
+                  currentResidueLocations?.[0].description,
+              );
+
+            if (
+              existingResidueLocations &&
+              existingDescriptionIndex !== undefined &&
+              existingDescriptionIndex >= 0
+            ) {
+              existingResidueLocations[existingDescriptionIndex].fragments =
+                existingResidueLocations[
+                  existingDescriptionIndex
+                ].fragments.concat(currentResidueLocations?.[0].fragments);
+              existingResidue.locations?.[0].fragments.push(
+                currentResidueFragments?.[0],
+              );
+            }
+          }
+
+          // Residue with that accession doesn't exist
+          else {
+            accessionAndDescriptionGroupedRedidues[currentResidue.accession] =
+              currentResidue;
+          }
+        }
+      }
+
+      // Normal results coming from InterPro DB
+      else {
+        uniqueResidues[currentResidue.accession] = currentResidue;
+      }
+    }
+
+    // Add to uniqueResidues if iprscan
+    if (iprscan) {
+      Object.values(accessionAndDescriptionGroupedRedidues).forEach(
+        (residue) => {
+          uniqueResidues[residue.accession] = residue;
+        },
+      );
     }
   }
 

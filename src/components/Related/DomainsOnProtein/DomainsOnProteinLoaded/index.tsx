@@ -295,14 +295,15 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  // Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
-  // and the ProteinViewer components are used in a different way in the InterproScan results section.
-
-  // InterPro Scan Search results
   if (protein.accession.startsWith('iprscan')) {
-    // What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
-    // InterProScan results section, because the DomainsOnProteinLoaded is used right away.
-    // Executing those steps here below. KEEP THIS ORDER OF OPERATIONS
+    /* 
+    Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
+    and the ProteinViewer components are used in a different way in the InterproScan results section.
+    What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
+    InterProScan results section, because the DomainsOnProteinLoaded is used right away.
+    Executing those steps here below. 
+    KEEP THIS ORDER OF OPERATIONS !
+    */
 
     // Move entries from unintegrated section to the correct one
     const accessionsToRemoveFromUnintegrated: string[] = [];
@@ -342,17 +343,18 @@ const DomainsOnProteinLoaded = ({
     let proteinViewerData = proteinViewerReorganization(
       dataFeatures,
       processedDataMerged as ProteinViewerDataObject<MinimalFeature>,
+      true,
     );
-    proteinViewerData = sectionsReorganization(proteinViewerData);
 
     // Residues' structure needs to change to allow PIRSR grouping and correct display on the PV
-    if (processedDataMerged['residues']) {
-      processedDataMerged['residues'] = standardizeResidueStructure(
-        processedDataMerged['residues'] as ExtendedFeature[],
+    if (proteinViewerData['residues']) {
+      proteinViewerData['residues'] = standardizeResidueStructure(
+        proteinViewerData['residues'] as ExtendedFeature[],
       );
     }
 
-    // Create PTM section
+    proteinViewerData = sectionsReorganization(proteinViewerData);
+
     if (proteinViewerData['intrinsically_disordered_regions']) {
       proteinViewerData['intrinsically_disordered_regions'] =
         standardizeMobiDBFeatureStructure(

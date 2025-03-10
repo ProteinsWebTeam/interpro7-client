@@ -165,6 +165,7 @@ const DomainOnProteinWithoutData = ({
   const proteinViewerData = proteinViewerReorganization(
     dataFeatures,
     mergedData,
+    false,
   );
 
   const onlyExtraFeatures =
