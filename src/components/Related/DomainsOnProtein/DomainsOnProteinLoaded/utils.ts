@@ -32,6 +32,11 @@ export const LASTS_IN_ORDER = [
   'match_conservation',
 ];
 
+const typeToSection: Record<string, string> = {
+  homologous_superfamily: 'domain',
+  repeat: 'domain',
+};
+
 export const byEntryType = (
   [a, _]: [string, unknown],
   [b, __]: [string, unknown],
@@ -235,7 +240,9 @@ function processInterProN_Matches(
       Object.values(interproN_Matches).filter((match: InterProN_Match) => {
         return (
           !match.integrated &&
-          match.type === type &&
+          (typeToSection[match.type]
+            ? typeToSection[match.type] === type
+            : match.type === type) &&
           (mode === 'best' ? match.is_preferred : true)
         );
       }),
@@ -252,7 +259,9 @@ function processInterProN_Matches(
       Object.values(interproN_Matches).filter((match: InterProN_Match) => {
         return (
           match.integrated &&
-          match.type === type &&
+          (typeToSection[match.type]
+            ? typeToSection[match.type] === type
+            : match.type === type) &&
           (mode === 'best' ? match.is_preferred : true)
         );
       }),
@@ -265,7 +274,10 @@ function processInterProN_Matches(
 
   // Add representative data, filtering only by type
   const typeFilteredInterpro_NMatches = Object.values(interproN_Matches).filter(
-    (match: InterProN_Match) => match.type === type,
+    (match: InterProN_Match) =>
+      typeToSection[match.type]
+        ? typeToSection[match.type] === type
+        : match.type === type,
   );
   const representativeData = processRepresentativeData(
     typeFilteredInterpro_NMatches,
@@ -327,7 +339,11 @@ function processInterProN_Matches(
   // In best mode, return the unintegrated, the map with the integrated that are preferred and a list of already seen match accessions (see choseBest function below)
   else if (mode === 'best') {
     const bestMatches = Object.entries(interproN_Matches).filter(
-      (match) => match[1].is_preferred && type == match[1].type,
+      (match) =>
+        match[1].is_preferred &&
+        (typeToSection[match[1].type]
+          ? typeToSection[match[1].type] === type
+          : match[1].type === type),
     );
 
     return [
@@ -369,7 +385,9 @@ function chooseBestMatch(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
     return (
-      match.type === type &&
+      (match.type && typeToSection[match.type]
+        ? typeToSection[match.type] === type
+        : match.type === type) &&
       !bestMatchesList.includes(match.accession) &&
       !match.integrated &&
       !match.accession.startsWith('IPR')
@@ -380,7 +398,11 @@ function chooseBestMatch(
   const baseMatchesObjIntegrated: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
-    return match.type === type && match.accession.startsWith('IPR');
+    return (
+      (match.type && typeToSection[match.type]
+        ? typeToSection[match.type] === type
+        : match.type === type) && match.accession.startsWith('IPR')
+    );
   }) as ExtendedFeature[];
 
   /*  Rebuild integrated matches structure (including children), appending matches to already existing preferred Intepro-N matches or traditional matches.
@@ -419,7 +441,9 @@ function chooseBestMatch(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
     return (
-      match.type === type &&
+      (match.type && typeToSection[match.type]
+        ? typeToSection[match.type] === type
+        : match.type === type) &&
       !match.integrated &&
       !match.accession.startsWith('IPR')
     );
@@ -479,7 +503,11 @@ function combineMatches(
   const unintegratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
-    return match.type === type && !match.accession.startsWith('IPR');
+    return (
+      (match.type && typeToSection[match.type]
+        ? typeToSection[match.type] === type
+        : match.type === type) && !match.accession.startsWith('IPR')
+    );
   });
 
   unintegratedTraditionalMatchesObj.forEach((match) => {
@@ -487,9 +515,27 @@ function combineMatches(
     const baseAccession = match.accession.replace(':nMatch', '');
 
     if (unintegratedInterProN_MatchesMap[match.accession]) {
-      unintegratedInterProN_MatchesMap[match.accession].children?.push(
-        newMatch as { accession: string; source_database: string },
-      );
+      // Find the corresponding N-match and push the traditional next to it
+      const siblingMatchIndex = unintegratedInterProN_MatchesMap[
+        match.accession
+      ].children?.findIndex((elem) => {
+        const processedAccession = elem.accession.replace(':nMatch', '');
+        if (processedAccession === match.accession) {
+          return true;
+        }
+        return false;
+      });
+      if (siblingMatchIndex !== undefined && siblingMatchIndex >= 0) {
+        unintegratedInterProN_MatchesMap[match.accession].children?.splice(
+          siblingMatchIndex,
+          0,
+          newMatch as { accession: string; source_database: string },
+        );
+      } else {
+        unintegratedInterProN_MatchesMap[match.accession].children?.push(
+          newMatch as { accession: string; source_database: string },
+        );
+      }
     } else {
       unintegratedInterProN_MatchesMap[baseAccession] = {
         accession: 'parentUnintegrated:' + baseAccession,
@@ -507,7 +553,11 @@ function combineMatches(
   const integratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
-    return match.type === type && match.accession.startsWith('IPR');
+    return (
+      (match.type && typeToSection[match.type]
+        ? typeToSection[match.type] === type
+        : match.type === type) && match.accession.startsWith('IPR')
+    );
   });
 
   integratedTraditionalMatchesObj.forEach((match) => {
@@ -535,7 +585,7 @@ function combineMatches(
         );
         if (siblingMatchIndex !== undefined && siblingMatchIndex >= 0) {
           existingIntegrated_NEntry.children?.splice(
-            siblingMatchIndex + 1,
+            siblingMatchIndex,
             0,
             match,
           );
