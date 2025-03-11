@@ -101,6 +101,14 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
         root: config.root.alphafold.pathname,
         query: config.root.alphafold.query,
       } as SettingsState[T];
+    case 'bfvd':
+      return {
+        protocol: config.root.alphafold.protocol,
+        hostname: config.root.alphafold.hostname,
+        port: config.root.alphafold.port || DEFAULT_HTTP_PORT,
+        root: config.root.alphafold.pathname,
+        query: config.root.alphafold.query,
+      } as SettingsState[T];
     default:
       return null;
   }
