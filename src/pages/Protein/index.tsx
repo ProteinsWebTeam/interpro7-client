@@ -380,6 +380,8 @@ for (const subPage of config.pages.protein.subPages) {
   subPagesForProtein.set(subPage, subPages.get(subPage));
 }
 
+console.log(subPagesForProtein);
+
 const childRoutesReg =
   /[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}/i;
 

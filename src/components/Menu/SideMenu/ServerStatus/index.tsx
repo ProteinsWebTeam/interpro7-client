@@ -18,6 +18,7 @@ const mapEndpointToName = new Map([
   ['ipScan', 'InterProScan API'],
   ['wikipedia', 'Wikipedia API'],
   ['alphafold', 'AlphaFold API'],
+  ['bfvd', 'BFVD API'],
 ]);
 
 type BrowserProps = {

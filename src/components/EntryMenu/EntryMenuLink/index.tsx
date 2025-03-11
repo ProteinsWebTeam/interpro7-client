@@ -52,6 +52,7 @@ export const EntryMenuLink = ({
   let value: null | number = null;
   let shouldPointToAll = false;
   if (!loading && payload && payload.metadata) {
+    console.log(payload);
     if (payload.metadata.counters) {
       if (counter) {
         // Some tabs do not have counter
@@ -88,6 +89,11 @@ export const EntryMenuLink = ({
       name.toLowerCase() === 'alphafold'
     ) {
       value = (payload.metadata as EntryMetadata).in_alphafold ? 1 : 0;
+    } else if (
+      mainKey?.toLowerCase() === 'protein' &&
+      name.toLowerCase() === 'bfvd'
+    ) {
+      value = (payload.metadata as EntryMetadata).in_bfvd ? 1 : 0;
     }
 
     /**

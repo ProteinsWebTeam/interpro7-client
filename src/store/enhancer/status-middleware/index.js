@@ -28,12 +28,18 @@ const checkStatusesAndDispatch = async function (
       ...endpointSettings,
       pathname:
         endpointSettings.root +
-        (endpoint === 'alphafold' ? 'api/prediction/Q5VSL9' : ''),
+        (endpoint === 'alphafold'
+          ? 'api/prediction/Q5VSL9'
+          : endpoint === 'alphafold'
+            ? ''
+            : ''),
     });
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
     try {
       const response = await customFetch(url, {
-        method: ['alphafold', 'wikipedia'].includes(endpoint) ? 'GET' : 'HEAD',
+        method: ['bfvd', 'alphafold', 'wikipedia'].includes(endpoint)
+          ? 'GET'
+          : 'HEAD',
         useCache: false,
       });
       dispatch(serverStatus(endpoint, response.ok));
