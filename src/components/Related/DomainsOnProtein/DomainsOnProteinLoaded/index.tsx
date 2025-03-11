@@ -257,23 +257,20 @@ const DomainsOnProteinLoaded = ({
           matchTypeSettings,
         );
       });
-
-      // Reorganize sections and sort added matches - still on our copy
-      processedDataMerged = sectionsReorganization(processedDataMerged);
-
-      // Sort data by match position, but exclude residues and PIRSR
-      Object.entries(
-        processedDataMerged as ProteinViewerDataObject<ExtendedFeature>,
-      ).forEach(([key, group]) => {
-        if (key !== 'residues') {
-          processedDataMerged[key] = group.sort(sortTracks).flat();
-        }
-      });
     }
   }
 
   // Reorganize sections and sort added matches
   processedDataMerged = sectionsReorganization(processedDataMerged);
+
+  // Sort data by match position, but exclude residues and PIRSR
+  Object.entries(
+    processedDataMerged as ProteinViewerDataObject<ExtendedFeature>,
+  ).forEach(([key, group]) => {
+    if (key !== 'residues') {
+      processedDataMerged[key] = group.sort(sortTracks).flat();
+    }
+  });
 
   if (dataVariation?.ok && dataVariation.payload) {
     const filteredVariationPayload = filterVariation(dataVariation.payload);
@@ -370,6 +367,8 @@ const DomainsOnProteinLoaded = ({
     ).map((group) => {
       if (group[0] !== 'residues') group[1].sort(sortTracks);
     });
+
+    console.log(proteinViewerData);
 
     // All the other features have been moved to dedicated sections now
     proteinViewerData['other_features'] = [];
