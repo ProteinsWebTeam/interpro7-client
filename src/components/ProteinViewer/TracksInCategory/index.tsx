@@ -65,6 +65,11 @@ const MARGIN_CHANGE_TRACKS = [
   'mobidblt',
   'tmhmm',
   'signalp',
+  'signalp_gram_positive',
+  'signalp_g+',
+  'signalp_g-',
+  'signalp_e',
+  'signalp_gram_negative',
   'coils',
 ];
 
