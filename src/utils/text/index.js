@@ -109,5 +109,11 @@ export const getTextForLabel = (
     text = entry.source_database.toUpperCase() + ': ' + text;
   }
 
+  // Post process labels for Interpro-N, optimal and stacked mode
+  text = text.replace(':nMatch', '');
+  if (text.includes('parentUnintegrated')) {
+    text = 'Unintegrated';
+  }
+
   return text;
 };

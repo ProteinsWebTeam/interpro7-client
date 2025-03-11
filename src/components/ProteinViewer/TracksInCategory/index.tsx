@@ -27,7 +27,7 @@ import cssBinder from 'styles/cssBinder';
 
 import style from '../style.css';
 import grid from '../grid.css';
-import { ExtendedFeature } from '..';
+import { ExtendedFeature } from '../utils';
 import LabelsInTrack from '../LabelsInTrack';
 
 import ProtVistaPopup, { PopupDetail } from '../Popup';
@@ -65,6 +65,11 @@ const MARGIN_CHANGE_TRACKS = [
   'mobidblt',
   'tmhmm',
   'signalp',
+  'signalp_gram_positive',
+  'signalp_g+',
+  'signalp_g-',
+  'signalp_e',
+  'signalp_gram_negative',
   'coils',
 ];
 
@@ -143,6 +148,7 @@ type Props = {
   sequence: string;
   customLocation?: InterProLocation;
   colorDomainsBy?: string;
+  matchTypeSettings?: MatchTypeUISettings;
   databases?: DBsInfo;
 };
 const TracksInCategory = forwardRef<ExpandedHandle, Props>(
@@ -157,6 +163,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       openTooltip,
       closeTooltip,
       colorDomainsBy,
+      matchTypeSettings,
       databases,
     },
     ref,
@@ -393,7 +400,11 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                         id={getTrackAccession(entry.accession)}
                         show-label
                         margin-left={20}
-                        margin-top={trackTopMargin} // Space unintegrated
+                        margin-top={
+                          matchTypeSettings === 'hmm_and_dl'
+                            ? 2
+                            : trackTopMargin
+                        }
                         // @ts-ignore
                         samesize={entry.source_database !== 'mobidblt'}
                         shape="roundRectangle"
@@ -428,8 +439,10 @@ const mapStateToProps = createSelector(
     customLocation,
     colorDomainsBy:
       (ui.colorDomainsBy as string) || EntryColorMode.DOMAIN_RELATIONSHIP,
+    matchTypeSettings: ui.matchTypeSettings as MatchTypeUISettings,
   }),
 );
+
 export default connect(mapStateToProps, null, null, {
   forwardRef: true,
 })(TracksInCategory);

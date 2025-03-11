@@ -13,7 +13,7 @@ import style from '../style.css';
 import grid from '../grid.css';
 
 const css = cssBinder(style, grid);
-import { ExtendedFeature } from '..';
+import { ExtendedFeature } from '../utils';
 
 type EventType =
   | 'click'

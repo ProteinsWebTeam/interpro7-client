@@ -347,6 +347,89 @@ type MinimalFeature = {
   member_databases?: Record<string, unknown>;
 };
 
+type Shapes =
+  | 'rectangle'
+  | 'roundRectangle'
+  | 'bridge'
+  | 'line'
+  | 'bridge'
+  | 'diamond'
+  | 'chevron'
+  | 'catFace'
+  | 'triangle'
+  | 'wave'
+  | 'hexagon'
+  | 'pentagon'
+  | 'circle'
+  | 'arrow'
+  | 'doubleBar'
+  | 'discontinuosStart'
+  | 'discontinuos'
+  | 'discontinuosEnd'
+  | 'helix'
+  | 'strand';
+
+type FeatureLocation = {
+  fragments: Array<{
+    start: number;
+    end: number;
+  }>;
+};
+
+type Residue = {
+  locations: Array<
+    FeatureLocation & {
+      accession: string;
+      description: string;
+    }
+  >;
+};
+
+type Feature = {
+  accession: string;
+  color?: string;
+  fill?: string;
+  shape?: Shapes;
+  tooltipContent?: string;
+  type?: string;
+  locations?: Array<FeatureLocation>;
+  feature?: Feature;
+  start?: number;
+  end?: number;
+  opacity?: number;
+};
+
+type ExtendedFeatureLocation = {
+  fragments: Array<{
+    start: number;
+    end: number;
+    [annotation: string]: unknown;
+  }>;
+} & {
+  representative?: boolean;
+  confidence?: number;
+  description?: string;
+  seq_feature?: string;
+};
+
+type ExtendedFeature = Feature & {
+  data?: unknown;
+  representative?: boolean;
+  entry_protein_locations?: Array<ExtendedFeatureLocation>;
+  locations?: Array<ExtendedFeatureLocation>;
+  name?: string;
+  short_name?: string;
+  source_database?: string;
+  entry_type?: string;
+  residues?: Array<Residue>;
+  location2residue?: unknown;
+  chain?: string;
+  protein?: string;
+  integrated?: string;
+  children?: Array<ExtendedFeature>;
+  warnings?: Array<string>;
+};
+
 type MatchI = {
   accession: string;
 };
