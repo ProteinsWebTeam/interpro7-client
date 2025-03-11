@@ -50,7 +50,7 @@ interface LoadedProps
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<ProteinsAPIProteomics, 'Proteomics'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    LoadDataProps<InterProNMatches, 'InterProNMatches'>,
+    // LoadDataProps<InterProNMatches, 'InterProNMatches'>,
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}
@@ -72,7 +72,7 @@ const DomainOnProteinWithoutData = ({
   dataConfidence,
   dataVariation,
   dataProteomics,
-  dataInterProNMatches,
+  // dataInterProNMatches,
   onMatchesLoaded,
   onFamiliesFound,
   children,
@@ -217,7 +217,7 @@ const DomainOnProteinWithoutData = ({
         dataVariation={dataVariation}
         dataProteomics={dataProteomics}
         dataFeatures={dataFeatures}
-        dataInterProNMatches={dataInterProNMatches}
+        //dataInterProNMatches={dataInterProNMatches}
         loading={
           data?.loading ||
           dataFeatures?.loading ||
@@ -369,13 +369,15 @@ export default connect(mapStateToProps, { changeSettingsRaw })(
                 getUrl: getVariationURL,
                 propNamespace: 'Variation',
               } as LoadDataParameters)(
+                /*(
                 loadData<InterProNMatches, 'InterProNMatches'>({
                   getUrl: getInterProNMatches,
                   propNamespace: 'InterProNMatches',
-                } as LoadDataParameters)(
-                  loadData(getRelatedEntriesURL as LoadDataParameters)(
-                    DomainOnProteinWithoutData,
-                  ),
+                } as LoadDataParameters) */ loadData(
+                  getRelatedEntriesURL as LoadDataParameters,
+                )(
+                  DomainOnProteinWithoutData,
+                  //) ,
                 ),
               ),
             ),
