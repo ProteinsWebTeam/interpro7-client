@@ -10,7 +10,7 @@ import { toPlural } from 'utils/pages/toPlural';
 
 import cssBinder from 'styles/cssBinder';
 import filtersAndTable from 'components/FiltersPanel/filters-and-table.css';
-import { GenericMatch } from 'src/components/Matches/MatchesByPrimary';
+import { GenericMatch } from 'components/Matches/MatchesByPrimary';
 
 const f = cssBinder(filtersAndTable);
 

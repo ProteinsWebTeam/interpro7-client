@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import {
+import BFVDModel from 'components/Structure3DModel/3DModel';
+import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
-} from 'components/AlphaFold/ProteinTable';
+} from 'components/Structure3DModel/ProteinTable';
+import ProteinViewerForAlphafold from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import { Selection } from 'components/Structure/ViewerAndEntries';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
@@ -39,9 +42,56 @@ const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
     setModelId(value);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (mainType === 'entry') {
+      // Take the list of matched UniProt matches and assign the first one to protein accession
+      if ((data?.payload?.count || 0) > 0)
+        setProteinAcc(data?.payload?.results[0].metadata.accession || '');
+    } else setProteinAcc(mainAccession as string);
+  }, [mainAccession, data]);
 
-  return <></>;
+  if (data?.loading) return <Loading />;
+  const hasMultipleProteins =
+    mainType === 'entry' && (data?.payload?.count || 0) > 1;
+
+  return (
+    <div
+      className={css('vf-stack', 'vf-stack-400', {
+        'split-view': isSplitScreen,
+      })}
+      ref={container}
+    >
+      {proteinAcc && (
+        <BFVDModel
+          proteinAcc={proteinAcc}
+          hasMultipleProteins={hasMultipleProteins}
+          onModelChange={handleModelChange}
+          modelId={modelId}
+          bfvdUrl={`https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`}
+          selections={selectionsInModel}
+          parentElement={container.current}
+          isSplitScreen={isSplitScreen}
+          onSplitScreenChange={(value: boolean) => setSplitScreen(value)}
+        />
+      )}
+      {mainType === 'entry' ? (
+        <ProteinTable onProteinChange={handleProteinChange} />
+      ) : (
+        <div
+          data-testid="alphafold-protvista"
+          className={css('protvista-container')}
+        >
+          <ProteinViewerForAlphafold
+            protein={proteinAcc}
+            onChangeSelection={(selection: null | Array<Selection>) => {
+              setSelectionsInModel(selection);
+            }}
+            isSplitScreen={isSplitScreen}
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default loadData({

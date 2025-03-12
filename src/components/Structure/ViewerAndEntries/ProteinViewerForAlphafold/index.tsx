@@ -10,7 +10,7 @@ import { useProcessData } from 'components/ProteinViewer/utils';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
-} from 'components/AlphaFold/selectors';
+} from 'components/Structure3DModel/selectors';
 import { Selection } from 'components/Structure/ViewerAndEntries';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
