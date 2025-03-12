@@ -33,7 +33,7 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 import summary from 'styles/summary.css';
-import { ExtendedFeature } from 'src/components/ProteinViewer';
+import { ExtendedFeature } from 'src/components/ProteinViewer/utils';
 
 const css = cssBinder(summary, fonts, style);
 

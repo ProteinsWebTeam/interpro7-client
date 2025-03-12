@@ -152,35 +152,10 @@ const ProteinViewerForAlphafold = ({
     representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
 
-  if (groups.domain) {
-    groups.domains = groups.domain.slice();
-    groups.domain = [];
-  }
-
-  if (groups.family) {
-    groups.families = groups.family.slice();
-    groups.family = [];
-  }
-
   if (dataConfidence) addConfidenceTrack(dataConfidence, protein, groups);
   const tracks = flattenTracksObject(groups);
 
-  const mainTracks = [
-    'alphafold confidence',
-    'domains',
-    'families',
-    'active site',
-    'conserved site',
-  ];
-
   if (!dataProtein.payload?.metadata) return null;
-
-  const hideCategories = {
-    domains: false,
-    families: false,
-    'active site': false,
-    'conserved site': false,
-  };
 
   return (
     <div ref={trackRef}>
@@ -188,8 +163,6 @@ const ProteinViewerForAlphafold = ({
         viewerType={'structures'}
         protein={dataProtein.payload.metadata}
         data={tracks}
-        mainTracks={mainTracks}
-        hideCategories={hideCategories}
         title="Protein domains"
         showOptions={!isSplitScreen}
       />

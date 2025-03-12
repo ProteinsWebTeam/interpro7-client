@@ -106,7 +106,7 @@ export interface SettingsAction
   extends Action<typeof CHANGE_SETTINGS | typeof RESET_SETTINGS> {
   category?: string;
   key?: string;
-  value?: string | number | boolean | LabelUISettings;
+  value?: string | number | boolean | LabelUISettings | MatchTypeUISettings;
 }
 
 // status

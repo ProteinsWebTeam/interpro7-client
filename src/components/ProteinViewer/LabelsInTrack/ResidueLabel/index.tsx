@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ExtendedFeature } from '../..';
+import { ExtendedFeature } from '../../utils';
 
 import cssBinder from 'styles/cssBinder';
 

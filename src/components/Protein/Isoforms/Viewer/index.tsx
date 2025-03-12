@@ -6,9 +6,19 @@ import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import NumberComponent from 'components/NumberComponent';
-import { groupByEntryType } from 'components/Related/DomainsOnProtein';
-import { byEntryType } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
-import { selectRepresentativeData } from 'components/ProteinViewer/utils';
+import {
+  groupByEntryType,
+  proteinViewerReorganization,
+  sectionsReorganization,
+} from 'components/Related/DomainsOnProtein/utils';
+import {
+  byEntryType,
+  sortTracks,
+} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
+import {
+  selectRepresentativeData,
+  ExtendedFeature,
+} from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -83,18 +93,8 @@ const features2protvista = (features: FeatureMap) => {
     'family',
   );
 
-  const homologous_superfamily = sortedCategories.filter(
-    (entry) => entry[0] == 'homologous superfamily',
-  )[0];
-
   sortedCategories.map((entry) => {
     if (entry[0] === 'domain') {
-      entry[0] = 'domains';
-      if (homologous_superfamily) {
-        if (Array.isArray(entry[1]))
-          entry[1] = entry[1].concat(homologous_superfamily[1]);
-      }
-
       if (representativeDomains) {
         if (Array.isArray(entry[1]))
           entry[1] = entry[1].concat(representativeDomains);
@@ -102,7 +102,6 @@ const features2protvista = (features: FeatureMap) => {
     }
 
     if (entry[0] === 'family') {
-      entry[0] = 'families';
       if (representativeFamilies) {
         if (Array.isArray(entry[1]))
           entry[1] = entry[1].concat(representativeFamilies);
@@ -142,40 +141,24 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
   const { accession, length, sequence, features } = data.payload;
   const dataProtvista = features2protvista(features);
 
-  const mainTracks = [
-    'alphafold confidence',
-    'families',
-    'domains',
-    'pathogenic and likely pathogenic variants',
-    'intrinsically disordered regions',
-    'spurious proteins',
-    'conserved residues',
-  ];
-
-  const hideCategories = {
-    'secondary structure': false,
-    families: true,
-    domains: true,
-    repeat: false,
-    'conserved site': false,
-    'active site': false,
-    'binding site': false,
-    ptm: false,
-    'match conservation': false,
-    'coiled-coils, signal peptides, transmembrane regions': false,
-    'short linear motifs': false,
-    'pfam-n': false,
-    funfam: false,
-  };
+  // Reorganize isoform viewer
+  let proteinDataRecord = Object.fromEntries(
+    dataProtvista,
+  ) as ProteinViewerDataObject;
+  proteinDataRecord = sectionsReorganization(proteinDataRecord);
+  proteinDataRecord = proteinViewerReorganization(
+    undefined,
+    proteinDataRecord,
+    false,
+  );
+  const proteinViewerData = Object.entries(proteinDataRecord);
 
   return (
     <div className={css('isoform-panel')}>
       <IsoformHeader accession={accession} length={length} />
       <ProteinViewer
-        mainTracks={mainTracks}
-        hideCategories={hideCategories}
         protein={{ sequence, length: sequence.length }}
-        data={dataProtvista}
+        data={proteinViewerData}
         title="Entry matches to this isoform"
       />
     </div>

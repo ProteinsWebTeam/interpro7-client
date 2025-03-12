@@ -26,6 +26,13 @@
   border-radius: 0.25rem;
 }
 
+.close-button.xs {
+  right: 0.66rem;
+  top: 0.66em;
+  font-size: 0.8em;
+  line-height: 1;
+}
+
 .new-callout.info {
   background-color: #c6e9ff;
   color: #0d3c61;
