@@ -4,7 +4,7 @@ import FullyLoadedTable from 'components/Table/FullyLoadedTable';
 import loadable from 'higherOrder/loadable';
 import Link from 'components/generic/Link';
 import Loading from 'components/SimpleCommonComponents/Loading';
-import { Renderer } from 'src/components/Table/Column';
+import { Renderer } from 'components/Table/Column';
 
 import cssBinder from 'styles/cssBinder';
 

@@ -15,7 +15,7 @@ import {
 
 import { DataForProteinChain, mergeChimericProteins } from './utils';
 
-import { ExtendedFeature } from 'src/components/ProteinViewer';
+import { ExtendedFeature } from 'components/ProteinViewer';
 
 const css = cssBinder(fonts);
 

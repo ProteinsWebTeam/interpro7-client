@@ -28,14 +28,14 @@ type Params = typeof AfConfidenceColorThemeParams;
 
 export function AfConfidenceColorTheme(
   ctx: ThemeDataContext,
-  props: PD.Values<Params>
+  props: PD.Values<Params>,
 ): ColorTheme<Params> {
   let color: LocationColor;
   if (
     ctx.structure &&
     !ctx.structure.isEmpty &&
     ctx.structure.models[0].customProperties.has(
-      AfConfidenceProvider.descriptor
+      AfConfidenceProvider.descriptor,
     )
   ) {
     const getConfidenceScore = AfConfidence.getConfidenceScore;
@@ -103,7 +103,7 @@ export const AfConfidenceColorThemeProvider: ColorTheme.Provider<
           {
             kind: PD.Select(categories[0], PD.arrayToOptions(categories)),
           },
-          { isFlat: true }
+          { isFlat: true },
         ),
       }),
     };
@@ -118,14 +118,14 @@ export const AfConfidenceColorThemeProvider: ColorTheme.Provider<
             ctx,
             data.structure.models[0],
             void 0,
-            true
+            true,
           )
         : Promise.resolve(),
     detach: (data) =>
       data.structure &&
       data.structure.models[0].customProperties.reference(
         AfConfidenceProvider.descriptor,
-        false
+        false,
       ),
   },
   category: '',

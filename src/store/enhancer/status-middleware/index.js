@@ -35,7 +35,6 @@ const checkStatusesAndDispatch = async function (
             : ''),
     });
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
-    console.log(endpoint, url);
     try {
       const response = await customFetch(url, {
         method: ['bfvd', 'alphafold', 'wikipedia'].includes(endpoint)

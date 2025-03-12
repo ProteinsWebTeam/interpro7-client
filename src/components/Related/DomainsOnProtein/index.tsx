@@ -11,7 +11,7 @@ import { changeSettingsRaw } from 'actions/creators';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
-} from 'components/AlphaFold/selectors';
+} from 'components/Structure3DModel/selectors';
 import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
@@ -30,7 +30,7 @@ import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variatio
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
-} from 'src/components/ProteinViewer';
+} from 'components/ProteinViewer';
 
 export const orderByAccession = (
   a: { accession: string },

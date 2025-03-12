@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import AlphaFoldModel from 'components/AlphaFold/Model';
+import AlphaFoldModel from 'components/Structure3DModel/3DModel';
 import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
-} from 'components/AlphaFold/ProteinTable';
+} from 'components/Structure3DModel/ProteinTable';
 import ProteinViewerForAlphafold from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
 import { Selection } from 'components/Structure/ViewerAndEntries';
 import Loading from 'components/SimpleCommonComponents/Loading';

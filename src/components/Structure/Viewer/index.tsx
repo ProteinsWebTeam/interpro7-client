@@ -24,6 +24,7 @@ import { Selection } from '../ViewerAndEntries';
 import { ColorByResidueLddtTheme } from './ColourByResidueLddtTheme';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
+import { BFactorColorThemeProvider } from './bfvd-confidence/color';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -107,6 +108,10 @@ class StructureView extends PureComponent<Props> {
         // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
           AfConfidenceColorThemeProvider,
+        );
+
+        this.viewer.representation.structure.themes.colorThemeRegistry.add(
+          BFactorColorThemeProvider,
         );
       }
       // mouseover ?????
@@ -293,6 +298,9 @@ class StructureView extends PureComponent<Props> {
         break;
       case 'af':
         colouringTheme = AfConfidenceColorThemeProvider.name;
+        break;
+      case 'bfvd':
+        colouringTheme = BFactorColorThemeProvider.name;
         break;
       default:
         colouringTheme = ChainIdColorThemeProvider.name;

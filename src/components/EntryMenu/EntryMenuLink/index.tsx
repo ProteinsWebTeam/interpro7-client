@@ -52,7 +52,6 @@ export const EntryMenuLink = ({
   let value: null | number = null;
   let shouldPointToAll = false;
   if (!loading && payload && payload.metadata) {
-    console.log(payload);
     if (payload.metadata.counters) {
       if (counter) {
         // Some tabs do not have counter
