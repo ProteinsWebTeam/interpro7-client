@@ -195,6 +195,7 @@ type DownloadProgress = {
   date?: Date;
   length?: number;
   subset?: boolean;
+  originURL?: string;
 };
 
 type CompletedDownload = DownloadProgress & {
@@ -202,6 +203,7 @@ type CompletedDownload = DownloadProgress & {
   date: Date;
   length: number;
   subset: boolean;
+  originURL?: string;
 };
 
 type Server =

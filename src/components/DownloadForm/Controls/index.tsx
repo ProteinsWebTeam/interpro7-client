@@ -45,6 +45,7 @@ export class Controls extends PureComponent<Props> {
       this.props.fileType,
       this.props.subset,
       this.props.entityType,
+      window.location.href,
     );
   });
 

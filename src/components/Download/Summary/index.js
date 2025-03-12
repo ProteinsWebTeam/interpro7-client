@@ -58,6 +58,7 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
 
   render() {
     const { download } = this.props;
+
     return (
       <div className={f('row')}>
         <div className={f('large-12', 'columns')}>
@@ -79,15 +80,28 @@ class Summary extends PureComponent /*:: < {download: Array<Object>} > */ {
           </div>
           <Table dataTable={download} contentType="files" actualSize={0}>
             <Column
-              dataKey="localID"
-              renderer={(localID /*: string */) => (
-                <Link target="_blank" href={localID.split('|')[0]}>
-                  {' '}
-                  {localID.split('|')[0]}{' '}
-                </Link>
-              )}
+              dataKey="originURL"
+              renderer={(originURL /*: string */) => {
+                /*
+                  originURL has been introduced later, causing the
+                  constructor to throw an error where the originURL is null.
+                  This happens for old saved downloads that just have the localID.
+                  This try catch block returns the ∅ symbol in that case.
+                */
+                try {
+                  const url = new URL(originURL);
+                  return (
+                    <Link target="_blank" href={originURL}>
+                      {url.pathname}
+                      {url.search}
+                    </Link>
+                  );
+                } catch {
+                  return originURL;
+                }
+              }}
             >
-              URL
+              Source
             </Column>
             <Column dataKey="fileType">Type</Column>
             <Column

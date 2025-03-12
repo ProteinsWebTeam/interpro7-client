@@ -91,6 +91,7 @@ export interface DownloadAction
   length?: number;
   date?: string;
   version?: string;
+  originURL?: string;
 }
 
 export interface InitialDownloadsAction

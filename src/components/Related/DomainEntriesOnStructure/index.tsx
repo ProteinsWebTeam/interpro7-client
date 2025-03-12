@@ -298,10 +298,21 @@ const EntriesOnStructure = ({
           });
 
           let accessionList: string[] = [];
+
+          /* 
+            - Take protein object for each "viewer" data 
+            - take the accession 
+            - split the accession if it's composed of multiple uniprot accessiokn
+          */
+
           const splitAccessions = e.protein
             ?.map((p) => p.accession)
-            .map((pAccession) => pAccession.split(','))
+            .map((pAccession) => {
+              if (pAccession) return pAccession.split(',');
+              else return [];
+            })
             .flat();
+
           accessionList = accessionList.concat(splitAccessions);
           accessionList = Array.from(new Set(accessionList));
 
