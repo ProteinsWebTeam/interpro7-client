@@ -184,7 +184,7 @@ const DomainOnProteinWithoutData = ({
       <>
         <Callout type="info">
           {onlyExtraFeatures && !showMoreSettings
-            ? `Additional matches are available, but not displayed in the summary display mode. 
+            ? `Additional matches are available, but not displayed in the summary display mode.
         Switch to the full display mode the see them.`
             : 'No entry matches this protein'}
         </Callout>

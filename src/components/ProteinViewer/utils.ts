@@ -119,7 +119,10 @@ export const selectRepresentativeData = (
   type: string,
 ) => {
   const flatRepresentativeData = [];
-
+  const types =
+    type === 'domain'
+      ? ['domain', 'repeat', 'homologous_superfamily']
+      : ['family'];
   for (const entry of entries) {
     const {
       accession,
@@ -131,11 +134,7 @@ export const selectRepresentativeData = (
       children,
     } = entry;
 
-    if (
-      entry[locationKey] === null ||
-      (entry.type !== type &&
-        (type === 'domain' ? entry.type !== 'repeat' : true)) // Handles repeat types, which fall under the "domain" cateogory
-    ) {
+    if (entry[locationKey] === null || !types.includes(entry.type as string)) {
       continue;
     }
     for (const location of entry[locationKey] as Array<ProtVistaLocation>) {
