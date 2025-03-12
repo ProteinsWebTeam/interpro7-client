@@ -30,11 +30,12 @@ const checkStatusesAndDispatch = async function (
         endpointSettings.root +
         (endpoint === 'alphafold'
           ? 'api/prediction/Q5VSL9'
-          : endpoint === 'alphafold'
-            ? ''
+          : endpoint === 'bfvd'
+            ? 'api/cluster/A0A2Z4HFS2'
             : ''),
     });
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
+    console.log(endpoint, url);
     try {
       const response = await customFetch(url, {
         method: ['bfvd', 'alphafold', 'wikipedia'].includes(endpoint)
