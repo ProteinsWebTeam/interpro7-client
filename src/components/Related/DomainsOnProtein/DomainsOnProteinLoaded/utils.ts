@@ -550,7 +550,7 @@ function combineMatches(
   const integratedInterProN_Map = processedResult[1];
   let flatIntegratedTraditionalMatchesObj: ExtendedFeature[] = [];
 
-  const integratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
+  let integratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
     traditionalMatches,
   ).filter((match: ExtendedFeature) => {
     return (
@@ -573,6 +573,12 @@ function combineMatches(
       );
 
       if (existingIntegrated_NEntry) {
+        // Remove from traditional matches the ones that have a corresponding integrated Interpro-N match
+        integratedTraditionalMatchesObj =
+          integratedTraditionalMatchesObj.filter(
+            (integratedMatch) => integratedMatch.accession !== match.integrated,
+          );
+
         // Find the corresponding N-match and push the traditional next to it
         const siblingMatchIndex = existingIntegrated_NEntry.children?.findIndex(
           (elem) => {
@@ -608,9 +614,13 @@ function combineMatches(
     ),
   );
 
-  return Array.from(integratedInterProN_Map.values()).concat(
-    Object.values(unintegratedInterProN_MatchesMap).concat(representativeData),
-  );
+  return Array.from(integratedInterProN_Map.values())
+    .concat(integratedTraditionalMatchesObj as MinimalFeature[])
+    .concat(
+      Object.values(unintegratedInterProN_MatchesMap).concat(
+        representativeData,
+      ),
+    );
 }
 /* #### END INTEPRO_N FUNCTIONS #### */
 
