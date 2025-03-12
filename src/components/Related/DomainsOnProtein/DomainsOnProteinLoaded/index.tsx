@@ -293,12 +293,12 @@ const DomainsOnProteinLoaded = ({
   }
 
   if (protein.accession.startsWith('iprscan')) {
-    /* 
+    /*
     Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
     and the ProteinViewer components are used in a different way in the InterproScan results section.
     What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
     InterProScan results section, because the DomainsOnProteinLoaded is used right away.
-    Executing those steps here below. 
+    Executing those steps here below.
     KEEP THIS ORDER OF OPERATIONS !
     */
 
@@ -410,9 +410,11 @@ const DomainsOnProteinLoaded = ({
             <b>InterPro‑N</b>, an AI-powered deep learning model developed by
             Google DeepMind.
             <br />
-            To view these predictions, open the <b>Options</b> menu below and
-            select your preferred display mode under{' '}
-            <b>"Display matches from"</b>.
+            By default, InterPro matches are supplemented with novel InterPro‑N
+            predictions (novel matches or those at least 5% longer).
+            <br />
+            To change the display mode, open the <i>Options</i> menu below and
+            select your preferred setting.
           </Callout>
         </>
       )}

@@ -46,10 +46,10 @@ const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
           <Tooltip
             title={`
             <div style='text-align:left;'>
-            <b>InterPro</b>: Only traditional InterPro matches <br>
-            <b>InterPro-N</b>: Only AI-predicted matches<br>
-            <b>Optimal</b>: Matches with the best sequence coverage<br>
-            <b>Stacked</b>: Both match types for easy comparison</div>`}
+            <b>Default</b>: InterPro matches supplemented with InterPro-N<br>
+            <b>InterPro</b>: traditional InterPro matches only<br>
+            <b>InterPro-N</b>: AI-predicted InterPro-N matches only<br>
+            <b>Stacked</b>: Both InterPro and InterPro-N matches</div>`}
           >
             <span
               className={css('small', 'icon', 'icon-common')}
