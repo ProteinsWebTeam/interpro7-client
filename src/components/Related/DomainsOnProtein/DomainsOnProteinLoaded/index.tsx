@@ -404,8 +404,8 @@ const DomainsOnProteinLoaded = ({
     <>
       {interpro_NMatchesCount > 0 && (
         <>
-          <Callout type="warning" closable={true}>
-            This sequence includes additional matches predicted by{' '}
+          <Callout type="warning" alt={true} closable={true}>
+            This sequence includes additional matches predicted by ✨
             <b>InterPro‑N</b>, an AI-powered deep learning model developed by
             Google DeepMind.
             <br />
