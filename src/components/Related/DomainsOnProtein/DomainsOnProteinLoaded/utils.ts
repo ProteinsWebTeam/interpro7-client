@@ -510,7 +510,7 @@ function chooseBestMatch(
     'dl',
   );
   const representativeAccessions = representativeFullData.map((match) =>
-    match.accession.replaceAll(':nMatch', ''),
+    match.accession.replaceAll(/:nmatch/gi, ''),
   );
 
   let processedIntegratedInterPro_NMatches = Array.from(
@@ -523,7 +523,7 @@ function chooseBestMatch(
         (match.type && typeToSection[match.type]) !== type &&
         match.children?.some((child) =>
           representativeAccessions.includes(
-            child.accession.replaceAll(':nMatch', ''),
+            child.accession.replaceAll(/:nmatch/gi, ''),
           ),
         )
         ? false
@@ -554,7 +554,7 @@ function combineMatches(
 
   unintegratedInterProN_Matches.forEach((match) => {
     const newMatch = JSON.parse(JSON.stringify(match));
-    const baseAccession = match.accession.replace(':nMatch', '');
+    const baseAccession = match.accession.replace(/:nmatch/i, '');
 
     unintegratedInterProN_MatchesMap[baseAccession] = {
       accession: 'parentUnintegrated:' + baseAccession,
@@ -577,14 +577,14 @@ function combineMatches(
 
   unintegratedTraditionalMatchesObj.forEach((match) => {
     const newMatch = JSON.parse(JSON.stringify(match));
-    const baseAccession = match.accession.replace(':nMatch', '');
+    const baseAccession = match.accession.replace(/:nmatch/i, '');
 
     if (unintegratedInterProN_MatchesMap[match.accession]) {
       // Find the corresponding N-match and push the traditional next to it
       const siblingMatchIndex = unintegratedInterProN_MatchesMap[
         match.accession
       ].children?.findIndex((elem) => {
-        const processedAccession = elem.accession.replace(':nMatch', '');
+        const processedAccession = elem.accession.replace(/:nmatch/i, '');
         if (processedAccession === match.accession) {
           return true;
         }
@@ -647,7 +647,7 @@ function combineMatches(
         // Find the corresponding N-match and push the traditional next to it
         const siblingMatchIndex = existingIntegrated_NEntry.children?.findIndex(
           (elem) => {
-            const processedAccession = elem.accession.replace(':nMatch', '');
+            const processedAccession = elem.accession.replace(/:nmatch/i, '');
             if (processedAccession === match.accession) {
               return true;
             }
@@ -707,7 +707,7 @@ function combineMatches(
     'dl',
   );
   const representativeAccessions = representativeFullData.map((match) =>
-    match.accession.replaceAll(':nMatch', ''),
+    match.accession.replaceAll(/:nmatch/gi, ''),
   );
 
   integratedInterPro_NMatches = integratedInterPro_NMatches.filter(
@@ -715,7 +715,7 @@ function combineMatches(
       return match.type !== type &&
         match.children?.some((child) =>
           representativeAccessions.includes(
-            child.accession.replaceAll(':nMatch', ''),
+            child.accession.replaceAll(/:nmatch/gi, ''),
           ),
         )
         ? false
@@ -728,7 +728,7 @@ function combineMatches(
       return match.type !== type &&
         match.children?.some((child) =>
           representativeAccessions.includes(
-            child.accession.replaceAll(':nMatch', ''),
+            child.accession.replaceAll(/:nmatch/gi, ''),
           ),
         )
         ? false

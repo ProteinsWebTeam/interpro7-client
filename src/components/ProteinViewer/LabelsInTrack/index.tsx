@@ -79,7 +79,7 @@ const LabelsInTrack = ({
                         db: entry.source_database,
                         accession: entry.accession.startsWith('residue:')
                           ? entry.accession.split('residue:')[1]
-                          : entry.accession.replace(':nMatch', ''),
+                          : entry.accession.replace(/:nmatch/i, ''),
                       },
                     },
                   }}
@@ -111,7 +111,7 @@ const LabelsInTrack = ({
                           main: { key: 'entry' },
                           entry: {
                             db: d.source_database,
-                            accession: d.accession,
+                            accession: d.accession.replace(/:nmatch/i, ''),
                           },
                         },
                       }}
