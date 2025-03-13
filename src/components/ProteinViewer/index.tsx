@@ -75,6 +75,8 @@ type Props = PropsWithChildren<{
   viewerType: string;
   changeSettingsRaw: typeof changeSettingsRaw;
   showMoreSettings: boolean;
+  matchesAvailable?: Record<string, boolean>;
+  matchTypeSettings?: MatchTypeUISettings;
 }>;
 
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
@@ -119,6 +121,8 @@ export const ProteinViewer = ({
   dataBase,
   loading = false,
   children,
+  matchesAvailable,
+  matchTypeSettings,
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
 
@@ -199,6 +203,13 @@ export const ProteinViewer = ({
   };
 
   useEffect(() => {
+    // Switch to default mode if any of either of InterPro or Intepro-N type of matches are not available.
+    if (matchesAvailable && matchTypeSettings) {
+      if (matchesAvailable[matchTypeSettings] === false) {
+        changeSettingsRaw('ui', 'matchTypeSettings', 'best');
+      }
+    }
+
     /* 
       Logic to handle default display settings for families and domains.
       There's cases where representative families or representative domains are not available.
@@ -259,6 +270,7 @@ export const ProteinViewer = ({
                   mainRef,
                   componentsRef,
                 }}
+                matchesAvailable={matchesAvailable || {}}
                 setExpandedAllTracks={setExpandedAllTracks}
                 tooltipEnabled={tooltipEnabled}
                 setTooltipEnabled={setTooltipEnabled}
@@ -444,6 +456,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
   (ui) => ({
     showMoreSettings: ui.showMoreSettings,
+    matchTypeSettings: ui.matchTypeSettings,
   }),
 );
 

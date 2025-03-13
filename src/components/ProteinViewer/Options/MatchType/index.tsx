@@ -17,6 +17,8 @@ const css = cssBinder(summary, fonts, ipro);
 
 type Props = {
   matchTypeSettings: MatchTypeUISettings;
+  hasInterPro: boolean;
+  hasInterPro_N: boolean;
   changeSettingsRaw: typeof changeSettingsRaw;
 };
 
@@ -27,7 +29,33 @@ const matchMap: Array<[matchTypes, string]> = [
   ['dl', 'InterPro-N'],
   ['hmm_and_dl', 'Stacked'],
 ];
-const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
+
+const MatchType = ({
+  matchTypeSettings,
+  hasInterPro,
+  hasInterPro_N,
+  changeSettingsRaw,
+}: Props) => {
+  const showOption: Record<string, boolean> = {
+    best: true,
+    hmm_and_dl: true,
+    hmm: hasInterPro,
+    dl: hasInterPro_N,
+  };
+
+  const getDisabledTooltip = (key: matchTypes): string | null => {
+    if (showOption[key]) return null;
+
+    switch (key) {
+      case 'hmm':
+        return 'This option is disabled because there are no InterPro matches available for this entry.';
+      case 'dl':
+        return 'This option is disabled because there are no InterPro-N matches available for this entry.';
+      default:
+        return null;
+    }
+  };
+
   const id = useId();
   const updateMatch = (evt: React.FormEvent) => {
     if (changeSettingsRaw)
@@ -58,29 +86,36 @@ const MatchType = ({ matchTypeSettings, changeSettingsRaw }: Props) => {
           </Tooltip>
         </header>
         {matchMap.map(([key, label]) => {
+          const disabledTooltip = getDisabledTooltip(key);
+          const option = (
+            <div
+              className={css('vf-form__item', 'vf-form__item--checkbox')}
+              style={{
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <input
+                className="vf-form__radio"
+                type="radio"
+                disabled={!showOption[key]}
+                onChange={updateMatch}
+                value={key}
+                checked={key == matchTypeSettings}
+                id={`${id}-${key}`}
+              />
+              <label className={css('vf-form__label')} htmlFor={`${id}-${key}`}>
+                {label}
+              </label>
+            </div>
+          );
+
           return (
             <li key={key}>
-              <div
-                className={css('vf-form__item', 'vf-form__item--checkbox')}
-                style={{
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                <input
-                  className="vf-form__radio"
-                  type="radio"
-                  onChange={updateMatch}
-                  value={key}
-                  checked={key == matchTypeSettings}
-                  id={`${id}-${key}`}
-                />
-                <label
-                  className={css('vf-form__label')}
-                  htmlFor={`${id}-${key}`}
-                >
-                  {label}
-                </label>
-              </div>
+              {disabledTooltip ? (
+                <Tooltip title={disabledTooltip}>{option}</Tooltip>
+              ) : (
+                option
+              )}
             </li>
           );
         })}

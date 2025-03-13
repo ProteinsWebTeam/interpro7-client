@@ -168,8 +168,18 @@ const DomainOnProteinWithoutData = ({
     false,
   );
 
+  let nrIntePro_NMatches = 0;
+  if (dataInterProNMatches?.payload) {
+    nrIntePro_NMatches = Object.values(dataInterProNMatches?.payload).length;
+  }
+
   const onlyExtraFeatures =
     dataIsEmptyBeforeMergingFeatures && extraFeaturesCount > 0;
+
+  const matchesAvailable = {
+    hmm: !dataIsEmptyBeforeMergingFeatures,
+    dl: nrIntePro_NMatches > 0,
+  };
 
   if (
     // No entries and no extra features
@@ -177,23 +187,27 @@ const DomainOnProteinWithoutData = ({
       !data?.loading &&
       !dataResidues?.loading &&
       !dataFeatures?.loading) ||
-    // No entries but extra features (e.g pfam-n)
+    // No Hmm entries but extra features or IntePro-N matches
     (onlyExtraFeatures && !showMoreSettings)
   ) {
     return (
       <>
-        <Callout type="info">
-          {onlyExtraFeatures && !showMoreSettings
-            ? `Additional matches are available, but not displayed in the summary display mode.
-        Switch to the full display mode the see them.`
-            : 'No entry matches this protein'}
-        </Callout>
+        {nrIntePro_NMatches == 0 && (
+          <Callout type="info">
+            {onlyExtraFeatures && !showMoreSettings
+              ? `Additional matches are available, but not displayed in the summary display mode.
+          Switch to the full display mode the see them.`
+              : 'No entry matches this protein'}
+          </Callout>
+        )}
 
         <DomainsOnProteinLoaded
           title={'Entry matches to this protein'}
           mainData={mainData}
           dataMerged={proteinViewerData}
           dataConfidence={dataConfidence}
+          dataInterProNMatches={dataInterProNMatches}
+          matchesAvailable={matchesAvailable}
           loading={
             data?.loading ||
             dataFeatures?.loading ||
@@ -218,6 +232,7 @@ const DomainOnProteinWithoutData = ({
         dataProteomics={dataProteomics}
         dataFeatures={dataFeatures}
         dataInterProNMatches={dataInterProNMatches}
+        matchesAvailable={matchesAvailable}
         loading={
           data?.loading ||
           dataFeatures?.loading ||

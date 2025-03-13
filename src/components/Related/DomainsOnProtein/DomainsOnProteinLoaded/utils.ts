@@ -186,7 +186,8 @@ function isInterProN(
 
 const processRepresentativeData = (
   matches: ExtendedFeature[] | InterProN_Match[],
-): MinimalFeature[] => {
+  type: string,
+): ExtendedFeature[] => {
   // Representative data logic
   const representativeDomains = selectRepresentativeData(
     matches,
@@ -215,12 +216,13 @@ const processRepresentativeData = (
   );
 
   // Signal to PV that this match comes from InterPro-N for visualization purposes
-  if (isInterProN(matches)) {
+  if (isInterProN(matches) && type == 'dl') {
     representativeData.forEach(
       (match) => (match.accession = match.accession + ':nMatch'),
     );
   }
-  return representativeData as MinimalFeature[];
+
+  return representativeData as ExtendedFeature[];
 };
 
 /* #### INTEPRO_N FUNCTIONS #### */
@@ -233,7 +235,6 @@ function processInterProN_Matches(
   | [MinimalFeature[], Map<string, ExtendedFeature>, string[]]
   | [MinimalFeature[], Map<string, ExtendedFeature>] {
   let processedInterProN_Matches: MinimalFeature[] = [];
-
   // Get deep copy of unintegrated entries
   const unintegratedInterProN_Matches = JSON.parse(
     JSON.stringify(
@@ -254,14 +255,20 @@ function processInterProN_Matches(
   });
 
   // Get deep copy of integrated entries
-  const integratedInterProN_Matches = JSON.parse(
+  let integratedInterProN_Matches = JSON.parse(
     JSON.stringify(
       Object.values(interproN_Matches).filter((match: InterProN_Match) => {
+        let integratedType = undefined;
+        if (match.integrated) {
+          integratedType = (match.integrated as ExtendedFeature).type;
+        }
         return (
           match.integrated &&
+          integratedType &&
           (typeToSection[match.type]
-            ? typeToSection[match.type] === type
-            : match.type === type) &&
+            ? typeToSection[match.type] === type ||
+              typeToSection[integratedType] == type
+            : match.type === type || integratedType == type) &&
           (mode === 'best' ? match.is_preferred : true)
         );
       }),
@@ -281,7 +288,25 @@ function processInterProN_Matches(
   );
   const representativeData = processRepresentativeData(
     typeFilteredInterpro_NMatches,
+    'dl',
   );
+
+  const representativeAccessions = representativeData.map(
+    (repr) => repr.accession,
+  );
+
+  // Take out domains or families, that are representative and are integrated in a different type of entry
+  if (mode === 'n-only') {
+    integratedInterProN_Matches = integratedInterProN_Matches.filter(
+      (match: InterProN_Match) => {
+        return !(
+          match.type === type &&
+          representativeAccessions.includes(match.accession) &&
+          (match.integrated as ExtendedFeature).type !== match.type
+        );
+      },
+    );
+  }
 
   // Create map <integrated_accession: integrated_entryobj> to append integrated matches as children later
   let integratedInterProN_Map: Map<string, ExtendedFeature> = new Map();
@@ -311,7 +336,7 @@ function processInterProN_Matches(
       if (interproMapEntry) {
         interproMapEntry.entry_protein_locations =
           tempInterproN_Match.entry_protein_locations;
-        interproMapEntry.accession = interproMapEntry.accession + ':nMatch';
+        interproMapEntry.accession = interproMapEntry.accession;
         integratedInterProN_Map.set(integratedAccession, interproMapEntry);
         if (interproMapEntry?.children) {
           interproMapEntry.children.push(tempInterproN_Match);
@@ -338,13 +363,21 @@ function processInterProN_Matches(
 
   // In best mode, return the unintegrated, the map with the integrated that are preferred and a list of already seen match accessions (see choseBest function below)
   else if (mode === 'best') {
-    const bestMatches = Object.entries(interproN_Matches).filter(
-      (match) =>
-        match[1].is_preferred &&
+    const bestMatches = Object.entries(interproN_Matches).filter((match) => {
+      let integratedType = null;
+      if (match[1].integrated) {
+        integratedType = (match[1].integrated as ExtendedFeature).type;
+      }
+      return (
+        match[1].integrated &&
+        integratedType &&
         (typeToSection[match[1].type]
-          ? typeToSection[match[1].type] === type
-          : match[1].type === type),
-    );
+          ? typeToSection[match[1].type] === type ||
+            typeToSection[integratedType] == type
+          : match[1].type === type || integratedType == type) &&
+        (mode === 'best' ? match[1].is_preferred : true)
+      );
+    });
 
     return [
       unintegratedInterProN_Matches,
@@ -457,18 +490,50 @@ function chooseBestMatch(
         flatIntegratedTraditionalMatchesObj.concat(match.children);
   });
 
-  const representativeData = processRepresentativeData(
-    flatIntegratedTraditionalMatchesObj.concat(
-      unintegratedTraditionalMatchesObj,
-    ),
+  // Add representative data
+  let flatIntegrated_NMatches: ExtendedFeature[] = [];
+  processedIntegratedMapInterPro_NMatches.forEach((match) => {
+    if (match.children)
+      flatIntegrated_NMatches = flatIntegrated_NMatches.concat(match.children);
+  });
+
+  const representativeTraditionalData = selectRepresentativeData(
+    flatIntegratedTraditionalMatchesObj
+      .concat(unintegratedTraditionalMatchesObj)
+      .concat(),
+    'entry_protein_locations',
+    type,
   );
 
-  return processedUnintegratedInterProN_Matches
-    .concat(baseMatchesObjUnintegrated)
+  const representativeFullData = processRepresentativeData(
+    flatIntegrated_NMatches,
+    'dl',
+  );
+  const representativeAccessions = representativeFullData.map((match) =>
+    match.accession.replaceAll(':nMatch', ''),
+  );
+
+  let processedIntegratedInterPro_NMatches = Array.from(
+    processedIntegratedMapInterPro_NMatches.values(),
+  );
+
+  processedIntegratedInterPro_NMatches =
+    processedIntegratedInterPro_NMatches.filter((match: ExtendedFeature) => {
+      return match.type !== type &&
+        (match.type && typeToSection[match.type]) !== type &&
+        match.children?.some((child) =>
+          representativeAccessions.includes(
+            child.accession.replaceAll(':nMatch', ''),
+          ),
+        )
+        ? false
+        : true;
+    });
+
+  return baseMatchesObjUnintegrated
+    .concat(processedIntegratedInterPro_NMatches)
     .concat(
-      Array.from(processedIntegratedMapInterPro_NMatches.values()).concat(
-        representativeData,
-      ),
+      representativeTraditionalData as MinimalFeature[],
     ) as MinimalFeature[];
 }
 
@@ -608,17 +673,75 @@ function combineMatches(
   });
 
   // Add representative data
-  const representativeData = processRepresentativeData(
-    flatIntegratedTraditionalMatchesObj.concat(
-      unintegratedTraditionalMatchesObj,
-    ),
+  let integratedInterPro_NMatches = Array.from(
+    integratedInterProN_Map.values(),
+  );
+  let flatIntegrated_NMatches: ExtendedFeature[] = [];
+  integratedInterPro_NMatches.forEach((match) => {
+    if (match.children)
+      flatIntegrated_NMatches = flatIntegrated_NMatches.concat(match.children);
+  });
+
+  const representativeN_Data = selectRepresentativeData(
+    flatIntegrated_NMatches.concat(unintegratedInterProN_Matches),
+    'entry_protein_locations',
+    type,
+  );
+  let representativeTraditionalData = selectRepresentativeData(
+    flatIntegratedTraditionalMatchesObj
+      .concat(unintegratedTraditionalMatchesObj)
+      .concat(),
+    'entry_protein_locations',
+    type,
+  );
+  const representativeTraditionalAccessions = representativeTraditionalData.map(
+    (repr) => repr.accession as string,
   );
 
-  return Array.from(integratedInterProN_Map.values())
+  // Add representative-n data if not available for HMMs
+  if (representativeTraditionalAccessions.length == 0)
+    representativeTraditionalData =
+      representativeTraditionalData.concat(representativeN_Data);
+
+  const representativeFullData = processRepresentativeData(
+    flatIntegrated_NMatches,
+    'dl',
+  );
+  const representativeAccessions = representativeFullData.map((match) =>
+    match.accession.replaceAll(':nMatch', ''),
+  );
+
+  integratedInterPro_NMatches = integratedInterPro_NMatches.filter(
+    (match: ExtendedFeature) => {
+      return match.type !== type &&
+        match.children?.some((child) =>
+          representativeAccessions.includes(
+            child.accession.replaceAll(':nMatch', ''),
+          ),
+        )
+        ? false
+        : true;
+    },
+  );
+
+  integratedTraditionalMatchesObj = integratedTraditionalMatchesObj.filter(
+    (match: ExtendedFeature) => {
+      return match.type !== type &&
+        match.children?.some((child) =>
+          representativeAccessions.includes(
+            child.accession.replaceAll(':nMatch', ''),
+          ),
+        )
+        ? false
+        : true;
+    },
+  );
+
+  return integratedInterPro_NMatches
     .concat(integratedTraditionalMatchesObj as MinimalFeature[])
     .concat(
       Object.values(unintegratedInterProN_MatchesMap).concat(
-        representativeData,
+        representativeTraditionalData as MinimalFeature[],
       ),
     );
 }

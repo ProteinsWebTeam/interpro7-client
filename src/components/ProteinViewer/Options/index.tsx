@@ -52,6 +52,7 @@ type Props = PropsWithChildren<{
     mainRef: React.MutableRefObject<HTMLDivElement | null>;
     componentsRef: React.MutableRefObject<HTMLDivElement | null>;
   };
+  matchesAvailable: Record<string, boolean>;
   colorDomainsBy?: string;
   changeSettingsRaw?: typeof changeSettingsRaw;
   setExpandedAllTracks: (v: boolean) => void;
@@ -71,6 +72,7 @@ const ProteinViewerOptions = ({
   changeSettingsRaw,
   // setExpandedAllTracks,
   tooltipEnabled,
+  matchesAvailable,
   setTooltipEnabled,
   loading = false,
 }: Props) => {
@@ -153,6 +155,9 @@ const ProteinViewerOptions = ({
     [EntryColorMode.MEMBER_DB, 'Member Database'],
     [EntryColorMode.DOMAIN_RELATIONSHIP, 'Domain Relationship'],
   ];
+
+  const websitePage = parentReferences.mainRef.current?.baseURI || '';
+
   return (
     <>
       <div className={css('view-options-title')}>
@@ -232,9 +237,16 @@ const ProteinViewerOptions = ({
             <hr />
             <LabelBy />
             <hr />
-            {!parentReferences.mainRef.current?.baseURI.includes(
-              'InterProScan',
-            ) && <MatchType />}
+            {!(
+              websitePage.includes('InterProScan') ||
+              websitePage.includes('structure') ||
+              websitePage.includes('alphafold')
+            ) && (
+              <MatchType
+                hasInterPro={matchesAvailable && matchesAvailable['hmm']}
+                hasInterPro_N={matchesAvailable && matchesAvailable['dl']}
+              />
+            )}
             <li>
               <NightingaleSaver
                 element-id={componentsDivId}

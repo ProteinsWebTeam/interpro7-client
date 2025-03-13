@@ -176,6 +176,7 @@ const processData = <M = Metadata>(
   endpoint: Endpoint,
 ) => {
   const results: Record<string, unknown>[] = [];
+
   for (const item of dataResults) {
     results.splice(
       0,
@@ -201,12 +202,13 @@ const processData = <M = Metadata>(
   const interproMap = new Map();
 
   interpro.map((ipro) => {
-    const integratedUnder = Object.values(ipro.member_databases as {}).map(
-      (entryDict) => Object.keys(entryDict as object)[0],
-    );
+    const integratedUnder = Object.values(ipro.member_databases as {})
+      .map((entryDict) => Object.keys(entryDict as object))
+      .flat();
+
     const interproK = integratedUnder.map((entryAccession) => {
       return `${ipro.accession}-${entryAccession}-${ipro.chain}-${
-        endpoint === 'structure' ? ipro.structureAccession : ipro.protein
+        endpoint === 'structure' ? ipro.structureAccession : ''
       }`;
     });
     interproK.map((k) => {
@@ -243,7 +245,7 @@ const processData = <M = Metadata>(
     } =
       interproMap.get(
         `${entry.integrated}-${entry.accession}-${entry.chain}-${
-          endpoint === 'structure' ? entry.structureAccession : entry.protein
+          endpoint === 'structure' ? entry.structureAccession : ''
         }`,
       ) || {};
 

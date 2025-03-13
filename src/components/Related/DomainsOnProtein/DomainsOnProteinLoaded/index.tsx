@@ -149,7 +149,6 @@ type Props = PropsWithChildren<{
   dataInterProNMatches?: RequestedData<InterProNMatches>;
   dataProteomics?: RequestedData<ProteinsAPIProteomics>;
   dataFeatures?: RequestedData<ExtraFeaturesPayload>;
-  dataInterproNMatches?: RequestedData<InterProNMatches>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
@@ -157,6 +156,7 @@ type Props = PropsWithChildren<{
   title?: string;
   colorDomainsBy?: string;
   matchTypeSettings?: MatchTypeUISettings;
+  matchesAvailable?: Record<string, boolean>;
   changeSettingsRaw: typeof changeSettingsRaw;
 }>;
 
@@ -180,6 +180,7 @@ const DomainsOnProteinLoaded = ({
   title = 'Entry matches to this protein',
   colorDomainsBy,
   matchTypeSettings,
+  matchesAvailable,
   changeSettingsRaw,
 }: Props) => {
   const [currentMatchType, setCurrentMatchType] = useState(matchTypeSettings);
@@ -368,8 +369,6 @@ const DomainsOnProteinLoaded = ({
       if (group[0] !== 'residues') group[1].sort(sortTracks);
     });
 
-    console.log(proteinViewerData);
-
     // All the other features have been moved to dedicated sections now
     proteinViewerData['other_features'] = [];
 
@@ -422,6 +421,7 @@ const DomainsOnProteinLoaded = ({
         protein={protein}
         data={flattenedData}
         title={title}
+        matchesAvailable={matchesAvailable}
         showConservationButton={showConservationButton}
         handleConservationLoad={handleConservationLoad}
         conservationError={conservationError}
