@@ -687,21 +687,20 @@ function combineMatches(
     'entry_protein_locations',
     type,
   );
-  let representativeTraditionalData = selectRepresentativeData(
-    flatIntegratedTraditionalMatchesObj
-      .concat(unintegratedTraditionalMatchesObj)
-      .concat(),
-    'entry_protein_locations',
-    type,
+
+  let representativeTraditionalData = traditionalMatches.filter(
+    (match: ExtendedFeature) => match.representative,
   );
+
   const representativeTraditionalAccessions = representativeTraditionalData.map(
     (repr) => repr.accession as string,
   );
 
   // Add representative-n data if not available for HMMs
   if (representativeTraditionalAccessions.length == 0)
-    representativeTraditionalData =
-      representativeTraditionalData.concat(representativeN_Data);
+    representativeTraditionalData = representativeTraditionalData.concat(
+      representativeN_Data as MinimalFeature[],
+    );
 
   const representativeFullData = processRepresentativeData(
     flatIntegrated_NMatches,
