@@ -202,9 +202,10 @@ const processData = <M = Metadata>(
   const interproMap = new Map();
 
   interpro.map((ipro) => {
-    const integratedUnder = Object.values(ipro.member_databases as {}).map(
-      (entryDict) => Object.keys(entryDict as object)[0],
-    );
+    const integratedUnder = Object.values(ipro.member_databases as {})
+      .map((entryDict) => Object.keys(entryDict as object))
+      .flat();
+
     const interproK = integratedUnder.map((entryAccession) => {
       return `${ipro.accession}-${entryAccession}-${ipro.chain}-${
         endpoint === 'structure' ? ipro.structureAccession : ipro.protein
