@@ -133,7 +133,6 @@ export const setDBs /*: Set<Object> */ = new Set([
     name: 'pirsf',
     dbName: 'PIRSF',
     re: /^[Pp][Ii][Rr][Ss][Ff][0-9]{6}$/,
-    url_template: 'https://pir.georgetown.edu/cgi-bin/pf_sf_tree.pl?id={id}',
   },
   {
     name: 'panther',
