@@ -30,6 +30,13 @@ const matchMap: Array<[matchTypes, string]> = [
   ['hmm_and_dl', 'Stacked'],
 ];
 
+const typeToName: Record<string, string> = {
+  best: 'Default',
+  hmm: 'InterPro',
+  dl: 'InterPro-N',
+  hmm_and_dl: 'Stacked',
+};
+
 const MatchType = ({
   matchTypeSettings,
   hasInterPro,
@@ -37,8 +44,8 @@ const MatchType = ({
   changeSettingsRaw,
 }: Props) => {
   const showOption: Record<string, boolean> = {
-    best: true,
-    hmm_and_dl: true,
+    best: hasInterPro && hasInterPro_N,
+    hmm_and_dl: hasInterPro && hasInterPro_N,
     hmm: hasInterPro,
     dl: hasInterPro_N,
   };
@@ -46,14 +53,18 @@ const MatchType = ({
   const getDisabledTooltip = (key: matchTypes): string | null => {
     if (showOption[key]) return null;
 
-    switch (key) {
-      case 'hmm':
-        return 'This option is disabled because there are no InterPro matches available for this entry.';
-      case 'dl':
-        return 'This option is disabled because there are no InterPro-N matches available for this entry.';
-      default:
-        return null;
-    }
+    let fullMsgString = 'This option is disabled because there are no ';
+
+    let possibleMatches = ['hmm', 'dl'];
+    let missingMatches = possibleMatches.filter((match) => !showOption[match]);
+    missingMatches = missingMatches.map((match) => typeToName[match]);
+
+    let missingMatchesString = missingMatches.join(' and ');
+
+    fullMsgString += missingMatchesString;
+    fullMsgString += ' matches available for this entry';
+
+    return fullMsgString;
   };
 
   const id = useId();
@@ -100,7 +111,7 @@ const MatchType = ({
                 disabled={!showOption[key]}
                 onChange={updateMatch}
                 value={key}
-                checked={key == matchTypeSettings}
+                checked={showOption[key] && key == matchTypeSettings}
                 id={`${id}-${key}`}
               />
               <label className={css('vf-form__label')} htmlFor={`${id}-${key}`}>
