@@ -689,7 +689,7 @@ function chooseBestMatch(
       if (!bestMatchesList.includes(integratedEntryMatch.accession)) {
         let alreadyIntegratedEntry =
           processedIntegratedMapInterPro_NMatches.get(
-            integratedEntry.accession + ':nMatch',
+            integratedEntry.accession,
           );
         if (alreadyIntegratedEntry) {
           alreadyIntegratedEntry.children?.push(integratedEntryMatch);

@@ -108,10 +108,12 @@ const MatchType = ({
               <input
                 className="vf-form__radio"
                 type="radio"
-                disabled={!showOption[key]}
+                disabled={!(hasInterPro && hasInterPro_N)}
                 onChange={updateMatch}
                 value={key}
-                checked={showOption[key] && key == matchTypeSettings}
+                checked={
+                  hasInterPro && hasInterPro_N && key == matchTypeSettings
+                }
                 id={`${id}-${key}`}
               />
               <label className={css('vf-form__label')} htmlFor={`${id}-${key}`}>
