@@ -24,15 +24,19 @@ const checkStatusesAndDispatch = async function (
   if (!browser) return;
   for (const endpoint of Object.keys(servers)) {
     const endpointSettings = settings[endpoint];
+
+    let testEndPoint = '';
+    switch (endpoint) {
+      case 'alphafold':
+        testEndPoint = 'api/prediction/Q5VSL9';
+      case 'bfvd':
+        testEndPoint = 'api/cluster/A0A2Z4HFS2';
+      default:
+    }
+
     let url = format({
       ...endpointSettings,
-      pathname:
-        endpointSettings.root +
-        (endpoint === 'alphafold'
-          ? 'api/prediction/Q5VSL9'
-          : endpoint === 'bfvd'
-            ? 'api/cluster/A0A2Z4HFS2'
-            : ''),
+      pathname: endpointSettings.root + testEndPoint,
     });
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
     try {
