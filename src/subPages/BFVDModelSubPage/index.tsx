@@ -32,6 +32,11 @@ const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
   const [selectionsInModel, setSelectionsInModel] =
     useState<Array<Selection> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
+
+  const [isPDBLoading, setIsPDBLoading] = useState(false);
+  const [isPDBAvailable, setIsPDBAvailable] = useState(false);
+  const [bfvdURL, setBfvdURL] = useState('');
+
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
   const handleProteinChange = (value: string) => {
@@ -49,21 +54,24 @@ const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
       if ((data?.payload?.count || 0) > 0)
         setProteinAcc(data?.payload?.results[0].metadata.accession || '');
     } else setProteinAcc(mainAccession as string);
-  }, [mainAccession, data]);
+
+    if (proteinAcc.length > 0) {
+      setBfvdURL(
+        `https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`,
+      );
+      setIsPDBLoading(true);
+      fetch(bfvdURL, { method: 'HEAD' }).then((res) => {
+        if (res.status == 200) {
+          setIsPDBAvailable(true);
+        }
+        setIsPDBLoading(false);
+      });
+    }
+  }, [mainAccession, data, proteinAcc]);
 
   if (data?.loading) return <Loading />;
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
-
-  const bfvdURL = `https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`;
-  let isPDBAvailable = false;
-
-  if (proteinAcc)
-    fetch(bfvdURL, { method: 'HEAD' }).then((res) => {
-      if (res.ok) {
-        isPDBAvailable = true;
-      }
-    });
 
   return (
     <div
@@ -73,44 +81,48 @@ const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
       ref={container}
     >
       {' '}
-      {isPDBAvailable ? (
-        <>
-          {proteinAcc && (
-            <BFVDModel
-              proteinAcc={proteinAcc}
-              hasMultipleProteins={hasMultipleProteins}
-              onModelChange={handleModelChange}
-              modelId={modelId}
-              bfvd={bfvdURL}
-              selections={selectionsInModel}
-              parentElement={container.current}
-              isSplitScreen={isSplitScreen}
-              onSplitScreenChange={(value: boolean) => setSplitScreen(value)}
-            />
-          )}
-          {mainType === 'entry' ? (
-            <ProteinTable onProteinChange={handleProteinChange} />
-          ) : (
-            <div
-              data-testid="alphafold-protvista"
-              className={css('protvista-container')}
-            >
-              <ProteinViewerForAlphafold
+      {!isPDBLoading ? (
+        isPDBAvailable ? (
+          <>
+            {proteinAcc && (
+              <BFVDModel
+                proteinAcc={proteinAcc}
+                hasMultipleProteins={hasMultipleProteins}
+                onModelChange={handleModelChange}
+                modelId={modelId}
                 bfvd={bfvdURL}
-                protein={proteinAcc}
-                onChangeSelection={(selection: null | Array<Selection>) => {
-                  setSelectionsInModel(selection);
-                }}
+                selections={selectionsInModel}
+                parentElement={container.current}
                 isSplitScreen={isSplitScreen}
+                onSplitScreenChange={(value: boolean) => setSplitScreen(value)}
               />
-            </div>
-          )}
-        </>
+            )}
+            {mainType === 'entry' ? (
+              <ProteinTable onProteinChange={handleProteinChange} />
+            ) : (
+              <div
+                data-testid="alphafold-protvista"
+                className={css('protvista-container')}
+              >
+                <ProteinViewerForAlphafold
+                  bfvd={bfvdURL}
+                  protein={proteinAcc}
+                  onChangeSelection={(selection: null | Array<Selection>) => {
+                    setSelectionsInModel(selection);
+                  }}
+                  isSplitScreen={isSplitScreen}
+                />
+              </div>
+            )}
+          </>
+        ) : (
+          <Callout type="warning">
+            {' '}
+            Structure Viewer currently not available for this entry.{' '}
+          </Callout>
+        )
       ) : (
-        <Callout type="warning">
-          {' '}
-          Structure viewer not available for this entry{' '}
-        </Callout>
+        <Loading />
       )}
     </div>
   );
