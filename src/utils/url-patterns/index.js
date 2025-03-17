@@ -76,7 +76,6 @@ export default (db /*: string */) => {
     ['hamap', '//hamap.expasy.org/signature/{}'],
     ['panther', 'http://www.pantherdb.org/panther/family.do?clsAccession={}'],
     ['pfam', '//www.ebi.ac.uk/interpro/entry/pfam/{}'],
-    ['pirsf', '//pir.georgetown.edu/cgi-bin/ipcSF?id={}'],
     ['profile', '//prosite.expasy.org/{}'],
     ['prosite', '//prosite.expasy.org/{}'],
     ['sfld', 'http://sfld.rbvi.ucsf.edu/archive/django/{}'],
