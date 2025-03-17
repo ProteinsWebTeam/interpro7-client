@@ -14,6 +14,7 @@ import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import forSplit from 'components/Structure/ViewerAndEntries/style.css';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 const css = cssBinder(ipro, fonts, forSplit);
 
@@ -54,6 +55,16 @@ const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
 
+  const bfvdURL = `https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`;
+  let isPDBAvailable = false;
+
+  if (proteinAcc)
+    fetch(bfvdURL, { method: 'HEAD' }).then((res) => {
+      if (res.ok) {
+        isPDBAvailable = true;
+      }
+    });
+
   return (
     <div
       className={css('vf-stack', 'vf-stack-400', {
@@ -61,34 +72,45 @@ const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
       })}
       ref={container}
     >
-      {proteinAcc && (
-        <BFVDModel
-          proteinAcc={proteinAcc}
-          hasMultipleProteins={hasMultipleProteins}
-          onModelChange={handleModelChange}
-          modelId={modelId}
-          bfvdUrl={`https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`}
-          selections={selectionsInModel}
-          parentElement={container.current}
-          isSplitScreen={isSplitScreen}
-          onSplitScreenChange={(value: boolean) => setSplitScreen(value)}
-        />
-      )}
-      {mainType === 'entry' ? (
-        <ProteinTable onProteinChange={handleProteinChange} />
+      {' '}
+      {isPDBAvailable ? (
+        <>
+          {proteinAcc && (
+            <BFVDModel
+              proteinAcc={proteinAcc}
+              hasMultipleProteins={hasMultipleProteins}
+              onModelChange={handleModelChange}
+              modelId={modelId}
+              bfvd={bfvdURL}
+              selections={selectionsInModel}
+              parentElement={container.current}
+              isSplitScreen={isSplitScreen}
+              onSplitScreenChange={(value: boolean) => setSplitScreen(value)}
+            />
+          )}
+          {mainType === 'entry' ? (
+            <ProteinTable onProteinChange={handleProteinChange} />
+          ) : (
+            <div
+              data-testid="alphafold-protvista"
+              className={css('protvista-container')}
+            >
+              <ProteinViewerForAlphafold
+                bfvd={bfvdURL}
+                protein={proteinAcc}
+                onChangeSelection={(selection: null | Array<Selection>) => {
+                  setSelectionsInModel(selection);
+                }}
+                isSplitScreen={isSplitScreen}
+              />
+            </div>
+          )}
+        </>
       ) : (
-        <div
-          data-testid="alphafold-protvista"
-          className={css('protvista-container')}
-        >
-          <ProteinViewerForAlphafold
-            protein={proteinAcc}
-            onChangeSelection={(selection: null | Array<Selection>) => {
-              setSelectionsInModel(selection);
-            }}
-            isSplitScreen={isSplitScreen}
-          />
-        </div>
+        <Callout type="warning">
+          {' '}
+          Structure viewer not available for this entry{' '}
+        </Callout>
       )}
     </div>
   );

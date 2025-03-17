@@ -55,7 +55,7 @@ type Props = {
   onModelChange: (value: string) => void;
   modelId: string | null;
   modelUrl?: string;
-  bfvdUrl?: string;
+  bfvd?: string;
   selections: Selection[] | null;
   parentElement?: HTMLElement | null;
   isSplitScreen: boolean;
@@ -69,7 +69,7 @@ const Structure3DModel = ({
   onModelChange,
   modelId,
   modelUrl,
-  bfvdUrl,
+  bfvd,
   data,
   selections,
   parentElement,
@@ -111,14 +111,14 @@ const Structure3DModel = ({
       {!isSplitScreen && (
         <>
           <h3>
-            {bfvdUrl
+            {bfvd
               ? 'BFVD Structure Prediction'
               : 'AlphaFold Structure Prediction'}
             {models.length > 1 || hasMultipleProteins ? 's' : ''}
           </h3>
           <p>
             The protein structure below has been predicted by{' '}
-            {bfvdUrl ? (
+            {bfvd ? (
               <>
                 ColabFold and is hosted on{' '}
                 <Link href={'https://bfvd.foldseek.com/'}>BFVD</Link>
@@ -136,12 +136,12 @@ const Structure3DModel = ({
             sequence&apos;s page at{' '}
             <Link
               href={
-                bfvdUrl
+                bfvd
                   ? `https://bfvd.foldseek.com/cluster/${proteinAcc}`
                   : modelUrl
               }
             >
-              {bfvdUrl ? 'BFVD' : 'AlphaFold DB'}
+              {bfvd ? 'BFVD' : 'AlphaFold DB'}
             </Link>
             .
           </p>
@@ -154,7 +154,7 @@ const Structure3DModel = ({
         </Callout>
       ) : null}
 
-      {!bfvdUrl && (
+      {!bfvd && (
         <SequenceCheck
           proteinAccession={proteinAcc}
           alphaFoldSequence={models?.[0]?.uniprotSequence}
@@ -186,14 +186,14 @@ const Structure3DModel = ({
                   View on{' '}
                   <Link
                     href={
-                      bfvdUrl
+                      bfvd
                         ? `https://bfvd.foldseek.com/cluster/${proteinAcc}`
                         : modelUrl
                     }
                   >
-                    {bfvdUrl ? 'BFVD' : 'AlphaFold DB'}
+                    {bfvd ? 'BFVD' : 'AlphaFold DB'}
                   </Link>
-                  {!bfvdUrl && (
+                  {!bfvd && (
                     <>
                       or{' '}
                       <UniProtLink
@@ -268,7 +268,7 @@ const Structure3DModel = ({
               >
                 <Link
                   className={css('control')}
-                  href={!bfvdUrl ? modelInfo.pdbUrl : bfvdUrl}
+                  href={!bfvd ? modelInfo.pdbUrl : bfvd}
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
                   <span
@@ -277,10 +277,10 @@ const Structure3DModel = ({
                   />
                   &nbsp;PDB file
                 </Link>
-                {!bfvdUrl && (
+                {!bfvd && (
                   <Link
                     className={css('control')}
-                    href={!bfvdUrl ? modelInfo.cifUrl : bfvdUrl}
+                    href={!bfvd ? modelInfo.cifUrl : bfvd}
                     download={`${proteinAcc || 'download'}.model.cif`}
                   >
                     <span
@@ -318,10 +318,10 @@ const Structure3DModel = ({
           >
             <StructureViewer
               id={'fullSequence'}
-              url={bfvdUrl ? bfvdUrl : modelInfo.cifUrl}
+              url={bfvd ? bfvd : modelInfo.cifUrl}
               elementId={elementId}
-              ext={bfvdUrl ? 'pdb' : 'mmcif'}
-              theme={bfvdUrl ? 'bfvd' : 'af'}
+              ext={bfvd ? 'pdb' : 'mmcif'}
+              theme={bfvd ? 'bfvd' : 'af'}
               shouldResetViewer={shouldResetViewer}
               selections={selections}
               onStructureLoaded={() => {

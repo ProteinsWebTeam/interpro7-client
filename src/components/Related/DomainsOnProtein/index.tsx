@@ -50,7 +50,6 @@ interface LoadedProps
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<ProteinsAPIProteomics, 'Proteomics'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    // LoadDataProps<InterProNMatches, 'InterProNMatches'>,
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}

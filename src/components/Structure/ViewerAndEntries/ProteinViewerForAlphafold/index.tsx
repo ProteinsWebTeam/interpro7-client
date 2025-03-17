@@ -19,6 +19,7 @@ import {
   flattenTracksObject,
   makeTracks,
 } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import { trace } from 'console';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -45,10 +46,99 @@ export const addConfidenceTrack = (
   }
 };
 
+export const addBFVDConfidenceTrack = async (
+  pdbURL: string,
+  tracks: ProteinViewerDataObject,
+  protein: string,
+): Promise<ProteinViewerDataObject> => {
+  try {
+    // Fetch the PDB file
+    const response = await fetch(pdbURL);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PDB file: ${response.status}`);
+    }
+    const pdbText = await response.text();
+    const lines = pdbText.split('\n');
+
+    // Track residues by their number
+    const residueBFactors: Map<number, number[]> = new Map();
+
+    // First pass: collect all B-factors for each residue
+    for (const line of lines) {
+      if (line.startsWith('ATOM') || line.startsWith('HETATM')) {
+        // Extract residue number (columns 23-26)
+        const residueNumStr = line.substring(22, 26).trim();
+        const residueNum = parseInt(residueNumStr);
+
+        // Extract B-factor value (columns 61-66)
+        const bFactorStr = line.substring(60, 66).trim();
+        const bFactor = parseFloat(bFactorStr);
+
+        if (!isNaN(residueNum) && !isNaN(bFactor)) {
+          // Add this B-factor to the appropriate residue
+          if (!residueBFactors.has(residueNum)) {
+            residueBFactors.set(residueNum, []);
+          }
+          residueBFactors.get(residueNum)?.push(bFactor);
+        }
+      }
+    }
+
+    // Second pass: calculate average B-factor for each residue
+    const residueAverageBFactors: number[] = [];
+
+    // Sort residue numbers to ensure correct order
+    const sortedResidueNumbers = Array.from(residueBFactors.keys()).sort(
+      (a, b) => a - b,
+    );
+
+    for (const residueNum of sortedResidueNumbers) {
+      const bFactors = residueBFactors.get(residueNum) || [];
+      // Calculate average B-factor for this residue
+      const averageBFactor =
+        bFactors.reduce((sum, bf) => sum + bf, 0) / bFactors.length;
+      residueAverageBFactors.push(averageBFactor);
+    }
+
+    // Add the track with amino acid-based B-factors
+    tracks['bfvd_confidence'] = [];
+    tracks['bfvd_confidence'][0] = {
+      accession: `confidence_af_${protein}`,
+      data: mapBFactorsToLetters(residueAverageBFactors),
+      type: 'confidence',
+      protein,
+      source_database: 'alphafold',
+    };
+
+    return tracks;
+  } catch (error) {
+    console.error('Error extracting B-factors:', error);
+    throw error;
+  }
+};
+
+export const mapBFactorsToLetters = (bFactors: number[]): string => {
+  // Map B-factor values to letters
+  return bFactors
+    .map((bFactor) => {
+      if (bFactor <= 50) {
+        return 'D'; // First color range (255, 125, 69)
+      } else if (bFactor <= 70) {
+        return 'L'; // Second color range (255, 219, 19)
+      } else if (bFactor <= 90) {
+        return 'M'; // Third color range (101, 203, 243)
+      } else {
+        return 'H'; // Fourth color range (0, 83, 214)
+      }
+    })
+    .join('');
+};
+
 type Props = {
   protein: string;
   onChangeSelection: (s: Selection[] | null) => void;
   isSplitScreen: boolean;
+  bfvd?: string;
 };
 interface LoadedProps
   extends Props,
@@ -59,6 +149,7 @@ interface LoadedProps
 const ProteinViewerForAlphafold = ({
   data,
   protein,
+  bfvd,
   dataProtein,
   dataConfidence,
   onChangeSelection,
@@ -69,6 +160,7 @@ const ProteinViewerForAlphafold = ({
 
   const [fixedSelection, _setFixedSelection] = useState<Selection[]>([]);
   const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
+  const [processedTracks, setProcessedTracks] = useState<ProteinViewerData>([]);
   const hoverSelectionRef = useRef(hoverSelection);
   const fixedSelectionRef = useRef(fixedSelection);
   const processedData = useProcessData(data?.payload?.results, 'protein');
@@ -85,6 +177,31 @@ const ProteinViewerForAlphafold = ({
     const selection = [...hoverSelection, ...fixedSelection];
     onChangeSelection(selection.length ? selection : null);
   }, [fixedSelection, hoverSelection]);
+
+  useEffect(() => {
+    if (!processedData) return;
+
+    let newGroups = { ...groups };
+
+    if (dataConfidence) {
+      addConfidenceTrack(dataConfidence, protein, newGroups);
+    }
+
+    // For synchronous operations, we can set state immediately
+    setProcessedTracks(flattenTracksObject(newGroups));
+
+    // For the async BFVD data, update state when it's ready
+    if (bfvd) {
+      addBFVDConfidenceTrack(bfvd, newGroups, protein).then((updatedTracks) => {
+        setProcessedTracks(
+          flattenTracksObject(
+            updatedTracks as ProteinViewerDataObject<MinimalFeature>,
+          ),
+        );
+      });
+    }
+  }, [processedData, dataConfidence, bfvd, protein]);
+
   useEffect(() => {
     trackRef.current?.addEventListener('change', (rawEvent: Event) => {
       const event = rawEvent as CustomEvent;
@@ -129,7 +246,7 @@ const ProteinViewerForAlphafold = ({
         }
       }
     });
-  }, [trackRef.current]);
+  }, [trackRef.current, processedTracks]);
   if (
     !data ||
     data.loading ||
@@ -145,15 +262,12 @@ const ProteinViewerForAlphafold = ({
     representativeFamilies,
   } = processedData;
 
-  const groups = makeTracks({
+  let groups = makeTracks({
     interpro: interpro as Array<{ accession: string; type: string }>,
     unintegrated: unintegrated as Array<{ accession: string; type: string }>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
     representativeFamilies: representativeFamilies as Array<MinimalFeature>,
   });
-
-  if (dataConfidence) addConfidenceTrack(dataConfidence, protein, groups);
-  const tracks = flattenTracksObject(groups);
 
   if (!dataProtein.payload?.metadata) return null;
 
@@ -162,7 +276,7 @@ const ProteinViewerForAlphafold = ({
       <ProteinViewer
         viewerType={'structures'}
         protein={dataProtein.payload.metadata}
-        data={tracks}
+        data={processedTracks}
         title="Protein domains"
         showOptions={!isSplitScreen}
       />

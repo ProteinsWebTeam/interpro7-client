@@ -48,6 +48,7 @@ export type ExtendedFeature = Feature & {
 };
 
 export const typeNameToSectionName: Record<string, string> = {
+  'bfvd confidence': 'BFVD Confidence',
   'alphafold confidence': 'AlphaFold Confidence',
   family: 'Families',
   domain: 'Domains',
