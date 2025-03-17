@@ -741,6 +741,7 @@ type SettingsProps = {
     disprot: Object,
     wikipedia: Object,
     alphafold: Object,
+    bfvd: Object,
     proteinsAPI: Object,
   },
   changeSettings: function,
