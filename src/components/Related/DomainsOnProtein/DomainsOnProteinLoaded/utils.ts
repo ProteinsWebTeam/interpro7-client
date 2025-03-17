@@ -653,10 +653,14 @@ function chooseBestMatch(
   let processedIntegratedMapInterPro_NMatches = processedResult[
     'integratedMap'
   ] as Map<string, ExtendedFeature>;
-  const flatIntegratedInterProN_Matches = Array.from(
-    processedIntegratedMapInterPro_NMatches.values(),
-  );
 
+  let flatIntegratedInterProN_Matches: ExtendedFeature[] = [];
+  processedIntegratedMapInterPro_NMatches.forEach((match) => {
+    if (match.children)
+      flatIntegratedInterProN_Matches = flatIntegratedInterProN_Matches.concat(
+        match.children,
+      );
+  });
   // List of best matches (unintegrated and integrated)
   let bestMatchesList = processedResult['best_matches'] as string[];
   bestMatchesList = bestMatchesList.map((match) =>
