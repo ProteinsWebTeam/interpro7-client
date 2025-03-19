@@ -61,7 +61,7 @@ const ProtVistaEntryPopup = ({
   let parentAccession = detail.feature?.parent?.accession;
 
   // Use :nMatch to distiguish the tracks during rendering on PV, but don't show the suffix on labels and tooltips
-  parentAccession = parentAccession?.replace(/:nmatch/i, '');
+  parentAccession = parentAccession?.replaceAll(/:nmatch/gi, '');
 
   // Handle cases where parent is not an InterPro Entry, like MobiDB lite matches
   if (parentAccession && parentAccession.startsWith('IPR'))
@@ -112,7 +112,7 @@ const ProtVistaEntryPopup = ({
           <div>
             {accession?.startsWith('residue:')
               ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
-              : accession?.replace('Mobidblt-', '').replace(/:nmatch/i, ' ')}
+              : accession?.replace('Mobidblt-', '').replaceAll(/:nmatch/gi, '')}
             {accession?.includes('nMatch') && (
               <sup>
                 {' '}
