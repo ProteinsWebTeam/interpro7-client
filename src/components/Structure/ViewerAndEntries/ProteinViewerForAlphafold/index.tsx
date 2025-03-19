@@ -54,7 +54,6 @@ type Props = {
   onChangeSelection: (s: Selection[] | null) => void;
   isSplitScreen: boolean;
   bfvd?: string;
-  matchesAvailable: Record<string, boolean>;
   dataInterProNMatches: Record<string, InterProN_Match>;
   matchTypeSettings: MatchTypeUISettings;
   colorDomainsBy: string;
@@ -73,7 +72,6 @@ const ProteinViewerForAlphafold = ({
   dataProtein,
   dataInterProNMatches,
   dataConfidence,
-  matchesAvailable,
   matchTypeSettings,
   colorDomainsBy,
   onChangeSelection,
@@ -224,7 +222,7 @@ const ProteinViewerForAlphafold = ({
   ) {
     let tracks = JSON.parse(JSON.stringify(processedTracks));
     tracksToProcess.forEach((track) => {
-      const traditionalMatches = tracks[track];
+      const traditionalMatches = tracks[track] || [];
       tracks[track] = mergeMatches(
         track,
         traditionalMatches as MinimalFeature[],
@@ -243,6 +241,18 @@ const ProteinViewerForAlphafold = ({
         }
       },
     );
+
+    const matchesAvailable = {
+      hmm:
+        processedTracks &&
+        Object.values(
+          processedTracks as ProteinViewerDataObject<ExtendedFeature>,
+        ).some((track) => {
+          // Check if any of the tracks have object, except for the confidence score one.
+          return track?.[0].type !== 'confidence' && track.length > 0;
+        }),
+      dl: interpro_NMatchesCount > 0, // Computed above
+    };
 
     return (
       <div ref={trackRef}>

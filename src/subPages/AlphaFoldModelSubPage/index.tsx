@@ -99,7 +99,6 @@ const AlphaFoldModelSubPage = ({
           className={css('protvista-container')}
         >
           <ProteinViewerForAlphafold
-            matchesAvailable={{ hmm: true, dl: true }}
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
             colorDomainsBy={colorDomainsBy}
