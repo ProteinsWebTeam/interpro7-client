@@ -160,7 +160,7 @@ type Props = PropsWithChildren<{
   changeSettingsRaw: typeof changeSettingsRaw;
 }>;
 
-const chooseColor = (color: string) => {
+export const chooseColor = (color: string) => {
   return Object.values(EntryColorMode).find((c) => c !== color) || '';
 };
 

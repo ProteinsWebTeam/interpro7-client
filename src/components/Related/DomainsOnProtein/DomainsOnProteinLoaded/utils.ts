@@ -1,4 +1,3 @@
-import { match } from 'assert';
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
