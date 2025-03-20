@@ -123,6 +123,7 @@ export const IPScanStatus = ({
     ((Number(search.page) || 1) - 1) * Number(pageSize),
     Number(pageSize),
   );
+  const expiryDate = new Date((job?.times?.created || 0) + MAX_TIME_ON_SERVER);
   return (
     <section>
       <IPScanVersionCheck
@@ -197,7 +198,7 @@ export const IPScanStatus = ({
           <StatusTooltip status={job?.status} />
         </section>
       </section>
-      {job?.status === 'finished' && (
+      {job?.status === 'finished' && expiryDate >= new Date() && (
         <section className={css('summary-row')}>
           <header>
             Expires{' '}
@@ -213,11 +214,7 @@ export const IPScanStatus = ({
               />
             </Tooltip>
           </header>
-          <section>
-            {new Date(
-              (job?.times?.created || 0) + MAX_TIME_ON_SERVER,
-            ).toDateString()}
-          </section>
+          <section>{expiryDate.toDateString()}</section>
         </section>
       )}
       <Table
