@@ -31,7 +31,7 @@ const matchMap: Array<[matchTypes, string]> = [
 ];
 
 const typeToName: Record<string, string> = {
-  best: 'Default',
+  best: 'Default/Combined',
   hmm: 'InterPro',
   dl: 'InterPro-N',
   hmm_and_dl: 'Stacked',
@@ -85,7 +85,7 @@ const MatchType = ({
           <Tooltip
             title={`
             <div style='text-align:left;'>
-            <b>Default</b>: InterPro matches supplemented with InterPro-N<br>
+            <b>Default/Combined</b>: InterPro matches supplemented with InterPro-N<br>
             <b>InterPro</b>: traditional InterPro matches only<br>
             <b>InterPro-N</b>: AI-predicted InterPro-N matches only<br>
             <b>Stacked</b>: Both InterPro and InterPro-N matches</div>`}
