@@ -249,7 +249,7 @@ const ProteinViewerForAlphafold = ({
           processedTracks as ProteinViewerDataObject<ExtendedFeature>,
         ).some((track) => {
           // Check if any of the tracks have object, except for the confidence score one.
-          return track?.[0].type !== 'confidence' && track.length > 0;
+          return track.length > 0 && track?.[0].type !== 'confidence';
         }),
       dl: interpro_NMatchesCount > 0, // Computed above
     };
