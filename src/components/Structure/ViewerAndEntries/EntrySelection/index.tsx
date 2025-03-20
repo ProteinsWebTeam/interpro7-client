@@ -11,18 +11,20 @@ type Props = {
   updateStructure: (memberDB: string | null, entry: string) => void;
   entryMap: Object;
   selectedEntry?: string;
+  entriesNames: Record<string, string | NameObject>;
 };
 
 const EntrySelection = ({
   entryMap,
   selectedEntry,
+  entriesNames,
   updateStructure,
 }: Props) => {
   const selectionGroups = [];
   selectionGroups.push(
     <option key="{NO_SELECTION}" value={NO_SELECTION}>
       Highlight Entry in the 3D structure
-    </option>
+    </option>,
   );
 
   for (const [memberDB, entries] of Object.entries(entryMap)) {
@@ -31,14 +33,14 @@ const EntrySelection = ({
       const key = `${memberDB}$-${entry}`;
       entryList.push(
         <option key={key} value={entry}>
-          {entry}
-        </option>
+          {entriesNames[entry] as string}
+        </option>,
       );
     }
     selectionGroups.push(
       <optgroup key={memberDB} label={memberDB}>
         {entryList}
-      </optgroup>
+      </optgroup>,
     );
   }
   const onSelectionChange = (e: React.FormEvent) => {
