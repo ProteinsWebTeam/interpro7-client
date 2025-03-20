@@ -1,4 +1,3 @@
-import { match } from 'assert';
 import {
   ExtendedFeature,
   ExtendedFeatureLocation,
@@ -495,11 +494,10 @@ function combineMatches(
   });
 
   // Take unintegrated traditional matches and apply appropriate filters
-  const unintegratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
-    traditionalMatches,
-  ).filter((match: ExtendedFeature) => {
-    return unintegratedTradMatchFilter(type, match);
-  });
+  const unintegratedTraditionalMatchesObj: ExtendedFeature[] =
+    traditionalMatches.filter((match: ExtendedFeature) => {
+      return unintegratedTradMatchFilter(type, match);
+    });
 
   // Combine unintegrated traditional matches from InterPro-N and HMMs under the same "parentUnintegrated" parent element
   unintegratedTraditionalMatchesObj.forEach((match) => {
@@ -543,11 +541,10 @@ function combineMatches(
 
   let flatIntegratedTraditionalMatchesObj: ExtendedFeature[] = [];
 
-  let integratedTraditionalMatchesObj: ExtendedFeature[] = Object.values(
-    traditionalMatches,
-  ).filter((match: ExtendedFeature) => {
-    return integratedTradMatchFilter(type, match);
-  });
+  let integratedTraditionalMatchesObj: ExtendedFeature[] =
+    traditionalMatches.filter((match: ExtendedFeature) => {
+      return integratedTradMatchFilter(type, match);
+    });
 
   // Flatten elements
   integratedTraditionalMatchesObj.forEach((match) => {
@@ -668,21 +665,20 @@ function chooseBestMatch(
   );
 
   // Retrieve traditional unintegrated matches that were not already in the InterproN matches and choosen as the preferred
-  const baseMatchesObjUnintegrated: ExtendedFeature[] = Object.values(
-    traditionalMatches,
-  ).filter((match: ExtendedFeature) => {
-    return (
-      unintegratedTradMatchFilter(type, match) &&
-      !bestMatchesList.includes(match.accession)
-    );
-  }) as ExtendedFeature[];
+  const baseMatchesObjUnintegrated: ExtendedFeature[] =
+    traditionalMatches.filter((match: ExtendedFeature) => {
+      return (
+        unintegratedTradMatchFilter(type, match) &&
+        !bestMatchesList.includes(match.accession)
+      );
+    }) as ExtendedFeature[];
 
   // Retrieve traditional integrated matches that were not alredy in the InterproN matches and choosen as the preferred
-  const baseMatchesObjIntegrated: ExtendedFeature[] = Object.values(
-    traditionalMatches,
-  ).filter((match: ExtendedFeature) => {
-    return integratedTradMatchFilter(type, match);
-  }) as ExtendedFeature[];
+  const baseMatchesObjIntegrated: ExtendedFeature[] = traditionalMatches.filter(
+    (match: ExtendedFeature) => {
+      return integratedTradMatchFilter(type, match);
+    },
+  ) as ExtendedFeature[];
 
   /*  Rebuild integrated matches structure (including children), appending matches to already existing preferred Intepro-N matches or traditional matches.
       In an integrated entry there could be a match coming from Interpro-N and one coming from traditional HMMs.

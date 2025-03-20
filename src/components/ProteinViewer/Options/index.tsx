@@ -239,8 +239,7 @@ const ProteinViewerOptions = ({
             <hr />
             {!(
               websitePage.includes('InterProScan') ||
-              websitePage.includes('structure') ||
-              websitePage.includes('alphafold')
+              websitePage.includes('structure')
             ) && (
               <MatchType
                 hasInterPro={matchesAvailable && matchesAvailable['hmm']}

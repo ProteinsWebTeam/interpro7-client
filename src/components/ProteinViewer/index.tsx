@@ -27,6 +27,7 @@ import {
   arrow,
   offset,
 } from '@floating-ui/react';
+import { chooseColor } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 import useStateRef from 'utils/hooks/useStateRef';
 
@@ -76,6 +77,7 @@ type Props = PropsWithChildren<{
   changeSettingsRaw: typeof changeSettingsRaw;
   showMoreSettings: boolean;
   matchesAvailable?: Record<string, boolean>;
+  colorDomainsBy?: string;
   matchTypeSettings?: MatchTypeUISettings;
 }>;
 
@@ -121,6 +123,7 @@ export const ProteinViewer = ({
   dataBase,
   loading = false,
   children,
+  colorDomainsBy,
   matchesAvailable,
   matchTypeSettings,
 }: LoadedProps) => {

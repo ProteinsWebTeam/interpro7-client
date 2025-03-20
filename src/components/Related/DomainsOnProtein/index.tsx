@@ -6,11 +6,11 @@ import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
-
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
 } from 'components/AlphaFold/selectors';
+
 import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
