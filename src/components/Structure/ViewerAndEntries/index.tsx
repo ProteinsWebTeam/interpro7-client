@@ -493,10 +493,8 @@ class StructureView extends PureComponent<Props, State> {
             }}
             isSpinning={isSpinning}
             shouldResetViewer={shouldResetViewer}
-            selections={this.state.selectionsInStructure}
-            onReset={() => {
-              this.setState({ selectionsInStructure: null });
-            }}
+            selections={this.state.selectionsInStructure || []}
+            onReset={() => this.setState({ selectionsInStructure: null })}
           />
         </PictureInPicturePanel>
         <div

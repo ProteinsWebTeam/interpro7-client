@@ -126,6 +126,29 @@ class StructureView extends PureComponent<Props> {
     }
   }
 
+  delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /* 
+  Delays take into account: 
+    - animation times
+    - the MolStar viewer not handling well multiple commands at once 
+  */
+  async resetOperations() {
+    if (this.viewer) {
+      if (this.props.onReset) {
+        await this.delay(100);
+        this.props.onReset();
+        this.applyChainIdTheme();
+      }
+
+      PluginCommands.Camera.ResetAxes(this.viewer, {});
+      await this.delay(500);
+      PluginCommands.Camera.Reset(this.viewer, {});
+    }
+  }
+
   componentDidUpdate(prevProps: Props) {
     if (this.name !== `${this.props.id}` || prevProps.url !== this.props.url) {
       this.name = `${this.props.id}`;
@@ -144,12 +167,7 @@ class StructureView extends PureComponent<Props> {
     if (this.viewer) {
       this.setSpin(this.props.isSpinning);
       if (this.props.shouldResetViewer) {
-        PluginCommands.Camera.Reset(this.viewer, {});
-        this.clearSelections();
-        this.applyChainIdTheme();
-        if (this.props.onReset) {
-          this.props.onReset();
-        }
+        this.resetOperations();
       }
       if ((this.props.selections?.length || 0) > 0) {
         this.highlightSelections(this.props.selections as Array<Selection>);
