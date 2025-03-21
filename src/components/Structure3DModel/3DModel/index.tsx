@@ -112,7 +112,7 @@ const Structure3DModel = ({
     if (!selections) setShouldResetViewer(true);
   }, [selections]);
 
-  if (data?.loading || isPDBLoading) return <Loading />;
+  if (data?.loading) return <Loading />;
 
   if ((data?.payload || []).length === 0) {
     return (
@@ -122,14 +122,17 @@ const Structure3DModel = ({
       </div>
     );
   }
-
   // Show warning if PDB is not available
-  if (!isPDBAvailable && bfvd) {
-    return (
-      <Callout type="warning">
-        Structure Viewer currently not available for this entry.
-      </Callout>
-    );
+  if (isPDBLoading) {
+    return <Loading />;
+  } else {
+    if (!isPDBAvailable) {
+      return (
+        <Callout type="warning">
+          Structure Viewer currently not available for this entry.
+        </Callout>
+      );
+    }
   }
 
   const models = data?.payload || [];

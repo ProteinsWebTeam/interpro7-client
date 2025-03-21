@@ -179,7 +179,19 @@ const ProteinViewerForAlphafold = ({
   }, [fixedSelection, hoverSelection]);
 
   useEffect(() => {
-    if (!processedData) return;
+    const {
+      interpro,
+      unintegrated,
+      representativeDomains,
+      representativeFamilies,
+    } = processedData;
+
+    const groups = makeTracks({
+      interpro: interpro as Array<{ accession: string; type: string }>,
+      unintegrated: unintegrated as Array<{ accession: string; type: string }>,
+      representativeDomains: representativeDomains as Array<MinimalFeature>,
+      representativeFamilies: representativeFamilies as Array<MinimalFeature>,
+    });
 
     const newGroups = { ...groups };
 
@@ -189,6 +201,8 @@ const ProteinViewerForAlphafold = ({
 
     // For synchronous operations, we can set state immediately
     setProcessedTracks(flattenTracksObject(newGroups));
+
+    console.log(bfvd);
 
     // For the async BFVD data, update state when it's ready
     if (bfvd) {
@@ -247,6 +261,7 @@ const ProteinViewerForAlphafold = ({
       }
     });
   }, [trackRef.current, processedTracks]);
+
   if (
     !data ||
     data.loading ||
@@ -255,19 +270,6 @@ const ProteinViewerForAlphafold = ({
     !processedData
   )
     return <Loading />;
-  const {
-    interpro,
-    unintegrated,
-    representativeDomains,
-    representativeFamilies,
-  } = processedData;
-
-  const groups = makeTracks({
-    interpro: interpro as Array<{ accession: string; type: string }>,
-    unintegrated: unintegrated as Array<{ accession: string; type: string }>,
-    representativeDomains: representativeDomains as Array<MinimalFeature>,
-    representativeFamilies: representativeFamilies as Array<MinimalFeature>,
-  });
 
   if (!dataProtein.payload?.metadata) return null;
 
