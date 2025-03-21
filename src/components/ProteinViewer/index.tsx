@@ -213,11 +213,11 @@ export const ProteinViewer = ({
       }
     }
 
-    /* 
+    /*
       Logic to handle default display settings for families and domains.
       There's cases where representative families or representative domains are not available.
       Examples: representative families still not supported in InterPro Scan, or there's just no representative match found in the data.
-      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown. 
+      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown.
       If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
     */
     const changeVisibilityFor: string[] = [];
@@ -282,7 +282,7 @@ export const ProteinViewer = ({
                 {children}
               </Options>
 
-              {/* Hide display mode switcher for alphafold viewer due to: 
+              {/* Hide display mode switcher for alphafold viewer due to:
               see comment in UseEffect above*/}
               {protein.accession && viewerType !== 'structures' && (
                 <ShowMoreTracks

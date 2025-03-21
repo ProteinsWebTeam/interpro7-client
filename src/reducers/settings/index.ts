@@ -15,4 +15,5 @@ export default combineReducers({
   wikipedia: category('wikipedia'),
   alphafold: category('alphafold'),
   proteinsAPI: category('proteinsAPI'),
+  ted: category('ted'),
 });

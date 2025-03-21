@@ -31,7 +31,7 @@ const EXCEPTIONAL_TYPES = [
   'variation',
   'ptm',
 ];
-const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
+const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:', 'TED:'];
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (
@@ -208,6 +208,18 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     ) : (
       <Link href={`https://disprot.org/${entry.protein}`} target="_blank">
         DisProt consensus
+      </Link>
+    );
+  }
+  if (entry.accession && entry.accession.startsWith('TED:')) {
+    return isPrinting ? (
+      <span>TED domains</span>
+    ) : (
+      <Link
+        href={`https://ted.cathdb.info/uniprot/${entry.protein}`}
+        target="_blank"
+      >
+        TED domains
       </Link>
     );
   }

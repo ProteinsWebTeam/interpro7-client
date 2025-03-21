@@ -241,6 +241,7 @@ const DomainsOnProteinLoaded = ({
       'short_linear_motifs',
       'spurious_proteins',
       'active_site',
+      'external_sources',
     ];
     const tracksToProcess = allTracks.filter(
       (track) => !unaffectedTracks.includes(track),

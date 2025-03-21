@@ -141,6 +141,7 @@ type SettingsState = {
   uniprot: ParsedURLServer;
   rfam: ParsedURLServer;
   proteinsAPI: ParsedURLServer;
+  ted: ParsedURLServer;
 };
 type ParsedURLServer = {
   protocol: string;
@@ -214,7 +215,8 @@ type Server =
   | 'alphafold'
   | 'repeatsDB'
   | 'disprot'
-  | 'proteinsAPI';
+  | 'proteinsAPI'
+  | 'ted';
 type ServerStatus = {
   status: boolean | null;
   lastCheck: number | null;

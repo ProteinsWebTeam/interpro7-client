@@ -5,6 +5,7 @@ import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
 import formatRepeatsDB from './RepeatsDB';
 import formatDisProt from './DisProt';
+import formatTED from './TED';
 
 export type ExtenalSourcesProps = {
   loading: boolean;
@@ -19,7 +20,8 @@ export function loadExternalSources<
 
   type Props = Omit<T, keyof ExtenalSourcesProps> &
     LoadDataProps<DisProtPayload, 'DisProt'> &
-    LoadDataProps<RepeatsDBPayload, 'RepeatsDB'>;
+    LoadDataProps<RepeatsDBPayload, 'RepeatsDB'> &
+    LoadDataProps<TEDPayload, 'TED'>;
 
   const ComponentWithExternalData = (props: Props) => {
     const {
@@ -27,6 +29,8 @@ export function loadExternalSources<
       isStaleRepeatsDB: __,
       dataDisProt,
       isStaleDisProt: ___,
+      dataTED,
+      isStaleDisProt: _,
       ...otherProps
     } = props;
 
@@ -34,12 +38,17 @@ export function loadExternalSources<
       ? formatRepeatsDB(dataRepeatsDB)
       : [];
     const disprotFormatted = dataDisProt ? formatDisProt(dataDisProt) : [];
+    const tedFormatted = dataTED ? formatTED(dataTED) : [];
 
     // TODO: Add Disprot
 
     // Fetch the props you want to inject. This could be done with context instead.
     const newProps = {
-      externalSourcesData: [...repeatsDBFormatted, ...disprotFormatted],
+      externalSourcesData: [
+        ...repeatsDBFormatted,
+        ...disprotFormatted,
+        ...tedFormatted,
+      ],
     };
 
     // props comes afterwards so the can override the default ones.
@@ -55,7 +64,12 @@ export function loadExternalSources<
     loadData<DisProtPayload, 'DisProt'>({
       getUrl: getDisProtURL,
       propNamespace: 'DisProt',
-    } as LoadDataParameters)(ComponentWithExternalData),
+    } as LoadDataParameters)(
+      loadData<TEDPayload, 'TED'>({
+        getUrl: getTEDURL,
+        propNamespace: 'TED',
+      } as LoadDataParameters)(ComponentWithExternalData),
+    ),
   );
 }
 
@@ -99,6 +113,32 @@ const getDisProtURL = createSelector(
         format: 'json',
       },
     });
+  },
+);
+
+const getTEDURL = createSelector(
+  (state: GlobalState) => state.settings.ted,
+  (state: GlobalState) => state.customLocation.description.protein.accession,
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    accession: string | null,
+  ) => {
+    if (!accession) return null;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: root,
+      query: {
+        acc: accession,
+      },
+    });
+    // return format({
+    //   protocol,
+    //   hostname,
+    //   port,
+    //   pathname: `${root}/api/v1/uniprot/summary/${accession}`.replaceAll(/\/{2,}/g, '/'),
+    // });
   },
 );
 
