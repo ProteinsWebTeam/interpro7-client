@@ -12,7 +12,7 @@ import { flattenTracksObject } from 'components/Related/DomainsOnProtein/Domains
 
 import { DataForProteinChain, mergeChimericProteins } from './utils';
 
-import { ExtendedFeature } from 'src/components/ProteinViewer/utils';
+import { ExtendedFeature } from 'components/ProteinViewer/utils';
 
 const css = cssBinder(fonts);
 

@@ -55,6 +55,7 @@ type Props = {
   onModelChange: (value: string) => void;
   modelId: string | null;
   modelUrl?: string;
+  bfvd?: string;
   selections: Selection[] | null;
   parentElement?: HTMLElement | null;
   isSplitScreen: boolean;
@@ -62,12 +63,13 @@ type Props = {
 };
 interface LoadedProps extends Props, LoadDataProps<AlphafoldPayload> {}
 
-const AlphaFoldModel = ({
+const Structure3DModel = ({
   proteinAcc,
   hasMultipleProteins,
   onModelChange,
   modelId,
   modelUrl,
+  bfvd,
   data,
   selections,
   parentElement,
@@ -76,15 +78,42 @@ const AlphaFoldModel = ({
 }: LoadedProps) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   const [isReady, setReady] = useState(false);
+
+  // Added states for PDB availability check (moved from BFVDModelSubPage)
+  const [isPDBLoading, setIsPDBLoading] = useState(false);
+  const [isPDBAvailable, setIsPDBAvailable] = useState(false);
+  const [bfvdURL, setBfvdURL] = useState(bfvd || '');
+
+  // Effect to check PDB availability (moved from BFVDModelSubPage)
+  useEffect(() => {
+    setIsPDBLoading(true);
+    if (bfvd && proteinAcc.length > 0) {
+      setBfvdURL(bfvd);
+      fetch(bfvd, { method: 'HEAD' }).then((res) => {
+        if (res.status == 200) {
+          setIsPDBAvailable(true);
+        }
+      });
+    } else {
+      // If not using BFVD, assume AlphaFold models are available
+      setIsPDBAvailable(true);
+      setIsPDBLoading(false);
+    }
+    setIsPDBLoading(false);
+  }, [proteinAcc, bfvd]);
+
   useEffect(() => {
     if (shouldResetViewer) {
       requestAnimationFrame(() => setShouldResetViewer(false));
     }
   }, [shouldResetViewer]);
+
   useEffect(() => {
     if (!selections) setShouldResetViewer(true);
   }, [selections]);
+
   if (data?.loading) return <Loading />;
+
   if ((data?.payload || []).length === 0) {
     return (
       <div>
@@ -93,29 +122,67 @@ const AlphaFoldModel = ({
       </div>
     );
   }
+  // Show warning if PDB is not available
+  if (isPDBLoading) {
+    return <Loading />;
+  } else {
+    if (!isPDBAvailable) {
+      return (
+        <Callout type="warning">
+          Structure Viewer currently not available for this entry.
+        </Callout>
+      );
+    }
+  }
 
   const models = data?.payload || [];
+
   const [modelInfo] =
-    modelId === null
-      ? models.slice(0, 1)
-      : models.filter((x) => x.entryId === modelId);
+    Object.values(models).length > 0
+      ? modelId === null
+        ? models.slice(0, 1)
+        : models.filter((x) => x.entryId === modelId)
+      : [];
+
   const elementId = 'new-structure-model-viewer';
   return (
     <div className={css('alphafold-model')}>
       {!isSplitScreen && (
         <>
           <h3>
-            AlphaFold structure prediction
+            {bfvd
+              ? 'BFVD Structure Prediction'
+              : 'AlphaFold Structure Prediction'}
             {models.length > 1 || hasMultipleProteins ? 's' : ''}
           </h3>
           <p>
             The protein structure below has been predicted by{' '}
-            <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
-            <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
-              Jumper, J et al. 2021
+            {bfvd ? (
+              <>
+                ColabFold and is hosted on{' '}
+                <Link href={'https://bfvd.foldseek.com/'}>BFVD</Link>
+              </>
+            ) : (
+              <>
+                <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
+                <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
+                  Jumper, J et al. 2021
+                </Link>
+                )
+              </>
+            )}
+            . For more information and additional features, please visit this
+            sequence&apos;s page at{' '}
+            <Link
+              href={
+                bfvd
+                  ? `https://bfvd.foldseek.com/cluster/${proteinAcc}`
+                  : modelUrl
+              }
+            >
+              {bfvd ? 'BFVD' : 'AlphaFold DB'}
             </Link>
-            ). For more information and additional features, please visit this
-            sequence&apos;s page at <Link href={modelUrl}>AlphaFold DB</Link>.
+            .
           </p>
         </>
       )}
@@ -125,11 +192,14 @@ const AlphaFoldModel = ({
           the table below the structure viewer to select another protein.
         </Callout>
       ) : null}
-      <SequenceCheck
-        proteinAccession={proteinAcc}
-        alphaFoldSequence={models?.[0]?.uniprotSequence}
-        alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
-      />
+
+      {!bfvd && (
+        <SequenceCheck
+          proteinAccession={proteinAcc}
+          alphaFoldSequence={models?.[0]?.uniprotSequence}
+          alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
+        />
+      )}
 
       <div className={css('af-container')}>
         {!isSplitScreen && (
@@ -144,30 +214,40 @@ const AlphaFoldModel = ({
                       main: { key: 'protein' },
                       protein: {
                         db: 'uniprot',
-                        accession: modelInfo.uniprotAccession,
+                        accession: proteinAcc,
                       },
                     },
                   }}
                 >
-                  {modelInfo.uniprotAccession}
+                  {proteinAcc}
                 </Link>
                 <span className={css('footer')}>
                   View on{' '}
-                  <Link href={modelUrl} className={css('ext')} target="_blank">
-                    AlphaFold DB
-                  </Link>{' '}
-                  or{' '}
-                  <UniProtLink
-                    id={modelInfo.uniprotAccession}
-                    className={css('ext')}
-                    target="_blank"
+                  <Link
+                    href={
+                      bfvd
+                        ? `https://bfvd.foldseek.com/cluster/${proteinAcc}`
+                        : modelUrl
+                    }
                   >
-                    UniProtKB
-                  </UniProtLink>
+                    {bfvd ? 'BFVD' : 'AlphaFold DB'}
+                  </Link>
+                  {!bfvd && (
+                    <>
+                      or{' '}
+                      <UniProtLink
+                        id={proteinAcc}
+                        className={css('ext')}
+                        target="_blank"
+                      >
+                        UniProtKB
+                      </UniProtLink>
+                    </>
+                  )}
                   <br />
                   Find similar structures with{' '}
                   <Link
-                    href={`https://search.foldseek.com/search?accession=${modelInfo.uniprotAccession}&source=AlphaFoldDB`}
+                    href={`https://search.foldseek.com/search?accession=${proteinAcc}&source=AlphaFoldDB`}
                     className={css('ext')}
                     target="_blank"
                   >
@@ -176,8 +256,14 @@ const AlphaFoldModel = ({
                 </span>
               </li>
               <li>
-                <span className={css('header')}>Organism</span>
-                <i>{modelInfo.organismScientificName}</i>
+                {modelInfo !== undefined ? (
+                  <>
+                    <span className={css('header')}>Organism</span>
+                    <i> {modelInfo.organismScientificName} </i>
+                  </>
+                ) : (
+                  ''
+                )}
               </li>
               {models.length > 1 ? (
                 <li>
@@ -221,7 +307,7 @@ const AlphaFoldModel = ({
               >
                 <Link
                   className={css('control')}
-                  href={modelInfo.pdbUrl}
+                  href={!bfvd ? modelInfo.pdbUrl : bfvdURL}
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
                   <span
@@ -230,17 +316,19 @@ const AlphaFoldModel = ({
                   />
                   &nbsp;PDB file
                 </Link>
-                <Link
-                  className={css('control')}
-                  href={modelInfo.cifUrl}
-                  download={`${proteinAcc || 'download'}.model.cif`}
-                >
-                  <span
-                    className={css('icon', 'icon-common', 'icon-download')}
-                    data-icon="&#xf019;"
-                  />
-                  &nbsp;mmCIF file
-                </Link>
+                {!bfvd && (
+                  <Link
+                    className={css('control')}
+                    href={!bfvd ? modelInfo.cifUrl : bfvdURL}
+                    download={`${proteinAcc || 'download'}.model.cif`}
+                  >
+                    <span
+                      className={css('icon', 'icon-common', 'icon-download')}
+                      data-icon="&#xf019;"
+                    />
+                    &nbsp;mmCIF file
+                  </Link>
+                )}
                 <Button
                   type="inline"
                   icon="icon-redo"
@@ -269,10 +357,10 @@ const AlphaFoldModel = ({
           >
             <StructureViewer
               id={'fullSequence'}
-              url={modelInfo.cifUrl}
+              url={bfvd ? bfvdURL : modelInfo.cifUrl}
               elementId={elementId}
-              ext="mmcif"
-              theme={'af'}
+              ext={bfvd ? 'pdb' : 'mmcif'}
+              theme={bfvd ? 'bfvd' : 'af'}
               shouldResetViewer={shouldResetViewer}
               selections={selections}
               onStructureLoaded={() => {
@@ -315,4 +403,4 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
 export default loadData({
   getUrl: getModelInfoUrl(true),
   mapStateToProps: getModelInfoUrl(false),
-} as LoadDataParameters)(AlphaFoldModel);
+} as LoadDataParameters)(Structure3DModel);
