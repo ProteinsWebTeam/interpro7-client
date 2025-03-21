@@ -78,21 +78,57 @@ const Structure3DModel = ({
 }: LoadedProps) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   const [isReady, setReady] = useState(false);
+
+  // Added states for PDB availability check (moved from BFVDModelSubPage)
+  const [isPDBLoading, setIsPDBLoading] = useState(false);
+  const [isPDBAvailable, setIsPDBAvailable] = useState(false);
+  const [bfvdURL, setBfvdURL] = useState(bfvd || '');
+
+  // Effect to check PDB availability (moved from BFVDModelSubPage)
+  useEffect(() => {
+    if (bfvd && proteinAcc.length > 0) {
+      setBfvdURL(bfvd);
+      setIsPDBLoading(true);
+      fetch(bfvd, { method: 'HEAD' }).then((res) => {
+        if (res.status == 200) {
+          setIsPDBAvailable(true);
+        }
+        setIsPDBLoading(false);
+      });
+    } else {
+      // If not using BFVD, assume AlphaFold models are available
+      setIsPDBAvailable(true);
+      setIsPDBLoading(false);
+    }
+  }, [proteinAcc, bfvd]);
+
   useEffect(() => {
     if (shouldResetViewer) {
       requestAnimationFrame(() => setShouldResetViewer(false));
     }
   }, [shouldResetViewer]);
+
   useEffect(() => {
     if (!selections) setShouldResetViewer(true);
   }, [selections]);
-  if (data?.loading) return <Loading />;
+
+  if (data?.loading || isPDBLoading) return <Loading />;
+
   if ((data?.payload || []).length === 0) {
     return (
       <div>
         <h3>Structure prediction</h3>
         <p>There is no structural model associated to {proteinAcc}.</p>
       </div>
+    );
+  }
+
+  // Show warning if PDB is not available
+  if (!isPDBAvailable && bfvd) {
+    return (
+      <Callout type="warning">
+        Structure Viewer currently not available for this entry.
+      </Callout>
     );
   }
 
@@ -268,7 +304,7 @@ const Structure3DModel = ({
               >
                 <Link
                   className={css('control')}
-                  href={!bfvd ? modelInfo.pdbUrl : bfvd}
+                  href={!bfvd ? modelInfo.pdbUrl : bfvdURL}
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
                   <span
@@ -280,7 +316,7 @@ const Structure3DModel = ({
                 {!bfvd && (
                   <Link
                     className={css('control')}
-                    href={!bfvd ? modelInfo.cifUrl : bfvd}
+                    href={!bfvd ? modelInfo.cifUrl : bfvdURL}
                     download={`${proteinAcc || 'download'}.model.cif`}
                   >
                     <span
@@ -318,7 +354,7 @@ const Structure3DModel = ({
           >
             <StructureViewer
               id={'fullSequence'}
-              url={bfvd ? bfvd : modelInfo.cifUrl}
+              url={bfvd ? bfvdURL : modelInfo.cifUrl}
               elementId={elementId}
               ext={bfvd ? 'pdb' : 'mmcif'}
               theme={bfvd ? 'bfvd' : 'af'}
