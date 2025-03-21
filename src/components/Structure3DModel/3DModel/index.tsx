@@ -86,20 +86,20 @@ const Structure3DModel = ({
 
   // Effect to check PDB availability (moved from BFVDModelSubPage)
   useEffect(() => {
+    setIsPDBLoading(true);
     if (bfvd && proteinAcc.length > 0) {
       setBfvdURL(bfvd);
-      setIsPDBLoading(true);
       fetch(bfvd, { method: 'HEAD' }).then((res) => {
         if (res.status == 200) {
           setIsPDBAvailable(true);
         }
-        setIsPDBLoading(false);
       });
     } else {
       // If not using BFVD, assume AlphaFold models are available
       setIsPDBAvailable(true);
       setIsPDBLoading(false);
     }
+    setIsPDBLoading(false);
   }, [proteinAcc, bfvd]);
 
   useEffect(() => {
