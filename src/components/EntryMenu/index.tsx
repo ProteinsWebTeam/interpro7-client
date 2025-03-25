@@ -157,22 +157,20 @@ export class EntryMenuWithoutData extends PureComponent<LoadedProps, State> {
           }}
         />
         {children}
-        {(tabs as Array<MenuItemProps>).map((e) => {
-          return (
-            <EntryMenuLink
-              key={e.name}
-              to={e.to}
-              exact={e.exact}
-              // activeClass={e.activeClass}
-              name={e.name}
-              data={data}
-              counter={e.counter}
-              isFirstLevel={!mainAccession}
-              usedOnTheSide={usedOnTheSide}
-              collapsed={this.state.isCollapsed}
-            />
-          );
-        })}
+        {(tabs as Array<MenuItemProps>).map((e) => (
+          <EntryMenuLink
+            key={e.name}
+            to={e.to}
+            exact={e.exact}
+            // activeClass={e.activeClass}
+            name={e.name}
+            data={data}
+            counter={e.counter}
+            isFirstLevel={!mainAccession}
+            usedOnTheSide={usedOnTheSide}
+            collapsed={this.state.isCollapsed}
+          />
+        ))}
       </ul>
     );
   }

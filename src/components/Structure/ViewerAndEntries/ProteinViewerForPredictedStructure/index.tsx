@@ -146,7 +146,7 @@ interface LoadedProps
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
     LoadDataProps<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>> {}
-const ProteinViewerForAlphafold = ({
+const ProteinViewerForPredictedStructure = ({
   data,
   protein,
   bfvd,
@@ -201,8 +201,6 @@ const ProteinViewerForAlphafold = ({
 
     // For synchronous operations, we can set state immediately
     setProcessedTracks(flattenTracksObject(newGroups));
-
-    console.log(bfvd);
 
     // For the async BFVD data, update state when it's ready
     if (bfvd) {
@@ -337,7 +335,7 @@ export default loadData<AlphafoldPayload, 'Prediction'>({
       propNamespace: 'Protein',
     } as LoadDataParameters)(
       loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
-        ProteinViewerForAlphafold,
+        ProteinViewerForPredictedStructure,
       ),
     ),
   ),

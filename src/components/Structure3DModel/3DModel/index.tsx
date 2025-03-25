@@ -89,17 +89,21 @@ const Structure3DModel = ({
     setIsPDBLoading(true);
     if (bfvd && proteinAcc.length > 0) {
       setBfvdURL(bfvd);
-      fetch(bfvd, { method: 'HEAD' }).then((res) => {
-        if (res.status == 200) {
-          setIsPDBAvailable(true);
-        }
-      });
+      fetch(bfvd, { method: 'HEAD' })
+        .then((res) => {
+          if (res.ok) {
+            setIsPDBAvailable(true);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsPDBLoading(false);
+        });
     } else {
       // If not using BFVD, assume AlphaFold models are available
       setIsPDBAvailable(true);
       setIsPDBLoading(false);
     }
-    setIsPDBLoading(false);
   }, [proteinAcc, bfvd]);
 
   useEffect(() => {
@@ -122,16 +126,19 @@ const Structure3DModel = ({
       </div>
     );
   }
+
   // Show warning if PDB is not available
-  if (isPDBLoading) {
-    return <Loading />;
-  } else {
-    if (!isPDBAvailable) {
-      return (
-        <Callout type="warning">
-          Structure Viewer currently not available for this entry.
-        </Callout>
-      );
+  if (bfvd) {
+    if (isPDBLoading) {
+      return <Loading />;
+    } else {
+      if (!isPDBAvailable) {
+        return (
+          <Callout type="warning">
+            Structure Viewer currently not available for this entry.
+          </Callout>
+        );
+      }
     }
   }
 
@@ -247,7 +254,9 @@ const Structure3DModel = ({
                   <br />
                   Find similar structures with{' '}
                   <Link
-                    href={`https://search.foldseek.com/search?accession=${proteinAcc}&source=AlphaFoldDB`}
+                    href={`https://search.foldseek.com/search?accession=${proteinAcc}&source=${
+                      bfvd ? 'BFVD' : 'AlphaFoldDB'
+                    }`}
                     className={css('ext')}
                     target="_blank"
                   >

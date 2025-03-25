@@ -29,8 +29,10 @@ const checkStatusesAndDispatch = async function (
     switch (endpoint) {
       case 'alphafold':
         testEndPoint = 'api/prediction/Q5VSL9';
+        break;
       case 'bfvd':
         testEndPoint = 'api/cluster/A0A2Z4HFS2';
+        break;
       default:
     }
 

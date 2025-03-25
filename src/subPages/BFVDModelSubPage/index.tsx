@@ -6,7 +6,7 @@ import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
 } from 'components/Structure3DModel/ProteinTable';
-import ProteinViewerForAlphafold from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
+import ProteinViewerForPredictedStructure from 'components/Structure/ViewerAndEntries/ProteinViewerForPredictedStructure';
 import { Selection } from 'components/Structure/ViewerAndEntries';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
@@ -88,7 +88,7 @@ const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
           data-testid="alphafold-protvista"
           className={css('protvista-container')}
         >
-          <ProteinViewerForAlphafold
+          <ProteinViewerForPredictedStructure
             bfvd={bfvdURL}
             protein={proteinAcc}
             onChangeSelection={(selection: null | Array<Selection>) => {

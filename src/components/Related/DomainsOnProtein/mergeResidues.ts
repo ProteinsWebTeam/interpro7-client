@@ -1,5 +1,3 @@
-import { ExtendedFeature } from 'components/ProteinViewer/utils';
-
 const PIRSR_ACCESSION_LENGTH = 11;
 const PIRSF_PREFIX_LENGTH = 5;
 
