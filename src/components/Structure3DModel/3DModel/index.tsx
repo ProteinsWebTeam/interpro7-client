@@ -94,15 +94,12 @@ const Structure3DModel = ({
           if (res.ok) {
             setIsPDBAvailable(true);
           }
+          setIsPDBLoading(false);
         })
         .catch((error) => {
-          console.log(error);
           setIsPDBLoading(false);
+          setIsPDBAvailable(false);
         });
-    } else {
-      // If not using BFVD, assume AlphaFold models are available
-      setIsPDBAvailable(true);
-      setIsPDBLoading(false);
     }
   }, [proteinAcc, bfvd]);
 
@@ -116,17 +113,6 @@ const Structure3DModel = ({
     if (!selections) setShouldResetViewer(true);
   }, [selections]);
 
-  if (data?.loading) return <Loading />;
-
-  if ((data?.payload || []).length === 0) {
-    return (
-      <div>
-        <h3>Structure prediction</h3>
-        <p>There is no structural model associated to {proteinAcc}.</p>
-      </div>
-    );
-  }
-
   // Show warning if PDB is not available
   if (bfvd) {
     if (isPDBLoading) {
@@ -139,6 +125,17 @@ const Structure3DModel = ({
           </Callout>
         );
       }
+    }
+  } else {
+    if (data?.loading) return <Loading />;
+
+    if ((data?.payload || []).length === 0) {
+      return (
+        <div>
+          <h3>Structure prediction</h3>
+          <p>There is no structural model associated to {proteinAcc}.</p>
+        </div>
+      );
     }
   }
 
@@ -386,6 +383,7 @@ const Structure3DModel = ({
 const getModelInfoUrl = (isUrlToApi: boolean) =>
   createSelector(
     (state: GlobalState) => state.settings.alphafold,
+    (state: GlobalState) => state.customLocation.description,
     (_: GlobalState, props?: Props) => {
       const proteinFromPayload =
         (props as LoadedProps)?.data?.payload?.[0]?.uniprotAccession || '';
@@ -393,17 +391,28 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
     },
     (
       { protocol, hostname, port, root, query }: ParsedURLServer,
+      description: InterProDescription,
       accession: string,
     ) => {
-      const modelUrl = format({
-        protocol,
-        hostname,
-        port,
-        pathname: isUrlToApi
-          ? `${root}api/prediction/${accession}`
-          : `${root}entry/${accession}`,
-        query: query,
-      });
+      let modelUrl = null;
+
+      if (
+        description['main']['key'] === 'entry' ||
+        description['main']['key'] === 'protein'
+      ) {
+        if (description[description['main']['key']]['detail'] === 'alphafold') {
+          modelUrl = format({
+            protocol,
+            hostname,
+            port,
+            pathname: isUrlToApi
+              ? `${root}api/prediction/${accession}`
+              : `${root}entry/${accession}`,
+            query: query,
+          });
+        }
+      }
+
       if (isUrlToApi) return modelUrl;
       return { modelUrl };
     },
