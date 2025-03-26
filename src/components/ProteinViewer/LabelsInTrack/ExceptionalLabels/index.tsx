@@ -3,7 +3,11 @@ import React from 'react';
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import Link from 'components/generic/Link';
 
-import { AlphafoldLink, PTMLink } from 'components/ExtLink/patternLinkWrapper';
+import {
+  AlphafoldLink,
+  PTMLink,
+  BFVDLink,
+} from 'components/ExtLink/patternLinkWrapper';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import { FunFamLink } from 'subPages/Subfamilies';
@@ -97,6 +101,16 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
       <AlphafoldLink id={entry.protein || ''} className={css('ext')}>
         pLDDT
       </AlphafoldLink>
+    );
+  }
+
+  if (entry.source_database === 'bfvd') {
+    return isPrinting ? (
+      <span>pLDDT</span>
+    ) : (
+      <BFVDLink id={entry.protein || ''} className={css('ext')}>
+        pLDDT
+      </BFVDLink>
     );
   }
 

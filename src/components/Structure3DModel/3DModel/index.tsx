@@ -89,7 +89,7 @@ const Structure3DModel = ({
     setIsPDBLoading(true);
     if (bfvd && proteinAcc.length > 0) {
       setBfvdURL(bfvd);
-      fetch(bfvd, { method: 'HEAD' })
+      fetch(bfvd, { method: 'GET' })
         .then((res) => {
           if (res.ok) {
             setIsPDBAvailable(true);

@@ -842,6 +842,7 @@ const _NOT_MEMBER_DBS = [
   'FUNFAM',
   'PFAM-N',
   'ALPHAFOLD',
+  'BFVD',
   'ELM',
 ];
 
