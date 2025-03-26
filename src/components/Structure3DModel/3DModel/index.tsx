@@ -160,32 +160,27 @@ const Structure3DModel = ({
             {models.length > 1 || hasMultipleProteins ? 's' : ''}
           </h3>
           <p>
-            The protein structure below has been predicted by{' '}
+            The protein structure below has been predicted{' '}
             {bfvd ? (
               <>
-                ColabFold and is hosted on{' '}
-                <Link href={'https://bfvd.foldseek.com/'}>BFVD</Link>
+                by the{' '}
+                <Link href={'//steineggerlab.com/en/'}>Steinegger Lab</Link>{' '}
+                using ColabFold (
+                <Link href={'//www.nature.com/articles/s41592-022-01488-1'}>
+                  Mirdita, M et al. 2022
+                </Link>
+                )
               </>
             ) : (
               <>
-                <Link href={'//deepmind.com/'}>DeepMind</Link> with AlphaFold (
+                by <Link href={'//deepmind.google/'}>Google DeepMind</Link>{' '}
+                using AlphaFold (
                 <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
                   Jumper, J et al. 2021
                 </Link>
                 )
               </>
             )}
-            . For more information and additional features, please visit this
-            sequence&apos;s page at{' '}
-            <Link
-              href={
-                bfvd
-                  ? `https://bfvd.foldseek.com/cluster/${proteinAcc}`
-                  : modelUrl
-              }
-            >
-              {bfvd ? 'BFVD' : 'AlphaFold DB'}
-            </Link>
             .
           </p>
         </>
@@ -230,28 +225,18 @@ const Structure3DModel = ({
                   <Link
                     href={
                       bfvd
-                        ? `https://bfvd.foldseek.com/cluster/${proteinAcc}`
+                        ? `//bfvd.foldseek.com/cluster/${proteinAcc}`
                         : modelUrl
                     }
+                    className={css('ext')}
+                    target="_blank"
                   >
                     {bfvd ? 'BFVD' : 'AlphaFold DB'}
                   </Link>
-                  {!bfvd && (
-                    <>
-                      or{' '}
-                      <UniProtLink
-                        id={proteinAcc}
-                        className={css('ext')}
-                        target="_blank"
-                      >
-                        UniProtKB
-                      </UniProtLink>
-                    </>
-                  )}
                   <br />
                   Find similar structures with{' '}
                   <Link
-                    href={`https://search.foldseek.com/search?accession=${proteinAcc}&source=${
+                    href={`//search.foldseek.com/search?accession=${proteinAcc}&source=${
                       bfvd ? 'BFVD' : 'AlphaFoldDB'
                     }`}
                     className={css('ext')}
