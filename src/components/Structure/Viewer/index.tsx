@@ -21,7 +21,6 @@ import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import Labels from './Labels';
 import { Selection } from '../ViewerAndEntries';
-import { ColorByResidueLddtTheme } from './ColourByResidueLddtTheme';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { BFactorColorThemeProvider } from './bfvd-confidence/color';
@@ -91,19 +90,6 @@ class StructureView extends PureComponent<Props> {
           this._structureViewerCanvas.current,
           this._structureViewer.current,
         );
-        if (ColorByResidueLddtTheme.colorThemeProvider)
-          this.viewer.representation.structure.themes.colorThemeRegistry.add(
-            ColorByResidueLddtTheme.colorThemeProvider,
-          );
-        if (ColorByResidueLddtTheme.labelProvider)
-          this.viewer.managers.lociLabels.addProvider(
-            ColorByResidueLddtTheme.labelProvider,
-          );
-        this.viewer.customModelProperties.register(
-          ColorByResidueLddtTheme.propertyProvider,
-          true,
-        );
-
         this.viewer.customModelProperties.register(AfConfidenceProvider, true);
         // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
@@ -292,10 +278,6 @@ class StructureView extends PureComponent<Props> {
   applyChainIdTheme() {
     let colouringTheme: string;
     switch (this.props.theme) {
-      case 'residue':
-        colouringTheme =
-          ColorByResidueLddtTheme.propertyProvider.descriptor.name;
-        break;
       case 'af':
         colouringTheme = AfConfidenceColorThemeProvider.name;
         break;
