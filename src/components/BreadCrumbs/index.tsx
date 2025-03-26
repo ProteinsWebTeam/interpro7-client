@@ -191,11 +191,10 @@ const BreadCrumbForEntityDetail = ({
 }: BreadCrumbForEntityDetailProps) => {
   let detailToRender = filters.length > 0 || detail ? detail : ' Overview';
 
-  // Handle camel case for AlphaFold
-  detailToRender =
-    detail && detailToRender?.includes('alphafold')
-      ? 'AlphaFold'
-      : detailToRender;
+  if (detail) {
+    if (detailToRender?.includes('alphafold')) detailToRender = 'AlphaFold';
+    else if (detailToRender?.includes('bfvd')) detailToRender = 'BFVD';
+  }
 
   return (
     <section className={css('detail')}>
