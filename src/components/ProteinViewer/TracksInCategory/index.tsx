@@ -96,7 +96,7 @@ const mapToFeatures = (entry: ExtendedFeature, colorDomainsBy: string) =>
     integrated: entry.integrated,
     source_database: entry.source_database,
     locations: [loc],
-    color: getTrackColor(entry, colorDomainsBy),
+    color: loc.color ?? getTrackColor(entry, colorDomainsBy),
     entry_type: entry.entry_type,
     type: entry.type || 'entry',
     residues: entry.residues && JSON.parse(JSON.stringify(entry.residues)),
@@ -386,6 +386,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           margin-left={20}
                           height={12}
                           id={getTrackAccession(entry.accession)}
+                          color={entry.color}
                           highlight-event="onmouseover"
                           highlight-color={highlightColor}
                           use-ctrl-to-zoom

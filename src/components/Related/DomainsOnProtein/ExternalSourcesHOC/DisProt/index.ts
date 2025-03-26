@@ -15,26 +15,39 @@ export const formatDisProt = ({
 }: RequestedData<DisProtPayload>) => {
   const panelsData: MinimalFeature[] = [];
   if (!loading && status === HTTP_OK && payload) {
-    let i = 1;
+    const locationsByType = {} as { [key: string]: ProtVistaLocation[] };
+    Object.keys(TYPES).forEach((key) => {
+      locationsByType[key] = [];
+    });
     for (const region of payload.disprot_consensus.full) {
-      panelsData.push({
-        accession: `DISPROT:${i++}`,
-        protein: payload.acc,
-        source_database: 'DisProt',
-        type: TYPES[region.type] || '',
-        locations: [
-          {
-            fragments: [
-              {
-                start: region.start,
-                end: region.end,
-              },
-            ],
-          },
-        ],
-      } as MinimalFeature);
+      const key = region.type;
+      if (locationsByType[key]) {
+        locationsByType[key].push({
+          fragments: [
+            {
+              start: region.start,
+              end: region.end,
+            },
+          ],
+        } as ProtVistaLocation);
+      }
     }
+
+    Object.keys(locationsByType).forEach((key) => {
+      const locations = locationsByType[key];
+      if (locations.length > 0) {
+        panelsData.push({
+          accession: `DISPROT:${panelsData.length + 1}`,
+          protein: payload.acc,
+          source_database: 'DisProt',
+          type: TYPES[key],
+          locations: locations,
+          color: '#A7662B',
+        } as MinimalFeature);
+      }
+    });
   }
+
   return panelsData;
 };
 

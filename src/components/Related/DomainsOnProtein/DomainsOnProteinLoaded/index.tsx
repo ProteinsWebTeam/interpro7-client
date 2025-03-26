@@ -20,6 +20,7 @@ import {
   sortTracks,
   standardizeMobiDBFeatureStructure,
   standardizeResidueStructure,
+  moveExtraFeatures,
 } from './utils';
 
 import { createSelector } from 'reselect';
@@ -260,6 +261,10 @@ const DomainsOnProteinLoaded = ({
         );
       });
     }
+  }
+
+  if (processedDataMerged['external_sources']) {
+    moveExtraFeatures(processedDataMerged);
   }
 
   // Reorganize sections and sort added matches

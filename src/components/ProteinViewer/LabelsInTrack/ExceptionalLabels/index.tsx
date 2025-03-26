@@ -206,7 +206,11 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     return isPrinting ? (
       <span>DisProt consensus</span>
     ) : (
-      <Link href={`https://disprot.org/${entry.protein}`} target="_blank">
+      <Link
+        href={`https://disprot.org/${entry.protein}`}
+        target="_blank"
+        className={css('ext')}
+      >
         DisProt consensus
       </Link>
     );
@@ -218,6 +222,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
       <Link
         href={`https://ted.cathdb.info/uniprot/${entry.protein}`}
         target="_blank"
+        className={css('ext')}
       >
         TED domains
       </Link>

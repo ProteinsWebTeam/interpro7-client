@@ -32,6 +32,7 @@ export const getTrackColor = (
   entry /*: Entry */,
   colorMode /*: ColorMode */,
 ) => {
+  if (entry.color) return entry.color;
   let acc;
   // eslint-disable-next-line default-case
   switch (colorMode) {

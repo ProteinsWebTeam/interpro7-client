@@ -16,7 +16,8 @@ export const formatRepeatsDB = ({
             accession: `REPEAT:${proteinAcc}:${feature.start}-${feature.end}`,
             protein: proteinAcc,
             source_database: 'RepeatsDB',
-            type: 'Consensus',
+            type: 'Repeated region',
+            color: '#cc79a7',
             locations: [
               {
                 fragments: [
