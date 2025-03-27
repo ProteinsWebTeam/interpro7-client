@@ -338,7 +338,7 @@ const EntriesOnStructure = ({
           return (
             <div key={i} className={css('vf-stack')}>
               <h4 id={`protvista-${chainsData.chain}`}>
-                Chain{chainsList.length > 1 && 's'} {chainsList.join(',')}
+                Chain{chainsList.length > 1 && 's'}: {chainsList.join(', ')}
                 {accessionList.length > 0 && ' ('}
                 {accessionList &&
                   accessionList.map((acc, idx) => {
