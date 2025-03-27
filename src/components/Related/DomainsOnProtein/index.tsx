@@ -10,7 +10,7 @@ import { getTrackColor, EntryColorMode } from 'utils/entry-color';
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
-} from 'components/AlphaFold/selectors';
+} from 'components/Structure3DModel/selectors';
 import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';

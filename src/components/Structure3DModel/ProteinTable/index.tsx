@@ -189,8 +189,9 @@ export const getUrl = (includeSearch: boolean) =>
           },
         };
         let query;
-        if (includeSearch) query = { ...search, has_model: true };
-        else query = { has_model: true };
+        if (includeSearch)
+          query = { ...search, with: description.entry.detail };
+        else query = { with: description.entry.detail };
         return format({
           protocol,
           hostname,

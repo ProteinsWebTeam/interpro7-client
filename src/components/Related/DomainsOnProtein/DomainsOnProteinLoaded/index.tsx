@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
-import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForAlphafold';
+import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForPredictedStructure';
 import loadable from 'higherOrder/loadable';
 import {
   groupByEntryType,

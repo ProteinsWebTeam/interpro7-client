@@ -122,6 +122,7 @@ export class EntryMenuWithoutData extends PureComponent<LoadedProps, State> {
     if (loading || !payload || !payload.metadata) {
       return <Loading />;
     }
+
     return (
       <ul
         className={css('tabs', className, {

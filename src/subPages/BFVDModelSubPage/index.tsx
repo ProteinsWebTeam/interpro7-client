@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import AlphaFoldModel from 'components/Structure3DModel/3DModel';
+import BFVDModel from 'components/Structure3DModel/3DModel';
 import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
@@ -24,13 +24,14 @@ interface LoadedProps
   extends Props,
     LoadDataProps<PayloadList<ProteinEntryPayload>> {}
 
-const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
+const BFVDModelSubPage = ({ data, description }: LoadedProps) => {
   const mainAccession = description[description.main.key as Endpoint].accession;
   const mainType = description.main.key!.toLowerCase();
   const container = useRef<HTMLDivElement>(null);
   const [selectionsInModel, setSelectionsInModel] =
     useState<Array<Selection> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
+
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
   const handleProteinChange = (value: string) => {
@@ -42,6 +43,7 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
     setModelId(value);
   };
 
+  // Set up initial protein accession
   useEffect(() => {
     if (mainType === 'entry') {
       // Take the list of matched UniProt matches and assign the first one to protein accession
@@ -51,6 +53,11 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
+
+  // Generate BFVD URL here but let the 3DModel component handle availability check
+  const bfvdURL = proteinAcc
+    ? `https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`
+    : '';
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
 
@@ -62,11 +69,12 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
       ref={container}
     >
       {proteinAcc && (
-        <AlphaFoldModel
+        <BFVDModel
           proteinAcc={proteinAcc}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
           modelId={modelId}
+          bfvd={bfvdURL}
           selections={selectionsInModel}
           parentElement={container.current}
           isSplitScreen={isSplitScreen}
@@ -81,6 +89,7 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
           className={css('protvista-container')}
         >
           <ProteinViewerForPredictedStructure
+            bfvd={bfvdURL}
             protein={proteinAcc}
             onChangeSelection={(selection: null | Array<Selection>) => {
               setSelectionsInModel(selection);
@@ -96,4 +105,4 @@ const AlphaFoldModelSubPage = ({ data, description }: LoadedProps) => {
 export default loadData({
   getUrl: getUrl(false),
   mapStateToProps: mapStateToPropsForModels,
-} as LoadDataParameters)(AlphaFoldModelSubPage);
+} as LoadDataParameters)(BFVDModelSubPage);

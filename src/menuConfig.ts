@@ -452,6 +452,26 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     },
   ],
   [
+    'bfvd',
+    {
+      to(customLocation: InterProLocation) {
+        const key = customLocation.description.main.key as Endpoint;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'bfvd',
+            },
+          },
+        };
+      },
+      name: 'BFVD',
+      counter: 'structural_models.bfvd',
+    },
+  ],
+  [
     'entry_alignments',
     {
       to(customLocation: InterProLocation) {
@@ -822,6 +842,7 @@ const _NOT_MEMBER_DBS = [
   'FUNFAM',
   'PFAM-N',
   'ALPHAFOLD',
+  'BFVD',
   'ELM',
 ];
 
