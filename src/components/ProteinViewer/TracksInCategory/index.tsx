@@ -74,6 +74,8 @@ const MARGIN_CHANGE_TRACKS = [
 ];
 
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:', 'TED:'];
+const WITH_TOP_MARGIN = ['REPEAT:', 'TED:'];
+const WITH_BOTTOM_MARGIN = ['TED:'];
 
 const b2sh = new Map([
   ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale
@@ -296,6 +298,12 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
             const isExternalSource = EXCEPTIONAL_PREFIXES.some((prefix) =>
               entry.accession.startsWith(prefix),
             );
+            const addTopMargin = WITH_TOP_MARGIN.some((prefix) =>
+              entry.accession.startsWith(prefix),
+            );
+            const addBottomMargin = WITH_BOTTOM_MARGIN.some((prefix) =>
+              entry.accession.startsWith(prefix),
+            );
 
             // Space unintegrated tracks
             const trackTopMargin =
@@ -384,7 +392,13 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                           length={sequence.length}
                           margin-color="#fafafa"
                           margin-left={20}
-                          height={12}
+                          margin-top={addTopMargin ? 8 : 0}
+                          margin-bottom={addBottomMargin ? 3 : 0}
+                          height={
+                            12 +
+                            (addTopMargin ? 8 : 0) +
+                            (addBottomMargin ? 3 : 0)
+                          }
                           id={getTrackAccession(entry.accession)}
                           color={entry.color}
                           highlight-event="onmouseover"
