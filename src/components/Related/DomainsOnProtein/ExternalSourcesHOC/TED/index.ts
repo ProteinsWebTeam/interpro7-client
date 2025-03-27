@@ -17,7 +17,14 @@ export const formatTED = ({
   status,
   payload,
 }: RequestedData<TEDPayload>) => {
-  if (loading || status !== HTTP_OK || !payload) return [] as MinimalFeature[];
+  if (
+    loading ||
+    status !== HTTP_OK ||
+    !payload ||
+    !payload.data ||
+    payload.data.length === 0
+  )
+    return [] as MinimalFeature[];
 
   return [
     {
