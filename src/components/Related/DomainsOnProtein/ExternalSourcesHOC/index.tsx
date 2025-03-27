@@ -6,6 +6,7 @@ import loadData from 'higherOrder/loadData/ts';
 import formatRepeatsDB from './RepeatsDB';
 import formatDisProt from './DisProt';
 import formatTED from './TED';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 export type ExtenalSourcesProps = {
   loading: boolean;
@@ -117,28 +118,26 @@ const getDisProtURL = createSelector(
 );
 
 const getTEDURL = createSelector(
-  (state: GlobalState) => state.settings.ted,
+  (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description.protein.accession,
   (
     { protocol, hostname, port, root }: ParsedURLServer,
     accession: string | null,
   ) => {
     if (!accession) return null;
+    const newDesc: InterProPartialDescription = {
+      main: { key: 'protein' },
+      protein: { db: 'uniprot', accession },
+    };
     return format({
       protocol,
       hostname,
       port,
-      pathname: root,
+      pathname: root + descriptionToPath(newDesc),
       query: {
-        acc: accession,
+        ted: '',
       },
     });
-    // return format({
-    //   protocol,
-    //   hostname,
-    //   port,
-    //   pathname: `${root}/api/v1/uniprot/summary/${accession}`.replaceAll(/\/{2,}/g, '/'),
-    // });
   },
 );
 
