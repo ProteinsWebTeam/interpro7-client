@@ -313,7 +313,7 @@ class StructureView extends PureComponent<Props, State> {
       // create matches in structure hierarchy
 
       for (const match of this.props.matches) {
-        let entry = match.metadata.accession;
+        const entry = match.metadata.accession;
         const db = match.metadata.source_database;
         if (!memberDBMap[db]) memberDBMap[db] = {};
         if (!memberDBMap[db][entry]) memberDBMap[db][entry] = {};
