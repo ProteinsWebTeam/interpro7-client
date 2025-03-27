@@ -41,8 +41,6 @@ export function loadExternalSources<
     const disprotFormatted = dataDisProt ? formatDisProt(dataDisProt) : [];
     const tedFormatted = dataTED ? formatTED(dataTED) : [];
 
-    // TODO: Add Disprot
-
     // Fetch the props you want to inject. This could be done with context instead.
     const newProps = {
       externalSourcesData: [
