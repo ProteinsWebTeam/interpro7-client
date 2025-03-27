@@ -17,7 +17,7 @@ const TEDPopup = ({ detail }: Props) => {
   const { accession, locations, protein } = detail.feature;
   return (
     <section>
-      <h6>TED Consensus Domains</h6>
+      <h6>TED consensus domain</h6>
       {locations.map(({ fragments }, i) => (
         <div key={i}>
           <Positions fragments={fragments} protein={protein} key={i} />
