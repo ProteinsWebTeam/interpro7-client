@@ -17,7 +17,7 @@ const RepeatsDBPopup = ({ detail }: Props) => {
   const { locations, protein } = detail.feature;
   return (
     <section>
-      <h5>RepeatsDB: consensus</h5>
+      <h6>RepeatsDB {locations[0].description}</h6>
 
       {locations.map(({ fragments }, i) => (
         <div key={i}>
