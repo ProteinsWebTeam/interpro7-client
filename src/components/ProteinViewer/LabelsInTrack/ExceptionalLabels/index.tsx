@@ -32,6 +32,11 @@ const EXCEPTIONAL_TYPES = [
   'ptm',
 ];
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:', 'TED:'];
+const WITH_TOP_PADDING = ['REPEAT:', 'TED:'];
+
+export const isStandaloneLabel = (entry: ExtendedFeature): boolean => {
+  return WITH_TOP_PADDING.some((prefix) => entry.accession.startsWith(prefix));
+};
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (
