@@ -1,11 +1,11 @@
 const HTTP_OK = 200;
 
-const TYPES: { [key: string]: string } = {
-  F: 'Function region',
-  S: 'Order state',
-  D: 'Disorder state',
-  T: 'Transition',
-  I: 'Transition with interaction',
+const TYPES: { [key: string]: [string, string] } = {
+  F: ['Function', '#b01e1c'],
+  S: ['Ordered', '#008de5'],
+  D: ['Disorder', '#a7662b'],
+  T: ['Transition', '#761e6f'],
+  I: ['Transition with interaction', '#761e6f'],
 };
 
 export const formatDisProt = ({
@@ -15,14 +15,13 @@ export const formatDisProt = ({
 }: RequestedData<DisProtPayload>) => {
   const panelsData: MinimalFeature[] = [];
   if (!loading && status === HTTP_OK && payload) {
-    const locationsByType = {} as { [key: string]: ProtVistaLocation[] };
-    Object.keys(TYPES).forEach((key) => {
-      locationsByType[key] = [];
-    });
+    const locations = [];
     for (const region of payload.disprot_consensus.full) {
-      const key = region.type;
-      if (locationsByType[key]) {
-        locationsByType[key].push({
+      if (TYPES[region.type]) {
+        const [description, color] = TYPES[region.type];
+        locations.push({
+          color: color,
+          description: description,
           fragments: [
             {
               start: region.start,
@@ -33,19 +32,14 @@ export const formatDisProt = ({
       }
     }
 
-    Object.keys(locationsByType).forEach((key) => {
-      const locations = locationsByType[key];
-      if (locations.length > 0) {
-        panelsData.push({
-          accession: `DISPROT:${panelsData.length + 1}`,
-          protein: payload.acc,
-          source_database: 'DisProt',
-          type: TYPES[key],
-          locations: locations,
-          color: '#A7662B',
-        } as MinimalFeature);
-      }
-    });
+    if (locations.length > 0) {
+      panelsData.push({
+        accession: `DISPROT:${panelsData.length + 1}`,
+        protein: payload.acc,
+        source_database: 'DisProt',
+        locations: locations,
+      } as MinimalFeature);
+    }
   }
 
   return panelsData;

@@ -14,10 +14,10 @@ type Props = {
 };
 
 const DisProtPopup = ({ detail }: Props) => {
-  const { locations, type, protein } = detail.feature;
+  const { locations, protein } = detail.feature;
   return (
     <section>
-      <h5>DisProt: {type}</h5>
+      <h6>DisProt: {locations[0].description}</h6>
 
       {locations.map(({ fragments }, i) => (
         <div key={i}>
