@@ -795,7 +795,7 @@ export function mergeMatches(
   }
 }
 
-export const moveExtraFeatures = (data: ProteinViewerDataObject) => {
+export const moveExternalFeatures = (data: ProteinViewerDataObject) => {
   data['external_sources'] = (
     data['external_sources'] as MinimalFeature[]
   ).filter((feature: MinimalFeature) => {

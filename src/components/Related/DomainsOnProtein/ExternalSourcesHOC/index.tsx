@@ -115,7 +115,7 @@ const getDisProtURL = createSelector(
   },
 );
 
-const getTEDURL = createSelector(
+export const getTEDURL = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description.protein.accession,
   (

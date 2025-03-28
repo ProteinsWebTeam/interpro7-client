@@ -12,7 +12,10 @@ import {
   getConfidenceURLFromPayload,
 } from 'components/AlphaFold/selectors';
 import { Selection } from 'components/Structure/ViewerAndEntries';
-import { sortTracks } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
+import {
+  moveExternalFeatures,
+  sortTracks,
+} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import { mergeMatches } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
@@ -23,6 +26,8 @@ import {
 } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 import { sectionsReorganization } from 'components/Related/DomainsOnProtein/utils';
+import { getTEDURL } from 'components/Related/DomainsOnProtein/ExternalSourcesHOC';
+import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TED';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -61,6 +66,7 @@ type Props = {
 
 interface LoadedProps
   extends Props,
+    LoadDataProps<TEDPayload, 'TED'>,
     LoadDataProps<{ metadata: ProteinMetadata }, 'Protein'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
@@ -75,6 +81,7 @@ const ProteinViewerForAlphafold = ({
   matchTypeSettings,
   colorDomainsBy,
   onChangeSelection,
+  dataTED,
   isSplitScreen = false,
 }: LoadedProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -254,6 +261,12 @@ const ProteinViewerForAlphafold = ({
       dl: interpro_NMatchesCount > 0, // Computed above
     };
 
+    const tedData = dataTED ? formatTED(dataTED) : [];
+    if (tedData.length > 0) {
+      tracks['external_sources'] = tedData;
+      moveExternalFeatures(tracks);
+    }
+
     return (
       <div ref={trackRef}>
         <ProteinViewer
@@ -316,12 +329,17 @@ export default loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getConfidenceURLFromPayload('Prediction'),
     propNamespace: 'Confidence',
   } as LoadDataParameters)(
-    loadData<{ metadata: ProteinMetadata }, 'Protein'>({
-      getUrl: getProteinURL,
-      propNamespace: 'Protein',
+    loadData<TEDPayload, 'TED'>({
+      getUrl: getTEDURL,
+      propNamespace: 'TED',
     } as LoadDataParameters)(
-      loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
-        ProteinViewerForAlphafold,
+      loadData<{ metadata: ProteinMetadata }, 'Protein'>({
+        getUrl: getProteinURL,
+        propNamespace: 'Protein',
+      } as LoadDataParameters)(
+        loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
+          ProteinViewerForAlphafold,
+        ),
       ),
     ),
   ),

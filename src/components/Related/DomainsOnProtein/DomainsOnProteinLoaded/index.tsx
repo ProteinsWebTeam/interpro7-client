@@ -20,7 +20,7 @@ import {
   sortTracks,
   standardizeMobiDBFeatureStructure,
   standardizeResidueStructure,
-  moveExtraFeatures,
+  moveExternalFeatures,
 } from './utils';
 
 import { createSelector } from 'reselect';
@@ -264,7 +264,7 @@ const DomainsOnProteinLoaded = ({
   }
 
   if (processedDataMerged['external_sources']) {
-    moveExtraFeatures(processedDataMerged);
+    moveExternalFeatures(processedDataMerged);
   }
 
   // Reorganize sections and sort added matches
