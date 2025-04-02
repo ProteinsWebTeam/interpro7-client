@@ -6,7 +6,6 @@ import loadData from 'higherOrder/loadData/ts';
 import formatRepeatsDB from './RepeatsDB';
 import formatDisProt from './DisProt';
 import formatTED from './TED';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 export type ExtenalSourcesProps = {
   loading: boolean;
