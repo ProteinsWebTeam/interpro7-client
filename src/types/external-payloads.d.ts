@@ -241,3 +241,13 @@ type DisProtPayload = {
   regions: Array<DisprotRegion>;
   disprot_consensus: DisprotConsensus;
 };
+type TEDDomain = {
+  ted_id: string;
+  uniprot_acc: string;
+  consensus_level: string;
+  chopping: string;
+  cath_label: string;
+};
+type TEDPayload = {
+  data: Array<TEDDomain>;
+};

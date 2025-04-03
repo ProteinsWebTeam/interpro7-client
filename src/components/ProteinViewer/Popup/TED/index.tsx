@@ -1,7 +1,7 @@
 import React from 'react';
 import Positions from '../Positions';
 
-export type DisProtDetail = {
+export type TEDDetails = {
   feature: {
     accession: string;
     type: string;
@@ -10,15 +10,14 @@ export type DisProtDetail = {
   };
 };
 type Props = {
-  detail: DisProtDetail;
+  detail: TEDDetails;
 };
 
-const DisProtPopup = ({ detail }: Props) => {
-  const { locations, protein } = detail.feature;
+const TEDPopup = ({ detail }: Props) => {
+  const { accession, locations, protein } = detail.feature;
   return (
     <section>
-      <h6>DisProt: {locations[0].description}</h6>
-
+      <h6>TED consensus domain</h6>
       {locations.map(({ fragments }, i) => (
         <div key={i}>
           <Positions fragments={fragments} protein={protein} key={i} />
@@ -27,4 +26,4 @@ const DisProtPopup = ({ detail }: Props) => {
     </section>
   );
 };
-export default DisProtPopup;
+export default TEDPopup;

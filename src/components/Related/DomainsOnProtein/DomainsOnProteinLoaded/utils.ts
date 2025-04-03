@@ -79,6 +79,8 @@ export function sortTracks(
   const [aAccession, aStart, aEnd] = getBoundaries(a);
   const [bAccession, bStart, bEnd] = getBoundaries(b);
 
+  if (aAccession && (aAccession as string).startsWith('TED:')) return -1;
+  if (bAccession && (bAccession as string).startsWith('TED:')) return 1;
   if (aStart > bStart) return 1;
   if (aStart < bStart) return -1;
   if (aStart === bStart) {
@@ -354,9 +356,9 @@ function processInterProN_Matches(
   );
   integratedInterProN_Matches = addSuffix(integratedInterProN_Matches);
 
-  /* 
+  /*
   Create map <integrated_accession: integrated_entryobj> to append integrated matches as children later
-   NOTE: see structure of returned InterPro-N objects 
+   NOTE: see structure of returned InterPro-N objects
   (it's a dict, where matches accessions are keys, values then contain the integrated entry as another dict)
   */
   let integratedInterProN_Map: Map<string, InterProN_Match> = new Map();
@@ -412,11 +414,11 @@ function processInterProN_Matches(
     type,
   );
 
-  /* 
+  /*
   Depending on which mode is selected, we need to return different objects
     - Only InterPro-N, "dl": simply return the merged unintegrated, integrated and representative data
     - Default mode, "best": return a record with the map of the integrated, the array of unintegrated and the list of best matches
-    - Stacked mode, "hmm_and_dl": return a record with the map of the integrated and the array of unintegrated 
+    - Stacked mode, "hmm_and_dl": return a record with the map of the integrated and the array of unintegrated
   */
   switch (mode) {
     case 'dl':
@@ -477,7 +479,7 @@ function combineMatches(
     ExtendedFeature | InterProN_Match
   > = new Map();
 
-  /* 
+  /*
     Build initial structure for unintegrated entries starting from InterPro-N ones.
     We're going to have a parentUnintegrated entry where all the unintegrated entries (HMMs and DLs)
     with the same accessionare going to fall.
@@ -523,7 +525,7 @@ function combineMatches(
     }
   });
 
-  /* 
+  /*
     Now we're going to to the same thing for integrated entries.
     Build initial structure for integrated entries starting from InterPro-N ones.
     We're going to have a parent InterPro entry where all the integrated entries (HMMs and DLs)
@@ -575,8 +577,8 @@ function combineMatches(
     }
   });
 
-  /* 
-    Logic to add representative data 
+  /*
+    Logic to add representative data
     Take representativa data from traditional matches first.
     If it's not available, then show the traditional data from InterPro-N
   */
@@ -709,8 +711,8 @@ function chooseBestMatch(
     });
   });
 
-  /* 
-  Logic to add representative data 
+  /*
+  Logic to add representative data
   Take representativa data from traditional matches first.
   If it's not available, then show the traditional data from InterPro-N
   */
@@ -792,3 +794,22 @@ export function mergeMatches(
       return [];
   }
 }
+
+export const moveExternalFeatures = (data: ProteinViewerDataObject) => {
+  data['external_sources'] = (
+    data['external_sources'] as MinimalFeature[]
+  ).filter((feature: MinimalFeature) => {
+    if (feature.source_database === 'DisProt') {
+      data['intrinsically_disordered_regions'].push(feature);
+      return false;
+    } else if (
+      feature.source_database === 'RepeatsDB' ||
+      feature.source_database === 'TED'
+    ) {
+      data['domain'].push(feature);
+      return false;
+    }
+
+    return true;
+  });
+};

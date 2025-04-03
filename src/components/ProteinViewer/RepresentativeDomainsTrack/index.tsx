@@ -121,6 +121,18 @@ const RepresentativeTrack = ({
     };
   }, [closeTooltip]);
 
+  let plural;
+  switch (type.toLowerCase()) {
+    case 'domain':
+      plural = 'domains';
+      break;
+    case 'family':
+      plural = 'families';
+      break;
+    default:
+      throw new Error(`Unsupported type ${type.toLowerCase()}`);
+  }
+
   return (
     <>
       <div className={css('track', { hideCategory })} ref={containerRef}>
@@ -139,7 +151,7 @@ const RepresentativeTrack = ({
         />
       </div>
       <div className={css('track-label', 'centered-label')}>
-        <b>Representative {type.toLowerCase()}</b>
+        <b>Representative {plural}</b>
       </div>
     </>
   );

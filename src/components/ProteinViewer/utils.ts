@@ -27,6 +27,7 @@ export type ExtendedFeatureLocation = {
   confidence?: number;
   description?: string;
   seq_feature?: string;
+  color?: string;
 };
 
 export type ExtendedFeature = Feature & {
