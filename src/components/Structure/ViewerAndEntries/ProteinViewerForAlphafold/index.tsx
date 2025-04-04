@@ -35,6 +35,97 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
+export const addBFVDConfidenceTrack = async (
+  pdbURL: string,
+  tracks: ProteinViewerDataObject,
+  dataProtein: ProteinMetadata,
+): Promise<ProteinViewerDataObject> => {
+  try {
+    // Fetch the PDB file
+    const response = await fetch(pdbURL);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch PDB file: ${response.status}`);
+    }
+
+    const protein = dataProtein.name;
+    const sequence = dataProtein.sequence;
+    const pdbText = await response.text();
+    const lines = pdbText.split('\n');
+
+    const residueBFactors: Map<number, number[]> = new Map();
+    const aminoacidNumbers = [...Array(sequence.length).keys()];
+    aminoacidNumbers.forEach((num) => residueBFactors.set(num, [-1]));
+
+    for (const line of lines) {
+      if (line.startsWith('ATOM') || line.startsWith('HETATM')) {
+        const residueNumStr = line.substring(22, 26).trim();
+        const residueNum = parseInt(residueNumStr);
+
+        const bFactorStr = line.substring(60, 66).trim();
+        const bFactor = parseFloat(bFactorStr);
+
+        if (!isNaN(residueNum) && !isNaN(bFactor)) {
+          // Add this B-factor to the appropriate residue
+          if (!residueBFactors.has(residueNum)) {
+            residueBFactors.set(residueNum, []);
+          }
+          residueBFactors.get(residueNum)?.push(bFactor);
+        }
+      }
+    }
+
+    // Second pass: calculate average B-factor for each residue
+    const residueAverageBFactors: number[] = [];
+
+    // Sort residue numbers to ensure correct order
+    const sortedResidueNumbers = Array.from(residueBFactors.keys()).sort(
+      (a, b) => a - b,
+    );
+
+    for (const residueNum of sortedResidueNumbers) {
+      const bFactors = residueBFactors.get(residueNum) || [];
+      // Calculate average B-factor for this residue
+      const averageBFactor =
+        bFactors.reduce((sum, bf) => sum + bf, 0) / bFactors.length;
+      residueAverageBFactors.push(averageBFactor);
+    }
+
+    // Add the track with amino acid-based B-factors
+    tracks['bfvd_confidence'] = [];
+    tracks['bfvd_confidence'][0] = {
+      accession: `confidence_bfvd_${protein}`,
+      data: mapBFactorsToLetters(residueAverageBFactors),
+      type: 'confidence',
+      protein,
+      source_database: 'bfvd',
+    };
+
+    return tracks;
+  } catch (error) {
+    console.error('Error extracting B-factors:', error);
+    throw error;
+  }
+};
+
+export const mapBFactorsToLetters = (bFactors: number[]): string => {
+  // Map B-factor values to letters
+  return bFactors
+    .map((bFactor) => {
+      if (bFactor <= 0) {
+        return 'N';
+      } else if (bFactor <= 50) {
+        return 'D'; // First color range (255, 125, 69)
+      } else if (bFactor <= 70) {
+        return 'L'; // Second color range (255, 219, 19)
+      } else if (bFactor <= 90) {
+        return 'M'; // Third color range (101, 203, 243)
+      } else {
+        return 'H'; // Fourth color range (0, 83, 214)
+      }
+    })
+    .join('');
+};
+
 /* Processing of the payload needs to be slightly different
 to add tracks to the groups object instead of the dataSorted object */
 export const addConfidenceTrack = (
@@ -128,8 +219,20 @@ const ProteinViewerForAlphafold = ({
     if (dataConfidence) {
       addConfidenceTrack(dataConfidence, protein, newGroups);
     }
+
     // For synchronous operations, we can set state immediately
     setProcessedTracks(newGroups);
+
+    // For the async BFVD data, update state when it's ready
+    if (bfvd && dataProtein?.payload) {
+      addBFVDConfidenceTrack(
+        bfvd,
+        newGroups,
+        dataProtein.payload['metadata'],
+      ).then((updatedTracks) => {
+        setProcessedTracks(newGroups);
+      });
+    }
   }, [processedData, dataConfidence, bfvd, protein]);
 
   useEffect(() => {
