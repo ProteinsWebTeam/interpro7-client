@@ -211,15 +211,20 @@ svg {
   cursor: default;
 }
 
-/* Hide parent tracks for domain and interpro entries*/
-g:global(.feature-group):has(g:global(.residues-group))
-  > g:global(.location-group) {
-  display: none;
-}
-
+/* Hide parent tracks for interpro entries and residues*/
 svg:global(.container):has(g:global(.children-features))
   > g:global(.sequence-features):has(
     g:global(.feature-group:is([id^="g_IPR"], [id^="g_parentUnintegrated"]))
   ) {
+  display: none;
+}
+
+g:global(.child-group):has(g:global(.residues-group))
+  > g:global(.child-location-group) {
+  display: none;
+}
+
+g:global(.feature-group):has(g:global(.residues-group))
+  > g:global(.location-group) {
   display: none;
 }

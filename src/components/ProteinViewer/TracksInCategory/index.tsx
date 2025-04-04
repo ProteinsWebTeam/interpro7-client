@@ -76,6 +76,7 @@ const MARGIN_CHANGE_TRACKS = [
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:', 'TED:'];
 const WITH_TOP_MARGIN = ['REPEAT:', 'TED:'];
 const WITH_BOTTOM_MARGIN = ['TED:'];
+const domainTypes = ['domain', 'homologous_superfamily', 'repeats'];
 
 const b2sh = new Map([
   ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale
@@ -90,22 +91,31 @@ const webComponents = [
   'nightingale-interpro-track',
   'nightingale-track',
 ];
-const mapToFeatures = (entry: ExtendedFeature, colorDomainsBy: string) =>
-  (entry.entry_protein_locations || entry.locations || []).map((loc) => ({
-    accession: entry.accession,
-    name: entry.name,
-    short_name: entry.short_name,
-    integrated: entry.integrated,
-    source_database: entry.source_database,
-    locations: [loc],
-    color: loc.color ?? getTrackColor(entry, colorDomainsBy),
-    entry_type: entry.entry_type,
-    type: entry.type || 'entry',
-    residues: entry.residues && JSON.parse(JSON.stringify(entry.residues)),
-    chain: entry.chain,
-    protein: entry.protein,
-    confidence: loc.confidence,
-  }));
+
+const mapToFeatures = (entry: ExtendedFeature, colorDomainsBy: string) => {
+  if (
+    !entry.accession.startsWith('IPR') &&
+    domainTypes.includes(entry.type || '')
+  )
+    return [];
+  return (entry.entry_protein_locations || entry.locations || []).map(
+    (loc) => ({
+      accession: entry.accession,
+      name: entry.name,
+      short_name: entry.short_name,
+      integrated: entry.integrated,
+      source_database: entry.source_database,
+      locations: [loc],
+      color: loc.color ?? getTrackColor(entry, colorDomainsBy),
+      entry_type: entry.entry_type,
+      type: entry.type || 'entry',
+      residues: entry.residues && JSON.parse(JSON.stringify(entry.residues)),
+      chain: entry.chain,
+      protein: entry.protein,
+      confidence: loc.confidence,
+    }),
+  );
+};
 
 const mapToContributors = (entry: ExtendedFeature, colorDomainsBy: string) =>
   entry.children?.map((child) => ({
@@ -266,7 +276,10 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                   colorDomainsBy || 'MEMBER_DB',
                 );
                 const contributors = mapToContributors(
-                  entry,
+                  !entry.accession.startsWith('IPR') &&
+                    domainTypes.includes(entry.type || '')
+                    ? ({ children: [entry] } as ExtendedFeature) // Return parent-like structure for domain unintegrated entries
+                    : entry,
                   colorDomainsBy || 'MEMBER_DB',
                 );
                 if (contributors)
