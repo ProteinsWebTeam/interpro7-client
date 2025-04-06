@@ -400,6 +400,7 @@ const getProteinURL = createSelector(
     });
   },
 );
+
 const getInterproRelatedEntriesURL = createSelector(
   (state) => state.settings.api,
   (_, props) => props.protein,
