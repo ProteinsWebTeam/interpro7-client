@@ -65,8 +65,7 @@ export const addBFVDConfidenceTrack = async (
         const bFactor = parseFloat(bFactorStr);
 
         if (!isNaN(residueNum) && !isNaN(bFactor)) {
-          // Add this B-factor to the appropriate residue
-          if (!residueBFactors.has(residueNum)) {
+          if (residueBFactors.get(residueNum)?.[0] == -1) {
             residueBFactors.set(residueNum, []);
           }
           residueBFactors.get(residueNum)?.push(bFactor);
