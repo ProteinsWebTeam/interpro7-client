@@ -347,6 +347,7 @@ type MinimalFeature = {
   locations?: Array<ProtVistaLocation>;
   children?: Array<{ accession: string; source_database: string }>;
   member_databases?: Record<string, unknown>;
+  representative?: boolean;
 };
 
 type Shapes =

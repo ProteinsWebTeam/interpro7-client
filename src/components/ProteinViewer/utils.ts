@@ -27,6 +27,7 @@ export type ExtendedFeatureLocation = {
   confidence?: number;
   description?: string;
   seq_feature?: string;
+  color?: string;
 };
 
 export type ExtendedFeature = Feature & {
@@ -120,7 +121,10 @@ export const selectRepresentativeData = (
   type: string,
 ) => {
   const flatRepresentativeData = [];
-
+  const types =
+    type === 'domain'
+      ? ['domain', 'repeat', 'homologous_superfamily']
+      : ['family'];
   for (const entry of entries) {
     const {
       accession,
@@ -132,11 +136,7 @@ export const selectRepresentativeData = (
       children,
     } = entry;
 
-    if (
-      entry[locationKey] === null ||
-      (entry.type !== type &&
-        (type === 'domain' ? entry.type !== 'repeat' : true)) // Handles repeat types, which fall under the "domain" cateogory
-    ) {
+    if (entry[locationKey] === null || !types.includes(entry.type as string)) {
       continue;
     }
     for (const location of entry[locationKey] as Array<ProtVistaLocation>) {
@@ -178,6 +178,7 @@ const processData = <M = Metadata>(
   endpoint: Endpoint,
 ) => {
   const results: Record<string, unknown>[] = [];
+
   for (const item of dataResults) {
     results.splice(
       0,
@@ -209,7 +210,7 @@ const processData = <M = Metadata>(
 
     const interproK = integratedUnder.map((entryAccession) => {
       return `${ipro.accession}-${entryAccession}-${ipro.chain}-${
-        endpoint === 'structure' ? ipro.structureAccession : ipro.protein
+        endpoint === 'structure' ? ipro.structureAccession : ''
       }`;
     });
     interproK.map((k) => {
@@ -246,7 +247,7 @@ const processData = <M = Metadata>(
     } =
       interproMap.get(
         `${entry.integrated}-${entry.accession}-${entry.chain}-${
-          endpoint === 'structure' ? entry.structureAccession : entry.protein
+          endpoint === 'structure' ? entry.structureAccession : ''
         }`,
       ) || {};
 

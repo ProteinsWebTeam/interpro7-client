@@ -35,7 +35,12 @@ const EXCEPTIONAL_TYPES = [
   'variation',
   'ptm',
 ];
-const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:'];
+const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:', 'TED:'];
+const WITH_TOP_PADDING = ['REPEAT:', 'TED:'];
+
+export const isStandaloneLabel = (entry: ExtendedFeature): boolean => {
+  return WITH_TOP_PADDING.some((prefix) => entry.accession.startsWith(prefix));
+};
 
 export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
   return (
@@ -220,8 +225,25 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     return isPrinting ? (
       <span>DisProt consensus</span>
     ) : (
-      <Link href={`https://disprot.org/${entry.protein}`} target="_blank">
+      <Link
+        href={`https://disprot.org/${entry.protein}`}
+        target="_blank"
+        className={css('ext')}
+      >
         DisProt consensus
+      </Link>
+    );
+  }
+  if (entry.accession && entry.accession.startsWith('TED:')) {
+    return isPrinting ? (
+      <span>TED domains</span>
+    ) : (
+      <Link
+        href={`https://ted.cathdb.info/uniprot/${entry.protein}`}
+        target="_blank"
+        className={css('ext')}
+      >
+        TED domains
       </Link>
     );
   }

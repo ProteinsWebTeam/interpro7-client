@@ -20,6 +20,7 @@ import {
   sortTracks,
   standardizeMobiDBFeatureStructure,
   standardizeResidueStructure,
+  moveExternalFeatures,
 } from './utils';
 
 import { createSelector } from 'reselect';
@@ -149,7 +150,6 @@ type Props = PropsWithChildren<{
   dataInterProNMatches?: RequestedData<InterProNMatches>;
   dataProteomics?: RequestedData<ProteinsAPIProteomics>;
   dataFeatures?: RequestedData<ExtraFeaturesPayload>;
-  dataInterproNMatches?: RequestedData<InterProNMatches>;
   conservationError?: string | null;
   showConservationButton?: boolean;
   handleConservationLoad?: () => void;
@@ -157,10 +157,11 @@ type Props = PropsWithChildren<{
   title?: string;
   colorDomainsBy?: string;
   matchTypeSettings?: MatchTypeUISettings;
+  matchesAvailable?: Record<string, boolean>;
   changeSettingsRaw: typeof changeSettingsRaw;
 }>;
 
-const chooseColor = (color: string) => {
+export const chooseColor = (color: string) => {
   return Object.values(EntryColorMode).find((c) => c !== color) || '';
 };
 
@@ -180,6 +181,7 @@ const DomainsOnProteinLoaded = ({
   title = 'Entry matches to this protein',
   colorDomainsBy,
   matchTypeSettings,
+  matchesAvailable,
   changeSettingsRaw,
 }: Props) => {
   const [currentMatchType, setCurrentMatchType] = useState(matchTypeSettings);
@@ -240,6 +242,7 @@ const DomainsOnProteinLoaded = ({
       'short_linear_motifs',
       'spurious_proteins',
       'active_site',
+      'external_sources',
     ];
     const tracksToProcess = allTracks.filter(
       (track) => !unaffectedTracks.includes(track),
@@ -258,6 +261,10 @@ const DomainsOnProteinLoaded = ({
         );
       });
     }
+  }
+
+  if (processedDataMerged['external_sources']) {
+    moveExternalFeatures(processedDataMerged);
   }
 
   // Reorganize sections and sort added matches
@@ -293,12 +300,12 @@ const DomainsOnProteinLoaded = ({
   }
 
   if (protein.accession.startsWith('iprscan')) {
-    /* 
+    /*
     Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
     and the ProteinViewer components are used in a different way in the InterproScan results section.
     What happens in the DomainsOnProtein component for matches coming from elasticsearch is skipped for the
     InterProScan results section, because the DomainsOnProteinLoaded is used right away.
-    Executing those steps here below. 
+    Executing those steps here below.
     KEEP THIS ORDER OF OPERATIONS !
     */
 
@@ -368,8 +375,6 @@ const DomainsOnProteinLoaded = ({
       if (group[0] !== 'residues') group[1].sort(sortTracks);
     });
 
-    console.log(proteinViewerData);
-
     // All the other features have been moved to dedicated sections now
     proteinViewerData['other_features'] = [];
 
@@ -405,21 +410,24 @@ const DomainsOnProteinLoaded = ({
     <>
       {interpro_NMatchesCount > 0 && (
         <>
-          {/*<Callout type="warning" closable={true}>
-          This sequence includes additional matches predicted by{' '}
-          <b>InterPro‑N</b>, an AI-powered deep learning model developed by
-          Google DeepMind.
-          <br />
-          To view these predictions, open the <b>Options</b> menu below and
-          select your preferred display mode under <b>"Display matches from"</b>
-          .
-        </Callout>*/}
+          <Callout type="warning" alt={false} closable={true}>
+            This sequence includes additional matches predicted by ✨
+            <b>InterPro‑N</b>, an AI-powered deep learning model developed by
+            Google DeepMind.
+            <br />
+            By default, InterPro matches are supplemented with novel InterPro‑N
+            predictions (novel matches or those at least 5% longer).
+            <br />
+            To change the display mode, open the <i>Options</i> menu below and
+            select your preferred setting.
+          </Callout>
         </>
       )}
       <ProteinViewer
         protein={protein}
         data={flattenedData}
         title={title}
+        matchesAvailable={matchesAvailable}
         showConservationButton={showConservationButton}
         handleConservationLoad={handleConservationLoad}
         conservationError={conservationError}

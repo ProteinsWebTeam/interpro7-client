@@ -12,39 +12,28 @@ import {
   getConfidenceURLFromPayload,
 } from 'components/Structure3DModel/selectors';
 import { Selection } from 'components/Structure/ViewerAndEntries';
+import {
+  moveExternalFeatures,
+  sortTracks,
+} from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
+import { mergeMatches } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
 
 import {
   flattenTracksObject,
   makeTracks,
 } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
-import { trace } from 'console';
+
+import { sectionsReorganization } from 'components/Related/DomainsOnProtein/utils';
+import { getTEDURL } from 'components/Related/DomainsOnProtein/ExternalSourcesHOC';
+import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TED';
 
 const ProteinViewer = loadable({
   loader: () =>
     import(/* webpackChunkName: "protein-viewer" */ 'components/ProteinViewer'),
   loading: null,
 });
-
-/* Processing of the payload needs to be slightly different
-to add tracks to the groups object instead of the dataSorted object */
-export const addConfidenceTrack = (
-  dataConfidence: RequestedData<AlphafoldConfidencePayload>,
-  protein: string,
-  tracks: ProteinViewerDataObject,
-) => {
-  if (dataConfidence?.payload?.confidenceCategory?.length) {
-    tracks['alphafold_confidence'] = [];
-    tracks['alphafold_confidence'][0] = {
-      accession: `confidence_af_${protein}`,
-      data: dataConfidence.payload.confidenceCategory.join(''),
-      type: 'confidence',
-      protein,
-      source_database: 'alphafold',
-    };
-  }
-};
 
 export const addBFVDConfidenceTrack = async (
   pdbURL: string,
@@ -137,25 +126,53 @@ export const mapBFactorsToLetters = (bFactors: number[]): string => {
     .join('');
 };
 
+/* Processing of the payload needs to be slightly different
+to add tracks to the groups object instead of the dataSorted object */
+export const addConfidenceTrack = (
+  dataConfidence: RequestedData<AlphafoldConfidencePayload>,
+  protein: string,
+  tracks: ProteinViewerDataObject,
+) => {
+  if (dataConfidence?.payload?.confidenceCategory?.length) {
+    tracks['alphafold_confidence'] = [];
+    tracks['alphafold_confidence'][0] = {
+      accession: `confidence_af_${protein}`,
+      data: dataConfidence.payload.confidenceCategory.join(''),
+      type: 'confidence',
+      protein,
+      source_database: 'alphafold',
+    };
+  }
+};
+
 type Props = {
   protein: string;
   onChangeSelection: (s: Selection[] | null) => void;
   isSplitScreen: boolean;
   bfvd?: string;
+  dataInterProNMatches?: Record<string, InterProN_Match>;
+  matchTypeSettings?: MatchTypeUISettings;
+  colorDomainsBy?: string;
 };
+
 interface LoadedProps
   extends Props,
+    LoadDataProps<TEDPayload, 'TED'>,
     LoadDataProps<{ metadata: ProteinMetadata }, 'Protein'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
     LoadDataProps<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>> {}
-const ProteinViewerForPredictedStructure = ({
+const ProteinViewerForAlphafold = ({
   data,
   protein,
   bfvd,
   dataProtein,
+  dataInterProNMatches,
   dataConfidence,
+  matchTypeSettings,
+  colorDomainsBy,
   onChangeSelection,
+  dataTED,
   isSplitScreen = false,
 }: LoadedProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -163,7 +180,8 @@ const ProteinViewerForPredictedStructure = ({
 
   const [fixedSelection, _setFixedSelection] = useState<Selection[]>([]);
   const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
-  const [processedTracks, setProcessedTracks] = useState<ProteinViewerData>([]);
+  const [processedTracks, setProcessedTracks] =
+    useState<ProteinViewerDataObject>({});
   const hoverSelectionRef = useRef(hoverSelection);
   const fixedSelectionRef = useRef(fixedSelection);
   const processedData = useProcessData(data?.payload?.results, 'protein');
@@ -181,29 +199,29 @@ const ProteinViewerForPredictedStructure = ({
     onChangeSelection(selection.length ? selection : null);
   }, [fixedSelection, hoverSelection]);
 
+  const [currentMatchType, setCurrentMatchType] = useState(matchTypeSettings);
+
+  const [forceRenderKey, setForceRenderKey] = useState(0);
+
   useEffect(() => {
-    const {
-      interpro,
-      unintegrated,
-      representativeDomains,
-      representativeFamilies,
-    } = processedData;
+    if (currentMatchType !== matchTypeSettings) {
+      setCurrentMatchType(matchTypeSettings);
+      if (colorDomainsBy) {
+        setForceRenderKey((prevKey) => prevKey + 1); // Triggers re-render
+      }
+    }
+  }, [matchTypeSettings, colorDomainsBy]);
 
-    const groups = makeTracks({
-      interpro: interpro as Array<{ accession: string; type: string }>,
-      unintegrated: unintegrated as Array<{ accession: string; type: string }>,
-      representativeDomains: representativeDomains as Array<MinimalFeature>,
-      representativeFamilies: representativeFamilies as Array<MinimalFeature>,
-    });
-
-    const newGroups = { ...groups };
+  useEffect(() => {
+    if (!processedData) return;
+    let newGroups = { ...groups };
 
     if (dataConfidence) {
       addConfidenceTrack(dataConfidence, protein, newGroups);
     }
 
     // For synchronous operations, we can set state immediately
-    setProcessedTracks(flattenTracksObject(newGroups));
+    setProcessedTracks(newGroups);
 
     // For the async BFVD data, update state when it's ready
     if (bfvd && dataProtein?.payload) {
@@ -211,12 +229,8 @@ const ProteinViewerForPredictedStructure = ({
         bfvd,
         newGroups,
         dataProtein.payload['metadata'],
-      ).then((updatedTracks) => {
-        setProcessedTracks(
-          flattenTracksObject(
-            updatedTracks as ProteinViewerDataObject<MinimalFeature>,
-          ),
-        );
+      ).then(() => {
+        setProcessedTracks(newGroups);
       });
     }
   }, [processedData, dataConfidence, bfvd, protein]);
@@ -266,7 +280,6 @@ const ProteinViewerForPredictedStructure = ({
       }
     });
   }, [trackRef.current, processedTracks]);
-
   if (
     !data ||
     data.loading ||
@@ -275,20 +288,100 @@ const ProteinViewerForPredictedStructure = ({
     !processedData
   )
     return <Loading />;
+  const {
+    interpro,
+    unintegrated,
+    representativeDomains,
+    representativeFamilies,
+  } = processedData;
+
+  let groups = makeTracks({
+    interpro: interpro as Array<{ accession: string; type: string }>,
+    unintegrated: unintegrated as Array<{ accession: string; type: string }>,
+    representativeDomains: representativeDomains as Array<MinimalFeature>,
+    representativeFamilies: representativeFamilies as Array<MinimalFeature>,
+  }) as ProteinViewerDataObject<ExtendedFeature>;
 
   if (!dataProtein.payload?.metadata) return null;
 
-  return (
-    <div ref={trackRef}>
-      <ProteinViewer
-        viewerType={'structures'}
-        protein={dataProtein.payload.metadata}
-        data={processedTracks}
-        title="Protein domains"
-        showOptions={!isSplitScreen}
-      />
-    </div>
+  if (!dataInterProNMatches) return;
+
+  let interpro_NMatchesCount = Object.entries(dataInterProNMatches).length;
+
+  const allTracks = Object.keys({ ...groups });
+  const unaffectedTracks = [
+    'alphafold_confidence',
+    'intrinsically_disordered_regions',
+    'funfam',
+    'residues',
+    'ptm',
+    'coiled-coils,_signal_peptides,_transmembrane_regions',
+    'short_linear_motifs',
+    'spurious_proteins',
+    'active_site',
+  ];
+
+  const tracksToProcess = allTracks.filter(
+    (track) => !unaffectedTracks.includes(track),
   );
+
+  if (
+    matchTypeSettings &&
+    colorDomainsBy &&
+    Object.keys(processedTracks).length > 0
+  ) {
+    let tracks = JSON.parse(JSON.stringify(processedTracks));
+    tracksToProcess.forEach((track) => {
+      const traditionalMatches = tracks[track] || [];
+      tracks[track] = mergeMatches(
+        track,
+        traditionalMatches as MinimalFeature[],
+        dataInterProNMatches,
+        matchTypeSettings,
+      );
+    });
+
+    tracks = sectionsReorganization(tracks);
+
+    // Sort data by match position, but exclude residues and PIRSR
+    Object.entries(tracks as ProteinViewerDataObject<ExtendedFeature>).forEach(
+      ([key, group]) => {
+        if (key !== 'residues') {
+          tracks[key] = group.sort(sortTracks).flat();
+        }
+      },
+    );
+
+    const matchesAvailable = {
+      hmm:
+        processedTracks &&
+        Object.values(
+          processedTracks as ProteinViewerDataObject<ExtendedFeature>,
+        ).some((track) => {
+          // Check if any of the tracks have object, except for the confidence score one.
+          return track.length > 0 && track?.[0].type !== 'confidence';
+        }),
+      dl: interpro_NMatchesCount > 0, // Computed above
+    };
+
+    const tedData = dataTED ? formatTED(dataTED) : [];
+    if (tedData.length > 0) {
+      tracks['external_sources'] = tedData;
+      moveExternalFeatures(tracks);
+    }
+    return (
+      <div ref={trackRef}>
+        <ProteinViewer
+          key={forceRenderKey}
+          protein={dataProtein.payload.metadata}
+          data={flattenTracksObject(tracks)}
+          title="Protein domains"
+          showOptions={!isSplitScreen}
+          matchesAvailable={matchesAvailable}
+        />
+      </div>
+    );
+  }
 };
 
 const getProteinURL = createSelector(
@@ -337,12 +430,17 @@ export default loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getConfidenceURLFromPayload('Prediction'),
     propNamespace: 'Confidence',
   } as LoadDataParameters)(
-    loadData<{ metadata: ProteinMetadata }, 'Protein'>({
-      getUrl: getProteinURL,
-      propNamespace: 'Protein',
+    loadData<TEDPayload, 'TED'>({
+      getUrl: getTEDURL,
+      propNamespace: 'TED',
     } as LoadDataParameters)(
-      loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
-        ProteinViewerForPredictedStructure,
+      loadData<{ metadata: ProteinMetadata }, 'Protein'>({
+        getUrl: getProteinURL,
+        propNamespace: 'Protein',
+      } as LoadDataParameters)(
+        loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
+          ProteinViewerForAlphafold,
+        ),
       ),
     ),
   ),
