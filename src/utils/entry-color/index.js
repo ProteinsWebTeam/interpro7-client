@@ -1,4 +1,3 @@
-// @flow
 import ColorHash from 'color-hash';
 
 import config from 'config';

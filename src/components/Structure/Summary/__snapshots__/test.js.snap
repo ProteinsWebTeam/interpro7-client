@@ -144,7 +144,7 @@ exports[`<SummaryStructure /> should render 1`] = `
             <BaseLink
               className="ext"
               id="102m"
-              pattern="http://scop.mrc-lmb.cam.ac.uk/search?t=txt;q={id}"
+              pattern="https://www.ebi.ac.uk/pdbe/scop/search?t=txt;q={id}"
               target="_blank"
             >
               SCOP

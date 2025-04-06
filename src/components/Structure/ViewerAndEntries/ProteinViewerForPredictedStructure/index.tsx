@@ -213,7 +213,7 @@ const ProteinViewerForAlphafold = ({
 
   useEffect(() => {
     if (!processedData) return;
-    let newGroups = { ...groups };
+    const newGroups = { ...groups };
 
     if (dataConfidence) {
       addConfidenceTrack(dataConfidence, protein, newGroups);
@@ -294,7 +294,7 @@ const ProteinViewerForAlphafold = ({
     representativeFamilies,
   } = processedData;
 
-  let groups = makeTracks({
+  const groups = makeTracks({
     interpro: interpro as Array<{ accession: string; type: string }>,
     unintegrated: unintegrated as Array<{ accession: string; type: string }>,
     representativeDomains: representativeDomains as Array<MinimalFeature>,
@@ -305,7 +305,7 @@ const ProteinViewerForAlphafold = ({
 
   if (!dataInterProNMatches) return;
 
-  let interpro_NMatchesCount = Object.entries(dataInterProNMatches).length;
+  const interpro_NMatchesCount = Object.entries(dataInterProNMatches).length;
 
   const allTracks = Object.keys({ ...groups });
   const unaffectedTracks = [

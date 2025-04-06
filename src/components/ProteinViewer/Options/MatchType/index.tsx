@@ -55,11 +55,11 @@ const MatchType = ({
 
     let fullMsgString = 'This option is disabled because there are no ';
 
-    let possibleMatches = ['hmm', 'dl'];
+    const possibleMatches = ['hmm', 'dl'];
     let missingMatches = possibleMatches.filter((match) => !showOption[match]);
     missingMatches = missingMatches.map((match) => typeToName[match]);
 
-    let missingMatchesString = missingMatches.join(' and ');
+    const missingMatchesString = missingMatches.join(' and ');
 
     fullMsgString += missingMatchesString;
     fullMsgString += ' matches available for this entry';
