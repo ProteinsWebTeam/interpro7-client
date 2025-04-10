@@ -57,6 +57,14 @@ export const getIProScanURL = (accession: string) => {
   return url;
 };
 
+type JobAdditionalMetadata = {
+  jobRunTime: {
+    endTime: string;
+    startTime: string;
+    jobId: string;
+  };
+};
+
 type Props = {
   job?: MinimalJobMetadata;
   search: InterProLocationSearch;
@@ -73,6 +81,8 @@ export const IPScanStatus = ({
   // updateJobTitle,
 }: Props) => {
   const [jobsData, setJobsData] = useState<Array<IprscanDataIDB>>([]);
+  const [expiryDate, setExpiryDate] = useState(new Date());
+
   const [shouldImportResults, setShouldImportResults] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   // const [versionMismatch, setVersionMismatch] = useState(false);
@@ -97,6 +107,28 @@ export const IPScanStatus = ({
       updateJobStatus();
     }
   }, [job, isImporting]);
+
+  useEffect(() => {
+    const setJobExpiryDate = async (job: MinimalJobMetadata) => {
+      const jobMetadataRequest = await fetch(
+        `https://www.ebi.ac.uk/Tools/services/rest/iprscan5/jobruntime/${job.remoteID}`,
+      );
+      const jobMetadata = await jobMetadataRequest.json();
+      const endDateString = (jobMetadata as JobAdditionalMetadata).jobRunTime
+        .endTime;
+      const endDateMilliSeconds = Date.parse(
+        endDateString.replace('BST', 'GMT+0100'),
+      );
+      const newExpiryDate = new Date(
+        (job?.times?.created || endDateMilliSeconds) + MAX_TIME_ON_SERVER,
+      );
+      setExpiryDate(newExpiryDate);
+    };
+
+    if (job) {
+      setJobExpiryDate(job || '');
+    }
+  }, [job]);
 
   if (!job)
     return (
@@ -123,7 +155,7 @@ export const IPScanStatus = ({
     ((Number(search.page) || 1) - 1) * Number(pageSize),
     Number(pageSize),
   );
-  const expiryDate = new Date((job?.times?.created || 0) + MAX_TIME_ON_SERVER);
+
   return (
     <section>
       <IPScanVersionCheck
