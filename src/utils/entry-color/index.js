@@ -58,7 +58,7 @@ export const getTrackColor = (
           return colorHash.hex('MobiDB-lite: Consensus Disorder Prediction');
         }
       }
-      if (entry.parent) {
+      if (entry.parent && entry.parent.accession) {
         acc = entry.parent.accession.split('').reverse().join('');
         return colorHash.hex(acc);
       }
