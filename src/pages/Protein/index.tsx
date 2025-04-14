@@ -335,7 +335,7 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
           </Column>
           <Column
             dataKey="in_alphafold"
-            renderer={(inAlphafold, { accession }) =>
+            renderer={(inAlphafold, { accession, in_bfvd }: ProteinMetadata) =>
               inAlphafold ? (
                 <Link
                   to={{
@@ -350,6 +350,21 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
                   }}
                 >
                   AlphaFold
+                </Link>
+              ) : in_bfvd ? (
+                <Link
+                  to={{
+                    description: {
+                      main: { key: 'protein' },
+                      protein: {
+                        db: 'uniprot',
+                        accession,
+                        detail: 'bfvd',
+                      },
+                    },
+                  }}
+                >
+                  BFVD
                 </Link>
               ) : null
             }
