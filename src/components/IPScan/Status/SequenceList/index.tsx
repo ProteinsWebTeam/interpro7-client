@@ -66,6 +66,7 @@ type JobAdditionalMetadata = {
 };
 
 type Props = {
+  ipScan: ParsedURLServer;
   job?: MinimalJobMetadata;
   search: InterProLocationSearch;
   defaultPageSize: number;
@@ -74,6 +75,7 @@ type Props = {
 };
 
 export const IPScanStatus = ({
+  ipScan,
   job,
   search,
   defaultPageSize,
@@ -110,9 +112,17 @@ export const IPScanStatus = ({
 
   useEffect(() => {
     const setJobExpiryDate = async (job: MinimalJobMetadata) => {
+      const ipScanURL = format({
+        protocol: ipScan.protocol,
+        hostname: ipScan.hostname,
+        port: ipScan.port,
+        pathname: ipScan.root,
+      });
+
       const jobMetadataRequest = await fetch(
-        `https://www.ebi.ac.uk/Tools/services/rest/iprscan5/jobruntime/${job.remoteID}`,
+        `${ipScanURL}/jobruntime/${job.remoteID}`,
       );
+
       const jobMetadata = await jobMetadataRequest.json();
       const endDateString = (jobMetadata as JobAdditionalMetadata).jobRunTime
         .endTime;
@@ -335,6 +345,7 @@ export const IPScanStatus = ({
 };
 
 const mapsStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ipScan,
   (state: GlobalState) =>
     Object.values(state.jobs || {}).find(
       (job) =>
@@ -342,7 +353,8 @@ const mapsStateToProps = createSelector(
     ),
   (state: GlobalState) => state.customLocation.search,
   (state: GlobalState) => state.settings.navigation.pageSize,
-  (job, search, defaultPageSize) => ({
+  (ipScan, job, search, defaultPageSize) => ({
+    ipScan: ipScan,
     job: job?.metadata,
     search,
     defaultPageSize,
