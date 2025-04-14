@@ -28,6 +28,7 @@ import {
 import { sectionsReorganization } from 'components/Related/DomainsOnProtein/utils';
 import { getTEDURL } from 'components/Related/DomainsOnProtein/ExternalSourcesHOC';
 import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TED';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -370,6 +371,22 @@ const ProteinViewerForAlphafold = ({
     }
     return (
       <div ref={trackRef}>
+        {interpro_NMatchesCount > 0 && (
+          <>
+            <Callout type="warning" alt={false} closable={true}>
+              This sequence includes additional matches predicted by ✨
+              <b>InterPro‑N</b>, an AI-powered deep learning model developed by
+              Google DeepMind.
+              <br />
+              By default, InterPro matches are supplemented with novel
+              InterPro‑N predictions (novel matches or those at least 5%
+              longer).
+              <br />
+              To change the display mode, open the <i>Options</i> menu below and
+              select your preferred setting.
+            </Callout>
+          </>
+        )}
         <ProteinViewer
           key={forceRenderKey}
           protein={dataProtein.payload.metadata}
