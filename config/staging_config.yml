@@ -49,6 +49,7 @@ pages:
       - model
       - logo
       - alphafold
+      - bfvd
       - entry_alignments
       - interactions
       - pathways
@@ -60,6 +61,7 @@ pages:
       - entry
       - structure
       - alphafold
+      - bfvd
       - sequence
       - similar_proteins
   structure:
