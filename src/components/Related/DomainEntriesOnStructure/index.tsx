@@ -6,6 +6,7 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ProteinViewerForStructure from './ProteinViewerLoaded';
 
 import cssBinder from 'styles/cssBinder';
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import { orderByAccession } from 'components/Related/DomainsOnProtein/utils';
 import { flattenTracksObject } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
@@ -14,7 +15,7 @@ import { DataForProteinChain, mergeChimericProteins } from './utils';
 
 import { ExtendedFeature } from 'components/ProteinViewer/utils';
 
-const css = cssBinder(fonts);
+const css = cssBinder(ipro, fonts);
 
 function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
   let fragment = undefined;
@@ -318,9 +319,9 @@ const EntriesOnStructure = ({
 
           let accessionList: string[] = [];
 
-          /* 
-            - Take protein object for each "viewer" data 
-            - take the accession 
+          /*
+            - Take protein object for each "viewer" data
+            - take the accession
             - split the accession if it's composed of multiple uniprot accessions
           */
 

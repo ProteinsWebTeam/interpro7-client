@@ -146,3 +146,7 @@ details.read-more {
     cursor: pointer;
   }
 }
+
+.vf-stack > h4 + * {
+  margin-top: 0;
+}
