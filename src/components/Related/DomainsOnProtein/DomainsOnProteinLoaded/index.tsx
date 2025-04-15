@@ -272,10 +272,8 @@ const DomainsOnProteinLoaded = ({
     moveExternalFeatures(processedDataMerged);
   }
 
-  console.log('hey', processedDataMerged);
   // Reorganize sections and sort added matches
   processedDataMerged = sectionsReorganization(processedDataMerged);
-  console.log(processedDataMerged);
 
   // Sort data by match position, but exclude residues and PIRSR
   Object.entries(
