@@ -244,11 +244,16 @@ const DomainsOnProteinLoaded = ({
       'active_site',
       'external_sources',
     ];
-    const tracksToProcess = allTracks.filter(
-      (track) => !unaffectedTracks.includes(track),
-    );
 
     if (matchTypeSettings && colorDomainsBy) {
+      if (matchTypeSettings !== 'hmm') {
+        unaffectedTracks.push('repeat');
+      }
+
+      const tracksToProcess = allTracks.filter(
+        (track) => !unaffectedTracks.includes(track),
+      );
+
       tracksToProcess.forEach((track) => {
         const traditionalMatches = processedDataMerged[track];
 
