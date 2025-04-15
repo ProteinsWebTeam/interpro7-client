@@ -244,11 +244,16 @@ const DomainsOnProteinLoaded = ({
       'active_site',
       'external_sources',
     ];
-    const tracksToProcess = allTracks.filter(
-      (track) => !unaffectedTracks.includes(track),
-    );
 
     if (matchTypeSettings && colorDomainsBy) {
+      if (matchTypeSettings !== 'hmm') {
+        unaffectedTracks.push('repeat');
+      }
+
+      const tracksToProcess = allTracks.filter(
+        (track) => !unaffectedTracks.includes(track),
+      );
+
       tracksToProcess.forEach((track) => {
         const traditionalMatches = processedDataMerged[track];
 
@@ -267,8 +272,10 @@ const DomainsOnProteinLoaded = ({
     moveExternalFeatures(processedDataMerged);
   }
 
+  console.log('hey', processedDataMerged);
   // Reorganize sections and sort added matches
   processedDataMerged = sectionsReorganization(processedDataMerged);
+  console.log(processedDataMerged);
 
   // Sort data by match position, but exclude residues and PIRSR
   Object.entries(

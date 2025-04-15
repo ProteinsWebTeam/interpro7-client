@@ -236,7 +236,8 @@ const ProteinViewerForAlphafold = ({
   }, [processedData, dataConfidence, bfvd, protein]);
 
   useEffect(() => {
-    trackRef.current?.addEventListener('change', (rawEvent: Event) => {
+    const currentTrack = trackRef.current;
+    const handleChange = (rawEvent: Event) => {
       const event = rawEvent as CustomEvent;
       if (!event.detail) return;
       const { eventType, highlight } = event.detail;
@@ -278,7 +279,14 @@ const ProteinViewerForAlphafold = ({
           setFixedSelection(hoverSelectionRef.current);
         }
       }
-    });
+    };
+    // Add the listener
+    currentTrack?.addEventListener('change', handleChange);
+
+    // Clean up listener
+    return () => {
+      trackRef.current?.removeEventListener('change', handleChange);
+    };
   }, [trackRef.current, processedTracks]);
   if (
     !data ||
