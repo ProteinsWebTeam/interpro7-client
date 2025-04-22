@@ -152,6 +152,8 @@ g:global(.child-location-group.clg-5) path {
 }
 .fullscreenable {
   overflow: scroll;
+}
+.margin-bottom-large {
   min-height: 600px; /*To fit option menu*/
 }
 table.matches-in-table {

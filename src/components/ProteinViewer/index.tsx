@@ -240,7 +240,13 @@ export const ProteinViewer = ({
   }, [showMoreSettings]);
 
   return (
-    <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
+    <div
+      ref={mainRef}
+      className={css(
+        'fullscreenable',
+        viewerType !== 'structures' ? 'margin-bottom-large' : '',
+      )}
+    >
       {/* Tooltip */}
       <div
         ref={refs.setFloating}
