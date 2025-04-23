@@ -76,7 +76,7 @@ const MARGIN_CHANGE_TRACKS = [
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:', 'TED:'];
 const WITH_TOP_MARGIN = ['REPEAT:', 'TED:'];
 const WITH_BOTTOM_MARGIN = ['TED:'];
-const domainTypes = ['domain', 'homologous_superfamily', 'repeats'];
+const domainTypes = ['domain', 'homologous_superfamily', 'repeat'];
 
 const b2sh = new Map([
   ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale

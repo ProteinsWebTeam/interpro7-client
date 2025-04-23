@@ -259,11 +259,18 @@ const EntriesOnStructure = ({
 
       // Move homologous superfamily to domains
       const homologousSuperFamilies = newTracks['homologous_superfamily'];
+      const repeats = newTracks['repeat'];
+
       if (homologousSuperFamilies) {
         newTracks['domain'] = newTracks['domain'].concat(
           homologousSuperFamilies,
         );
         newTracks['homologous_superfamily'] = [];
+      }
+
+      if (repeats) {
+        newTracks['domain'] = newTracks['domain'].concat(repeats);
+        newTracks['repeat'] = [];
       }
 
       const representativeDomains = representativesDomainsPerChain[chain];
