@@ -496,7 +496,11 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               </tbody>
             </table>
 
-            <p>Interpro cites {content.citations} publications in PubMed.</p>
+            <p>
+              InterPro cites{' '}
+              <NumberComponent noTitle>{content.citations}</NumberComponent>{' '}
+              publications in PubMed.
+            </p>
 
             <h4>Member database information</h4>
 
@@ -531,6 +535,9 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               <tbody>
                 {Object.values(perMemberDB)
                   .filter((db) => !db.name.toLowerCase().startsWith('mobidb'))
+                  .sort((a, b) =>
+                    a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+                  )
                   .map(
                     ({
                       name,
@@ -604,7 +611,7 @@ class ReleaseNotes extends PureComponent /*:: <Props> */ {
               >
                 MobiDB-lite
               </Link>
-              , a derivative of the
+              , a derivative of the{' '}
               <Link
                 href="https://mobidb.org/"
                 className={f('ext')}

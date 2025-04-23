@@ -9,12 +9,14 @@ root:
   wikipedia: https://en.wikipedia.org/w/api.php
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   alphafold: https://alphafold.ebi.ac.uk/
+  bfvd: https://bfvd.foldseek.com/
   repeatsDB: https://repeatsdb.org/api/production/annotations/
   disprot: https://disprot.org/api/
   LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
+  ted: https://ted.cathdb.info/
 
 title: InterPro
 
@@ -46,6 +48,7 @@ pages:
       - proteome
       - model
       - alphafold
+      - bfvd
       - logo
       - entry_alignments
       - interactions
@@ -60,6 +63,7 @@ pages:
       - structure
       - sequence
       - alphafold
+      - bfvd
       - similar_proteins
   structure:
     subPages:

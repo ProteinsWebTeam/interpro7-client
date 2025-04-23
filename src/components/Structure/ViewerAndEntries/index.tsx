@@ -291,14 +291,27 @@ class StructureView extends PureComponent<Props, State> {
     return hits;
   }
 
+  getEntryNames() {
+    const accessionToName: Record<string, NameObject | string> = {};
+    if (this.props.matches) {
+      for (const match of this.props.matches) {
+        const entryName = match.metadata.name;
+        const entryAccession = match.metadata.accession;
+        accessionToName[entryAccession] = entryName || entryAccession;
+      }
+    }
+    return accessionToName;
+  }
+
   createEntryMap() {
     const memberDBMap: Record<
       string,
       Record<string, Record<string, Array<EntryHit>>>
-    > = { pdb: {} };
+    > = {};
 
     if (this.props.matches) {
       // create matches in structure hierarchy
+
       for (const match of this.props.matches) {
         const entry = match.metadata.accession;
         const db = match.metadata.source_database;
@@ -317,15 +330,6 @@ class StructureView extends PureComponent<Props, State> {
             db,
             match,
           });
-          // create PDB chain mapping
-          if (!memberDBMap.pdb[structure.accession])
-            memberDBMap.pdb[structure.accession] = {};
-          if (!memberDBMap.pdb[structure.accession][chain]) {
-            memberDBMap.pdb[structure.accession][chain] = this._getChainMap(
-              chain,
-              structure.entry_structure_locations,
-            );
-          }
         }
       }
     }
@@ -407,6 +411,7 @@ class StructureView extends PureComponent<Props, State> {
             top: this.props.matches ? (
               <EntrySelection
                 entryMap={entryMap}
+                entriesNames={this.getEntryNames()}
                 updateStructure={this.showEntryInStructure}
                 selectedEntry={selectedEntry}
               />
@@ -488,10 +493,8 @@ class StructureView extends PureComponent<Props, State> {
             }}
             isSpinning={isSpinning}
             shouldResetViewer={shouldResetViewer}
-            selections={this.state.selectionsInStructure}
-            onReset={() => {
-              this.setState({ selectionsInStructure: null });
-            }}
+            selections={this.state.selectionsInStructure || []}
+            onReset={() => this.setState({ selectionsInStructure: null })}
           />
         </PictureInPicturePanel>
         <div

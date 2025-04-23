@@ -4,14 +4,22 @@ import { format } from 'url';
 export const getAlphaFoldPredictionURL = createSelector(
   (state: GlobalState) => state.settings.alphafold,
   (state: GlobalState) => state.customLocation.description.protein.accession,
-  ({ protocol, hostname, port, root, query }, accession) => {
-    return format({
-      protocol,
-      hostname,
-      port,
-      pathname: `${root}api/prediction/${accession}`,
-      query: query,
-    });
+  (state: GlobalState) => state.customLocation.description,
+  ({ protocol, hostname, port, root, query }, accession, description) => {
+    const descriptionKey = description['main']['key'];
+    if (descriptionKey === 'entry' || descriptionKey === 'protein') {
+      if (description[descriptionKey]['detail'] !== 'bfvd') {
+        // Avoid making this request when we're on the BFVD page.
+        return format({
+          protocol,
+          hostname,
+          port,
+          pathname: `${root}api/prediction/${accession}`,
+          query: query,
+        });
+      }
+    }
+    return null;
   },
 );
 type StartsWithData = `data${string}`;

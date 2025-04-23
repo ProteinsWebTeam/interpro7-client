@@ -6,11 +6,11 @@ import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { edgeCases, STATUS_TIMEOUT } from 'utils/server-message';
 import { getTrackColor, EntryColorMode } from 'utils/entry-color';
-
 import {
   getAlphaFoldPredictionURL,
   getConfidenceURLFromPayload,
-} from 'components/AlphaFold/selectors';
+} from 'components/Structure3DModel/selectors';
+
 import { useProcessData } from 'components/ProteinViewer/utils';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
@@ -50,7 +50,7 @@ interface LoadedProps
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<ProteinsAPIProteomics, 'Proteomics'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    // LoadDataProps<InterProNMatches, 'InterProNMatches'>,
+    LoadDataProps<InterProNMatches, 'InterProNMatches'>,
     LoadDataProps<
       PayloadList<EndpointWithMatchesPayload<EntryMetadata>> | ErrorPayload
     > {}
@@ -72,7 +72,7 @@ const DomainOnProteinWithoutData = ({
   dataConfidence,
   dataVariation,
   dataProteomics,
-  // dataInterProNMatches,
+  dataInterProNMatches,
   onMatchesLoaded,
   onFamiliesFound,
   children,
@@ -168,8 +168,18 @@ const DomainOnProteinWithoutData = ({
     false,
   );
 
+  let nrIntePro_NMatches = 0;
+  if (dataInterProNMatches?.payload) {
+    nrIntePro_NMatches = Object.values(dataInterProNMatches?.payload).length;
+  }
+
   const onlyExtraFeatures =
     dataIsEmptyBeforeMergingFeatures && extraFeaturesCount > 0;
+
+  const matchesAvailable = {
+    hmm: !dataIsEmptyBeforeMergingFeatures,
+    dl: nrIntePro_NMatches > 0,
+  };
 
   if (
     // No entries and no extra features
@@ -177,23 +187,27 @@ const DomainOnProteinWithoutData = ({
       !data?.loading &&
       !dataResidues?.loading &&
       !dataFeatures?.loading) ||
-    // No entries but extra features (e.g pfam-n)
+    // No Hmm entries but extra features or IntePro-N matches
     (onlyExtraFeatures && !showMoreSettings)
   ) {
     return (
       <>
-        <Callout type="info">
-          {onlyExtraFeatures && !showMoreSettings
-            ? `Additional matches are available, but not displayed in the summary display mode. 
-        Switch to the full display mode the see them.`
-            : 'No entry matches this protein'}
-        </Callout>
+        {nrIntePro_NMatches == 0 && (
+          <Callout type="info">
+            {onlyExtraFeatures && !showMoreSettings
+              ? `Additional matches are available, but not displayed in the summary display mode.
+          Switch to the full display mode the see them.`
+              : 'No entry matches this protein'}
+          </Callout>
+        )}
 
         <DomainsOnProteinLoaded
           title={'Entry matches to this protein'}
           mainData={mainData}
           dataMerged={proteinViewerData}
           dataConfidence={dataConfidence}
+          dataInterProNMatches={dataInterProNMatches}
+          matchesAvailable={matchesAvailable}
           loading={
             data?.loading ||
             dataFeatures?.loading ||
@@ -217,7 +231,8 @@ const DomainOnProteinWithoutData = ({
         dataVariation={dataVariation}
         dataProteomics={dataProteomics}
         dataFeatures={dataFeatures}
-        //dataInterProNMatches={dataInterProNMatches}
+        dataInterProNMatches={dataInterProNMatches}
+        matchesAvailable={matchesAvailable}
         loading={
           data?.loading ||
           dataFeatures?.loading ||
@@ -369,15 +384,13 @@ export default connect(mapStateToProps, { changeSettingsRaw })(
                 getUrl: getVariationURL,
                 propNamespace: 'Variation',
               } as LoadDataParameters)(
-                /*(
                 loadData<InterProNMatches, 'InterProNMatches'>({
                   getUrl: getInterProNMatches,
                   propNamespace: 'InterProNMatches',
-                } as LoadDataParameters) */ loadData(
-                  getRelatedEntriesURL as LoadDataParameters,
-                )(
-                  DomainOnProteinWithoutData,
-                  //) ,
+                } as LoadDataParameters)(
+                  loadData(getRelatedEntriesURL as LoadDataParameters)(
+                    DomainOnProteinWithoutData,
+                  ),
                 ),
               ),
             ),

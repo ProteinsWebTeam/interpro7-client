@@ -21,9 +21,9 @@ import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import Labels from './Labels';
 import { Selection } from '../ViewerAndEntries';
-import { ColorByResidueLddtTheme } from './ColourByResidueLddtTheme';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
+import { BFactorColorThemeProvider } from './bfvd-confidence/color';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -90,23 +90,14 @@ class StructureView extends PureComponent<Props> {
           this._structureViewerCanvas.current,
           this._structureViewer.current,
         );
-        if (ColorByResidueLddtTheme.colorThemeProvider)
-          this.viewer.representation.structure.themes.colorThemeRegistry.add(
-            ColorByResidueLddtTheme.colorThemeProvider,
-          );
-        if (ColorByResidueLddtTheme.labelProvider)
-          this.viewer.managers.lociLabels.addProvider(
-            ColorByResidueLddtTheme.labelProvider,
-          );
-        this.viewer.customModelProperties.register(
-          ColorByResidueLddtTheme.propertyProvider,
-          true,
-        );
-
         this.viewer.customModelProperties.register(AfConfidenceProvider, true);
         // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
           AfConfidenceColorThemeProvider,
+        );
+
+        this.viewer.representation.structure.themes.colorThemeRegistry.add(
+          BFactorColorThemeProvider,
         );
       }
       // mouseover ?????
@@ -123,6 +114,29 @@ class StructureView extends PureComponent<Props> {
         `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
         'mmcif',
       );
+    }
+  }
+
+  delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /* 
+  Delays take into account: 
+    - animation times
+    - the MolStar viewer not handling well multiple commands at once 
+  */
+  async resetOperations() {
+    if (this.viewer) {
+      if (this.props.onReset) {
+        await this.delay(100);
+        this.props.onReset();
+        this.applyChainIdTheme();
+      }
+
+      PluginCommands.Camera.ResetAxes(this.viewer, {});
+      await this.delay(500);
+      PluginCommands.Camera.Reset(this.viewer, {});
     }
   }
 
@@ -144,12 +158,7 @@ class StructureView extends PureComponent<Props> {
     if (this.viewer) {
       this.setSpin(this.props.isSpinning);
       if (this.props.shouldResetViewer) {
-        PluginCommands.Camera.Reset(this.viewer, {});
-        this.clearSelections();
-        this.applyChainIdTheme();
-        if (this.props.onReset) {
-          this.props.onReset();
-        }
+        this.resetOperations();
       }
       if ((this.props.selections?.length || 0) > 0) {
         this.highlightSelections(this.props.selections as Array<Selection>);
@@ -287,12 +296,11 @@ class StructureView extends PureComponent<Props> {
   applyChainIdTheme() {
     let colouringTheme: string;
     switch (this.props.theme) {
-      case 'residue':
-        colouringTheme =
-          ColorByResidueLddtTheme.propertyProvider.descriptor.name;
-        break;
       case 'af':
         colouringTheme = AfConfidenceColorThemeProvider.name;
+        break;
+      case 'bfvd':
+        colouringTheme = BFactorColorThemeProvider.name;
         break;
       default:
         colouringTheme = ChainIdColorThemeProvider.name;

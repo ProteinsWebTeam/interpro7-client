@@ -1,4 +1,3 @@
-// @flow
 import ColorHash from 'color-hash';
 
 import config from 'config';
@@ -32,6 +31,7 @@ export const getTrackColor = (
   entry /*: Entry */,
   colorMode /*: ColorMode */,
 ) => {
+  if (entry.color) return entry.color;
   let acc;
   // eslint-disable-next-line default-case
   switch (colorMode) {
@@ -58,7 +58,7 @@ export const getTrackColor = (
           return colorHash.hex('MobiDB-lite: Consensus Disorder Prediction');
         }
       }
-      if (entry.parent) {
+      if (entry.parent && entry.parent.accession) {
         acc = entry.parent.accession.split('').reverse().join('');
         return colorHash.hex(acc);
       }

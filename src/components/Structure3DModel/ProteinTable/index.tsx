@@ -189,8 +189,9 @@ export const getUrl = (includeSearch: boolean) =>
           },
         };
         let query;
-        if (includeSearch) query = { ...search, has_model: true };
-        else query = { has_model: true };
+        if (includeSearch)
+          query = { ...search, with: description.entry.detail };
+        else query = { with: description.entry.detail };
         return format({
           protocol,
           hostname,
@@ -199,7 +200,12 @@ export const getUrl = (includeSearch: boolean) =>
           query: query,
         });
       }
-      return null;
+      return format({
+        protocol,
+        hostname,
+        port,
+        pathname: '',
+      });
       // This below was to support the idea of multiple models for the same protein, which is unnecessary at the moment
       // return {
       //   accession: description[description.main.key].accession,

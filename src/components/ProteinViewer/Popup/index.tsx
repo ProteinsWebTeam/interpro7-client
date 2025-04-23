@@ -8,6 +8,7 @@ import ProtVistaConservationPopup, { ConservationDetail } from './Conservation';
 import RepeatsDBPopup, { RepeatsDBDetail } from './RepeatsDB';
 import ProtVistaPTMPopup, { PTMDetail } from './PTM';
 import DisProtPopup, { DisProtDetail } from './DisProt';
+import TEDPopup, { TEDDetails } from './TED';
 import { ExtendedFeature } from '../utils';
 
 export type PopupDetail = (
@@ -78,11 +79,11 @@ const ProtVistaPopup = ({ detail, sourceDatabase, currentLocation }: Props) => {
   )
     return <RepeatsDBPopup detail={detail as RepeatsDBDetail} />;
   if (
-    ((detail as RepeatsDBDetail)?.feature?.accession || '').startsWith(
-      'DISPROT:',
-    )
+    ((detail as DisProtDetail)?.feature?.accession || '').startsWith('DISPROT:')
   )
     return <DisProtPopup detail={detail as DisProtDetail} />;
+  if (((detail as TEDDetails)?.feature?.accession || '').startsWith('TED:'))
+    return <TEDPopup detail={detail as TEDDetails} />;
 
   // comes from the Entry track
   return (

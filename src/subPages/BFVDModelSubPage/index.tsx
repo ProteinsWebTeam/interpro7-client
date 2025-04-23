@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import AlphaFoldModel from 'components/Structure3DModel/3DModel';
+import BFVDModel from 'components/Structure3DModel/3DModel';
 import ProteinTable, {
   getUrl,
   mapStateToPropsForModels,
@@ -10,17 +10,14 @@ import ProteinViewerForPredictedStructure from 'components/Structure/ViewerAndEn
 import { Selection } from 'components/Structure/ViewerAndEntries';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
-import { connect } from 'react-redux';
-import { format } from 'url';
-import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import { createSelector } from 'reselect';
-
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import forSplit from 'components/Structure/ViewerAndEntries/style.css';
-import { changeSettingsRaw } from 'actions/creators';
-import { chooseColor } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
+import { connect } from 'react-redux';
+import { format } from 'url';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
+import { createSelector } from 'reselect';
 
 const css = cssBinder(ipro, fonts, forSplit);
 
@@ -34,7 +31,7 @@ interface LoadedProps
     LoadDataProps<InterProNMatches, 'InterProNMatches'>,
     LoadDataProps<PayloadList<ProteinEntryPayload>> {}
 
-const AlphaFoldModelSubPage = ({
+const BFVDModelSubPage = ({
   data,
   customLocation,
   dataInterProNMatches,
@@ -48,7 +45,7 @@ const AlphaFoldModelSubPage = ({
   const [selectionsInModel, setSelectionsInModel] =
     useState<Array<Selection> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
-  const [interproNData, setInterProNData] = useState({});
+
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
   const handleProteinChange = (value: string) => {
@@ -60,6 +57,7 @@ const AlphaFoldModelSubPage = ({
     setModelId(value);
   };
 
+  // Set up initial protein accession
   useEffect(() => {
     if (mainType === 'entry') {
       // Take the list of matched UniProt matches and assign the first one to protein accession
@@ -69,6 +67,11 @@ const AlphaFoldModelSubPage = ({
   }, [mainAccession, data]);
 
   if (data?.loading) return <Loading />;
+
+  // Generate BFVD URL here but let the 3DModel component handle availability check
+  const bfvdURL = proteinAcc
+    ? `https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`
+    : '';
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
 
@@ -80,11 +83,12 @@ const AlphaFoldModelSubPage = ({
       ref={container}
     >
       {proteinAcc && (
-        <AlphaFoldModel
+        <BFVDModel
           proteinAcc={proteinAcc}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
           modelId={modelId}
+          bfvd={bfvdURL}
           selections={selectionsInModel}
           parentElement={container.current}
           isSplitScreen={isSplitScreen}
@@ -99,6 +103,7 @@ const AlphaFoldModelSubPage = ({
           className={css('protvista-container')}
         >
           <ProteinViewerForPredictedStructure
+            bfvd={bfvdURL}
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
             colorDomainsBy={colorDomainsBy}
@@ -164,6 +169,6 @@ export default connect(mapStateToProps)(
     loadData<InterProNMatches, 'InterProNMatches'>({
       getUrl: getInterProNMatches,
       propNamespace: 'InterProNMatches',
-    } as LoadDataParameters)(AlphaFoldModelSubPage),
+    } as LoadDataParameters)(BFVDModelSubPage),
   ),
 );

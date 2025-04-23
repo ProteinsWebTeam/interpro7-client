@@ -138,9 +138,11 @@ type SettingsState = {
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
+  bfvd: ParsedURLServer;
   uniprot: ParsedURLServer;
   rfam: ParsedURLServer;
   proteinsAPI: ParsedURLServer;
+  ted: ParsedURLServer;
 };
 type ParsedURLServer = {
   protocol: string;
@@ -212,9 +214,11 @@ type Server =
   | 'ipScan'
   | 'wikipedia'
   | 'alphafold'
+  | 'bfvd'
   | 'repeatsDB'
   | 'disprot'
-  | 'proteinsAPI';
+  | 'proteinsAPI'
+  | 'ted';
 type ServerStatus = {
   status: boolean | null;
   lastCheck: number | null;

@@ -6,15 +6,16 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import ProteinViewerForStructure from './ProteinViewerLoaded';
 
 import cssBinder from 'styles/cssBinder';
+import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import { orderByAccession } from 'components/Related/DomainsOnProtein/utils';
 import { flattenTracksObject } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 import { DataForProteinChain, mergeChimericProteins } from './utils';
 
-import { ExtendedFeature } from 'src/components/ProteinViewer/utils';
+import { ExtendedFeature } from 'components/ProteinViewer/utils';
 
-const css = cssBinder(fonts);
+const css = cssBinder(ipro, fonts);
 
 function getBoundaries(item: ExtendedFeature | ExtendedFeature[]) {
   let fragment = undefined;
@@ -281,16 +282,35 @@ const EntriesOnStructure = ({
     }
   };
 
+  const sequenceToChain: Record<
+    string,
+    { chainsData: DataForProteinChain; chains: string[] }
+  > = {};
+  merged.map((e) => {
+    if (!sequenceToChain[e.sequence.sequence])
+      sequenceToChain[e.sequence.sequence] = {
+        chainsData: e,
+        chains: [e.chain],
+      };
+    else sequenceToChain[e.sequence.sequence]['chains'].push(e.chain);
+  });
+
   return (
     <>
       <div className={css('vf-stack', 'vf-stack--400')}>
-        {merged.map((e, i) => {
+        {Object.values(sequenceToChain).map((data, i) => {
+          const chainsData = data['chainsData'];
+          const chainsList = data['chains'];
+
           const sequenceData = {
-            accession: `${e.chain}-${structure}`,
-            ...e.sequence,
+            accession: `${chainsData.chain}-${structure}`,
+            ...chainsData.sequence,
           };
 
-          const reorganizedTracks = reorganizeStructureViewer(e.chain, e.data);
+          const reorganizedTracks = reorganizeStructureViewer(
+            chainsData.chain,
+            chainsData.data,
+          );
           const tracks = flattenTracksObject(reorganizedTracks);
 
           tracks.map((entry) => {
@@ -299,13 +319,13 @@ const EntriesOnStructure = ({
 
           let accessionList: string[] = [];
 
-          /* 
-            - Take protein object for each "viewer" data 
-            - take the accession 
-            - split the accession if it's composed of multiple uniprot accessiokn
+          /*
+            - Take protein object for each "viewer" data
+            - take the accession
+            - split the accession if it's composed of multiple uniprot accessions
           */
 
-          const splitAccessions = e.protein
+          const splitAccessions = chainsData.protein
             ?.map((p) => p.accession)
             .map((pAccession) => {
               if (pAccession) return pAccession.split(',');
@@ -318,8 +338,8 @@ const EntriesOnStructure = ({
 
           return (
             <div key={i} className={css('vf-stack')}>
-              <h4 id={`protvista-${e.chain}`}>
-                Chain {e.chain}
+              <h4 id={`protvista-${chainsData.chain}`}>
+                Chain{chainsList.length > 1 && 's'}: {chainsList.join(', ')}
                 {accessionList.length > 0 && ' ('}
                 {accessionList &&
                   accessionList.map((acc, idx) => {
@@ -343,7 +363,7 @@ const EntriesOnStructure = ({
                     );
                   })}
                 {accessionList.length > 0 && ')'}
-                {e.isChimeric && (
+                {chainsData.isChimeric && (
                   <Tooltip title="This chain maps to a Chimeric protein consisting of two or more proteins">
                     <div className={css('tag')}>
                       <span
@@ -360,8 +380,8 @@ const EntriesOnStructure = ({
                 tracks={
                   tracks as Array<[string, Array<Record<string, unknown>>]>
                 }
-                chain={e.chain}
-                id={`${e.chain}`}
+                chain={chainsData.chain}
+                id={`${chainsData.chain}`}
                 protein={sequenceData}
                 viewerType={'structures'}
               />

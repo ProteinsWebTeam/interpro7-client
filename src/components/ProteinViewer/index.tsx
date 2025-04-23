@@ -27,6 +27,7 @@ import {
   arrow,
   offset,
 } from '@floating-ui/react';
+import { chooseColor } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 import useStateRef from 'utils/hooks/useStateRef';
 
@@ -75,6 +76,9 @@ type Props = PropsWithChildren<{
   viewerType: string;
   changeSettingsRaw: typeof changeSettingsRaw;
   showMoreSettings: boolean;
+  matchesAvailable?: Record<string, boolean>;
+  colorDomainsBy?: string;
+  matchTypeSettings?: MatchTypeUISettings;
 }>;
 
 interface LoadedProps extends Props, LoadDataProps<RootAPIPayload, 'Base'> {}
@@ -119,10 +123,14 @@ export const ProteinViewer = ({
   dataBase,
   loading = false,
   children,
+  colorDomainsBy,
+  matchesAvailable,
+  matchTypeSettings,
 }: LoadedProps) => {
   const [isPrinting, setPrinting] = useState(false);
 
   const mainTracks = [
+    'bfvd confidence',
     'alphafold confidence',
     'domain',
     'family',
@@ -199,11 +207,18 @@ export const ProteinViewer = ({
   };
 
   useEffect(() => {
-    /* 
+    // Switch to default mode if any of either of InterPro or Intepro-N type of matches are not available.
+    if (matchesAvailable && matchTypeSettings) {
+      if (matchesAvailable[matchTypeSettings] === false) {
+        changeSettingsRaw('ui', 'matchTypeSettings', 'best');
+      }
+    }
+
+    /*
       Logic to handle default display settings for families and domains.
       There's cases where representative families or representative domains are not available.
       Examples: representative families still not supported in InterPro Scan, or there's just no representative match found in the data.
-      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown. 
+      This can create problems in the summary view, where the domains and families section are hidden by default and just the representative are shown.
       If the representative track is not available, nothing would be shown. This prevents it, showing all the matches anyway.
     */
     const changeVisibilityFor: string[] = [];
@@ -225,7 +240,13 @@ export const ProteinViewer = ({
   }, [showMoreSettings]);
 
   return (
-    <div ref={mainRef} className={css('fullscreenable', 'margin-bottom-large')}>
+    <div
+      ref={mainRef}
+      className={css(
+        'fullscreenable',
+        viewerType !== 'structures' ? 'margin-bottom-large' : '',
+      )}
+    >
       {/* Tooltip */}
       <div
         ref={refs.setFloating}
@@ -259,6 +280,7 @@ export const ProteinViewer = ({
                   mainRef,
                   componentsRef,
                 }}
+                matchesAvailable={matchesAvailable || {}}
                 setExpandedAllTracks={setExpandedAllTracks}
                 tooltipEnabled={tooltipEnabled}
                 setTooltipEnabled={setTooltipEnabled}
@@ -267,7 +289,7 @@ export const ProteinViewer = ({
                 {children}
               </Options>
 
-              {/* Hide display mode switcher for alphafold viewer due to: 
+              {/* Hide display mode switcher for alphafold viewer due to:
               see comment in UseEffect above*/}
               {protein.accession && viewerType !== 'structures' && (
                 <ShowMoreTracks
@@ -305,23 +327,27 @@ export const ProteinViewer = ({
                     });
 
                     const LabelComponent = component?.component || 'span';
-                    let representativeEntries: ExtendedFeature[] | null = null;
-                    let nonRepresentativeEntries: ExtendedFeature[] | null =
-                      null;
+                    const reprEntries: ExtendedFeature[] = [];
+                    const tedEntries: ExtendedFeature[] = [];
+                    const otherEntries: ExtendedFeature[] = [];
 
                     if (type === 'domain' || type === 'family') {
-                      representativeEntries = entries.filter(
-                        (entry) => entry.representative === true,
+                      entries.forEach((entry: ExtendedFeature) => {
+                        if (entry.representative) reprEntries.push(entry);
+                        else if (entry.source_database === 'TED')
+                          tedEntries.push(entry);
+                        else otherEntries.push(entry);
+                      });
+                    } else if (type === 'ptm')
+                      standardizePTMData(entries, protein).forEach(
+                        (entry: ExtendedFeature) => {
+                          otherEntries.push(entry);
+                        },
                       );
-                      nonRepresentativeEntries = entries.filter(
-                        (entry) => entry.representative !== true,
-                      );
-                    }
-
-                    // Transform PTM data to track-like data
-                    if (type == 'ptm') {
-                      entries = standardizePTMData(entries, protein);
-                    }
+                    else
+                      entries.forEach((entry: ExtendedFeature) => {
+                        otherEntries.push(entry);
+                      });
 
                     // A few sections (like Alphafold camel case) need to be named differently than simply capitalizing words in the type.
                     // This dict is used to go from type to section name
@@ -375,52 +401,43 @@ export const ProteinViewer = ({
                             />
                           </div>
                         )}{' '}
-                        {representativeEntries ? (
-                          <>
-                            {representativeEntries.length > 0 ? (
-                              <RepresentativeTrack
-                                type={type}
-                                hideCategory={false}
-                                highlightColor={highlightColor}
-                                entries={representativeEntries}
-                                length={protein.sequence.length}
-                                openTooltip={openTooltip}
-                                closeTooltip={closeTooltip}
-                                isPrinting={isPrinting}
-                              />
-                            ) : (
-                              ' '
-                            )}
-                            <TracksInCategory
-                              entries={nonRepresentativeEntries || []}
-                              sequence={protein.sequence}
-                              hideCategory={hideCategory[type]}
-                              highlightColor={highlightColor}
-                              openTooltip={openTooltip}
-                              closeTooltip={closeTooltip}
-                              isPrinting={isPrinting}
-                              ref={(ref: ExpandedHandle) =>
-                                categoryRefs.current.push(ref)
-                              }
-                              databases={dataBase?.payload?.databases}
-                            />
-                          </>
-                        ) : (
-                          entries && (
-                            <TracksInCategory
-                              entries={entries}
-                              sequence={protein.sequence}
-                              hideCategory={hideCategory[type]}
-                              highlightColor={highlightColor}
-                              openTooltip={openTooltip}
-                              closeTooltip={closeTooltip}
-                              isPrinting={isPrinting}
-                              ref={(ref: ExpandedHandle) =>
-                                categoryRefs.current.push(ref)
-                              }
-                              databases={dataBase?.payload?.databases}
-                            />
-                          )
+                        {reprEntries.length > 0 && (
+                          <RepresentativeTrack
+                            type={type}
+                            hideCategory={false}
+                            highlightColor={highlightColor}
+                            entries={reprEntries}
+                            length={protein.sequence.length}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
+                            isPrinting={isPrinting}
+                          />
+                        )}
+                        {tedEntries.length > 0 && (
+                          <TracksInCategory
+                            entries={tedEntries}
+                            sequence={protein.sequence}
+                            hideCategory={false}
+                            highlightColor={highlightColor}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
+                            isPrinting={isPrinting}
+                          />
+                        )}
+                        {otherEntries.length > 0 && (
+                          <TracksInCategory
+                            entries={otherEntries}
+                            sequence={protein.sequence}
+                            hideCategory={hideCategory[type]}
+                            highlightColor={highlightColor}
+                            openTooltip={openTooltip}
+                            closeTooltip={closeTooltip}
+                            isPrinting={isPrinting}
+                            ref={(ref: ExpandedHandle) =>
+                              categoryRefs.current.push(ref)
+                            }
+                            databases={dataBase?.payload?.databases}
+                          />
                         )}
                       </div>
                     );
@@ -444,6 +461,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui,
   (ui) => ({
     showMoreSettings: ui.showMoreSettings,
+    matchTypeSettings: ui.matchTypeSettings,
   }),
 );
 

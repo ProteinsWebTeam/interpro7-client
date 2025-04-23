@@ -110,7 +110,7 @@ export const getTextForLabel = (
   }
 
   // Post process labels for Interpro-N, optimal and stacked mode
-  text = text.replace(':nMatch', '');
+  text = text.replace(/:nmatch/i, '');
   if (text.includes('parentUnintegrated')) {
     text = 'Unintegrated';
   }

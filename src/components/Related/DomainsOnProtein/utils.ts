@@ -195,8 +195,8 @@ export const proteinViewerReorganization = (
 
       if (!uniqueResidues[dictKey]) uniqueResidues[dictKey] = currentResidue;
     } else {
-      /* 
-        Results coming in from InterProScan 5 are splitted. We get a residue object for each "location" match. 
+      /*
+        Results coming in from InterProScan 5 are splitted. We get a residue object for each "location" match.
         Normally we'd have a single residue object with multiple locations matches in the "locations" attribute.
         The following logic is to group residues in a single object based on accession and the sites' description.
       */

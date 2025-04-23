@@ -57,7 +57,16 @@ export const getIProScanURL = (accession: string) => {
   return url;
 };
 
+type JobAdditionalMetadata = {
+  jobRunTime: {
+    endTime: string;
+    startTime: string;
+    jobId: string;
+  };
+};
+
 type Props = {
+  ipScan: ParsedURLServer;
   job?: MinimalJobMetadata;
   search: InterProLocationSearch;
   defaultPageSize: number;
@@ -66,6 +75,7 @@ type Props = {
 };
 
 export const IPScanStatus = ({
+  ipScan,
   job,
   search,
   defaultPageSize,
@@ -73,6 +83,8 @@ export const IPScanStatus = ({
   // updateJobTitle,
 }: Props) => {
   const [jobsData, setJobsData] = useState<Array<IprscanDataIDB>>([]);
+  const [expiryDate, setExpiryDate] = useState(new Date());
+
   const [shouldImportResults, setShouldImportResults] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   // const [versionMismatch, setVersionMismatch] = useState(false);
@@ -97,6 +109,36 @@ export const IPScanStatus = ({
       updateJobStatus();
     }
   }, [job, isImporting]);
+
+  useEffect(() => {
+    const setJobExpiryDate = async (job: MinimalJobMetadata) => {
+      const ipScanURL = format({
+        protocol: ipScan.protocol,
+        hostname: ipScan.hostname,
+        port: ipScan.port,
+        pathname: ipScan.root,
+      });
+
+      const jobMetadataRequest = await fetch(
+        `${ipScanURL}/jobruntime/${job.remoteID}`,
+      );
+
+      const jobMetadata = await jobMetadataRequest.json();
+      const endDateString = (jobMetadata as JobAdditionalMetadata).jobRunTime
+        .endTime;
+      const endDateMilliSeconds = Date.parse(
+        endDateString.replace('BST', 'GMT+0100'),
+      );
+      const newExpiryDate = new Date(
+        (job?.times?.created || endDateMilliSeconds) + MAX_TIME_ON_SERVER,
+      );
+      setExpiryDate(newExpiryDate);
+    };
+
+    if (job) {
+      setJobExpiryDate(job || '');
+    }
+  }, [job]);
 
   if (!job)
     return (
@@ -123,7 +165,7 @@ export const IPScanStatus = ({
     ((Number(search.page) || 1) - 1) * Number(pageSize),
     Number(pageSize),
   );
-  const expiryDate = new Date((job?.times?.created || 0) + MAX_TIME_ON_SERVER);
+
   return (
     <section>
       <IPScanVersionCheck
@@ -303,6 +345,7 @@ export const IPScanStatus = ({
 };
 
 const mapsStateToProps = createSelector(
+  (state: GlobalState) => state.settings.ipScan,
   (state: GlobalState) =>
     Object.values(state.jobs || {}).find(
       (job) =>
@@ -310,7 +353,8 @@ const mapsStateToProps = createSelector(
     ),
   (state: GlobalState) => state.customLocation.search,
   (state: GlobalState) => state.settings.navigation.pageSize,
-  (job, search, defaultPageSize) => ({
+  (ipScan, job, search, defaultPageSize) => ({
+    ipScan: ipScan,
     job: job?.metadata,
     search,
     defaultPageSize,

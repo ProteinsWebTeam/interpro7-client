@@ -34,7 +34,7 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
           name: true,
           short: true,
         },
-        matchTypeSettings: 'hmm',
+        matchTypeSettings: 'best',
         structureViewer: false,
         shouldHighlight: true,
         idaAccessionDB: 'interpro',
@@ -100,6 +100,22 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
         port: config.root.alphafold.port || DEFAULT_HTTP_PORT,
         root: config.root.alphafold.pathname,
         query: config.root.alphafold.query,
+      } as SettingsState[T];
+    case 'bfvd':
+      return {
+        protocol: config.root.bfvd.protocol,
+        hostname: config.root.bfvd.hostname,
+        port: config.root.bfvd.port || DEFAULT_HTTP_PORT,
+        root: config.root.bfvd.pathname,
+        query: config.root.bfvd.query,
+      } as SettingsState[T];
+    case 'ted':
+      return {
+        protocol: config.root.ted.protocol,
+        hostname: config.root.ted.hostname,
+        port: config.root.ted.port || DEFAULT_HTTP_PORT,
+        root: config.root.ted.pathname,
+        query: config.root.ted.query,
       } as SettingsState[T];
     default:
       return null;

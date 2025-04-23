@@ -11,7 +11,8 @@ exports[`<EntriesOnStructure /> should render 1`] = `
       <h4
         id="protvista-A"
       >
-        Chain 
+        Chain
+        : 
         A
          (
         <small>

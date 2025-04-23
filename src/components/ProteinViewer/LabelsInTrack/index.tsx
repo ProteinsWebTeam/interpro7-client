@@ -11,7 +11,10 @@ import cssBinder from 'styles/cssBinder';
 import style from '../../ProteinViewer/style.css';
 import grid from '../../ProteinViewer/grid.css';
 import local from './style.css';
-import ExceptionalLabels, { isAnExceptionalLabel } from './ExceptionalLabels';
+import ExceptionalLabels, {
+  isAnExceptionalLabel,
+  isStandaloneLabel,
+} from './ExceptionalLabels';
 
 const css = cssBinder(style, grid, local);
 
@@ -31,9 +34,13 @@ const LabelsInTrack = ({
   const key = entry.source_database === 'pdb' ? 'structure' : 'entry';
   return (
     <div
-      className={css('track-label', {
-        hideCategory,
-      })}
+      className={css(
+        'track-label',
+        isStandaloneLabel(entry) ? 'inner-track-label' : null,
+        {
+          hideCategory,
+        },
+      )}
     >
       {isAnExceptionalLabel(entry) ? (
         <ExceptionalLabels entry={entry} isPrinting={isPrinting} />
@@ -79,7 +86,7 @@ const LabelsInTrack = ({
                         db: entry.source_database,
                         accession: entry.accession.startsWith('residue:')
                           ? entry.accession.split('residue:')[1]
-                          : entry.accession,
+                          : entry.accession.replaceAll(/:nmatch/gi, ''),
                       },
                     },
                   }}
@@ -111,7 +118,7 @@ const LabelsInTrack = ({
                           main: { key: 'entry' },
                           entry: {
                             db: d.source_database,
-                            accession: d.accession,
+                            accession: d.accession.replaceAll(/:nmatch/gi, ''),
                           },
                         },
                       }}

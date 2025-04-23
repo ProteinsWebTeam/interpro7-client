@@ -32,7 +32,7 @@ const EXTERNAL_LINKS = [
   },
   { pattern: 'https://www.cathdb.info/pdb/{id}', label: 'CATH' },
   {
-    pattern: 'http://scop.mrc-lmb.cam.ac.uk/search?t=txt;q={id}',
+    pattern: 'https://www.ebi.ac.uk/pdbe/scop/search?t=txt;q={id}',
     label: 'SCOP',
   },
   {

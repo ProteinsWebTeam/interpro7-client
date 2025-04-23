@@ -281,6 +281,30 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                     UniProt
                   </UniProtLink>
                 </li>
+                {metadata.in_bfvd ? (
+                  <>
+                    <li>
+                      <BaseLink
+                        id={metadata.accession}
+                        target={'_blank'}
+                        pattern="https://bfvd.foldseek.com/cluster/{id}"
+                        className={css('ext')}
+                      >
+                        BFVD
+                      </BaseLink>
+                    </li>
+                    <li>
+                      <BaseLink
+                        id={metadata.accession}
+                        target={'_blank'}
+                        pattern="https://search.foldseek.com/search?accession={id}&source=BFVD"
+                        className={css('ext')}
+                      >
+                        Foldseek
+                      </BaseLink>
+                    </li>
+                  </>
+                ) : null}
                 {metadata.in_alphafold ? (
                   <>
                     <li>

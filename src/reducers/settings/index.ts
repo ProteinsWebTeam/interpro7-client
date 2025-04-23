@@ -14,5 +14,7 @@ export default combineReducers({
   disprot: category('disprot'),
   wikipedia: category('wikipedia'),
   alphafold: category('alphafold'),
+  bfvd: category('bfvd'),
   proteinsAPI: category('proteinsAPI'),
+  ted: category('ted'),
 });
