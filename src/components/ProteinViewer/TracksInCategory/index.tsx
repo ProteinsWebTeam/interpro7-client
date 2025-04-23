@@ -76,7 +76,7 @@ const MARGIN_CHANGE_TRACKS = [
 const EXCEPTIONAL_PREFIXES = ['G3D:', 'REPEAT:', 'DISPROT:', 'TED:'];
 const WITH_TOP_MARGIN = ['REPEAT:', 'TED:'];
 const WITH_BOTTOM_MARGIN = ['TED:'];
-const domainTypes = ['domain', 'homologous_superfamily', 'repeat'];
+const domainTypes = ['domain', 'homologous_superfamily', 'repeats'];
 
 const b2sh = new Map([
   ['N_TERMINAL_DISC', 'discontinuosStart'], // TODO fix spelling in this and nightingale
@@ -183,9 +183,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
     const [expandedTrack, setExpandedTrack, expandedTrackRef] = useStateRef<
       Record<string, boolean>
     >({});
-    const [hasListeners, setHasListeners] = useState<Record<string, boolean>>(
-      {},
-    );
     const [hasData, setHasData] = useState<Record<string, boolean>>({});
     const databasesRef = useRef<DBsInfo | null>(null);
     const uniqueID = useRef(uniqueId());
@@ -195,6 +192,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       if (databases) databasesRef.current = databases;
     }, [databases]);
     const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
+      console.log('unintegrated');
       if (detail) {
         const accession = detail.feature?.accession || '';
         switch (detail.eventType) {
@@ -250,7 +248,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       Promise.all(
         webComponents.map((wc) => customElements.whenDefined(wc)),
       ).then(() => {
-        const addedListeners: Record<string, boolean> = {};
         const addedData: Record<string, boolean> = {};
         for (const entry of entries) {
           const track = document.getElementById(
@@ -258,12 +255,9 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
           );
           if (track) {
             // setting up the listeners
-            if (!hasListeners[entry.accession]) {
-              track.addEventListener('change', (evt) =>
-                handleTrackEvent({ detail: (evt as CustomEvent).detail }),
-              );
-              addedListeners[entry.accession || ''] = true;
-            }
+            track.addEventListener('change', (evt) =>
+              handleTrackEvent({ detail: (evt as CustomEvent).detail }),
+            );
             // adding the data
             if (!hasData[entry.accession]) {
               if (
@@ -290,11 +284,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
             }
           }
         }
-        if (Object.keys(addedListeners).length)
-          setHasListeners({
-            ...hasListeners,
-            ...addedListeners,
-          });
         if (Object.keys(addedData).length)
           setHasData({
             ...hasData,
