@@ -192,7 +192,6 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
       if (databases) databasesRef.current = databases;
     }, [databases]);
     const handleTrackEvent = ({ detail }: { detail: DetailInterface }) => {
-      console.log('unintegrated');
       if (detail) {
         const accession = detail.feature?.accession || '';
         switch (detail.eventType) {
