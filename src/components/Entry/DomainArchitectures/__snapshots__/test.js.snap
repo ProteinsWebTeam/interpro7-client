@@ -12,9 +12,7 @@ exports[`<DomainArchitecturesWithData /> should render 1`] = `
     count={511}
     showDBSelector={true}
   />
-  <div
-    className="margin-bottom-large"
-  >
+  <div>
     <Memo(Loadable)
       data={
         {
