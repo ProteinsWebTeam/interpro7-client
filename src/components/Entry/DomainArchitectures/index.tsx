@@ -190,7 +190,7 @@ export const DomainArchitecturesWithData = ({
         const idaObj = ida2json(obj.ida, obj.representative, currentDB);
         const representativeAcc = obj?.representative?.accession;
         return (
-          <div key={obj.ida_id} className={css('margin-bottom-large')}>
+          <div key={obj.ida_id}>
             <SchemaOrgData data={obj} processData={schemaProcessData} />
             <div>
               <Link
