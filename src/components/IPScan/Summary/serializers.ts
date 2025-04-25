@@ -223,7 +223,7 @@ export const mergeData = (
     );
 
     if (representativeLocations.length) {
-      if (match.signature?.type.toLowerCase() === 'family') {
+      if (match.signature?.type?.toLowerCase() === 'family') {
         representativeFamilies.push({
           ...processedMatch,
           locations: representativeLocations,
