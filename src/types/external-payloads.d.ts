@@ -7,7 +7,7 @@ type Iprscan5Signature = {
     version: string;
   };
   entry: Iprscan5Entry;
-  type: string;
+  type?: string;
 };
 type Iprscan5Entry = {
   accession: string;
