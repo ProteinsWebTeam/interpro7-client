@@ -43,6 +43,7 @@ const flatMatchesFromIPScanPayload = function* (
     yield {
       accession: match.signature.accession,
       name: match.signature.description || '',
+      short_name: match.signature.name,
       source_database: db,
       matches: [
         {
