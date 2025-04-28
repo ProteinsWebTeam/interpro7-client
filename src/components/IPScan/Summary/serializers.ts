@@ -147,12 +147,14 @@ export const mergeData = (
     residues: [],
     other_residues: [],
     representative_domains: [],
+    representative_families: [],
   };
   const unintegrated: Record<string, IpScanMatch> = {};
   const otherFeatures: Record<string, IpScanMatch> = {};
   let integrated = new Map<string, IpScanEntry>();
   const signatures = new Map<string, IpScanMatch>();
   const representativeDomains = [];
+  const representativeFamilies = [];
 
   for (const match of matches) {
     const { library } = match.signature.signatureLibraryRelease;
@@ -219,12 +221,22 @@ export const mergeData = (
     const representativeLocations = processedMatch.locations.filter(
       (loc) => loc.representative,
     );
+
     if (representativeLocations.length) {
-      representativeDomains.push({
-        ...processedMatch,
-        locations: representativeLocations,
-        integrated: match.signature?.entry?.accession,
-      });
+      if (match.signature?.type?.toLowerCase() === 'family') {
+        representativeFamilies.push({
+          ...processedMatch,
+          locations: representativeLocations,
+          integrated: match.signature?.entry?.accession,
+        });
+      } else {
+        // domains, homologous_superfamily
+        representativeDomains.push({
+          ...processedMatch,
+          locations: representativeLocations,
+          integrated: match.signature?.entry?.accession,
+        });
+      }
     }
   }
 
@@ -247,6 +259,9 @@ export const mergeData = (
   }
   if (representativeDomains?.length) {
     mergedData.representative_domains = representativeDomains;
+  }
+  if (representativeFamilies?.length) {
+    mergedData.representative_families = representativeFamilies;
   }
 
   return mergedData;

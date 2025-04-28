@@ -42,7 +42,8 @@ const flatMatchesFromIPScanPayload = function* (
     const db = iproscan2urlDB(match.signature.signatureLibraryRelease.library);
     yield {
       accession: match.signature.accession,
-      name: match.signature.description || '',
+      name: match.signature.description || '∅',
+      short_name: match.signature.name || '∅',
       source_database: db,
       matches: [
         {
