@@ -20,7 +20,7 @@ const mdb1Values = new Set([
   'CDD',
   'HAMAP',
   'Panther',
-  'PfamA',
+  'Pfam',
   'PIRSF',
   'PRINTS',
   'PrositeProfiles',
@@ -46,17 +46,29 @@ const labels = new Map([
   ['Gene3d', 'CATH-Gene3D'],
   ['PrositeProfiles', 'PROSITE profiles'],
   ['PrositePatterns', 'PROSITE patterns'],
+  ['FunFam', 'CATH-FunFam'],
 ]);
+
+const exclude = [
+  'SignalP_EUK',
+  'SignalP_GRAM_POSITIVE',
+  'SignalP_GRAM_NEGATIVE',
+];
+
+const sortOptions = (a: { value: string }, b: { value: string }) => {
+  return a.value < b.value ? -1 : 1;
+};
 
 const groupApplications = (
   applications: Array<IprscanParameterValue>,
   initialOptions?: InterProLocationSearch,
 ) => {
-  const mdb1 = [];
-  const mdb2 = [];
-  const other = [];
-  const noCategory = [];
-  const appOptions = initialOptions?.applications as Array<string>;
+  let mdb1 = [];
+  let mdb2 = [];
+  let other = [];
+  let noCategory = [];
+  let appOptions = initialOptions?.applications as Array<string>;
+
   for (const application of applications) {
     if (appOptions?.length) {
       application.defaultValue = appOptions.includes(application.value);
@@ -66,6 +78,13 @@ const groupApplications = (
     else if (otherValues.has(application.value)) other.push(application);
     else if (!ignoreList.has(application.value)) noCategory.push(application);
   }
+
+  mdb1 = mdb1.sort(sortOptions);
+  mdb2 = mdb2.sort(sortOptions);
+  other = other.sort(sortOptions);
+  noCategory = noCategory
+    .sort(sortOptions)
+    .filter((o) => !exclude.includes(o.value));
   return { mdb1, mdb2, other, noCategory };
 };
 
