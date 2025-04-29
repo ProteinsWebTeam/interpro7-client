@@ -117,7 +117,7 @@ const HamburgerBtn = connect(mapStateToPropsHamburger, { toggleSideNav })(
   search: Object
 }; */
 
-export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
+export class _SideIcons extends PureComponent {
   static propTypes = {
     movedAway: T.bool.isRequired,
     stuck: T.bool.isRequired,
@@ -125,8 +125,21 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
     search: T.object.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchValue: '',
+    };
+  }
+
+  setSearchValue = (value) => {
+    this.setState({ searchValue: value });
+  };
+
   render() {
     const { movedAway, stuck, lowGraphics, search } = this.props;
+    const { searchValue } = this.state;
+
     return (
       <div
         className={styleBundle('columns', 'small-6', 'medium-4', {
@@ -141,6 +154,7 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
               delay={DEBOUNCE_RATE_SLOW}
               shouldRedirect={true}
               forHeader={true}
+              setSearchValue={this.setSearchValue}
             />
             <Link
               to={{
@@ -149,6 +163,7 @@ export class _SideIcons extends PureComponent /*:: <SideIconsProps> */ {
                   search: {
                     ...search,
                     type: 'text',
+                    value: searchValue,
                   },
                 },
               }}
@@ -213,7 +228,6 @@ export class Header extends PureComponent /*:: <HeaderProps> */ {
   // TODO: check why position:sticky banner in the page works just on top - pbm with container
   render() {
     const { stickyMenuOffset: offset, stuck, isSignature } = this.props;
-    // console.log(this.state);
     const shouldStuck = stuck;
     return (
       <div

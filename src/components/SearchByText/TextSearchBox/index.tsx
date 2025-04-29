@@ -6,6 +6,7 @@ import { debounce } from 'lodash-es';
 
 import { goToCustomLocation } from 'actions/creators';
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import searchStorage from 'storage/searchStorage';
 
@@ -30,6 +31,7 @@ type Props = {
   delay?: number;
   shouldRedirect?: boolean;
   forHeader?: boolean;
+  setSearchValue?: (s: string) => void;
 };
 type State = {
   localValue?: string | null;
@@ -77,22 +79,26 @@ class TextSearchBox extends PureComponent<Props, State> {
     const value = this.state.localValue
       ? this.state.localValue.trim()
       : this.state.localValue;
+
+    /* 
+      Used for search history but buggy -
+      if you typed in something wrong 
+      and try to correct it, (e.g kinases, kinase),
+      it'll always go back to the first text typed
+    */
+    // let tmpSearchHistory = this.state.searchHistory;
+    // if (value && !this.state.searchHistory.includes(value)) {
+    //   tmpSearchHistory = [value, ...this.state.searchHistory];
+    //   this.setState({ searchHistory: tmpSearchHistory });
+    // }
+    // searchStorage.setValue(tmpSearchHistory);
+
     if (shouldRedirect) {
       const directLinkDescription = getURLByAccession(value);
       if (directLinkDescription) {
-        this.props.goToCustomLocation({
-          description: directLinkDescription,
-        });
-        return;
+        window.location.href = descriptionToPath(directLinkDescription);
       }
     }
-
-    let tmpSearchHistory = this.state.searchHistory;
-    if (value && !this.state.searchHistory.includes(value)) {
-      tmpSearchHistory = [value, ...this.state.searchHistory];
-      this.setState({ searchHistory: tmpSearchHistory });
-    }
-    searchStorage.setValue(tmpSearchHistory);
 
     // Finally just trigger a search
     this.props.goToCustomLocation(
@@ -109,6 +115,7 @@ class TextSearchBox extends PureComponent<Props, State> {
       replace,
     );
   };
+
   private debouncedPush = debounce(
     this.routerPush,
     this.props.delay || DEBOUNCE_RATE,
@@ -120,18 +127,20 @@ class TextSearchBox extends PureComponent<Props, State> {
     }
   };
 
-  handleChange = (term: string, { action }: InputActionMeta) => {
+  handleInputChange = (term: string, { action }: InputActionMeta) => {
     if (action === 'input-change') {
-      this.setState({ localValue: term, loading: true }, () =>
-        this.debouncedPush(true),
-      );
+      this.setState({ localValue: term, loading: true });
+      if (this.props.setSearchValue) {
+        this.props.setSearchValue(term);
+      }
     }
   };
 
-  setSelection = (selection: { value?: string } | null) => {
-    this.setState({ localValue: selection?.value, loading: true }, () =>
-      this.debouncedPush(true),
-    );
+  handleChange = (selection: { value?: string } | null) => {
+    this.setState({ localValue: selection?.value, loading: true });
+    if (this.props.setSearchValue) {
+      this.props.setSearchValue(selection?.value || '');
+    }
   };
 
   focus() {
@@ -153,8 +162,8 @@ class TextSearchBox extends PureComponent<Props, State> {
             })}
             placeholder="Enter your search"
             onKeyDown={this.handleKeyPress}
-            onInputChange={this.handleChange}
-            onChange={(val) => this.setSelection(val)}
+            onChange={this.handleChange}
+            onInputChange={this.handleInputChange}
             value={{
               value: this.state.localValue || '',
               label: this.state.localValue || '',
