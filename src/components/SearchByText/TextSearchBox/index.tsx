@@ -29,7 +29,6 @@ type Props = {
   className?: string;
   goToCustomLocation: typeof goToCustomLocation;
   delay?: number;
-  shouldRedirect?: boolean;
   forHeader?: boolean;
   setSearchValue?: (s: string) => void;
 };
@@ -73,7 +72,7 @@ class TextSearchBox extends PureComponent<Props, State> {
     }
   }
   routerPush = (replace?: boolean) => {
-    const { pageSize, shouldRedirect } = this.props;
+    const { pageSize } = this.props;
     const query: { page: number; page_size?: number } = { page: 1 };
     if (pageSize) query.page_size = Number(pageSize);
     const value = this.state.localValue
@@ -92,6 +91,7 @@ class TextSearchBox extends PureComponent<Props, State> {
     //   this.setState({ searchHistory: tmpSearchHistory });
     // }
     // searchStorage.setValue(tmpSearchHistory);
+
     const directLinkDescription = getURLByAccession(value);
     if (directLinkDescription) {
       window.location.href = descriptionToPath(directLinkDescription);
