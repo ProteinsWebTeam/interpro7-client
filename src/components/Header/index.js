@@ -14,6 +14,7 @@ import { sideNavSelector } from 'reducers/ui/sideNav';
 import { toggleSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+import getURLByAccession from 'utils/processDescription/getURLbyAccession';
 
 import Link from 'components/generic/Link';
 // $FlowFixMe
@@ -134,6 +135,12 @@ export class _SideIcons extends PureComponent {
 
   setSearchValue = (value) => {
     this.setState({ searchValue: value });
+    const directLinkDescription = getURLByAccession(value);
+    if (directLinkDescription) {
+      this.setState({ directLink: descriptionToPath(directLinkDescription) });
+    } else {
+      this.setState({ directLink: null });
+    }
   };
 
   render() {
@@ -152,21 +159,25 @@ export class _SideIcons extends PureComponent {
             <TextSearchBox
               name="search"
               delay={DEBOUNCE_RATE_SLOW}
-              shouldRedirect={true}
               forHeader={true}
               setSearchValue={this.setSearchValue}
             />
             <Link
-              to={{
-                description: {
-                  main: { key: 'search' },
-                  search: {
-                    ...search,
-                    type: 'text',
-                    value: searchValue,
-                  },
-                },
-              }}
+              to={
+                !this.state.directLink
+                  ? {
+                      description: {
+                        main: { key: 'search' },
+                        search: {
+                          ...search,
+                          type: 'text',
+                          value: searchValue,
+                        },
+                      },
+                    }
+                  : null
+              }
+              href={this.state.directLink}
             >
               <div role="button" aria-label="Search InterPro">
                 <svg

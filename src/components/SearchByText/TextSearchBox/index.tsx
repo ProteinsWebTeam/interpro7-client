@@ -83,8 +83,8 @@ class TextSearchBox extends PureComponent<Props, State> {
     /* 
       Used for search history but buggy -
       if you typed in something wrong 
-      and try to correct it, (e.g kinases, kinase),
-      it'll always go back to the first text typed
+      and tried to correct it, (e.g kinases, kinase),
+      it'd always go back to the text typed in the first place.
     */
     // let tmpSearchHistory = this.state.searchHistory;
     // if (value && !this.state.searchHistory.includes(value)) {
@@ -92,28 +92,24 @@ class TextSearchBox extends PureComponent<Props, State> {
     //   this.setState({ searchHistory: tmpSearchHistory });
     // }
     // searchStorage.setValue(tmpSearchHistory);
-
-    if (shouldRedirect) {
-      const directLinkDescription = getURLByAccession(value);
-      if (directLinkDescription) {
-        window.location.href = descriptionToPath(directLinkDescription);
-      }
-    }
-
-    // Finally just trigger a search
-    this.props.goToCustomLocation(
-      {
-        description: {
-          main: { key: 'search' },
-          search: {
-            type: 'text',
-            value,
+    const directLinkDescription = getURLByAccession(value);
+    if (directLinkDescription) {
+      window.location.href = descriptionToPath(directLinkDescription);
+    } else {
+      this.props.goToCustomLocation(
+        {
+          description: {
+            main: { key: 'search' },
+            search: {
+              type: 'text',
+              value,
+            },
           },
+          search: query,
         },
-        search: query,
-      },
-      replace,
-    );
+        replace,
+      );
+    }
   };
 
   private debouncedPush = debounce(
