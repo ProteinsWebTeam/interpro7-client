@@ -49,6 +49,14 @@ const PfamDownloads = () => (
             </Link>
           </td>
         </tr>
+        <tr>
+          <td>Checksums</td>
+          <td>
+            <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/md5_checksums">
+              md5
+            </Link>
+          </td>
+        </tr>
       </tbody>
     </table>
     <p className={css('small', 'margin-top-small')}>

@@ -31,6 +31,10 @@ const InterProDownloads = () => (
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/interpro.xml.gz">
               xml.gz
             </Link>
+            ,{' '}
+            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/interpro.xml.gz.md5">
+              md5
+            </Link>
           </td>
         </tr>
         <tr>
@@ -38,6 +42,10 @@ const InterProDownloads = () => (
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/match_complete.xml.gz">
               xml.gz
+            </Link>
+            ,{' '}
+            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/match_complete.xml.gz.md5">
+              md5
             </Link>
           </td>
         </tr>
@@ -47,6 +55,10 @@ const InterProDownloads = () => (
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/uniparc_match.tar.gz">
               tar.gz
             </Link>
+            ,{' '}
+            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/uniparc_match.tar.gz.md5">
+              md5
+            </Link>
           </td>
         </tr>
         <tr>
@@ -54,6 +66,10 @@ const InterProDownloads = () => (
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/protein2ipr.dat.gz">
               dat.gz
+            </Link>
+            ,{' '}
+            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/protein2ipr.dat.gz.md5">
+              md5
             </Link>
           </td>
         </tr>
