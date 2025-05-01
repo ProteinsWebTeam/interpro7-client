@@ -20,7 +20,7 @@ const mdb1Values = new Set([
   'CDD',
   'HAMAP',
   'Panther',
-  'Pfam',
+  'PfamA',
   'PIRSF',
   'PRINTS',
   'PrositeProfiles',
@@ -49,11 +49,7 @@ const labels = new Map([
   ['FunFam', 'CATH-FunFam'],
 ]);
 
-const exclude = [
-  'SignalP_EUK',
-  'SignalP_GRAM_POSITIVE',
-  'SignalP_GRAM_NEGATIVE',
-];
+const excludeFromOptions = ['SignalP'];
 
 const sortOptions = (a: { value: string }, b: { value: string }) => {
   return a.value < b.value ? -1 : 1;
@@ -81,10 +77,10 @@ const groupApplications = (
 
   mdb1 = mdb1.sort(sortOptions);
   mdb2 = mdb2.sort(sortOptions);
-  other = other.sort(sortOptions);
-  noCategory = noCategory
+  other = other
     .sort(sortOptions)
-    .filter((o) => !exclude.includes(o.value));
+    .filter((o) => !excludeFromOptions.includes(o.value));
+  noCategory = noCategory.sort(sortOptions);
   return { mdb1, mdb2, other, noCategory };
 };
 
@@ -99,7 +95,8 @@ const applicationToCheckbox = ({
 }) => (
   <AdvancedOption
     name="appl"
-    value={value}
+    // Pfam edge case (the "PfamA" is defined by IPScan5)
+    value={value === 'PfamA' ? 'Pfam' : value}
     defaultChecked={defaultValue}
     title={properties && properties.properties[0].value}
     key={value}
