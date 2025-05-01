@@ -164,10 +164,10 @@ const Structure3DModel = ({
             {bfvd ? (
               <>
                 by the{' '}
-                <Link href={'//steineggerlab.com/en/'}>Steinegger Lab</Link>{' '}
+                <Link href={'//steineggerlab.com/en'}>Steinegger Lab</Link>{' '}
                 using ColabFold (
-                <Link href={'//www.nature.com/articles/s41592-022-01488-1'}>
-                  Mirdita, M et al. 2022
+                <Link href={'//doi.org/10.1093/nar/gkae1119'}>
+                  Kim, R et al. 2024
                 </Link>
                 )
               </>
