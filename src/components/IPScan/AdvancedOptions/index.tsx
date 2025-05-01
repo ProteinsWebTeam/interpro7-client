@@ -52,7 +52,7 @@ const labels = new Map([
 const excludeFromOptions = ['SignalP'];
 
 const sortOptions = (a: { value: string }, b: { value: string }) => {
-  return a.value < b.value ? -1 : 1;
+  return a.value[0].toLowerCase() < b.value[0].toLowerCase() ? -1 : 1;
 };
 
 const groupApplications = (
@@ -63,6 +63,7 @@ const groupApplications = (
   let mdb2 = [];
   let other = [];
   let noCategory = [];
+  let otherFeatures = [];
   let appOptions = initialOptions?.applications as Array<string>;
 
   for (const application of applications) {
@@ -77,11 +78,11 @@ const groupApplications = (
 
   mdb1 = mdb1.sort(sortOptions);
   mdb2 = mdb2.sort(sortOptions);
-  other = other
-    .sort(sortOptions)
-    .filter((o) => !excludeFromOptions.includes(o.value));
-  noCategory = noCategory.sort(sortOptions);
-  return { mdb1, mdb2, other, noCategory };
+  otherFeatures = other
+    .concat(noCategory)
+    .filter((o) => !excludeFromOptions.includes(o.value))
+    .sort(sortOptions);
+  return { mdb1, mdb2, otherFeatures };
 };
 
 const applicationToCheckbox = ({
@@ -95,8 +96,7 @@ const applicationToCheckbox = ({
 }) => (
   <AdvancedOption
     name="appl"
-    // Pfam edge case (the "PfamA" is defined by IPScan5)
-    value={value === 'PfamA' ? 'Pfam' : value}
+    value={value}
     defaultChecked={defaultValue}
     title={properties && properties.properties[0].value}
     key={value}
@@ -135,7 +135,7 @@ export const AdvancedOptions = ({
   const { loading, payload, ok } = data;
   if (loading) return 'Loading…';
   if (!ok || !payload) return 'Failed…';
-  const { mdb1, mdb2, other, noCategory } = groupApplications(
+  const { mdb1, mdb2, otherFeatures } = groupApplications(
     payload.values.values,
     initialOptions,
   );
@@ -216,8 +216,7 @@ export const AdvancedOptions = ({
           </fieldset>
           <fieldset className={css('new-fieldset')}>
             <legend>Other sequence features</legend>
-            {other.map(applicationToCheckbox)}
-            {noCategory.map(applicationToCheckbox)}
+            {otherFeatures.map(applicationToCheckbox)}
           </fieldset>
         </fieldset>
       </details>
