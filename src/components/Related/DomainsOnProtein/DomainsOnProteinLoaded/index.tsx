@@ -321,24 +321,26 @@ const DomainsOnProteinLoaded = ({
         const unintegratedEntry = {
           ...(processedDataMerged['unintegrated'][i] as ExtendedFeature),
         };
+
+        let dbSection: string = '';
         const sourcedb = unintegratedEntry.source_database;
         if (sourcedb && Object.keys(dbToSection).includes(sourcedb)) {
-          if (processedDataMerged[dbToSection[sourcedb]]) {
-            const previousSectionData = [
-              ...(processedDataMerged[
-                dbToSection[sourcedb]
-              ] as ExtendedFeature[]),
-            ];
-            previousSectionData.push(unintegratedEntry);
-            processedDataMerged[dbToSection[sourcedb]] = [
-              ...previousSectionData,
-            ];
-            accessionsToRemoveFromUnintegrated.push(
-              unintegratedEntry.accession,
-            );
-          }
+          dbSection = dbToSection[sourcedb];
+        }
+
+        let sectionKey: string =
+          unintegratedEntry.type?.toLowerCase() || dbSection;
+
+        if (processedDataMerged[sectionKey]) {
+          const previousSectionData = [
+            ...(processedDataMerged[sectionKey] as ExtendedFeature[]),
+          ];
+          previousSectionData.push(unintegratedEntry);
+          processedDataMerged[sectionKey] = [...previousSectionData];
+          accessionsToRemoveFromUnintegrated.push(unintegratedEntry.accession);
         }
       }
+
       const filteredUnintegrated = (
         processedDataMerged['unintegrated'] as ExtendedFeature[]
       ).filter(
