@@ -14,6 +14,8 @@ import { sideNavSelector } from 'reducers/ui/sideNav';
 import { toggleSideNav } from 'actions/creators';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+
+// $FlowFixMe
 import getURLByAccession from 'utils/processDescription/getURLbyAccession';
 
 import Link from 'components/generic/Link';
