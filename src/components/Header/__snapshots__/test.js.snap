@@ -305,7 +305,7 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -316,6 +316,7 @@ exports[`<SideIcons /> movedAway, stuck, lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }
@@ -366,7 +367,7 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -377,6 +378,7 @@ exports[`<SideIcons /> movedAway, stuck, no lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }
@@ -427,7 +429,7 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -438,6 +440,7 @@ exports[`<SideIcons /> movedAway, unstuck, lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }
@@ -488,7 +491,7 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -499,6 +502,7 @@ exports[`<SideIcons /> movedAway, unstuck, no lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }
@@ -549,7 +553,7 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -560,6 +564,7 @@ exports[`<SideIcons /> not movedAway, stuck, lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }
@@ -610,7 +615,7 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -621,6 +626,7 @@ exports[`<SideIcons /> not movedAway, stuck, no lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }
@@ -671,7 +677,7 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -682,6 +688,7 @@ exports[`<SideIcons /> not movedAway, unstuck, lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }
@@ -732,7 +739,7 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
         delay={2000}
         forHeader={true}
         name="search"
-        shouldRedirect={true}
+        setSearchValue={[Function]}
       />
       <Memo(Connect(Link))
         to={
@@ -743,6 +750,7 @@ exports[`<SideIcons /> not movedAway, unstuck, no lowGraphics 1`] = `
               },
               "search": {
                 "type": "text",
+                "value": "",
               },
             },
           }

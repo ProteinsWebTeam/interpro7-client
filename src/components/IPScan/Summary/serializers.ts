@@ -17,6 +17,7 @@ type IpScanMatch = {
   accession: string;
   name: string;
   short_name: string;
+  type?: string;
   source_database: string;
   protein_length: number;
   locations: Array<BaseLocation & Iprscan5Location>;
@@ -162,6 +163,7 @@ export const mergeData = (
       accession: match.signature.accession,
       name: match.signature.description || match.signature.name,
       short_name: match.signature.name,
+      type: match.signature.type,
       source_database: iproscan2urlDB(library),
       protein_length: sequenceLength || 0,
       locations: match.locations.map((loc) => ({
