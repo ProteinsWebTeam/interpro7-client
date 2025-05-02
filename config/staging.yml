@@ -1,0 +1,18 @@
+googleAnalytics: G-DFXN8SYJF9
+
+root:
+  website: https://wwwdev.ebi.ac.uk/interpro/
+  API: https://wwwdev.ebi.ac.uk/interpro/api/
+  EBIsearch: https://wwwdev.ebi.ac.uk/ebisearch/ws/rest/interpro7
+  IPScan: https://wwwdev.ebi.ac.uk/Tools/services/rest/iprscan5/
+  readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
+  wikipedia: https://en.wikipedia.org/w/api.php
+  alphafold: https://alphafold.ebi.ac.uk/
+  bfvd: https://bfvd.foldseek.com/
+  repeatsDB: https://repeatsdb.org/api/production/annotations/
+  disprot: https://disprot.org/api/
+  Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
+  UniProt: https://rest.uniprot.org/
+  proteinsAPI: https://www.ebi.ac.uk/proteins/api/
+  ted: https://ted.cathdb.info/
+
