@@ -61,10 +61,10 @@ const groupApplications = (
 ) => {
   let mdb1 = [];
   let mdb2 = [];
-  let other = [];
-  let noCategory = [];
+  const other = [];
+  const noCategory = [];
   let otherFeatures = [];
-  let appOptions = initialOptions?.applications as Array<string>;
+  const appOptions = initialOptions?.applications as Array<string>;
 
   for (const application of applications) {
     if (appOptions?.length) {

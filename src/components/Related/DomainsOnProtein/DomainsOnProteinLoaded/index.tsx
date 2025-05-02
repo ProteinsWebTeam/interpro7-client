@@ -328,7 +328,7 @@ const DomainsOnProteinLoaded = ({
           dbSection = dbToSection[sourcedb];
         }
 
-        let sectionKey: string =
+        const sectionKey: string =
           unintegratedEntry.type?.toLowerCase() || dbSection;
 
         if (processedDataMerged[sectionKey]) {
