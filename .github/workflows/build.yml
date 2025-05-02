@@ -1,0 +1,75 @@
+name: build
+
+on:
+  push:
+    branches: [release, master]
+  pull_request:
+    branches: [release, master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      is_dev: ${{ steps.set-vars.outputs.is_dev }}
+      is_master: ${{ steps.set-vars.outputs.is_master }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '19.2.0'
+          cache: 'npm'
+
+      - name: Set branch flags
+        id: set-vars
+        run: |
+          echo "is_dev=${{ github.ref == 'refs/heads/release' }}" >> $GITHUB_OUTPUT
+          echo "is_master=${{ github.ref == 'refs/heads/master' }}" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: |
+          npm i -g npm@9.3.1
+          npm ci
+
+      - name: Clean dist
+        run: rm -rf dist && mkdir dist
+
+      - name: Build dev
+        if: steps.set-vars.outputs.is_dev == 'true'
+        run: |
+          mkdir -p dist/dev
+          cp config/base.yml config.yml
+          cat config/staging.yml >> config.yml
+          npm run deploy:staging
+          mv dist/* dist/dev/
+
+      - name: Build staging
+        if: steps.set-vars.outputs.is_master == 'true'
+        run: |
+          mkdir -p dist/staging
+          cp config/base.yml config.yml
+          cat config/staging.yml >> config.yml
+          npm run deploy:staging
+          mv dist/* dist/staging/
+
+      - name: Build prod
+        if: steps.set-vars.outputs.is_master == 'true'
+        run: |
+          mkdir -p dist/prod
+          cp config/base.yml config.yml
+          cat config/prod.yml >> config.yml
+          npm run deploy:production
+          mv dist/* dist/prod/
+
+      - name: Upload GitHub Pages artifact
+        if: steps.set-vars.outputs.is_dev == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: dist/dev
