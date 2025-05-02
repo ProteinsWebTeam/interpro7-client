@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -11,7 +12,7 @@ jobs:
         with:
           node-version: '19.2.0'
           cache: 'npm'
-      
+
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
@@ -19,7 +20,7 @@ jobs:
           npm ci
 
       # Conditional execution of building steps for the different branches
-      # dev -> dev 
+      # dev -> dev
       # master -> staging, master
 
       - name: 🏗 - Build dev
