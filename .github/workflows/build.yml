@@ -43,29 +43,23 @@ jobs:
       - name: Build dev
         if: steps.set-vars.outputs.is_dev == 'true'
         run: |
-          mkdir -p dist/dev
           cp config/base.yml config.yml
           cat config/staging.yml >> config.yml
-          npm run deploy:staging
-          mv dist/* dist/dev/
+          npm run deploy -- -- --output-path=dist/dev/
 
       - name: Build staging
         if: steps.set-vars.outputs.is_master == 'true'
         run: |
-          mkdir -p dist/staging
           cp config/base.yml config.yml
           cat config/staging.yml >> config.yml
-          npm run deploy:staging
-          mv dist/* dist/staging/
+          npm run deploy -- -- --output-path=dist/staging/
 
       - name: Build prod
         if: steps.set-vars.outputs.is_master == 'true'
         run: |
-          mkdir -p dist/prod
           cp config/base.yml config.yml
           cat config/prod.yml >> config.yml
-          npm run deploy:production
-          mv dist/* dist/prod/
+          npm run deploy -- -- --output-path=dist/prod/
 
       - name: Upload GitHub Pages artifact
         if: steps.set-vars.outputs.is_dev == 'true'
