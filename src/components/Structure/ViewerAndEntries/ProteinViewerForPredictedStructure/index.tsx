@@ -253,17 +253,19 @@ const ProteinViewerForAlphafold = ({
             break;
 
           case 'mouseover': {
-            isHovering.current = true;
-            const color =
-              parseInt(event?.detail?.feature?.color?.substring(1), 16) || 0;
-            const selection =
-              highlight?.split(',').map((block: string) => {
-                const parts = block.split(':');
-                const start = Number(parts?.[0]) || 1;
-                const end = Number(parts?.[1]) || 1;
-                return { chain: 'A', start, end, color };
-              }) || [];
-            setHoverSelection(selection);
+            if (!fixedSelectionRef.current.length) {
+              isHovering.current = true;
+              const color =
+                parseInt(event?.detail?.feature?.color?.substring(1), 16) || 0;
+              const selection =
+                highlight?.split(',').map((block: string) => {
+                  const parts = block.split(':');
+                  const start = Number(parts?.[0]) || 1;
+                  const end = Number(parts?.[1]) || 1;
+                  return { chain: 'A', start, end, color };
+                }) || [];
+              setHoverSelection(selection);
+            }
             break;
           }
           default:

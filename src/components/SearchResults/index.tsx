@@ -99,6 +99,20 @@ export const SearchResults = ({
         status={status}
       >
         <HighlightToggler />
+        <Exporter>
+          <div className={css('menu-grid')}>
+            <FileExporter
+              fileType="json"
+              name={`SearchResults${searchValue}.json`}
+              count={hitCount}
+            />
+            <FileExporter
+              fileType="tsv"
+              name={`SearchResults${searchValue}.tsv`}
+              count={hitCount}
+            />
+          </div>
+        </Exporter>
         <Column
           dataKey="id"
           renderer={(
