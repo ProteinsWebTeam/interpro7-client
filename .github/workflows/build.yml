@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [release, master]
+    branches: [master, release]
   pull_request:
-    branches: [release, master]
+    branches: [master, release]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -38,32 +38,54 @@ jobs:
           npm ci
 
       - name: Clean dist
-        run: rm -rf dist && mkdir dist
+        run: |
+          rm -rf dist && mkdir dist
 
       - name: Build dev
         if: steps.set-vars.outputs.is_dev == 'true'
         run: |
-          cp config/base.yml config.yml
-          cat config/staging.yml >> config.yml
+          cat config/base.yml config/staging.yml > config.yml
           npm run deploy -- -- --output-path=dist/dev/
 
       - name: Build staging
         if: steps.set-vars.outputs.is_master == 'true'
         run: |
-          cp config/base.yml config.yml
-          cat config/staging.yml >> config.yml
+          cat config/base.yml config/staging.yml > config.yml
           npm run deploy -- -- --output-path=dist/staging/
 
       - name: Build prod
         if: steps.set-vars.outputs.is_master == 'true'
         run: |
-          cp config/base.yml config.yml
-          cat config/prod.yml >> config.yml
+          cat config/base.yml config/prod.yml > config.yml
           npm run deploy -- -- --output-path=dist/prod/
 
-      - name: Upload GitHub Pages artifact
+      - name: Upload build artifacts
+        # if: steps.set-vars.outputs.is_master == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist
+
+      - name: Upload build artifacts for deployment
         if: steps.set-vars.outputs.is_dev == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
-          path: dist/dev
+          path: dist/dev/
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.is_dev == 'true'
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+
