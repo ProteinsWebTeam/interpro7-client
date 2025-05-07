@@ -41,16 +41,22 @@ jobs:
         run: |
           rm -rf dist && mkdir dist
 
-      - name: Build dev
+      - name: Build dev (internal)
         if: steps.set-vars.outputs.is_dev == 'true'
         run: |
-          cat config/base.yml config/staging.yml > config.yml
+          cat config/base.yml config/dev.yml > config.yml
           npm run deploy -- -- --output-path=dist/dev/
+
+      - name: Build dev (external)
+        if: steps.set-vars.outputs.is_dev == 'true'
+        run: |
+          cat config/base.yml config/staging_gh.yml > config.yml
+          npm run deploy -- -- --output-path=dist/gh/
 
       - name: Build staging
         if: steps.set-vars.outputs.is_master == 'true'
         run: |
-          cat config/base.yml config/staging.yml > config.yml
+          cat config/base.yml config/staging_ebi.yml > config.yml
           npm run deploy -- -- --output-path=dist/staging/
 
       - name: Build prod
@@ -60,17 +66,16 @@ jobs:
           npm run deploy -- -- --output-path=dist/prod/
 
       - name: Upload build artifacts
-        # if: steps.set-vars.outputs.is_master == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: dist
 
-      - name: Upload build artifacts for deployment
+      - name: Upload build artifacts for GitHub pages
         if: steps.set-vars.outputs.is_dev == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/dev/
+          path: dist/gh/
 
   deploy:
     needs: build
@@ -88,4 +93,3 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
-
