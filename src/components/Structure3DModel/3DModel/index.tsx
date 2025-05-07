@@ -109,10 +109,6 @@ const Structure3DModel = ({
     }
   }, [shouldResetViewer]);
 
-  useEffect(() => {
-    if (!selections) setShouldResetViewer(true);
-  }, [selections]);
-
   // Show warning if PDB is not available
   if (bfvd) {
     if (isPDBLoading) {
