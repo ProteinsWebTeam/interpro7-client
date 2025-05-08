@@ -1,14 +1,10 @@
 name: CI Pipeline
 
 on:
-  workflow_run:
-    workflows: ["test_and_build"]
-    types:
-      - completed
+  push:
     branches:
       - dev
       - master
-
 
 jobs:
   deploy:
@@ -19,7 +15,7 @@ jobs:
       - name: Download artifact from triggering workflow
         uses: actions/download-artifact@v4
         with:
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: 14908922593
           path: artifact
 
       - name: Determine deploy branch and set paths
