@@ -12,11 +12,11 @@ jobs:
           node-version: '19.2.0'
           cache: 'npm'
       
-      # - name: 🔧 - Install
-      #   run: |
-      #     cp config.yml.example config.yml
-      #     npm i -g npm@9.3.1
-      #     npm ci
+      - name: 🔧 - Install
+        run: |
+          cp config.yml.example config.yml
+      # npm i -g npm@9.3.1
+      # npm ci
 
       # Conditional execution of building steps for the different branches
       # dev -> dev 
