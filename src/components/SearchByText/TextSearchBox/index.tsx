@@ -16,6 +16,7 @@ import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from '../style.css';
+import config from 'config';
 
 const css = cssBinder(fonts, local);
 
@@ -79,9 +80,9 @@ class TextSearchBox extends PureComponent<Props, State> {
       ? this.state.localValue.trim()
       : this.state.localValue;
 
-    /* 
+    /*
       Used for search history but buggy -
-      if you typed in something wrong 
+      if you typed in something wrong
       and tried to correct it, (e.g kinases, kinase),
       it'd always go back to the text typed in the first place.
     */
@@ -95,9 +96,7 @@ class TextSearchBox extends PureComponent<Props, State> {
     const directLinkDescription = getURLByAccession(value);
     if (directLinkDescription) {
       const path = descriptionToPath(directLinkDescription);
-      const url = new URL(window.location.origin);
-      url.pathname = new URL(`/interpro/${path}`, url).pathname;
-      window.location.href = url.toString();
+      window.location.href = new URL(path, config.root.website.path).href;
     } else {
       this.props.goToCustomLocation(
         {
