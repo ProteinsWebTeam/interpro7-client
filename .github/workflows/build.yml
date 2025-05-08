@@ -37,45 +37,57 @@ jobs:
           npm i -g npm@9.3.1
           npm ci
 
-      - name: Clean dist
-        run: |
-          rm -rf dist && mkdir dist
-
       - name: Build dev (internal)
         if: steps.set-vars.outputs.is_dev == 'true'
         run: |
           cat config/base.yml config/dev.yml > config.yml
-          npm run deploy -- -- --output-path=dist/dev/
+          rm -rf dist/
+          npm run deploy -- -- --output-path=dist/
+
+      - name: Upload dev build (internal)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-build
+          path: dist/
 
       - name: Build dev (external)
         if: steps.set-vars.outputs.is_dev == 'true'
         run: |
           cat config/base.yml config/staging_gh.yml > config.yml
-          npm run deploy -- -- --output-path=dist/gh/
+          rm -rf dist/
+          npm run deploy -- -- --output-path=dist/
+
+      - name: Upload dev build (external)
+        if: steps.set-vars.outputs.is_dev == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
 
       - name: Build staging
         if: steps.set-vars.outputs.is_master == 'true'
         run: |
           cat config/base.yml config/staging_ebi.yml > config.yml
-          npm run deploy -- -- --output-path=dist/staging/
+          rm -rf dist/
+          npm run deploy -- -- --output-path=dist/
+
+      - name: Upload staging build
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-build
+          path: dist
 
       - name: Build prod
         if: steps.set-vars.outputs.is_master == 'true'
         run: |
           cat config/base.yml config/prod.yml > config.yml
-          npm run deploy -- -- --output-path=dist/prod/
+          rm -rf dist/
+          npm run deploy -- -- --output-path=dist/
 
-      - name: Upload build artifacts
+      - name: Upload prod build
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
+          name: prod-build
           path: dist
-
-      - name: Upload build artifacts for GitHub pages
-        if: steps.set-vars.outputs.is_dev == 'true'
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist/gh/
 
   deploy:
     needs: build
