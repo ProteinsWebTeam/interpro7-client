@@ -17,6 +17,7 @@ jobs:
         with:
           run-id: 14909169644
           pattern: dev-build-artifact
+          github-token: ${{ secrets.GH_PAT }} 
 
       - name: Determine deploy branch and set paths
         id: set-vars
