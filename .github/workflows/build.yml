@@ -45,6 +45,7 @@ jobs:
           npm run deploy -- -- --output-path=dist/
 
       - name: Upload dev build (internal)
+        if: steps.set-vars.outputs.is_dev == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: dev-build
@@ -71,6 +72,7 @@ jobs:
           npm run deploy -- -- --output-path=dist/
 
       - name: Upload staging build
+        if: steps.set-vars.outputs.is_master == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: staging-build
@@ -84,6 +86,7 @@ jobs:
           npm run deploy -- -- --output-path=dist/
 
       - name: Upload prod build
+        if: steps.set-vars.outputs.is_master == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: prod-build
