@@ -20,7 +20,7 @@ jobs:
       - name: Determine deploy branch and set paths
         id: set-vars
         run: |
-          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          BRANCH="dev"
           
           echo "Detected branch: $BRANCH"
 
