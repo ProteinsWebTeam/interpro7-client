@@ -6,23 +6,21 @@ on:
       - dev
       - master
 
-
 jobs:
   deploy:
-    runs-on: self-hosted 
+    runs-on: self-hosted
 
     steps:
       - name: Download artifact from triggering workflow
         uses: actions/download-artifact@v4
         with:
-          run-id: 14909169644
+          run-id: ${{ github.event.workflow_run.id }}
           pattern: dev-build-artifact
-          github-token: ${{ secrets.GH_PAT }} 
 
       - name: Determine deploy branch and set paths
         id: set-vars
         run: |
-          BRANCH="dev"
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
           
           echo "Detected branch: $BRANCH"
 
