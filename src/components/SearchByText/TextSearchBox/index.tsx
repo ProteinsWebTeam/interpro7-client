@@ -96,7 +96,10 @@ class TextSearchBox extends PureComponent<Props, State> {
     const directLinkDescription = getURLByAccession(value);
     if (directLinkDescription) {
       const path = descriptionToPath(directLinkDescription);
-      window.location.href = new URL(path, config.root.website.path).href;
+      const basePath = new URL(config.root.website.href).pathname;
+      const newPath = `${basePath}/${path}`.replaceAll(/\/{2,}/g, '/');
+      const newUrl = new URL(newPath, window.location.origin);
+      window.location.href = newUrl.href;
     } else {
       this.props.goToCustomLocation(
         {

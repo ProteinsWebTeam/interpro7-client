@@ -37,6 +37,7 @@ import styles from './style.css';
 import ebiGlobalStyles from 'ebi-framework/css/ebi-global.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import ipro from 'styles/interpro-new.css';
+import config from 'config';
 
 const styleBundle = foundationPartial(ebiGlobalStyles, fonts, ipro, styles);
 const reducedStyleBundle = classnames.bind(styles);
@@ -139,9 +140,10 @@ export class _SideIcons extends PureComponent {
     const directLinkDescription = getURLByAccession(value);
     if (directLinkDescription) {
       const path = descriptionToPath(directLinkDescription);
-      const url = new URL(window.location.origin);
-      url.pathname = new URL(`/interpro/${path}`, url).pathname;
-      this.setState({ directLink: url.toString() });
+      const basePath = new URL(config.root.website.href).pathname;
+      const newPath = `${basePath}/${path}`.replaceAll(/\/{2,}/g, '/');
+      const newUrl = new URL(newPath, window.location.origin);
+      this.setState({ directLink: newUrl.toString() });
     } else {
       this.setState({ directLink: null });
     }
