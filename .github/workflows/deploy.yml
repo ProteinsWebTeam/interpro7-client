@@ -18,7 +18,8 @@ jobs:
       - name: Download artifact from triggering workflow
         uses: actions/download-artifact@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}\
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Determine deploy branch and set paths
         id: set-vars
