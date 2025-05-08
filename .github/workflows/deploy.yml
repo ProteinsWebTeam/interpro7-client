@@ -1,14 +1,18 @@
 name: CI Pipeline
 
 on:
-  push:
+  workflow_run:
+    workflows: ["test_and_build"]
+    types:
+      - completed
     branches:
       - dev
       - master
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hoster
 
     steps:
       - name: Download artifact from triggering workflow
