@@ -9,7 +9,6 @@ on:
       - dev
       - master
 
-
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
