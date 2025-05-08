@@ -12,14 +12,14 @@ on:
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Download artifact from triggering workflow
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
-          path: artifact
+          pattern: dev-build-artifact
 
       - name: Determine deploy branch and set paths
         id: set-vars
