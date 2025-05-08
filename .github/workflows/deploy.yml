@@ -57,4 +57,4 @@ jobs:
       - name: Copy deployment artifacts to remote server
         run: |
           echo "Deploying artifacts from artifact/ to $VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
-          scp -q -r artifact/* "$VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
+          scp -q -r dev-build-artifact/* "$VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
