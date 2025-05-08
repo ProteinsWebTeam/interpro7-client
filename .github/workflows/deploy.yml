@@ -15,7 +15,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           run-id: 14908922593
-          path: artifact
+          name: dev-build-artifact
 
       - name: Determine deploy branch and set paths
         id: set-vars
