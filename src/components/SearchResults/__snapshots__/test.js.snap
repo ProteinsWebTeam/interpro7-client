@@ -129,6 +129,20 @@ exports[`<SearchResults /> should render 1`] = `
     query={{}}
   >
     <Memo(Connect(HighlightToggler)) />
+    <Memo(Connect(Exporter))>
+      <div
+        className="menu-grid"
+      >
+        <Memo(Connect(FileExporter))
+          fileType="json"
+          name="SearchResultsIPR020422.json"
+        />
+        <Memo(Connect(FileExporter))
+          fileType="tsv"
+          name="SearchResultsIPR020422.tsv"
+        />
+      </div>
+    </Memo(Connect(Exporter))>
     <Column
       dataKey="id"
       renderer={[Function]}

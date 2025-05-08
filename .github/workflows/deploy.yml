@@ -1,0 +1,60 @@
+name: CI Pipeline
+
+on:
+  workflow_run:
+    workflows: ["test_and_build"]
+    types:
+      - completed
+    branches:
+      - dev
+      - master
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
+
+    steps:
+      - name: Download artifact from triggering workflow
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Determine deploy branch and set paths
+        id: set-vars
+        run: |
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          
+          echo "Detected branch: $BRANCH"
+
+          case "$BRANCH" in
+            dev)
+              echo "DEPLOY_BRANCH=dev" >> $GITHUB_ENV
+              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/dev/website/releases/" >> $GITHUB_ENV
+              echo "VM_NAME=wp-np3-bd" >> $GITHUB_ENV
+              ;;
+            master)
+              echo "DEPLOY_BRANCH=master" >> $GITHUB_ENV
+              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/master/website/releases/" >> $GITHUB_ENV
+              echo "VM_NAME=wp-np3-bd" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "No matching branch. Exiting."
+              exit 0
+              ;;
+          esac
+
+          TIMESTAMP=$(date --utc +%Y_%m_%d-%H_%M_%S_utc)
+          echo "IPRO_RELEASE_FOLDER=interpro7-client-${TIMESTAMP}" >> $GITHUB_ENV
+          echo "DIST_PATH=$BRANCH" >> $GITHUB_ENV
+
+      - name: Create remote release folder
+        run: |
+          echo "Creating release folder $IPRO_RELEASE_FOLDER on $VM_NAME"
+          ssh $VM_NAME "mkdir -p '$VM_BASE_PATH/$IPRO_RELEASE_FOLDER'"
+
+      - name: Copy deployment artifacts to remote server
+        run: |
+          echo "Deploying artifacts from artifact/ to $VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
+          scp -q -r dev-build-artifact/* "$VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"

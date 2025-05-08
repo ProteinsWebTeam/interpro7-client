@@ -138,7 +138,10 @@ export class _SideIcons extends PureComponent {
     this.setState({ searchValue: value });
     const directLinkDescription = getURLByAccession(value);
     if (directLinkDescription) {
-      this.setState({ directLink: descriptionToPath(directLinkDescription) });
+      const path = descriptionToPath(directLinkDescription);
+      const url = new URL(window.location.origin);
+      url.pathname = new URL(`/interpro/${path}`, url).pathname;
+      this.setState({ directLink: url.toString() });
     } else {
       this.setState({ directLink: null });
     }

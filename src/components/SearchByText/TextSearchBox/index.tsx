@@ -94,7 +94,10 @@ class TextSearchBox extends PureComponent<Props, State> {
 
     const directLinkDescription = getURLByAccession(value);
     if (directLinkDescription) {
-      window.location.href = descriptionToPath(directLinkDescription);
+      const path = descriptionToPath(directLinkDescription);
+      const url = new URL(window.location.origin);
+      url.pathname = new URL(`/interpro/${path}`, url).pathname;
+      window.location.href = url.toString();
     } else {
       this.props.goToCustomLocation(
         {
