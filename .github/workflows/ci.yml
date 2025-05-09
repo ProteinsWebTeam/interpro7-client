@@ -1,58 +1,58 @@
-name: CI Pipeline
+# name: CI Pipeline
 
-on:
-  workflow_run:
-    workflows: ["test_and_build"]
-    types: [completed]
-    branches:
-      - 'runner'
+# on:
+#   workflow_run:
+#     workflows: ["test_and_build"]
+#     types: [completed]
+#     branches:
+#       - 'runner'
 
-jobs:
-  build:
-    runs-on: self-hosted 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          clean: false
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
+# jobs:
+#   build:
+#     runs-on: self-hosted 
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+#         with:
+#           clean: false
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           fetch-depth: 0
 
-      - name: Release 
-        run: |
-            source ~/miniforge3/etc/profile.d/conda.sh
-            conda activate base
-            export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+#       - name: Release 
+#         run: |
+#             source ~/miniforge3/etc/profile.d/conda.sh
+#             conda activate base
+#             export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
 
-            # Determine the deployment branch and set paths accordingly
-            if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^dev/'; then
-              export DEPLOY_BRANCH="dev"
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
-              export VM_NAME="wp-np3-bd";
-            elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^runner/'; then
-              export DEPLOY_BRANCH="runner"
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
-              export VM_NAME="wp-np3-bd";
-            elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^master/'; then
-              export DEPLOY_BRANCH="master"
-              export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
-              export VM_NAME="wp-np3-bd";
-            else
-              echo "No matching changes detected. Exiting."
-              exit 0
-            fi
+#             # Determine the deployment branch and set paths accordingly
+#             if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^dev/'; then
+#               export DEPLOY_BRANCH="dev"
+#               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
+#               export VM_NAME="wp-np3-bd";
+#             elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^runner/'; then
+#               export DEPLOY_BRANCH="runner"
+#               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/dev/website/releases/";
+#               export VM_NAME="wp-np3-bd";
+#             elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^master/'; then
+#               export DEPLOY_BRANCH="master"
+#               export VM_BASE_PATH="/nfs/www-prod/web_hx2/interpro/master/website/releases/";
+#               export VM_NAME="wp-np3-bd";
+#             else
+#               echo "No matching changes detected. Exiting."
+#               exit 0
+#             fi
 
-            # Adjust the dist/ path based on the deploy branch
-            export DIST_PATH="$DEPLOY_BRANCH"
-            export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
+#             # Adjust the dist/ path based on the deploy branch
+#             export DIST_PATH="$DEPLOY_BRANCH"
+#             export IPRO_RELEASE_FOLDER="interpro7-client-$(date --utc +%Y_%m_%d-%H_%M_%S_utc)";
             
-            echo "Deploying from $DIST_PATH to $VM_BASE_PATH"
+#             echo "Deploying from $DIST_PATH to $VM_BASE_PATH"
             
-            # Create the release folder on the remote server
-            ssh $VM_NAME "cd $VM_BASE_PATH; mkdir -p "${IPRO_RELEASE_FOLDER}""
+#             # Create the release folder on the remote server
+#             ssh $VM_NAME "cd $VM_BASE_PATH; mkdir -p "${IPRO_RELEASE_FOLDER}""
             
-            # Copy the deployment artifacts
-            scp -q -r $DIST_PATH/* $VM_NAME:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
+#             # Copy the deployment artifacts
+#             scp -q -r $DIST_PATH/* $VM_NAME:"$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
 
 
 
