@@ -31,7 +31,7 @@ jobs:
           case "$BRANCH" in
             dev)
               echo "DEPLOY_BRANCH=dev" >> $GITHUB_ENV
-              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/dev/website/" >> $GITHUB_ENV
+              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/stage/website/" >> $GITHUB_ENV
               echo "VM_NAME=wp-np3-bd" >> $GITHUB_ENV
               ;;
             master)
