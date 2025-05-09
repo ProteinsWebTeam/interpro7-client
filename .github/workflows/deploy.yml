@@ -61,4 +61,4 @@ jobs:
 
       - name: Create symbolic link
         run: |
-          ssh $VM_NAME "ln -sfn '$VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER' '$VM_BASE_PATH/interpro7-client'"
+          ssh $VM_NAME "ln -sfn '$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER' '$VM_BASE_PATH/interpro7-client'"
