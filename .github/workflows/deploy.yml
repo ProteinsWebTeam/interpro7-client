@@ -31,12 +31,12 @@ jobs:
           case "$BRANCH" in
             dev)
               echo "DEPLOY_BRANCH=dev" >> $GITHUB_ENV
-              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/dev/website/releases/" >> $GITHUB_ENV
+              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/dev/website/" >> $GITHUB_ENV
               echo "VM_NAME=wp-np3-bd" >> $GITHUB_ENV
               ;;
             master)
               echo "DEPLOY_BRANCH=master" >> $GITHUB_ENV
-              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/master/website/releases/" >> $GITHUB_ENV
+              echo "VM_BASE_PATH=/nfs/www-prod/web_hx2/interpro/master/website/" >> $GITHUB_ENV
               echo "VM_NAME=wp-np3-bd" >> $GITHUB_ENV
               ;;
             *)
@@ -52,9 +52,14 @@ jobs:
       - name: Create remote release folder
         run: |
           echo "Creating release folder $IPRO_RELEASE_FOLDER on $VM_NAME"
-          ssh $VM_NAME "mkdir -p '$VM_BASE_PATH/$IPRO_RELEASE_FOLDER'"
+          ssh $VM_NAME "mkdir -p '$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER'"
 
       - name: Copy deployment artifacts to remote server
         run: |
           echo "Deploying artifacts from artifact/ to $VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
-          scp -q -r dev-build-artifact/* "$VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
+          scp -q -r build-artifact/* "$VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER"
+
+      - name: Create symbolic link
+        run: |
+          echo "Deploying artifacts from artifact/ to $VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER"
+          ssh $VM_NAME "ln -sfn '$VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER' '$VM_BASE_PATH/interpro7-client'"
