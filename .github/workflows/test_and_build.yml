@@ -32,7 +32,7 @@ jobs:
         if: github.ref_name == 'dev'
         uses: actions/upload-artifact@v4
         with:
-          name: dev-build-artifact
+          name: build-artifact
           path: dist/dev/**
 
       - name: 🏗 - Build staging
@@ -45,7 +45,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: actions/upload-artifact@v4
         with:
-          name: staging-build-artifact
+          name: build-artifact
           path: dist/staging/**
 
       - name: 🏗 - Build master
@@ -58,7 +58,7 @@ jobs:
         if: github.ref_name == 'master'
         uses: actions/upload-artifact@v4
         with:
-          name: master-build-artifact
+          name: build-artifact
           path: dist/master/**
 
       - name: Slack Notification

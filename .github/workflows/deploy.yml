@@ -56,10 +56,9 @@ jobs:
 
       - name: Copy deployment artifacts to remote server
         run: |
-          echo "Deploying artifacts from artifact/ to $VM_NAME:$VM_BASE_PATH/$IPRO_RELEASE_FOLDER"
+          echo "Deploying artifacts from artifact/ to $VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER"
           scp -q -r build-artifact/* "$VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER"
 
       - name: Create symbolic link
         run: |
-          echo "Deploying artifacts from artifact/ to $VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER"
           ssh $VM_NAME "ln -sfn '$VM_NAME:$VM_BASE_PATH/releases/$IPRO_RELEASE_FOLDER' '$VM_BASE_PATH/interpro7-client'"
