@@ -57,6 +57,14 @@ const PfamDownloads = () => (
             </Link>
           </td>
         </tr>
+        <tr>
+          <td>Release Notes</td>
+          <td>
+            <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/relnotes.txt">
+              txt
+            </Link>
+          </td>
+        </tr>
       </tbody>
     </table>
     <p className={css('small', 'margin-top-small')}>
