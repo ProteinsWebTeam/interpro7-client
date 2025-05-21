@@ -30,7 +30,7 @@ const AntiFamDownloads = () => (
     <p className={css('small', 'margin-top-small')}>
       See all downloads available on the{' '}
       <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/AntiFam/">
-        FTP Site
+        FTP site
       </Link>
     </p>
   </>

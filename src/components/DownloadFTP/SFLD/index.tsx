@@ -46,7 +46,7 @@ const SFLDDownloads = () => (
     <p className={css('small', 'margin-top-small')}>
       See all downloads available on the{' '}
       <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/">
-        FTP Site
+        FTP site
       </Link>
     </p>
   </>

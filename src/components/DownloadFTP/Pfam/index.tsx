@@ -61,7 +61,7 @@ const PfamDownloads = () => (
     </table>
     <p className={css('small', 'margin-top-small')}>
       See all downloads available on the{' '}
-      <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/">FTP Site</Link>
+      <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/">FTP site</Link>
     </p>
   </>
 );

@@ -32,7 +32,7 @@ const InterProScanDownloads = () => (
       recommend you download the latest version of InterProScan. However, all
       previous releases are archived on the{' '}
       <Link href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
-        FTP Site
+        FTP site
       </Link>
       . InterProScan&#39;s source code is available on{' '}
       <Link
