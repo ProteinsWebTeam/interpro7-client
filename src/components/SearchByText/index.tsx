@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -11,6 +11,8 @@ import TextSearchBox, {
 import Example from 'components/SearchByText/Example';
 import Link from 'components/generic/Link';
 import Button from 'components/SimpleCommonComponents/Button';
+import getURLByAccession from 'utils/processDescription/getURLbyAccession';
+import descriptionToPath from 'utils/processDescription/descriptionToPath';
 
 import { schemaProcessDataPageSection } from 'schema_org/processors';
 
@@ -31,6 +33,32 @@ type Props = { main?: string };
 
 export const SearchByText = ({ main }: Props) => {
   const input = useRef(null);
+  const [searchValue, setSearchValue] = useState('');
+  const [directLink, setDirectLink] = useState<string | null>(null);
+
+  const handleValueChange = (value: string) => {
+    setSearchValue(value);
+    const directLinkDescription = getURLByAccession(value);
+    if (directLinkDescription) {
+      const path = descriptionToPath(directLinkDescription);
+      const url = new URL(window.location.origin);
+      url.pathname = new URL(`/interpro/${path}`, url).pathname;
+      console.log(url);
+      setDirectLink(url.toString());
+    } else {
+      setDirectLink(null);
+    }
+  };
+
+  const clearText = () => {
+    if (input.current) {
+      (input.current as { state: { localValue: string } })['state'][
+        'localValue'
+      ] = '';
+    }
+    handleValueChange('');
+  };
+
   useEffect(() => {
     if (main === 'search') {
       (input.current as unknown as { focus: () => void })?.focus();
@@ -46,7 +74,12 @@ export const SearchByText = ({ main }: Props) => {
         }}
         processData={schemaProcessDataPageSection}
       />
-      <form onSubmit={(e) => e.preventDefault()} data-category="navigation">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+        data-category="navigation"
+      >
         <div className={css('simple-box')}>
           <header>
             Search by protein families, domains, proteins, keywords, or GO terms
@@ -55,6 +88,7 @@ export const SearchByText = ({ main }: Props) => {
             <TextSearchBox
               ref={input}
               delay={main === 'search' ? DEBOUNCE_RATE : DEBOUNCE_RATE_SLOW}
+              setSearchValue={handleValueChange}
             />
             <div className={css('examples')}>
               <span>
@@ -70,10 +104,27 @@ export const SearchByText = ({ main }: Props) => {
 
           <footer>
             <div>
-              <Button submit style={{ marginRight: '0.2rem' }}>
-                Search
-              </Button>
               <Link
+                buttonType="primary"
+                to={
+                  !directLink
+                    ? {
+                        description: {
+                          main: { key: 'search' },
+                          search: {
+                            type: 'text',
+                            value: searchValue,
+                          },
+                        },
+                      }
+                    : null
+                }
+                href={directLink}
+              >
+                Search
+              </Link>
+              <Link
+                onClick={clearText}
                 buttonType="secondary"
                 to={{
                   description: {
