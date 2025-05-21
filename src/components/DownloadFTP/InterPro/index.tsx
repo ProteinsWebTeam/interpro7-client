@@ -21,7 +21,7 @@ const InterProDownloads = () => (
           <td>InterPro entry list</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/entry.list">
-              TSV
+              text
             </Link>
           </td>
         </tr>
