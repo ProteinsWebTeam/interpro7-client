@@ -37,7 +37,7 @@ const PfamDownloads = () => (
           <td>Pfam-A Seed alignment</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.seed.gz">
-              gzipped
+              stockholm
             </Link>
           </td>
         </tr>
