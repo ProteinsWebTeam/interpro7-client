@@ -43,7 +43,6 @@ export const SearchByText = ({ main }: Props) => {
       const path = descriptionToPath(directLinkDescription);
       const url = new URL(window.location.origin);
       url.pathname = new URL(`/interpro/${path}`, url).pathname;
-      console.log(url);
       setDirectLink(url.toString());
     } else {
       setDirectLink(null);
