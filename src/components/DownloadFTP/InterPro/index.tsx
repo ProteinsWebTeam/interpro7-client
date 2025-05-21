@@ -21,7 +21,7 @@ const InterProDownloads = () => (
           <td>InterPro entry list</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/entry.list">
-              TSV
+              text
             </Link>
           </td>
         </tr>
@@ -116,7 +116,7 @@ const InterProDownloads = () => (
     </table>
     <p className={css('small', 'margin-top-small')}>
       See all downloads available on the{' '}
-      <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/">FTP Site</Link>
+      <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/">FTP site</Link>
     </p>
 
     <h5>From individual web pages</h5>

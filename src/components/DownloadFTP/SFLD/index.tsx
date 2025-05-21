@@ -21,7 +21,7 @@ const SFLDDownloads = () => (
           <td>SFLD models</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld.hmm">
-              text
+              hmm
             </Link>
           </td>
         </tr>

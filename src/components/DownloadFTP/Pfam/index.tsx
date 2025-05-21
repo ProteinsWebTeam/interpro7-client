@@ -21,7 +21,7 @@ const PfamDownloads = () => (
           <td>Pfam-A models</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz">
-              gzipped
+              hmm
             </Link>
           </td>
         </tr>
@@ -29,7 +29,7 @@ const PfamDownloads = () => (
           <td>Pfam-A HMM data</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.dat.gz">
-              gzipped
+              text
             </Link>
           </td>
         </tr>
@@ -37,7 +37,7 @@ const PfamDownloads = () => (
           <td>Pfam-A Seed alignment</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.seed.gz">
-              gzipped
+              stockholm
             </Link>
           </td>
         </tr>
@@ -45,7 +45,7 @@ const PfamDownloads = () => (
           <td>Pfam-A Full alignment</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.gz">
-              gzipped
+              stockholm
             </Link>
           </td>
         </tr>

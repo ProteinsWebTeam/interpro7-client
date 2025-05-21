@@ -21,7 +21,7 @@ const AntiFamDownloads = () => (
           <td>AntiFam families</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/AntiFam/current/Antifam.tar.gz">
-              tar.gz
+              tar
             </Link>
           </td>
         </tr>
