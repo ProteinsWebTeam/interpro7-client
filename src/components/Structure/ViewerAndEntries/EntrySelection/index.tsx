@@ -3,6 +3,7 @@ import React from 'react';
 import cssBinder from 'styles/cssBinder';
 
 import style from '../style.css';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 const css = cssBinder(style);
 export const NO_SELECTION = 'NO_SELECTION';
@@ -56,18 +57,18 @@ const EntrySelection = ({
     // update structure viewer
     updateStructure(memberDB, entry);
   };
-  return (
-    selectionGroups.length > 1 && (
-      <select
-        className={css('structure-viewer-select')}
-        onChange={onSelectionChange}
-        onBlur={onSelectionChange}
-        value={selectedEntry}
-        data-testid="structure-entry-select"
-      >
-        {selectionGroups}
-      </select>
-    )
+  return selectionGroups.length > 1 ? (
+    <select
+      className={css('structure-viewer-select')}
+      onChange={onSelectionChange}
+      onBlur={onSelectionChange}
+      value={selectedEntry}
+      data-testid="structure-entry-select"
+    >
+      {selectionGroups}
+    </select>
+  ) : (
+    <Callout type="info">No entry matches this structure</Callout>
   );
 };
 
