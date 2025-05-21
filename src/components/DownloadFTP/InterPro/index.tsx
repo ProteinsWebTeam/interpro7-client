@@ -29,7 +29,7 @@ const InterProDownloads = () => (
           <td>InterPro entry details</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/interpro.xml.gz">
-              xml.gz
+              xml
             </Link>
             ,{' '}
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/interpro.xml.gz.md5">
@@ -41,7 +41,7 @@ const InterProDownloads = () => (
           <td>Protein matched complete</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/match_complete.xml.gz">
-              xml.gz
+              xml
             </Link>
             ,{' '}
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/match_complete.xml.gz.md5">
@@ -53,7 +53,7 @@ const InterProDownloads = () => (
           <td>Uniparc sequences</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/uniparc_match.tar.gz">
-              tar.gz
+              tar
             </Link>
             ,{' '}
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/uniparc_match.tar.gz.md5">
@@ -65,7 +65,7 @@ const InterProDownloads = () => (
           <td>UniProtKB proteins</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/protein2ipr.dat.gz">
-              dat.gz
+              text
             </Link>
             ,{' '}
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/protein2ipr.dat.gz.md5">
@@ -77,23 +77,23 @@ const InterProDownloads = () => (
           <td>Entry relationships tree</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/ParentChildTreeFile.txt">
-              txt
+              text
             </Link>
           </td>
         </tr>
         <tr>
-          <td>List of GO terms</td>
+          <td>InterPro-GO mapping</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/interpro2go">
-              txt
+              text
             </Link>
           </td>
         </tr>
         <tr>
-          <td>Latest release note</td>
+          <td>Release notes</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/releases/latest/release_notes.txt">
-              txt
+              text
             </Link>
           </td>
         </tr>

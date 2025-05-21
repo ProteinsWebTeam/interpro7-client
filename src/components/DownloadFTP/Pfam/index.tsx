@@ -50,18 +50,10 @@ const PfamDownloads = () => (
           </td>
         </tr>
         <tr>
-          <td>Checksums</td>
-          <td>
-            <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/md5_checksums">
-              md5
-            </Link>
-          </td>
-        </tr>
-        <tr>
           <td>Release Notes</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/relnotes.txt">
-              txt
+              text
             </Link>
           </td>
         </tr>

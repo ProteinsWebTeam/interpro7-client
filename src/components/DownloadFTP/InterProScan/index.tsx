@@ -21,7 +21,7 @@ const InterProScanDownloads = () => (
           <td>Latest InterProScan release</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
-              FTP
+              ftp
             </Link>
           </td>
         </tr>
