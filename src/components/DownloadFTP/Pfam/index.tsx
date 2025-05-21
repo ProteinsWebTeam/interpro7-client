@@ -21,7 +21,7 @@ const PfamDownloads = () => (
           <td>Pfam-A models</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.hmm.gz">
-              gzipped
+              hmm
             </Link>
           </td>
         </tr>
