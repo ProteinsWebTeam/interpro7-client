@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Link from 'components/generic/Link';
 import cssBinder from 'styles/cssBinder';
 
@@ -13,69 +12,33 @@ const PrintsDownloads = () => (
     <table className={css('classic')}>
       <thead>
         <tr>
-          <th className={css('min-width-sm')}>Name</th>
-          <th>Description</th>
-          <th className={css('xs-hide')}>File name</th>
-          <th className={css('xs-hide')}>Format</th>
-          <th className={css('xs-hide')}>Links</th>
+          <th>Resource</th>
+          <th>Download</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td>Hierarchy of PRINTS families</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/FingerPRINTShierarchy21Feb2012">
-              Hierarchy of PRINTS families
+              text
             </Link>
-          </td>
-          <td>Fingerprints hierarchy</td>
-          <td className={css('xs-hide')}>FingerPRINTShierarchy21Feb2012</td>
-          <td className={css('xs-hide')}>text</td>
-          <td style={{ whiteSpace: 'nowrap' }}>
-            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/FingerPRINTShierarchy21Feb2012">
-              <span
-                className={css('icon', 'icon-common', 'font-l')}
-                data-icon="&#x3d;"
-              />
-            </Link>
-            <br />
           </td>
         </tr>
         <tr>
+          <td>PRINTS database</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/prints42_0.kdat">
-              PRINTS database
+              text
             </Link>
-          </td>
-          <td>Compendium of protein fingerprints</td>
-          <td className={css('xs-hide')}>prints42_0.kdat</td>
-          <td className={css('xs-hide')}>text</td>
-          <td style={{ whiteSpace: 'nowrap' }}>
-            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/prints42_0.kdat">
-              <span
-                className={css('icon', 'icon-common', 'font-l')}
-                data-icon="&#x3d;"
-              />
-            </Link>
-            <br />
           </td>
         </tr>
         <tr>
+          <td>BLOSUM62 matrices</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/prints42_0.pval_blos62">
-              BLOSUM62 matrices of PRINTS families
+              text
             </Link>
-          </td>
-          <td>Compact version of prints.dat</td>
-          <td className={css('xs-hide')}>prints42_0.pval_blos62</td>
-          <td className={css('xs-hide')}>text</td>
-          <td style={{ whiteSpace: 'nowrap' }}>
-            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/42.0/prints42_0.pval_blos62">
-              <span
-                className={css('icon', 'icon-common', 'font-l')}
-                data-icon="&#x3d;"
-              />
-            </Link>
-            <br />
           </td>
         </tr>
       </tbody>
@@ -83,7 +46,7 @@ const PrintsDownloads = () => (
     <p className={css('small', 'margin-top-small')}>
       See all downloads available on the{' '}
       <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/prints/">
-        FTP Site
+        FTP site
       </Link>
     </p>
   </>

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Link from 'components/generic/Link';
 import cssBinder from 'styles/cssBinder';
 
@@ -13,69 +12,33 @@ const SFLDDownloads = () => (
     <table className={css('classic')}>
       <thead>
         <tr>
-          <th className={css('min-width-sm')}>Name</th>
-          <th>Description</th>
-          <th className={css('xs-hide')}>File name</th>
-          <th className={css('xs-hide')}>Format</th>
-          <th className={css('xs-hide')}>Links</th>
+          <th>Resource</th>
+          <th>Download</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td>SFLD models</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld.hmm">
-              SFLD models
+              hmm
             </Link>
-          </td>
-          <td>HMMs for SFLD</td>
-          <td className={css('xs-hide')}>sfld.hmm</td>
-          <td className={css('xs-hide')}>text</td>
-          <td style={{ whiteSpace: 'nowrap' }}>
-            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld.hmm">
-              <span
-                className={css('icon', 'icon-common', 'font-l')}
-                data-icon="&#x3d;"
-              />
-            </Link>
-            <br />
           </td>
         </tr>
         <tr>
+          <td>SFLD hierarchy</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld_hierarchy_flat.txt">
-              SFLD hierarchy
+              text
             </Link>
-          </td>
-          <td className={css('xs-hide')}>SFLD hierarchy</td>
-          <td>sfld_hierarchy_flat.txt</td>
-          <td className={css('xs-hide')}>text</td>
-          <td style={{ whiteSpace: 'nowrap' }}>
-            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld_hierarchy_flat.txt">
-              <span
-                className={css('icon', 'icon-common', 'font-l')}
-                data-icon="&#x3d;"
-              />
-            </Link>
-            <br />
           </td>
         </tr>
         <tr>
+          <td>Sites annotations</td>
           <td>
             <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld_sites.annot">
-              Sites annotations
+              text
             </Link>
-          </td>
-          <td>MSA feature annotation file</td>
-          <td className={css('xs-hide')}>sfld_sites.annot</td>
-          <td className={css('xs-hide')}>text</td>
-          <td style={{ whiteSpace: 'nowrap' }}>
-            <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/4/sfld_sites.annot">
-              <span
-                className={css('icon', 'icon-common', 'font-l')}
-                data-icon="&#x3d;"
-              />
-            </Link>
-            <br />
           </td>
         </tr>
       </tbody>
@@ -83,7 +46,7 @@ const SFLDDownloads = () => (
     <p className={css('small', 'margin-top-small')}>
       See all downloads available on the{' '}
       <Link href="https://ftp.ebi.ac.uk/pub/databases/interpro/databases/sfld/">
-        FTP Site
+        FTP site
       </Link>
     </p>
   </>

@@ -23,39 +23,39 @@ jobs:
       # master -> staging, master
 
       - name: 🏗 - Build dev
-        if: github.ref == 'refs/heads/dev'
+        if: github.ref_name == 'dev'
         run: |
             cp config/dev_config.yml config.yml
             npm run deploy -- -- --output-path=dist/dev/
 
       - name: Upload Dev Build Artifact
-        if: github.ref == 'refs/heads/dev'
+        if: github.ref_name == 'dev'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: dist/dev/**
 
       - name: 🏗 - Build staging
-        if: github.ref == 'refs/heads/master'
+        if: github.ref_name == 'master'
         run: |
             cp config/staging_config.yml config.yml
             npm run deploy -- -- --output-path=dist/staging/
 
       - name: Upload Staging Build Artifact
-        if: github.ref == 'refs/heads/master'
+        if: github.ref_name == 'master'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: dist/staging/**
 
       - name: 🏗 - Build master
-        if: github.ref == 'refs/heads/master'
+        if: github.ref_name == 'master'
         run: |
             cp config/master_config.yml config.yml
             npm run deploy -- -- --output-path=dist/master/
 
       - name: Upload Master Build Artifact
-        if: github.ref == 'refs/heads/master'
+        if: github.ref_name == 'master'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact

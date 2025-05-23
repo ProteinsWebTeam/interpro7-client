@@ -28,6 +28,7 @@ exports[`<SearchByText /> should render 1`] = `
       >
         <Connect(TextSearchBox)
           delay={1000}
+          setSearchValue={[Function]}
         />
         <div
           className="examples"
@@ -67,18 +68,28 @@ exports[`<SearchByText /> should render 1`] = `
       </div>
       <footer>
         <div>
-          <ForwardRef
-            style={
+          <Memo(Connect(Link))
+            buttonType="primary"
+            href={null}
+            to={
               {
-                "marginRight": "0.2rem",
+                "description": {
+                  "main": {
+                    "key": "search",
+                  },
+                  "search": {
+                    "type": "text",
+                    "value": "",
+                  },
+                },
               }
             }
-            submit={true}
           >
             Search
-          </ForwardRef>
+          </Memo(Connect(Link))>
           <Memo(Connect(Link))
             buttonType="secondary"
+            onClick={[Function]}
             to={
               {
                 "description": {
