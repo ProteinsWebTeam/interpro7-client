@@ -29,12 +29,17 @@ const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
   const currentVersionReleaseDate = new Date(
     data?.payload?.databases?.interpro?.releaseDate || 0,
   );
-  const [_, jobVersion] = (ipScanVersion || '').split('-');
+
+  if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
+
+  // If version comes from InterProScan5, split it, otherwise just take the value of "interpro-version" provided by 106
+  const jobVersion = ipScanVersion.includes('-')
+    ? ipScanVersion.split('-')[1]
+    : ipScanVersion;
+
   useEffect(() => {
     if (callback) callback(currentVersion !== jobVersion);
   }, [currentVersion, jobVersion, callback]);
-
-  if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
 
   // eslint-disable-next-line no-magic-numbers
   const msPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds per day
