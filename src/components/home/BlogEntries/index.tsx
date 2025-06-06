@@ -21,6 +21,7 @@ const css = cssBinder(fonts, local, cards, buttonCSS);
 const BLOG_ROOT = 'https://proteinswebteam.github.io/interpro-blog';
 
 type BlogEntryProps = {
+  feed_type?: string;
   category: string;
   author?: string;
   excerpt: string;
@@ -48,32 +49,37 @@ export const BlogEntry = ({
   url,
   published,
   image_category: imageCategory,
+  feed_type,
 }: BlogEntryProps) => {
   const maxString = 10;
   return (
     <Card
       imageIconClass={css(`image-blog-${imageCategory || 'default'}`)}
       imageComponent={
-        <div
-          className={css(
-            'card-tag',
-            `tag-${category === 'focus' ? 'focus' : 'blog'}`,
-          )}
-        >
-          <Tooltip
-            title={`View all ${
-              category === 'focus' ? 'Protein focus' : 'Blog articles'
-            }`}
+        feed_type !== 'embl-news' ? (
+          <div
+            className={css(
+              'card-tag',
+              `tag-${category === 'focus' ? 'focus' : 'blog'}`,
+            )}
           >
-            <Link
-              href={`${BLOG_ROOT}/categories/${category}/`}
-              target="_blank"
-              className={css('white-link')}
+            <Tooltip
+              title={`View all ${
+                category === 'focus' ? 'Protein focus' : 'Blog articles'
+              }`}
             >
-              {category === 'focus' ? 'Protein focus' : 'Blog'}
-            </Link>
-          </Tooltip>
-        </div>
+              <Link
+                href={`${BLOG_ROOT}/categories/${category}/`}
+                target="_blank"
+                className={css('white-link')}
+              >
+                {category === 'focus' ? 'Protein focus' : 'Blog'}
+              </Link>
+            </Tooltip>
+          </div>
+        ) : (
+          <></>
+        )
       }
       title={
         <Link href={url} target="_blank">
@@ -136,6 +142,7 @@ const EMBLFeedStandardizer = (dataEMBL: EMBLArticle[]): BlogEntryProps[] => {
       url: article['url'],
       image_category: 'website',
       date: article['created'],
+      feed_type: 'embl-news',
     };
     newDataEMBL.push(newArticle);
   });
