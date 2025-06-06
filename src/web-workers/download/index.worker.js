@@ -148,7 +148,9 @@ const processResultsFor = (fileType, subset, endpoint) =>
 
 const getFirstPage = (url, fileType, endpoint) => {
   const location = parse(url, true);
-  if (fileType === 'fasta') {
+  if (fileType === 'tsv' || fileType === 'json') {
+    location.query.extra_fields = ['short_name'];
+  } else if (fileType === 'fasta') {
     location.query.extra_fields = [
       ...(location.query.extra_fields, '').split(','),
       'sequence',
