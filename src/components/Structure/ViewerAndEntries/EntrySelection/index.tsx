@@ -13,6 +13,7 @@ type Props = {
   entryMap: Object;
   selectedEntry?: string;
   entriesNames: Record<string, string | NameObject>;
+  isReady: boolean;
 };
 
 const EntrySelection = ({
@@ -20,6 +21,7 @@ const EntrySelection = ({
   selectedEntry,
   entriesNames,
   updateStructure,
+  isReady,
 }: Props) => {
   const selectionGroups = [];
   selectionGroups.push(
@@ -57,19 +59,21 @@ const EntrySelection = ({
     // update structure viewer
     updateStructure(memberDB, entry);
   };
-  return selectionGroups.length > 1 ? (
-    <select
-      className={css('structure-viewer-select')}
-      onChange={onSelectionChange}
-      onBlur={onSelectionChange}
-      value={selectedEntry}
-      data-testid="structure-entry-select"
-    >
-      {selectionGroups}
-    </select>
-  ) : (
-    <Callout type="info">No entry matches this structure</Callout>
-  );
+  if (selectionGroups.length > 1) {
+    return (
+      <select
+        className={css('structure-viewer-select')}
+        onChange={onSelectionChange}
+        onBlur={onSelectionChange}
+        value={selectedEntry}
+        data-testid="structure-entry-select"
+      >
+        {selectionGroups}
+      </select>
+    );
+  } else if (isReady) {
+    return <Callout type="info">No entry matches this structure</Callout>;
+  }
 };
 
 export default EntrySelection;
