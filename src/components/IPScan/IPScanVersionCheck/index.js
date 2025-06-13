@@ -29,30 +29,29 @@ const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
   const currentVersionReleaseDate = new Date(
     data?.payload?.databases?.interpro?.releaseDate || 0,
   );
-  const [_, jobVersion] = (ipScanVersion || '').split('-');
-  useEffect(() => {
-    if (callback) callback(currentVersion !== jobVersion);
-  }, [currentVersion, jobVersion, callback]);
 
   if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
+
+  // If version comes from InterProScan5, split it, otherwise just take the value of "interpro-version" provided by 106
+
+  useEffect(() => {
+    if (callback) callback(currentVersion !== ipScanVersion);
+  }, [currentVersion, ipScanVersion, callback]);
 
   // eslint-disable-next-line no-magic-numbers
   const msPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds per day
   const daysSinceRelease = Math.round(
     (new Date().getTime() - currentVersionReleaseDate.getTime()) / msPerDay,
   );
-  if (currentVersion !== jobVersion) {
+  if (currentVersion !== ipScanVersion) {
     return (
       <Callout type="info">
         <h4>Mismatched Version</h4>
         <p>
-          InterProScan version: <code>{ipScanVersion}</code>.
-        </p>
-        <p>
           Some links might not work as the results are from a previous release
-          of InterPro {jobVersion ? <code>{jobVersion}</code> : null} and some
-          of the data might have been deleted or changed in the current version{' '}
-          <code>{currentVersion}</code>.
+          of InterPro {ipScanVersion ? <code>{ipScanVersion}</code> : null} and
+          some of the data might have been deleted or changed in the current
+          version <code>{currentVersion}</code>.
         </p>
         {daysSinceRelease < DAYS_TO_UPDATE_IPSCAN ? (
           <p>

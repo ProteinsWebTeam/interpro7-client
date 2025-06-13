@@ -166,11 +166,13 @@ export const IPScanStatus = ({
     Number(pageSize),
   );
 
+  const jobVersion =
+    jobsData?.[0]?.['interpro-version'] ||
+    jobsData?.[0]?.['interproscan-version'];
+
   return (
     <section>
-      <IPScanVersionCheck
-        ipScanVersion={jobsData?.[0]?.['interproscan-version']}
-      />
+      <IPScanVersionCheck ipScanVersion={jobVersion} />
 
       <h3 className={css('light')}>
         Your InterProScan Search Results (Sequences){' '}
