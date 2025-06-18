@@ -253,10 +253,14 @@ const SummaryIPScanJob = ({
   const reg = /(.+)(-\d+)$/;
   const match = reg.exec(jobAccession);
   const rootAccession = match?.[1] ?? jobAccession;
+
+  const jobVersion =
+    bPayload['interpro-version'] || bPayload['interproscan-version'];
+
   return (
     <div className={css('sections')}>
       <section>
-        <IPScanVersionCheck ipScanVersion={bPayload['interproscan-version']} />
+        <IPScanVersionCheck ipScanVersion={jobVersion} />
 
         <IPScanTitle
           type="sequence"

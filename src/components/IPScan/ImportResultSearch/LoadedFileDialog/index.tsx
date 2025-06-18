@@ -65,6 +65,16 @@ const LoadedFileDialog = ({
   if (fileContent && isValid(fileContent))
     validFileContent = fileContent as IprscanDataIDB;
 
+  let ipScanVersion: string = '';
+  let iProVersion: string = '';
+
+  if (validFileContent) {
+    ipScanVersion = validFileContent['interproscan-version'] || '';
+    if (validFileContent['interpro-version'])
+      iProVersion = validFileContent['interpro-version'];
+    else iProVersion = ipScanVersion.split('-')[1];
+  }
+
   const saveFileInIndexDB = () => {
     if (!validFileContent) return;
 
@@ -72,7 +82,7 @@ const LoadedFileDialog = ({
       validFileContent.results,
       `imported_file-${fileName}`,
       null,
-      validFileContent['interproscan-version'],
+      iProVersion,
       validFileContent.applications,
       importJobFromData,
     );
@@ -89,11 +99,9 @@ const LoadedFileDialog = ({
           <p>
             You are about to load the analysis of{' '}
             <b>{validFileContent.results.length} sequences</b> with InterProScan
-            version {validFileContent['interproscan-version']}
+            version {ipScanVersion}
           </p>
-          <IPScanVersionCheck
-            ipScanVersion={fileContent['interproscan-version']}
-          />
+          <IPScanVersionCheck ipScanVersion={iProVersion} />
           <NucleotideCheck fileContent={validFileContent} />
           <div style={{ textAlign: 'right' }}>
             <Button onClick={saveFileInIndexDB}>OK</Button>

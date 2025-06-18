@@ -21,12 +21,14 @@ const css = cssBinder(fonts, local, cards, buttonCSS);
 const BLOG_ROOT = 'https://proteinswebteam.github.io/interpro-blog';
 
 type BlogEntryProps = {
+  feed_type?: string;
   category: string;
   author?: string;
   excerpt: string;
   title: string;
   url: string;
   published?: string;
+  date?: string;
   image_category:
     | 'default'
     | 'biology'
@@ -47,32 +49,37 @@ export const BlogEntry = ({
   url,
   published,
   image_category: imageCategory,
+  feed_type,
 }: BlogEntryProps) => {
   const maxString = 10;
   return (
     <Card
       imageIconClass={css(`image-blog-${imageCategory || 'default'}`)}
       imageComponent={
-        <div
-          className={css(
-            'card-tag',
-            `tag-${category === 'focus' ? 'focus' : 'blog'}`,
-          )}
-        >
-          <Tooltip
-            title={`View all ${
-              category === 'focus' ? 'Protein focus' : 'Blog articles'
-            }`}
+        feed_type !== 'embl-news' ? (
+          <div
+            className={css(
+              'card-tag',
+              `tag-${category === 'focus' ? 'focus' : 'blog'}`,
+            )}
           >
-            <Link
-              href={`${BLOG_ROOT}/categories/${category}/`}
-              target="_blank"
-              className={css('white-link')}
+            <Tooltip
+              title={`View all ${
+                category === 'focus' ? 'Protein focus' : 'Blog articles'
+              }`}
             >
-              {category === 'focus' ? 'Protein focus' : 'Blog'}
-            </Link>
-          </Tooltip>
-        </div>
+              <Link
+                href={`${BLOG_ROOT}/categories/${category}/`}
+                target="_blank"
+                className={css('white-link')}
+              >
+                {category === 'focus' ? 'Protein focus' : 'Blog'}
+              </Link>
+            </Tooltip>
+          </div>
+        ) : (
+          <></>
+        )
       }
       title={
         <Link href={url} target="_blank">
@@ -111,44 +118,110 @@ export const BlogEntry = ({
   );
 };
 
-interface LoadedProps
-  extends LoadDataProps<{
-    [key: string]: BlogEntryProps;
-  }> {}
+type EMBLArticle = {
+  title: string;
+  teaser: string;
+  url: string;
+  created: string;
+};
 
-export const BlogEntries = ({ data }: LoadedProps) => {
-  if (!data) return null;
-  const { loading, payload } = data;
-  if (loading) return 'Loading…';
-  if (!payload) return null;
+interface LoadedProps
+  extends LoadDataProps,
+    LoadDataProps<BlogEntryProps[], 'Feed'>,
+    LoadDataProps<{ rows: EMBLArticle[] }, 'EMBL'> {}
+
+const EMBLFeedStandardizer = (dataEMBL: EMBLArticle[]): BlogEntryProps[] => {
+  const newDataEMBL: BlogEntryProps[] = [];
+
+  dataEMBL.map((article) => {
+    const newArticle: BlogEntryProps = {
+      title: article['title'],
+      author: 'EMBL-EBI',
+      excerpt: article['teaser'],
+      category: 'interpro',
+      url: article['url'],
+      image_category: 'website',
+      date: article['created'],
+      feed_type: 'embl-news',
+    };
+    newDataEMBL.push(newArticle);
+  });
+  return newDataEMBL;
+};
+
+const addArticleCreationDate = (
+  dataFeed: BlogEntryProps[],
+): BlogEntryProps[] => {
+  dataFeed.map((article) => {
+    const match = article.url.match(/\/(\d{4})\/(\d{2})\/(\d{2})\//);
+    if (match) {
+      const [_, year, month, day] = match;
+      const formatted = `${year}-${month}-${day}T00:00:00+0000`;
+      article.date = formatted;
+    }
+  });
+  return dataFeed;
+};
+
+const sortArticlesByDate = (
+  articleA: BlogEntryProps,
+  articleB: BlogEntryProps,
+) => {
+  if (articleA.date && articleB.date) {
+    if (articleA.date > articleB.date) return -1;
+    if (articleA.date <= articleB.date) return 1;
+  }
+  return 0;
+};
+
+export const BlogEntries = ({ dataFeed, dataEMBL }: LoadedProps) => {
+  if (!dataFeed?.payload && !dataEMBL?.payload) return null;
+  if (dataFeed?.loading || dataEMBL?.loading) return 'Loading..';
   const minWidth = 300;
+
+  const emblArticles: EMBLArticle[] = dataEMBL?.payload?.rows || [];
+  const blogArticles = addArticleCreationDate(dataFeed?.payload || []);
+  const fullFeed = EMBLFeedStandardizer(emblArticles)
+    .concat(blogArticles)
+    .sort(sortArticlesByDate);
 
   return (
     <section>
       <ResizeObserverComponent measurements={['width']} element="div">
         {({ width }: { width: number }) => (
           <div className={css('blogs-container', 'vf-grid')}>
-            {Object.entries(payload)
-              .slice(0, Math.min(width / minWidth))
-              .map(([type, content]) => (
-                <BlogEntry {...content} key={type} />
-              ))}
+            {dataFeed?.payload &&
+              dataEMBL?.payload &&
+              Object.entries(fullFeed)
+                .slice(0, Math.min(width / minWidth))
+                .map(([type, content]) => <BlogEntry {...content} />)}
           </div>
         )}
       </ResizeObserverComponent>
       <div className={css('blogs-container', 'vf-grid', 'read-all')}>
-        <Link href={`${BLOG_ROOT}`} target="_blank" buttonType="primary">
+        {/* <Link href={`${BLOG_ROOT}`} target="_blank" buttonType="primary">
           Read all articles
-        </Link>
+        </Link> */}
       </div>
     </section>
   );
 };
 
 export default loadData({
-  getUrl: () => `${BLOG_ROOT}/feed.json`,
+  getUrl: () =>
+    'https://www.embl.org/api/v1/news?source=contenthub&title=interpro&site=embl-ebi&items_per_page=10',
+  propNamespace: 'EMBL',
   fetchOptions: {
     responseType: 'json',
     useCache: false,
   },
-})(BlogEntries);
+})(
+  loadData({
+    getUrl: () => `${BLOG_ROOT}/feed.json`,
+    propNamespace: 'Feed',
+    fetchOptions: {
+      responseType: 'json',
+      useCache: false,
+    },
+  })(BlogEntries),
+);

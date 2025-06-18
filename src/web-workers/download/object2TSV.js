@@ -79,6 +79,7 @@ export const columns /*: {
   entry: [
     { name: 'Accession', selector: 'metadata.accession' },
     { name: 'Name', selector: 'metadata.name' },
+    { name: 'Short Name', selector: 'extra_fields.short_name' },
     { name: 'Source Database', selector: 'metadata.source_database' },
     { name: 'Type', selector: 'metadata.type' },
     { name: 'Integrated Into', selector: 'metadata.integrated' },
