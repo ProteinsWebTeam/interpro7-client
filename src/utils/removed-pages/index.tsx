@@ -59,7 +59,7 @@ export const removedPages: Array<{
                 main: { key: 'entry' },
                 entry: {
                   ...location.entry,
-                  detail: 'overview',
+                  detail: '',
                 },
               },
             }}
