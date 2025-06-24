@@ -32,8 +32,6 @@ const IPScanVersionCheck = ({ data, ipScanVersion, callback } /*: Props */) => {
 
   if (!data || data.loading || !ipScanVersion) return <Loading inline={true} />;
 
-  // If version comes from InterProScan5, split it, otherwise just take the value of "interpro-version" provided by 106
-
   useEffect(() => {
     if (callback) callback(currentVersion !== ipScanVersion);
   }, [currentVersion, ipScanVersion, callback]);

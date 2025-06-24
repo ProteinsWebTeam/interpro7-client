@@ -33,7 +33,6 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 import summary from 'styles/summary.css';
-import { ExtendedFeature } from 'src/components/ProteinViewer/utils';
 
 const css = cssBinder(summary, fonts, style);
 
@@ -254,8 +253,7 @@ const SummaryIPScanJob = ({
   const match = reg.exec(jobAccession);
   const rootAccession = match?.[1] ?? jobAccession;
 
-  const jobVersion =
-    bPayload['interpro-version'] || bPayload['interproscan-version'];
+  let jobVersion = bPayload['interproscan-version'] || '';
 
   return (
     <div className={css('sections')}>

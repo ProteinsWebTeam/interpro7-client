@@ -166,9 +166,7 @@ export const IPScanStatus = ({
     Number(pageSize),
   );
 
-  const jobVersion =
-    jobsData?.[0]?.['interpro-version'] ||
-    jobsData?.[0]?.['interproscan-version'];
+  const jobVersion = jobsData?.[0]?.['interproscan-version'];
 
   return (
     <section>
