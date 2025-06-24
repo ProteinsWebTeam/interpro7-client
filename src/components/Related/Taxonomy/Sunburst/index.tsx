@@ -152,7 +152,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
           </ResizeObserverComponent>
         </div>
         <div className={css('panel-legends')}>
-          {legends && (
+          {/*legends && (
             <div>
               <h5>Legends</h5>
               <ul className={css('legends')}>
@@ -172,7 +172,7 @@ const Sunburst = ({ data, description }: LoadedProps) => {
                 ))}
               </ul>
             </div>
-          )}
+          )*/}
           <div>
             <h5>Weight Segments by</h5>
             <select
