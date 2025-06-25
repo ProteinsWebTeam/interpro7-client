@@ -62,6 +62,7 @@ const MARGIN_CHANGE_TRACKS = [
   'elm',
   'pfam-n',
   'funfam',
+  'cath-funfam',
   'mobidblt',
   'tmhmm',
   'signalp',

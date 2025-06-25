@@ -143,6 +143,10 @@ export const proteinViewerReorganization = (
     dataMerged,
   ) as MinimalFeature[];
   dataMerged['funfam'] = getFeature('funfam', dataMerged) as MinimalFeature[];
+  dataMerged['cath-funfam'] = getFeature(
+    'cath-funfam',
+    dataMerged,
+  ) as MinimalFeature[];
 
   if (Object.keys(dataMerged).includes('region')) {
     dataMerged['spurious_proteins'] = dataMerged['region'];
@@ -155,6 +159,7 @@ export const proteinViewerReorganization = (
     'short_linear_motifs',
     'mobidblt',
     'funfam',
+    'cath-funfam',
     'elm',
   ]);
 

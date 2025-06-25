@@ -236,6 +236,7 @@ const DomainsOnProteinLoaded = ({
       'alphafold_confidence',
       'intrinsically_disordered_regions',
       'funfam',
+      'cath-funfam',
       'residues',
       'ptm',
       'coiled-coils,_signal_peptides,_transmembrane_regions',
@@ -304,7 +305,10 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
-  if (protein.accession.startsWith('iprscan')) {
+  if (
+    protein.accession.startsWith('iprscan') ||
+    protein.accession.startsWith('imported_file')
+  ) {
     /*
     Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
     and the ProteinViewer components are used in a different way in the InterproScan results section.
@@ -337,6 +341,11 @@ const DomainsOnProteinLoaded = ({
           ];
           previousSectionData.push(unintegratedEntry);
           processedDataMerged[sectionKey] = [...previousSectionData];
+          accessionsToRemoveFromUnintegrated.push(unintegratedEntry.accession);
+        } else {
+          const newData: ExtendedFeature[] = [];
+          newData.push(unintegratedEntry);
+          processedDataMerged[sectionKey] = [...newData];
           accessionsToRemoveFromUnintegrated.push(unintegratedEntry.accession);
         }
       }
