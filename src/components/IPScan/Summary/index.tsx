@@ -210,10 +210,11 @@ const SummaryIPScanJob = ({
   const basePayload: LocalPayload = data.payload
     ? data.payload.results[0]
     : localPayload;
+
   if (!basePayload || !status) return <Loading />;
   let bPayload = { ...basePayload } as LocalPayload;
   if (data.payload)
-    bPayload['interproscan-version'] = data.payload?.['interproscan-version'];
+    bPayload['interpro-version'] = data.payload?.['interpro-version'];
   if (jobType === 'n') {
     bPayload = {
       ...bPayload,
@@ -253,7 +254,7 @@ const SummaryIPScanJob = ({
   const match = reg.exec(jobAccession);
   const rootAccession = match?.[1] ?? jobAccession;
 
-  let jobVersion = bPayload['interproscan-version'] || '';
+  let jobVersion = bPayload['interpro-version'] || '';
 
   return (
     <div className={css('sections')}>

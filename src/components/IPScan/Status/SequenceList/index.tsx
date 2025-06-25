@@ -166,11 +166,12 @@ export const IPScanStatus = ({
     Number(pageSize),
   );
 
-  const jobVersion = jobsData?.[0]?.['interproscan-version'];
+  const jobIPScanVersion = jobsData?.[0]?.['interproscan-version'];
+  const jobIProVersion = jobsData?.[0]?.['interpro-version'];
 
   return (
     <section>
-      <IPScanVersionCheck ipScanVersion={jobVersion} />
+      <IPScanVersionCheck ipScanVersion={jobIProVersion} />
 
       <h3 className={css('light')}>
         Your InterProScan Search Results (Sequences){' '}
@@ -206,6 +207,14 @@ export const IPScanStatus = ({
               tooltipText="Copy URL"
             /> */}
         </section>
+      </section>
+      <section className={css('summary-row')}>
+        <header>InterPro Version</header>
+        <section>{jobIProVersion}</section>
+      </section>
+      <section className={css('summary-row')}>
+        <header>InterProScan Version</header>
+        <section>{jobIPScanVersion}</section>
       </section>
       <section className={css('summary-row')}>
         <header>Sequence type</header>
