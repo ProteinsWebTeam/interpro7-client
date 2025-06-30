@@ -208,14 +208,18 @@ export const IPScanStatus = ({
             /> */}
         </section>
       </section>
-      <section className={css('summary-row')}>
-        <header>InterPro Version</header>
-        <section>{jobIProVersion}</section>
-      </section>
-      <section className={css('summary-row')}>
-        <header>InterProScan Version</header>
-        <section>{jobIPScanVersion}</section>
-      </section>
+      {jobIProVersion && (
+        <section className={css('summary-row')}>
+          <header>InterPro Version</header>
+          <section>{jobIProVersion}</section>
+        </section>
+      )}
+      {jobIPScanVersion && (
+        <section className={css('summary-row')}>
+          <header>InterProScan Version</header>
+          <section>{jobIPScanVersion}</section>
+        </section>
+      )}
       <section className={css('summary-row')}>
         <header>Sequence type</header>
         <section>
@@ -225,23 +229,6 @@ export const IPScanStatus = ({
       <section className={css('summary-row')}>
         <header>Number of Sequences</header>
         <section>{job?.entries || 1}</section>
-      </section>
-      <section className={css('summary-row')}>
-        <header>Actions</header>
-        <section>
-          <Actions
-            localID={job?.localID || ''}
-            status={job?.status || ''}
-            MoreActions={
-              <>
-                <ReRun jobsData={jobsData} />
-                <DropDownButton label="Download" icon="icon-download">
-                  <DownloadAll job={job} jobsData={jobsData} />
-                </DropDownButton>
-              </>
-            }
-          />
-        </section>
       </section>
       <section className={css('summary-row')}>
         <header>Status</header>
@@ -268,6 +255,23 @@ export const IPScanStatus = ({
           <section>{expiryDate.toDateString()}</section>
         </section>
       )}
+      <section className={css('summary-row')}>
+        <header>Actions</header>
+        <section>
+          <Actions
+            localID={job?.localID || ''}
+            status={job?.status || ''}
+            MoreActions={
+              <>
+                <ReRun jobsData={jobsData} />
+                <DropDownButton label="Download" icon="icon-download">
+                  <DownloadAll job={job} jobsData={jobsData} />
+                </DropDownButton>
+              </>
+            }
+          />
+        </section>
+      </section>
       <Table
         dataTable={paginatedJobs}
         rowKey="localID"

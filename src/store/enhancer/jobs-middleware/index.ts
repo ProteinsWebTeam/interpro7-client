@@ -153,7 +153,27 @@ const updateJobInDB = async (
 
   (Array.isArray(data?.results) ? data?.results : []).forEach((result, i) => {
     const newLocalID = `${localID}-${i + 1}`;
-    dataT.set({ ...data, results: [result], localID: newLocalID }, newLocalID);
+
+    // Standardize IPScan5 and IPScan6 versions
+    let ipScanVersion: string = '';
+    let iProVersion: string = '';
+
+    if (data) {
+      ipScanVersion = data['interproscan-version'] || '';
+      if (data['interpro-version']) iProVersion = data['interpro-version'];
+      else iProVersion = ipScanVersion.split('-')[1];
+    }
+
+    dataT.set(
+      {
+        ...data,
+        'interproscan-version': ipScanVersion,
+        'interpro-version': iProVersion,
+        results: [result],
+        localID: newLocalID,
+      },
+      newLocalID,
+    );
   });
   if (dispatch) {
     rehydrateStoredJobs(dispatch);
