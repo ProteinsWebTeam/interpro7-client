@@ -82,7 +82,8 @@ type Iprscan5ORFResult = {
 };
 
 type Iprscan5Payload = {
-  'interproscan-version': string;
+  'interproscan-version'?: string;
+  'interpro-version'?: string;
   results: Array<Iprscan5Result>;
 };
 
