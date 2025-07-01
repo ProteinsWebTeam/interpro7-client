@@ -52,7 +52,6 @@ const OTHER_TRACK_TYPES = [
   'confidence',
   'residue',
   'Model',
-  'Domain',
   'consensus majority',
   'variation',
 ];
@@ -64,6 +63,7 @@ const MARGIN_CHANGE_TRACKS = [
   'funfam',
   'cath-funfam',
   'mobidblt',
+  'mobidb-lite',
   'tmhmm',
   'signalp',
   'signalp_gram_positive',
