@@ -116,16 +116,20 @@ export const standardizeResidueStructure = (
 
 export const standardizeMobiDBFeatureStructure = (
   features: Array<ExtendedFeature>,
+  extractedAccession: string = '',
 ): Array<ExtendedFeature> => {
   const newFeatures: Array<ExtendedFeature> = [];
   features.forEach((feature) => {
-    const tempFeature = { ...feature };
+    const tempFeature = {
+      ...(feature as ExtendedFeature & { extracted_accession: string }),
+    };
     const slicedTempFeatureLocations: Array<ExtendedFeatureLocation> = [];
     const featureChildrenRecord: Record<string, ExtendedFeature> = {};
 
     tempFeature.accession = 'Mobidblt-Consensus Disorder Prediction';
     tempFeature.source_database = 'mobidblt';
     tempFeature.protein = '';
+    tempFeature.extracted_accession = extractedAccession;
 
     tempFeature.locations?.forEach(
       (

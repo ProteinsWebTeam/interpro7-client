@@ -376,11 +376,29 @@ const DomainsOnProteinLoaded = ({
     proteinViewerData = sectionsReorganization(proteinViewerData);
 
     if (proteinViewerData['intrinsically_disordered_regions']) {
+      // In imported files/submitted jobs, accession of the protein needs to be retrieved for MobiDB-links to work.
+      // Short name is stored with different format, so there's different cases to be handled.
+      // What we extract from "short_name" will get processed by the MobiDBlink component downstream
+
+      let extractedAccession = (
+        (protein as ProteinMetadata).name as { short: string }
+      ).short;
+      if (extractedAccession.includes('|')) {
+        let splittedAccession = extractedAccession.split('|');
+        if (splittedAccession.length == 3) {
+          extractedAccession = splittedAccession[1];
+        }
+      } else if (extractedAccession.includes(' ')) {
+        let splittedAccession = extractedAccession.split(' ');
+        extractedAccession = splittedAccession[0];
+      }
+
       proteinViewerData['intrinsically_disordered_regions'] =
         standardizeMobiDBFeatureStructure(
           proteinViewerData[
             'intrinsically_disordered_regions'
           ] as ExtendedFeature[],
+          extractedAccession,
         );
     }
 
