@@ -24,7 +24,7 @@ export const DownloadTable = ({ data }: LoadedProps) => {
   const [_, dataVersion] = version.split('-');
 
   return (
-    <table className={css('vf-table', 'ipscan-download-table')}>
+    <table className={css('vf-table')}>
       <thead>
         <tr>
           <th>Resource</th>
