@@ -9,9 +9,10 @@ import Link from 'components/generic/Link';
 import cssBinder from 'styles/cssBinder';
 
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import local from './style.css';
 import tableCSS from 'components/Table/style.css';
 
-const css = cssBinder(tableCSS, fonts);
+const css = cssBinder(tableCSS, fonts, local);
 
 interface LoadedProps extends LoadDataProps<{ tag_name: string }> {}
 
@@ -23,7 +24,7 @@ export const DownloadTable = ({ data }: LoadedProps) => {
   const [_, dataVersion] = version.split('-');
 
   return (
-    <table className={css('vf-table')}>
+    <table className={css('vf-table', 'ipscan-download-table')}>
       <thead>
         <tr>
           <th>Resource</th>
@@ -47,6 +48,41 @@ export const DownloadTable = ({ data }: LoadedProps) => {
             >
               md5
             </Link>
+          </td>
+        </tr>
+        <tr>
+          <td>InterProScan</td>
+          <td>6.0.0-alpha</td>
+          <td>
+            <p>
+              To get started, install <strong>Nextflow</strong> (version
+              24.10.04 or later) along with a container runtime such as Docker,
+              SingularityCE, or Apptainer. Nextflow will automatically retrieve
+              the workflow from GitHub, and required data can be downloaded
+              during execution.
+            </p>
+            <p>
+              If you have Docker and Nextflow installed, run the following
+              command to test InterProScan and download required data:
+            </p>
+            <pre>
+              <code>
+                nextflow run ebi-pf-team/interproscan6 <br /> -r 6.0.0-alpha{' '}
+                <br /> -profile docker,test <br /> --datadir data <br />{' '}
+                --interpro latest <br /> --download
+              </code>
+            </pre>
+            <p>
+              For more information, refer to the official guide on{' '}
+              <a
+                href="https://github.com/ebi-pf-team/interproscan6"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
+              .
+            </p>
           </td>
         </tr>
       </tbody>
