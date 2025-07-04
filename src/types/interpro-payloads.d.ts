@@ -120,7 +120,7 @@ type SourceOrganism = {
 };
 interface ProteinMetadata extends Metadata {
   id?: string;
-  name: string | { name: string; short: string };
+  name: string;
   description: Array<string>;
   source_database: 'uniprot' | 'reviewed' | 'unreviewed';
   length: number;

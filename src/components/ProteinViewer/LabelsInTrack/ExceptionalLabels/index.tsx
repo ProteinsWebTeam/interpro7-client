@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import Link from 'components/generic/Link';
@@ -13,8 +13,6 @@ import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 import { FunFamLink } from 'subPages/Subfamilies';
 
 import { ExtendedFeature } from '../../utils';
-import { format } from 'url';
-import config from 'config';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -55,52 +53,20 @@ export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
 };
 
 const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
-  const [mobiDBLink, setMobiDBLink] = useState('');
-
-  // States
-  // 0 = not requested
-  // 1 = requested
-  // 2 = server responded
-  const [mobiDBLinkRequested, setMobiDBLinkRequested] = useState(0);
-
   let label = (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
     entry.name ||
     entry.accession) as string;
-
-  const entryAccessionLink =
-    (entry as ExtendedFeature & { extracted_accession: string })
-      .extracted_accession || entry.protein;
 
   if (
     entry.source_database === 'mobidblt' ||
     entry.source_database === 'mobidb-lite'
   ) {
-    // Fetch actual accession number. Sometimes the extracted_accession is a short_name that needs to be resolved.
-    const APIUrl = format({
-      protocol: config.root.API.protocol,
-      hostname: config.root.API.hostname,
-      port: config.root.API.port,
-      pathname: config.root.API.pathname,
-    });
-
-    if (mobiDBLinkRequested == 0) {
-      setMobiDBLinkRequested(1);
-      fetch(`${APIUrl}/utils/accession/${entryAccessionLink}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data['accession']) {
-            setMobiDBLink(data['accession']);
-          }
-          setMobiDBLinkRequested(2);
-        });
-    }
-
     return (
       <>
-        {isPrinting || mobiDBLinkRequested != 2 ? (
+        {isPrinting ? (
           <span>{entry.accession}</span>
         ) : (
-          <Link target="_blank" href={`https://mobidb.org/${mobiDBLink}`}>
+          <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
             {entry.accession.replace('Mobidblt-', 'MobiDB-lite: ')}
           </Link>
         )}

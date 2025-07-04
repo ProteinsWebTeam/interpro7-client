@@ -49,7 +49,7 @@ const ProteinCard = ({ data, search, entryDB }: Props) => {
             }}
           >
             <HighlightedText
-              text={data.metadata.name as string}
+              text={data.metadata.name}
               textToHighlight={search}
             />
           </Link>
@@ -86,7 +86,7 @@ const ProteinCard = ({ data, search, entryDB }: Props) => {
     >
       {data.extra_fields ? (
         <SummaryCounterProteins
-          proteinName={data.metadata.name as string}
+          proteinName={data.metadata.name}
           proteinAccession={data.metadata.accession}
           counters={data.extra_fields.counters}
           entryDB={entryDB}
