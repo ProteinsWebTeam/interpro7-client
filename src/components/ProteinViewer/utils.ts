@@ -70,6 +70,7 @@ export const typeNameToSectionName: Record<string, string> = {
   'short linear motifs': 'Short Linear Motifs',
   'pfam-n': 'Pfam-N',
   funfam: 'FunFam',
+  'cath-funfam': 'FunFam',
   'external sources': 'External Sources',
   'secondary structure': 'Secondary Structure',
 };

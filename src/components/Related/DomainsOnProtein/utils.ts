@@ -42,8 +42,8 @@ export const getFeature = (
         const entryDB = entry.source_database?.toLowerCase();
         if (entryDB) {
           if (Array.isArray(filter))
-            return filter.some((item) => entryDB.includes(item));
-          else return filter.includes(entryDB);
+            return filter.some((item) => entryDB.startsWith(item));
+          else return filter.startsWith(entryDB);
         }
       },
     );
@@ -143,6 +143,10 @@ export const proteinViewerReorganization = (
     dataMerged,
   ) as MinimalFeature[];
   dataMerged['funfam'] = getFeature('funfam', dataMerged) as MinimalFeature[];
+  dataMerged['cath-funfam'] = getFeature(
+    'cath-funfam',
+    dataMerged,
+  ) as MinimalFeature[];
 
   if (Object.keys(dataMerged).includes('region')) {
     dataMerged['spurious_proteins'] = dataMerged['region'];
@@ -154,7 +158,9 @@ export const proteinViewerReorganization = (
     'pfam-n',
     'short_linear_motifs',
     'mobidblt',
+    'mobidb-lite',
     'funfam',
+    'cath-funfam',
     'elm',
   ]);
 
