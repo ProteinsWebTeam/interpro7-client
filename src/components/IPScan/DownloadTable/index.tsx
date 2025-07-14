@@ -75,13 +75,15 @@ export const DownloadTable = ({ dataIPScan, dataIPScan6 }: LoadedProps) => {
         If you have Docker and Nextflow installed, run the following command to
         test InterProScan and download required data:
       </p>
-      <pre>
-        <code>
-          nextflow run ebi-pf-team/interproscan6 <br /> -r 6.0.0-alpha <br />{' '}
-          -profile docker,test <br /> --datadir data <br /> --interpro latest{' '}
-          <br /> --download
-        </code>
-      </pre>
+      <p>
+        <pre>
+          <code>
+            nextflow run ebi-pf-team/interproscan6 <br /> -r 6.0.0-alpha <br />{' '}
+            -profile docker,test <br /> --datadir data <br /> --interpro latest{' '}
+            <br /> --download
+          </code>
+        </pre>
+      </p>
       <p>
         For more information, refer to the official guide on{' '}
         <a
