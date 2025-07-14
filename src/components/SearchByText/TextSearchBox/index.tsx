@@ -153,6 +153,7 @@ class TextSearchBox extends PureComponent<Props, State> {
       <div className={css('input-group', 'margin-bottom-small')}>
         <div className={css('search-input-box')}>
           <Select
+            menuIsOpen={false}
             options={(this.state.searchHistory || []).map((term) => ({
               value: term,
               label: term,

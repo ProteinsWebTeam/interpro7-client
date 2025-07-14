@@ -33,7 +33,8 @@ type JobStatus =
 type IprscanDataIDB = {
   localID: string;
   applications: Array<string> | string;
-  'interproscan-version': string;
+  'interproscan-version'?: string;
+  'interpro-version'?: string;
   input?: string;
   originalInput?: string;
   results: Array<Iprscan5Result>;
@@ -48,6 +49,7 @@ type LocalPayload = (Iprscan5Result | Iprscan5NucleotideResult) & {
   goterms?: Array<string>;
   pathways?: Array<string>;
   'interproscan-version'?: string;
+  'interpro-version'?: string;
   sequence?: string;
   length?: number;
 };

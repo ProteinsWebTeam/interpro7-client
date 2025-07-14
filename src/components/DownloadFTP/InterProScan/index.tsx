@@ -1,11 +1,10 @@
 import React from 'react';
-
 import Link from 'components/generic/Link';
-import DownloadTable from 'components/IPScan/DownloadTable';
 import cssBinder from 'styles/cssBinder';
 
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import DownloadTable from 'components/IPScan/DownloadTable';
 
 const css = cssBinder(fonts, ipro);
 
@@ -17,9 +16,10 @@ const InterProScanDownloads = () => (
       recommend you download the latest version of InterProScan. However, all
       previous releases are archived on the{' '}
       <Link href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
-        FTP Site
+        FTP site
       </Link>
-      . InterProScan&#39;s source code is available on{' '}
+      .<br />
+      InterProScan&#39;s source code is available on{' '}
       <Link
         href="//github.com/ebi-pf-team/interproscan"
         className={css('ext')}

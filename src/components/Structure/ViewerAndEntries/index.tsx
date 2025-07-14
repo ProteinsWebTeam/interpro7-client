@@ -414,6 +414,7 @@ class StructureView extends PureComponent<Props, State> {
                 entriesNames={this.getEntryNames()}
                 updateStructure={this.showEntryInStructure}
                 selectedEntry={selectedEntry}
+                isReady={this.state.isReady}
               />
             ) : null,
           }}

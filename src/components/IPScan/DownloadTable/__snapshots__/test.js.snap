@@ -6,80 +6,38 @@ exports[`<DownloadTable /> should render 1`] = `
 >
   <thead>
     <tr>
-      <th
-        className="min-width-sm"
-      >
-        Name
+      <th>
+        Resource
       </th>
       <th>
-        Description
+        Version
       </th>
       <th>
-        Data
-      </th>
-      <th
-        className="xs-hide"
-      >
-        File name
-      </th>
-      <th
-        className="xs-hide"
-      >
-        Format
-      </th>
-      <th
-        className="xs-hide"
-      >
-        Links
+        Download
       </th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>
-        <Memo(Connect(Link))
-          href="http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
-          style={
-            {
-              "whiteSpace": "nowrap",
-            }
-          }
-          target="_blank"
-        >
-          InterProScan 
-          5.35-74.0
-        </Memo(Connect(Link))>
+        InterProScan (64-bit Linux)
       </td>
       <td>
-        Download and install the latest version of InterProScan (64-bit Linux)
-      </td>
-      <td>
-        v
-        74.0
-      </td>
-      <td
-        className="xs-hide"
-      >
-        interproscan-
         5.35-74.0
-        -64-bit.tar.gz
-      </td>
-      <td
-        className="xs-hide"
-      >
-        gzipped
       </td>
       <td>
         <Memo(Connect(Link))
-          href="http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
-          target="_blank"
+          href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz"
         >
-          <span
-            className="icon icon-common font-l"
-            data-icon="="
-          />
+          tar
         </Memo(Connect(Link))>
-        <br />
+        ,
+         
+        <Memo(Connect(Link))
+          href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/5.35-74.0/interproscan-5.35-74.0-64-bit.tar.gz.md5"
+        >
+          md5
+        </Memo(Connect(Link))>
       </td>
     </tr>
   </tbody>
