@@ -323,6 +323,7 @@ const ProteinViewerForAlphafold = ({
     'alphafold_confidence',
     'intrinsically_disordered_regions',
     'funfam',
+    'cath-funfam',
     'residues',
     'ptm',
     'coiled-coils,_signal_peptides,_transmembrane_regions',
