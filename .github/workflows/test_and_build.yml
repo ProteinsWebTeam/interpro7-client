@@ -15,7 +15,7 @@ jobs:
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
-          npm i -g npm@10.9.1
+          npm install --global npm@10.9.1 --verbose
           npm ci
 
       - name: 🏗 - Build
