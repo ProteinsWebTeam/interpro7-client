@@ -30,7 +30,7 @@ github:
     repo: interproscan
   IPScan6:
     owner: ebi-pf-team
-    repo: interproscan
+    repo: interproscan6
   ReadTheDocs:
     owner: ProteinsWebTeam
     repo: interpro-docs
