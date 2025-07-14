@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm i -g npm@9.9.4
-          npm ci
+          npm --no-audit --no-fund --loglevel=verbose ci
 
       - name: Build dev (internal)
         if: steps.set-vars.outputs.is_dev == 'true'
