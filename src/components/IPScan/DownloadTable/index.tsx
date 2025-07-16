@@ -26,45 +26,27 @@ export const DownloadTable = ({ data }: LoadedProps) => {
     <table className={css('vf-table')}>
       <thead>
         <tr>
-          <th className={css('min-width-sm')}>Name</th>
-          <th>Description</th>
-          <th>Data</th>
-          <th className={css('xs-hide')}>File name</th>
-          <th className={css('xs-hide')}>Format</th>
-          <th className={css('xs-hide')}>Links</th>
+          <th>Resource</th>
+          <th>Version</th>
+          <th>Download</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td>InterProScan (64-bit Linux)</td>
+          <td>{version}</td>
           <td>
             <Link
-              href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
-              target="_blank"
-              style={{ whiteSpace: 'nowrap' }}
+              href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
             >
-              InterProScan {version}
+              tar
             </Link>
-          </td>
-          <td>
-            Download and install the latest version of InterProScan (64-bit
-            Linux)
-          </td>
-          <td>v{dataVersion}</td>
-          <td className={css('xs-hide')}>
-            interproscan-{version}-64-bit.tar.gz
-          </td>
-          <td className={css('xs-hide')}>gzipped</td>
-          <td>
+            ,{' '}
             <Link
-              href={`http://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
-              target="_blank"
+              href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz.md5`}
             >
-              <span
-                className={css('icon', 'icon-common', 'font-l')}
-                data-icon="&#x3d;"
-              />
+              md5
             </Link>
-            <br />
           </td>
         </tr>
       </tbody>
