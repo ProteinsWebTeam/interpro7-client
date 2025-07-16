@@ -11,25 +11,51 @@ jobs:
         with:
           node-version: '19.2.0'
           cache: 'npm'
-      
+
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
           npm i -g npm@9.3.1
           npm ci
 
-      - name: 🏗 - Build
+      - name: 🏗 - Build (dev)
         run: |
-          cp config/${{ github.ref_name }}_config.yml config.yml
-          npm run deploy -- -- --output-path=dist/${{ github.ref_name }}/
-        if: contains(fromJson('["dev", "master"]'), github.ref_name)
+          cp config/dev_config.yml config.yml
+          npm run deploy -- -- --output-path=dist/dev/
+        if: github.ref_name == 'dev'
 
-      - name: Upload Build Artifact
+      - name: Upload Build Artifact (dev)
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: dist/${{ github.ref_name }}/**
-        if: contains(fromJson('["dev", "master"]'), github.ref_name)
+          path: dist/dev/**
+        if: github.ref_name == 'dev'
+
+      - name: 🏗 - Build (master - master_config)
+        run: |
+          cp config/master_config.yml config.yml
+          npm run deploy -- -- --output-path=dist/master/
+        if: github.ref_name == 'master'
+
+      - name: Upload Build Artifact (master)
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-build-artifact
+          path: dist/master/**
+        if: github.ref_name == 'master'
+
+      - name: 🏗 - Build (master - staging_config)
+        run: |
+          cp config/staging_config.yml config.yml
+          npm run deploy -- -- --output-path=dist/staging/
+        if: github.ref_name == 'master'
+
+      - name: Upload Build Artifact (staging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-build-artifact
+          path: dist/staging/**
+        if: github.ref_name == 'master'
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
