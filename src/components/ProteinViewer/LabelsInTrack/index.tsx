@@ -44,7 +44,7 @@ const LabelsInTrack = ({
   const key = entry.source_database === 'pdb' ? 'structure' : 'entry';
 
   //Imports, IPScan5 and IPScan6 standardizations
-  let filteredSourceDb = IPScanStandardization(entry.source_database || '');
+  const filteredSourceDb = IPScanStandardization(entry.source_database || '');
 
   return (
     <div

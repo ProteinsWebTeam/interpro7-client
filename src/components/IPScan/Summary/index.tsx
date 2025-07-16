@@ -254,7 +254,7 @@ const SummaryIPScanJob = ({
   const match = reg.exec(jobAccession);
   const rootAccession = match?.[1] ?? jobAccession;
 
-  let jobVersion = bPayload['interpro-version'] || '';
+  const jobVersion = bPayload['interpro-version'] || '';
 
   return (
     <div className={css('sections')}>

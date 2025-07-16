@@ -53,7 +53,7 @@ export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
 };
 
 const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
-  let label = (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
+  const label = (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
     entry.name ||
     entry.accession) as string;
 
@@ -61,7 +61,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     entry.source_database === 'mobidblt' ||
     entry.source_database === 'mobidb-lite'
   ) {
-    let comesFromIPscan =
+    const comesFromIPscan =
       entry.protein?.includes('iprscan') ||
       entry.protein?.includes('imported_file');
 
