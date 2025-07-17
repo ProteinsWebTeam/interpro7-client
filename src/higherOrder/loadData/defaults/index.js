@@ -26,12 +26,20 @@ export const getUrlForMeta = createSelector(
     ),
 );
 
-export const getUrlForRelease = (repoKey) =>
-  createSelector(
+export const getUrlForRelease = (repoKey) => {
+  const selector = createSelector(
     () => config.github[repoKey],
     ({ owner, repo }) =>
-      `https://api.github.com/repos/${owner}/${repo}/releases/latest`,
+      format({
+        protocol: 'https',
+        hostname: 'api.github.com',
+        pathname: `repos/${owner}/${repo}/releases`,
+        query: { per_page: 1 },
+      }),
   );
+  return (state) => selector(state);
+};
+
 export const getReadTheDocsURL = (relativePath) =>
   createSelector(
     () => config.github.ReadTheDocs,
