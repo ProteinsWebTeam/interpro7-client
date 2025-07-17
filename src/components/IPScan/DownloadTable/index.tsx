@@ -63,6 +63,25 @@ export const DownloadTable = ({ dataIPScan, dataIPScan6 }: LoadedProps) => {
         </tbody>
       </table>
 
+      <p className={css('small', 'margin-top-small')}>
+        To ensure you have the latest data and software enhancements we always
+        recommend you download the latest version of InterProScan. However, all
+        previous releases are archived on the{' '}
+        <Link href="https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/">
+          FTP site
+        </Link>
+        .<br />
+        InterProScan&#39;s source code is available on{' '}
+        <Link
+          href="//github.com/ebi-pf-team/interproscan"
+          className={css('ext')}
+          target="_blank"
+        >
+          Github
+        </Link>
+        .
+      </p>
+
       <h4> InterProScan 6 </h4>
       <p> The latest version of InterProScan6 is {version6}. </p>
       <p>
@@ -78,14 +97,13 @@ export const DownloadTable = ({ dataIPScan, dataIPScan6 }: LoadedProps) => {
       <p>
         <pre>
           <code>
-            nextflow run ebi-pf-team/interproscan6 <br /> -r 6.0.0-alpha <br />{' '}
+            nextflow run ebi-pf-team/interproscan6 <br /> -r {version6} <br />{' '}
             -profile docker,test <br /> --datadir data <br /> --interpro latest{' '}
-            <br /> --download
           </code>
         </pre>
       </p>
       <p>
-        For more information, refer to the official guide on{' '}
+        You will find more examples and documentation on{' '}
         <a
           href="https://github.com/ebi-pf-team/interproscan6"
           target="_blank"
