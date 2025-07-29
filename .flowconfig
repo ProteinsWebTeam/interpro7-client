@@ -27,6 +27,7 @@
 .*/node_modules/shallowequal*
 .*/node_modules/tiny-invariant*
 .*/node_modules/react-element-to-jsx-string*
+.*/node_modules/sass/node_modules/immutable/.* 
 
 [untyped]
 .*/node_modules/molstar/**/.*
