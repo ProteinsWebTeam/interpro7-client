@@ -29,6 +29,8 @@ import { sectionsReorganization } from 'components/Related/DomainsOnProtein/util
 import { getTEDURL } from 'components/Related/DomainsOnProtein/ExternalSourcesHOC';
 import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TED';
 import Callout from 'components/SimpleCommonComponents/Callout';
+import Link from 'components/generic/Link';
+import config from 'config';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -394,7 +396,14 @@ const ProteinViewerForAlphafold = ({
               longer).
               <br />
               To change the display mode, open the <i>Options</i> menu below and
-              select your preferred setting.
+              select your preferred setting. See{' '}
+              <Link
+                href={`${config.root.readthedocs.href}protein_viewer.html`}
+                target="_blank"
+              >
+                our documentation
+              </Link>{' '}
+              for an explanation of each display mode.
             </Callout>
           </>
         )}
