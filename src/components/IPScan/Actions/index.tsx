@@ -81,24 +81,34 @@ export const Actions = ({
   return (
     <nav className={css('buttons', { centered: forStatus })}>
       {withTitle && 'Actions: '}
-      <Tooltip
-        title={
-          <div>
-            <b>Delete job</b>: This will remove the stored data from your
-            browser. Remember that search results are only retained on our
-            servers for 7 days
-          </div>
-        }
-      >
+      {status !== 'imported file' ? (
+        <Tooltip
+          title={
+            <div>
+              <b>Delete job</b>: This will remove the stored data from your
+              browser. Remember that search results are only retained on our
+              servers for 7 days
+            </div>
+          }
+        >
+          {}
+          <Button
+            type={forStatus ? 'inline' : 'secondary'}
+            icon="icon-trash"
+            onClick={_handleDelete}
+            aria-label="Delete Results"
+          >
+            {!forStatus && <span>Delete Results</span>}
+          </Button>
+        </Tooltip>
+      ) : (
         <Button
           type={forStatus ? 'inline' : 'secondary'}
           icon="icon-trash"
           onClick={_handleDelete}
           aria-label="Delete Results"
-        >
-          {!forStatus && <span>Delete Results</span>}
-        </Button>
-      </Tooltip>
+        ></Button>
+      )}
       {status === 'finished' && (
         <Tooltip
           title={

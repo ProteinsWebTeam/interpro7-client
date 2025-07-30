@@ -53,6 +53,13 @@ const isXChecked = (x: string) => (form: HTMLElement) =>
 
 const isStayChecked = isXChecked('stay');
 
+function isWithinLast60Minutes(timestamp: number) {
+  const now = Date.now(); // current time in milliseconds
+  const sixtyMinutesInMs = 60 * 60 * 1000; // 60 minutes in milliseconds
+
+  return now - timestamp <= sixtyMinutesInMs;
+}
+
 type Props = {
   createJob: typeof createJob;
   goToCustomLocation: typeof goToCustomLocation;
@@ -60,6 +67,7 @@ type Props = {
   value?: string | null;
   main?: string;
   search?: InterProLocationSearch;
+  jobs: JobsState;
 };
 
 type State = {
@@ -225,6 +233,15 @@ export class IPScanSearch extends PureComponent<Props, State> {
     const allOk = this.state.sequenceIssues.length === 0;
     const hasText =
       !!this._editorRef.current && this._editorRef.current?.hasText();
+
+    const last60minIpScanJobs = Object.values(this.props.jobs).filter((job) => {
+      return (
+        job['metadata']['remoteID']?.includes('iprscan') &&
+        job.metadata?.entries == 1 &&
+        isWithinLast60Minutes(job.metadata?.times?.created || 0)
+      );
+    });
+
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
         <form
@@ -240,6 +257,12 @@ export class IPScanSearch extends PureComponent<Props, State> {
           className={css('search-form', { dragging })}
           ref={this._formRef}
         >
+          {last60minIpScanJobs.length > 1 && (
+            <Callout type="alert">
+              {' '}
+              You've been submitting too many 1-sequence searches.
+            </Callout>
+          )}
           <div>
             <div className={css('simple-box', 'ipscan-block')}>
               <header>Scan your sequences</header>
@@ -376,11 +399,13 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ipScan,
   (state: GlobalState) => state.customLocation.description,
   (state: GlobalState) => state.customLocation.search,
-  (ipScan, desc, search) => ({
+  (state: GlobalState) => state.jobs,
+  (ipScan, desc, search, jobs) => ({
     ipScan,
     value: desc.search.value,
     main: desc.main.key!,
     search,
+    jobs,
   }),
 );
 
