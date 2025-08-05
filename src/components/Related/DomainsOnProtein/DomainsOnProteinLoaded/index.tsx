@@ -439,7 +439,7 @@ const DomainsOnProteinLoaded = ({
             To change the display mode, open the <i>Options</i> menu below and
             select your preferred setting. See{' '}
             <Link
-              href={`${config.root.readthedocs.href}protein_viewer.html`}
+              href={`${config.root.readthedocs.href}protein_viewer.html#interpro-n-display-modes`}
               target="_blank"
             >
               our documentation
