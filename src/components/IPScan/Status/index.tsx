@@ -138,7 +138,7 @@ export class IPScanStatus extends PureComponent<Props, State> {
 
     const statusColumnName: Record<string, string> = {
       'imported file': 'Imported',
-      finished: 'Completed',
+      'finished': 'Completed',
       'saved in browser': 'Saved',
     };
 
