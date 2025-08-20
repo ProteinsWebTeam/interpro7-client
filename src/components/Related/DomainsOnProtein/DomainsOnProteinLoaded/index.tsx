@@ -306,8 +306,7 @@ const DomainsOnProteinLoaded = ({
   }
 
   if (
-    protein.accession.startsWith('iprscan') ||
-    protein.accession.startsWith('imported_file')
+    (protein.name as IPScanProteinName).name == 'InterProScan Search Result'
   ) {
     /*
     Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format

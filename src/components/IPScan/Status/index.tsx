@@ -217,8 +217,6 @@ export class IPScanStatus extends PureComponent<Props, State> {
                 jobName = '∅';
               }
 
-              jobName = jobName?.replace('imported_file-', '');
-
               return (
                 <>
                   <span style={{ marginRight: '1em' }}>
