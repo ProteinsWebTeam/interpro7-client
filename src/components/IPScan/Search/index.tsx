@@ -234,6 +234,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
     const hasText =
       !!this._editorRef.current && this._editorRef.current?.hasText();
 
+    const nrJobsThreshold = 1;
     const last60minIpScanJobs = Object.values(this.props.jobs).filter((job) => {
       return (
         job['metadata']['remoteID']?.includes('iprscan') &&
@@ -257,11 +258,13 @@ export class IPScanSearch extends PureComponent<Props, State> {
           className={css('search-form', { dragging })}
           ref={this._formRef}
         >
-          {last60minIpScanJobs.length > 1 && (
-            <Callout type="alert">
-              {' '}
-              You've been submitting too many 1-sequence searches.
-            </Callout>
+          {last60minIpScanJobs.length > nrJobsThreshold && (
+            <>
+              {/*<Callout type="alert">
+                {' '}
+                You've been submitting too many 1-sequence searches.
+              </Callout> */}
+            </>
           )}
           <div>
             <div className={css('simple-box', 'ipscan-block')}>
