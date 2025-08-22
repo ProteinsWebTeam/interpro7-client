@@ -81,15 +81,8 @@ export const Actions = ({
   return (
     <nav className={css('buttons', { centered: forStatus })}>
       {withTitle && 'Actions: '}
-      <Tooltip
-        title={
-          <div>
-            <b>Delete job</b>: This will remove the stored data from your
-            browser. Remember that search results are only retained on our
-            servers for 7 days
-          </div>
-        }
-      >
+      <Tooltip title={<div>Delete this job</div>}>
+        {}
         <Button
           type={forStatus ? 'inline' : 'secondary'}
           icon="icon-trash"

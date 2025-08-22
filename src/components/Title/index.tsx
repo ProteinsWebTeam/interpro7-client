@@ -145,7 +145,7 @@ export class Title extends PureComponent<LoadedProps> {
                 'margin-bottom-large': isIPScanResult,
               })}
             >
-              {longName}{' '}
+              {longName as string}{' '}
               {(metadata as EntryMetadata).is_llm && (
                 <MiniBadgeAI
                   tooltipText={getTooltipContentFormMetadata(

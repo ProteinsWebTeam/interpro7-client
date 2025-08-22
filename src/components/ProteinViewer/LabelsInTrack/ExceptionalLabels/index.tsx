@@ -61,9 +61,7 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     entry.source_database === 'mobidblt' ||
     entry.source_database === 'mobidb-lite'
   ) {
-    const comesFromIPscan =
-      entry.protein?.includes('iprscan') ||
-      entry.protein?.includes('imported_file');
+    const comesFromIPscan = entry.protein?.includes('iprscan');
 
     return (
       <>
