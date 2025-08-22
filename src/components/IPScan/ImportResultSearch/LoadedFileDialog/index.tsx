@@ -82,7 +82,7 @@ const LoadedFileDialog = ({
 
     saveJobInIDB(
       validFileContent.results,
-      `${fileName}`,
+      fileName,
       null,
       iProVersion,
       ipScanVersion,
