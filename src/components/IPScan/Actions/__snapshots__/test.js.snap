@@ -7,10 +7,7 @@ exports[`<Actions /> should render 1`] = `
   <Tooltip
     title={
       <div>
-        <b>
-          Delete job
-        </b>
-        : This will remove the stored data from your browser. Remember that search results are only retained on our servers for 7 days
+        Delete this job
       </div>
     }
   >

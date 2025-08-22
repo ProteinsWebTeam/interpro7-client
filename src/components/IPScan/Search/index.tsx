@@ -235,13 +235,19 @@ export class IPScanSearch extends PureComponent<Props, State> {
       !!this._editorRef.current && this._editorRef.current?.hasText();
 
     const nrJobsThreshold = 1;
-    const last60minIpScanJobs = Object.values(this.props.jobs).filter((job) => {
-      return (
-        job['metadata']['remoteID']?.includes('iprscan') &&
-        job.metadata?.entries == 1 &&
-        isWithinLast60Minutes(job.metadata?.times?.created || 0)
-      );
-    });
+    let last60minIpScanJobs: {
+      metadata: MinimalJobMetadata;
+    }[] = [];
+
+    if (this.props.jobs) {
+      last60minIpScanJobs = Object.values(this.props.jobs).filter((job) => {
+        return (
+          job['metadata']['remoteID']?.includes('iprscan') &&
+          job.metadata?.entries == 1 &&
+          isWithinLast60Minutes(job.metadata?.times?.created || 0)
+        );
+      });
+    }
 
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
