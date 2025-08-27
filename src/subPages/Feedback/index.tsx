@@ -13,6 +13,7 @@ import cssBinder from 'styles/cssBinder';
 
 import local from './style.css';
 import forms from 'styles/forms.css';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 const css = cssBinder(local, forms);
 
@@ -44,6 +45,9 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
 
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
+  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackType, setFeedbackType] = useState<'info' | 'warning'>('info');
+
   const entry = `${metadata.name.name} (${metadata.accession})`;
   const queue =
     metadata.source_database.toLowerCase() === 'pfam' ? 'pfam' : 'interpro';
@@ -61,17 +65,21 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
       method: 'POST',
       body: data,
     }).then((response) => {
-      let text;
       // eslint-disable-next-line no-magic-numbers
       if (response.status === 200) {
-        text = 'Thanks for your feedback';
+        setFeedbackText('Thank you for your feedback!');
+        setFeedbackType('info');
         // eslint-disable-next-line no-magic-numbers
       } else if (response.status === 429) {
-        text = 'Request aborted as too many requests are made within a minute';
+        setFeedbackText(
+          'Request aborted as too many requests are made within a minute',
+        );
+        setFeedbackType('warning');
       } else {
-        text = 'Invalid request';
+        setFeedbackText('Invalid request');
+        setFeedbackType('warning');
       }
-      addToast(
+      /* addToast(
         {
           title: text,
           ttl: 3000,
@@ -80,6 +88,7 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
       );
       setMessage('');
       setEmail('');
+      */
     });
   };
   const handleFields = (e: FormEvent) => {
@@ -126,6 +135,19 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
           literature references.
         </p>
       )}
+      <p>
+        {feedbackText && (
+          <Callout
+            onClose={() => {
+              setFeedbackText('');
+            }}
+            closable={true}
+            type={feedbackType}
+          >
+            {feedbackText}
+          </Callout>
+        )}
+      </p>
       <label
         className={css(
           'vf-form__label',
