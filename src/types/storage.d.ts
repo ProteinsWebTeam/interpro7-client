@@ -9,6 +9,7 @@ type IprscanMetaIDB = {
   type: string;
   times: JobTimes;
   entries?: number;
+  aboveThreshold?: boolean;
   seqtype?: 'p' | 'n';
 };
 

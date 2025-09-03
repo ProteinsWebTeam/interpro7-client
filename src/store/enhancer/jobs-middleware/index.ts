@@ -245,7 +245,9 @@ const middleware: Middleware<
           body: url
             .format({
               query: {
-                email: config.IPScan.contactEmail,
+                email: meta.aboveThreshold
+                  ? config.IPScan.lowPriorityEmail
+                  : config.IPScan.contactEmail,
                 title: localID,
                 sequence: input,
                 appl: applications,

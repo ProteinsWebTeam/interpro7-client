@@ -34,6 +34,7 @@ import fonts from 'EBI-Icon-fonts/fonts.css';
 const css = cssBinder(searchPageCss, local, blocks, buttonCSS, fonts);
 
 export const MAX_NUMBER_OF_SEQUENCES = 100;
+const NR_PER_HOUR_JOBS_THRESHOLD = 2;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -76,6 +77,7 @@ type State = {
   submittedJob: string | null;
   sequenceIssues: Array<SequenceIssue>;
   dragging: boolean;
+  last60minIpScanJobs: number;
 };
 
 export class IPScanSearch extends PureComponent<Props, State> {
@@ -91,12 +93,28 @@ export class IPScanSearch extends PureComponent<Props, State> {
     if (props.search) {
       initialAdvancedOptions = props.search;
     }
+
+    let last60minIpScanJobs: {
+      metadata: MinimalJobMetadata;
+    }[] = [];
+
+    if (this.props.jobs) {
+      last60minIpScanJobs = Object.values(this.props.jobs).filter((job) => {
+        return (
+          job['metadata']['remoteID']?.includes('iprscan') &&
+          job.metadata?.entries == 1 &&
+          isWithinLast60Minutes(job.metadata?.times?.created || 0)
+        );
+      });
+    }
+
     this.state = {
       title: undefined,
       initialAdvancedOptions,
       submittedJob: null,
       sequenceIssues: [],
       dragging: false,
+      last60minIpScanJobs: last60minIpScanJobs.length,
     };
 
     this._formRef = React.createRef();
@@ -154,12 +172,15 @@ export class IPScanSearch extends PureComponent<Props, State> {
     const entries =
       editorContent.split('\n').filter((line) => line.trim().startsWith('>'))
         .length || 1;
+
     this.props.createJob({
       metadata: {
         localID,
         entries,
         localTitle: this.state.title,
         type: 'InterProScan',
+        aboveThreshold:
+          this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD,
         seqtype: isXChecked('seqtype')(this._formRef.current) ? 'n' : 'p',
       },
       data: {
@@ -234,21 +255,6 @@ export class IPScanSearch extends PureComponent<Props, State> {
     const hasText =
       !!this._editorRef.current && this._editorRef.current?.hasText();
 
-    const nrJobsThreshold = 1;
-    let last60minIpScanJobs: {
-      metadata: MinimalJobMetadata;
-    }[] = [];
-
-    if (this.props.jobs) {
-      last60minIpScanJobs = Object.values(this.props.jobs).filter((job) => {
-        return (
-          job['metadata']['remoteID']?.includes('iprscan') &&
-          job.metadata?.entries == 1 &&
-          isWithinLast60Minutes(job.metadata?.times?.created || 0)
-        );
-      });
-    }
-
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
         <form
@@ -264,12 +270,20 @@ export class IPScanSearch extends PureComponent<Props, State> {
           className={css('search-form', { dragging })}
           ref={this._formRef}
         >
-          {last60minIpScanJobs.length > nrJobsThreshold && (
+          {this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD && (
             <>
-              {/*<Callout type="alert">
-                {' '}
-                You've been submitting too many 1-sequence searches.
-              </Callout> */}
+              {
+                <Callout type="alert">
+                  {' '}
+                  You've submitted {this.state.last60minIpScanJobs}{' '}
+                  single-sequence jobs in the past hour. Since this matches our{' '}
+                  {NR_PER_HOUR_JOBS_THRESHOLD}-jobs-per-hour threshold, your
+                  next submissions will be processed through our low-priority
+                  queue. To avoid this and reduce server load, consider batching
+                  your sequences. You can submit up to 100 sequences in a single
+                  job instead of individual submissions.
+                </Callout>
+              }
             </>
           )}
           <div>
