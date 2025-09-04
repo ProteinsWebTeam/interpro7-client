@@ -61,6 +61,17 @@ function isWithinLast60Minutes(timestamp: number) {
   return now - timestamp <= sixtyMinutesInMs;
 }
 
+const getLast60MinJobs = (
+  jobs: JobsState,
+): { metadata: MinimalJobMetadata }[] =>
+  Object.values(jobs).filter((job) => {
+    return (
+      job['metadata']['status'] !== 'imported file' &&
+      job.metadata?.entries == 1 &&
+      isWithinLast60Minutes(job.metadata?.times?.created || 0)
+    );
+  });
+
 type Props = {
   createJob: typeof createJob;
   goToCustomLocation: typeof goToCustomLocation;
@@ -77,7 +88,7 @@ type State = {
   submittedJob: string | null;
   sequenceIssues: Array<SequenceIssue>;
   dragging: boolean;
-  last60minIpScanJobs: number;
+  last60minIpScanJobs?: number;
 };
 
 export class IPScanSearch extends PureComponent<Props, State> {
@@ -94,27 +105,12 @@ export class IPScanSearch extends PureComponent<Props, State> {
       initialAdvancedOptions = props.search;
     }
 
-    let last60minIpScanJobs: {
-      metadata: MinimalJobMetadata;
-    }[] = [];
-
-    if (this.props.jobs) {
-      last60minIpScanJobs = Object.values(this.props.jobs).filter((job) => {
-        return (
-          job['metadata']['remoteID']?.includes('iprscan') &&
-          job.metadata?.entries == 1 &&
-          isWithinLast60Minutes(job.metadata?.times?.created || 0)
-        );
-      });
-    }
-
     this.state = {
       title: undefined,
       initialAdvancedOptions,
       submittedJob: null,
       sequenceIssues: [],
       dragging: false,
-      last60minIpScanJobs: last60minIpScanJobs.length,
     };
 
     this._formRef = React.createRef();
@@ -122,7 +118,25 @@ export class IPScanSearch extends PureComponent<Props, State> {
     if (this.props.value) this.sequenceToSet = this.props.value;
   }
 
-  componentDidUpdate() {
+  componentDidMount(): void {
+    if (this.props.jobs) {
+      let last60minIpScanJobs: {
+        metadata: MinimalJobMetadata;
+      }[] = [];
+
+      last60minIpScanJobs = getLast60MinJobs(this.props.jobs);
+      this.setState({ last60minIpScanJobs: last60minIpScanJobs.length });
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.jobs !== prevProps.jobs) {
+      let last60minIpScanJobs: {
+        metadata: MinimalJobMetadata;
+      }[] = [];
+      last60minIpScanJobs = getLast60MinJobs(this.props.jobs);
+      this.setState({ last60minIpScanJobs: last60minIpScanJobs.length });
+    }
     if (this.sequenceToSet && this._editorRef.current) {
       this._handleReset(this.sequenceToSet);
       this.sequenceToSet = null;
@@ -180,7 +194,9 @@ export class IPScanSearch extends PureComponent<Props, State> {
         localTitle: this.state.title,
         type: 'InterProScan',
         aboveThreshold:
-          this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD,
+          (this.state.last60minIpScanJobs &&
+            this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD) ||
+          false,
         seqtype: isXChecked('seqtype')(this._formRef.current) ? 'n' : 'p',
       },
       data: {
@@ -270,22 +286,23 @@ export class IPScanSearch extends PureComponent<Props, State> {
           className={css('search-form', { dragging })}
           ref={this._formRef}
         >
-          {this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD && (
-            <>
-              {
-                <Callout type="alert">
-                  {' '}
-                  You've submitted {this.state.last60minIpScanJobs}{' '}
-                  single-sequence jobs in the past hour. Since this matches our{' '}
-                  {NR_PER_HOUR_JOBS_THRESHOLD}-jobs-per-hour threshold, your
-                  next submissions will be processed through our low-priority
-                  queue. To avoid this and reduce server load, consider batching
-                  your sequences. You can submit up to 100 sequences in a single
-                  job instead of individual submissions.
-                </Callout>
-              }
-            </>
-          )}
+          {this.state.last60minIpScanJobs &&
+            this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD && (
+              <>
+                {
+                  <Callout type="alert">
+                    {' '}
+                    You've submitted {this.state.last60minIpScanJobs}{' '}
+                    single-sequence jobs in the past hour. Since this matches
+                    our {NR_PER_HOUR_JOBS_THRESHOLD}-jobs-per-hour threshold,
+                    your next submissions will be processed through our
+                    low-priority queue. To avoid this and reduce server load,
+                    consider batching your sequences. You can submit up to 100
+                    sequences in a single job instead of individual submissions.
+                  </Callout>
+                }
+              </>
+            )}
           <div>
             <div className={css('simple-box', 'ipscan-block')}>
               <header>Scan your sequences</header>
