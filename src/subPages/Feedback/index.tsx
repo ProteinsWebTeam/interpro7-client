@@ -67,7 +67,7 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
     }).then((response) => {
       // eslint-disable-next-line no-magic-numbers
       if (response.status === 200) {
-        setFeedbackText('Thank you for your feedback!');
+        setFeedbackText('Your feedback has been successfully submitted.');
         setFeedbackType('info');
         // eslint-disable-next-line no-magic-numbers
       } else if (response.status === 429) {
