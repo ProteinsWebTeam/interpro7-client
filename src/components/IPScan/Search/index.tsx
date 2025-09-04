@@ -292,13 +292,13 @@ export class IPScanSearch extends PureComponent<Props, State> {
                 {
                   <Callout type="alert">
                     {' '}
-                    You've submitted {this.state.last60minIpScanJobs}{' '}
-                    single-sequence jobs in the past hour. Since this matches
-                    our {NR_PER_HOUR_JOBS_THRESHOLD}-jobs-per-hour threshold,
-                    your next submissions will be processed through our
-                    low-priority queue. To avoid this and reduce server load,
-                    consider batching your sequences. You can submit up to 100
-                    sequences in a single job instead of individual submissions.
+                    You’ve submitted {this.state.last60minIpScanJobs} jobs in
+                    the past hour. Our system allows up to{' '}
+                    {NR_PER_HOUR_JOBS_THRESHOLD} jobs per hour before new
+                    submissions are moved to the low-priority queue. To avoid
+                    delays and help reduce server load, we recommend batching
+                    your sequences. You can submit up to 100 sequences in a
+                    single job instead of sending them one by one.
                   </Callout>
                 }
               </>
