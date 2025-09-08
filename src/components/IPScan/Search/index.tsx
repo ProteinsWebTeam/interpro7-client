@@ -30,11 +30,12 @@ import local from './style.css';
 import searchPageCss from 'pages/Search/style.css';
 import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import config from 'config';
 
 const css = cssBinder(searchPageCss, local, blocks, buttonCSS, fonts);
 
 export const MAX_NUMBER_OF_SEQUENCES = 100;
-const NR_PER_HOUR_JOBS_THRESHOLD = 2;
+const NR_PER_HOUR_JOBS_THRESHOLD = 5;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -61,13 +62,13 @@ function isWithinLast60Minutes(timestamp: number) {
   return now - timestamp <= sixtyMinutesInMs;
 }
 
-const getLast60MinJobs = (
+const getLast60MinSingleSequenceJobs = (
   jobs: JobsState,
 ): { metadata: MinimalJobMetadata }[] =>
   Object.values(jobs).filter((job) => {
     return (
       job['metadata']['status'] !== 'imported file' &&
-      job.metadata?.entries == 1 &&
+      job.metadata?.entries === 1 &&
       isWithinLast60Minutes(job.metadata?.times?.created || 0)
     );
   });
@@ -124,7 +125,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
         metadata: MinimalJobMetadata;
       }[] = [];
 
-      last60minIpScanJobs = getLast60MinJobs(this.props.jobs);
+      last60minIpScanJobs = getLast60MinSingleSequenceJobs(this.props.jobs);
       this.setState({ last60minIpScanJobs: last60minIpScanJobs.length });
     }
   }
@@ -134,7 +135,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
       let last60minIpScanJobs: {
         metadata: MinimalJobMetadata;
       }[] = [];
-      last60minIpScanJobs = getLast60MinJobs(this.props.jobs);
+      last60minIpScanJobs = getLast60MinSingleSequenceJobs(this.props.jobs);
       this.setState({ last60minIpScanJobs: last60minIpScanJobs.length });
     }
     if (this.sequenceToSet && this._editorRef.current) {
@@ -193,10 +194,11 @@ export class IPScanSearch extends PureComponent<Props, State> {
         entries,
         localTitle: this.state.title,
         type: 'InterProScan',
-        aboveThreshold:
-          (this.state.last60minIpScanJobs &&
-            this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD) ||
-          false,
+        email:
+          this.state.last60minIpScanJobs &&
+          this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD
+            ? config.IPScan.lowPriorityEmail
+            : config.IPScan.contactEmail,
         seqtype: isXChecked('seqtype')(this._formRef.current) ? 'n' : 'p',
       },
       data: {
@@ -286,23 +288,6 @@ export class IPScanSearch extends PureComponent<Props, State> {
           className={css('search-form', { dragging })}
           ref={this._formRef}
         >
-          {this.state.last60minIpScanJobs &&
-            this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD && (
-              <>
-                {
-                  <Callout type="alert">
-                    {' '}
-                    You’ve submitted {this.state.last60minIpScanJobs} jobs in
-                    the past hour. Our system allows up to{' '}
-                    {NR_PER_HOUR_JOBS_THRESHOLD} jobs per hour before new
-                    submissions are moved to the low-priority queue. To avoid
-                    delays and help reduce server load, we recommend batching
-                    your sequences. You can submit up to 100 sequences in a
-                    single job instead of sending them one by one.
-                  </Callout>
-                }
-              </>
-            )}
           <div>
             <div className={css('simple-box', 'ipscan-block')}>
               <header>Scan your sequences</header>
