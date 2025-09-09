@@ -40,7 +40,7 @@ github:
 
 IPScan:
   contactEmail: interpro-team@ebi.ac.uk
-  lowPriorityEmail: interpro-team-normal-priority@ebi.ac.ukß
+  lowPriorityEmail: interpro-team-normal-priority@ebi.ac.uk
 pages:
   entry:
     plural: entries
