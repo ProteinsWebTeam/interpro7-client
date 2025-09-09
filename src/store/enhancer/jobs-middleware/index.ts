@@ -26,8 +26,6 @@ import {
 } from 'actions/types';
 import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 
-import config from 'config';
-
 import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
@@ -245,7 +243,7 @@ const middleware: Middleware<
           body: url
             .format({
               query: {
-                email: config.IPScan.contactEmail,
+                email: meta.email,
                 title: localID,
                 sequence: input,
                 appl: applications,
