@@ -28,7 +28,7 @@ const PfamCitationDetails = {
   title: 'The Pfam protein families database: embracing AI/ML',
   authors: `Paysan-Lafosse T, Andreeva A, Blum M, Chuguransky SR, Grego T, Pinto BL, Salazar GA, Bileschi ML,
             Llinares-López F, Meng-Papaxanthos L, Colwell LJ, Grishin NV, Schaeffer RD, Clementel D, Tosatto SCE,
-            Sonnhammer E, Wood V, Bateman A`,
+            Sonnhammer E, Wood V, Bateman A.`,
   source: 'Nucleic Acids Research',
   year: 2025,
   imageClass: 'image-nar-default',
