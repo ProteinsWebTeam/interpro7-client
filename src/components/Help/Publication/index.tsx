@@ -19,15 +19,15 @@ const InterProCitationDetails = {
             Sigrist CJA, Thanki N, Thibaud-Nissen F, Thomas PD, Tosatto SCE,
             Wu CH, Bateman A.`,
   source: 'Nucleic Acids Research',
-  year: 2024,
+  year: 2025,
   imageClass: 'image-nar-default',
 };
 
 const PfamCitationDetails = {
   doi: '10.1093/nar/gkae997',
   title: 'The Pfam protein families database: embracing AI/ML',
-  authors: `Paysan-Lafosse T, Andreeva A, Blum M, Chuguransky SR, Grego T, Pinto BL, Salazar GA, Bileschi ML, 
-            Llinares-López F, Meng-Papaxanthos L, Colwell LJ, Grishin NV, Schaeffer RD, Clementel D, Tosatto SCE, 
+  authors: `Paysan-Lafosse T, Andreeva A, Blum M, Chuguransky SR, Grego T, Pinto BL, Salazar GA, Bileschi ML,
+            Llinares-López F, Meng-Papaxanthos L, Colwell LJ, Grishin NV, Schaeffer RD, Clementel D, Tosatto SCE,
             Sonnhammer E, Wood V, Bateman A`,
   source: 'Nucleic Acids Research',
   year: 2025,
