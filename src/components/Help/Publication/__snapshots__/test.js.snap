@@ -1,25 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Publication /> should render 1`] = `
-<blockquote
-  className="vf-blockquote"
->
-  <div />
-  <div>
-    <b />
-  </div>
-  <React.Fragment>
-    <i />
-    . 
-    ,
-     
-    <Memo(Connect(Link))
-      className="ext"
-      href="https://doi.org/undefined"
-      target="_blank"
-    >
-      doi: 
-    </Memo(Connect(Link))>
-  </React.Fragment>
-</blockquote>
+<React.Fragment>
+  <blockquote
+    className="vf-blockquote"
+  >
+    <div />
+    <div>
+      <b />
+    </div>
+    <React.Fragment>
+      <i />
+      . 
+      ,
+       
+      <Memo(Connect(Link))
+        className="ext"
+        href="https://doi.org/undefined"
+        target="_blank"
+      >
+        doi: 
+      </Memo(Connect(Link))>
+    </React.Fragment>
+  </blockquote>
+</React.Fragment>
 `;
