@@ -8,7 +8,7 @@ import local from './style.css';
 import cssBinder from 'styles/cssBinder';
 const css = cssBinder(local);
 
-const citationDetails = {
+const InterProCitationDetails = {
   doi: '10.1093/nar/gkae1082',
   title: 'InterPro: the protein sequence classification resource in 2025',
   authors: `Blum M, Andreeva A, Florentino LC, Chuguransky SR, Grego T, Hobbs E,
@@ -20,6 +20,17 @@ const citationDetails = {
             Wu CH, Bateman A.`,
   source: 'Nucleic Acids Research',
   year: 2024,
+  imageClass: 'image-nar-default',
+};
+
+const PfamCitationDetails = {
+  doi: 'doi.org/10.1093/nar/gkae997',
+  title: 'The Pfam protein families database: embracing AI/ML',
+  authors: `Paysan-Lafosse T, Andreeva A, Blum M, Chuguransky SR, Grego T, Pinto BL, Salazar GA, Bileschi ML, 
+            Llinares-López F, Meng-Papaxanthos L, Colwell LJ, Grishin NV, Schaeffer RD, Clementel D, Tosatto SCE, 
+            Sonnhammer E, Wood V, Bateman A`,
+  source: 'Nucleic Acids Research',
+  year: 2025,
   imageClass: 'image-nar-default',
 };
 
@@ -39,25 +50,31 @@ export const PrintedPublication = ({
   year,
 }: pubProps) => {
   return (
-    <blockquote className={css('vf-blockquote')}>
-      <div>{authors}</div>
-      <div>
-        <b>{title}</b>
-      </div>
-      <>
-        <i>{source}</i>. {year},{' '}
-        <Link
-          href={`https://doi.org/${doi}`}
-          className={css('ext')}
-          target="_blank"
-        >
-          doi: {doi}
-        </Link>
-      </>
-    </blockquote>
+    <>
+      <blockquote className={css('vf-blockquote')}>
+        <div>{authors}</div>
+        <div>
+          <b>{title}</b>
+        </div>
+        <>
+          <i>{source}</i>. {year},{' '}
+          <Link
+            href={`https://doi.org/${doi}`}
+            className={css('ext')}
+            target="_blank"
+          >
+            doi: {doi}
+          </Link>
+        </>
+      </blockquote>
+    </>
   );
 };
 
 export const InterProCitation = () => (
-  <PrintedPublication {...citationDetails} />
+  <>
+    <PrintedPublication {...InterProCitationDetails} />
+    <br></br>
+    <PrintedPublication {...PfamCitationDetails} />
+  </>
 );
