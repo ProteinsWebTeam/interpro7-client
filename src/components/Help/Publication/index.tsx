@@ -24,7 +24,7 @@ const InterProCitationDetails = {
 };
 
 const PfamCitationDetails = {
-  doi: 'doi.org/10.1093/nar/gkae997',
+  doi: '10.1093/nar/gkae997',
   title: 'The Pfam protein families database: embracing AI/ML',
   authors: `Paysan-Lafosse T, Andreeva A, Blum M, Chuguransky SR, Grego T, Pinto BL, Salazar GA, Bileschi ML, 
             Llinares-López F, Meng-Papaxanthos L, Colwell LJ, Grishin NV, Schaeffer RD, Clementel D, Tosatto SCE, 
