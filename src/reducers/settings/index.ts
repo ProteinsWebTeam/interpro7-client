@@ -16,5 +16,4 @@ export default combineReducers({
   alphafold: category('alphafold'),
   bfvd: category('bfvd'),
   proteinsAPI: category('proteinsAPI'),
-  ted: category('ted'),
 });
