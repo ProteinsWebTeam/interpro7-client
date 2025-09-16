@@ -35,6 +35,8 @@ export const getConfidenceURLFromPayload = (namespace: string) =>
     ) => props[`data${namespace}`],
     (dataPrediction: RequestedData<AlphafoldPayload>) => {
       const cifURL = dataPrediction?.payload?.[0]?.cifUrl;
-      return null;
+      return cifURL?.length
+        ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')
+        : null;
     },
   );
