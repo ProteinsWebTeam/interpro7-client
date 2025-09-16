@@ -158,13 +158,13 @@ type RfamPayload = {
 };
 
 type AlphafoldPayload = Array<{
-  entryId: string;
+  modelEntityId: string;
   uniprotAccession: string;
   uniprotId: string;
   uniprotDescription: string;
   taxId: number;
   organismScientificName: string;
-  uniprotSequence: string;
+  sequence: string;
   modelCreatedDate: string;
   cifUrl: string;
   pdbUrl: string;

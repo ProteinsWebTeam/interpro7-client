@@ -174,8 +174,10 @@ class StructureView extends PureComponent<Props> {
       try {
         if (this.viewer) {
           await this.viewer.clear();
+
+          const encodedUrl = encodeURIComponent(url);
           const data = await this.viewer.builders.data.download(
-            { url: url },
+            { url: `http://localhost:5000/download?url=${encodedUrl}` },
             { state: { isGhost: false } },
           );
           const trajectory =
