@@ -159,23 +159,15 @@ type RfamPayload = {
 
 type AlphafoldPayload = Array<{
   entryId: string;
-  gene: string;
   uniprotAccession: string;
   uniprotId: string;
   uniprotDescription: string;
   taxId: number;
   organismScientificName: string;
-  uniprotStart: number;
-  uniprotEnd: number;
   uniprotSequence: string;
   modelCreatedDate: string;
-  latestVersion: number;
-  allVersions: number[];
   cifUrl: string;
-  bcifUrl: string;
   pdbUrl: string;
-  paeImageUrl: string;
-  paeDocUrl: string;
 }>;
 type AlphafoldConfidencePayload = {
   residueNumber: Array<number>;

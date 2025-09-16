@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import config from 'config';
 
 export const getAlphaFoldPredictionURL = createSelector(
   (state: GlobalState) => state.settings.alphafold,
@@ -15,13 +16,16 @@ export const getAlphaFoldPredictionURL = createSelector(
           hostname,
           port,
           pathname: `${root}api/prediction/${accession}`,
-          query: query,
+          query: {
+            key: config.afdb_key,
+          },
         });
       }
     }
     return null;
   },
 );
+
 type StartsWithData = `data${string}`;
 export const getConfidenceURLFromPayload = (namespace: string) =>
   createSelector(
@@ -31,8 +35,6 @@ export const getConfidenceURLFromPayload = (namespace: string) =>
     ) => props[`data${namespace}`],
     (dataPrediction: RequestedData<AlphafoldPayload>) => {
       const cifURL = dataPrediction?.payload?.[0]?.cifUrl;
-      return cifURL?.length
-        ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')
-        : null;
+      return null;
     },
   );
