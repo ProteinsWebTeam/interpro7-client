@@ -18,11 +18,17 @@ const TEDPopup = ({ detail }: Props) => {
   return (
     <section>
       <h6>TED consensus domain</h6>
-      {locations.map(({ fragments }, i) => (
-        <div key={i}>
-          <Positions fragments={fragments} protein={protein} key={i} />
-        </div>
-      ))}
+      <strong>Boundaries:</strong>{' '}
+      {locations
+        .map(({ fragments }) =>
+          fragments
+            .map((fragment) => `${fragment.start}-${fragment.end}`)
+            .join(', '),
+        )
+        .join('; ')}
+      <br />
+      <strong>QScore:</strong>{' '}
+      {locations.length > 0 ? (locations[0].score as string) : 'N/A'}
     </section>
   );
 };

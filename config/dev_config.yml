@@ -16,7 +16,6 @@ root:
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
-  ted: https://ted.cathdb.info/
 
 title: InterPro
 

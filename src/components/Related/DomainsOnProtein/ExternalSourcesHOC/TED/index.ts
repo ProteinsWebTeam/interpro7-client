@@ -21,8 +21,8 @@ export const formatTED = ({
     loading ||
     status !== HTTP_OK ||
     !payload ||
-    !payload.data ||
-    payload.data.length === 0
+    !payload.annotations ||
+    payload.annotations.length === 0
   )
     return [] as MinimalFeature[];
 
@@ -30,16 +30,18 @@ export const formatTED = ({
     {
       accession: `TED:TED`,
       source_database: 'TED',
-      locations: payload.data.map((domain: TEDDomain, index: number) => ({
-        color: COLORS[index % COLORS.length],
-        fragments: domain.chopping.split('_').map((segment) => {
-          const [start, end] = segment.split('-').map(Number);
-          return {
-            start: start,
-            end: end,
-          };
+      locations: payload.annotations.map(
+        (domain: TEDDomain, index: number) => ({
+          color: COLORS[index % COLORS.length],
+          fragments: domain.segments.map((segment) => {
+            return {
+              start: segment.af_start,
+              end: segment.af_end,
+            };
+          }),
+          score: domain.qscore,
         }),
-      })),
+      ),
     },
   ] as MinimalFeature[];
 };
