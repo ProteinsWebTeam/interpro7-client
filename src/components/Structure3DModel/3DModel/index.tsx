@@ -385,9 +385,6 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
             pathname: isUrlToApi
               ? `${root}api/prediction/${accession}`
               : `${root}entry/${accession}`,
-            query: {
-              key: config.afdb_key,
-            },
           });
         }
       }

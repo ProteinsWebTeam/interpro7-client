@@ -16,9 +16,6 @@ export const getAlphaFoldPredictionURL = createSelector(
           hostname,
           port,
           pathname: `${root}api/prediction/${accession}`,
-          query: {
-            key: config.afdb_key,
-          },
         });
       }
     }
