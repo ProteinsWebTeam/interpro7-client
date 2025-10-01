@@ -1,7 +1,7 @@
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { iproscan2urlDB } from 'utils/url-patterns';
 
-const OTHER_FEATURES_DBS = [''];
+const OTHER_FEATURES_DBS = ['mobidb-lite', 'cath-funfam'];
 const OTHER_RESIDUES_DBS = [''];
 
 type IpScanEntry = {

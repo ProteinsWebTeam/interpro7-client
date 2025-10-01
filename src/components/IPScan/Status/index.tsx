@@ -135,6 +135,13 @@ export class IPScanStatus extends PureComponent<Props, State> {
       ((Number(search.page) || 1) - 1) * Number(pageSize),
       Number(pageSize),
     );
+
+    const statusColumnName: Record<string, string> = {
+      'imported file': 'Imported',
+      'finished': 'Completed',
+      'saved in browser': 'Saved',
+    };
+
     return (
       <div className={css('vf-stack')}>
         <h3 className={css('light')}>
@@ -199,33 +206,47 @@ export class IPScanStatus extends PureComponent<Props, State> {
             dataKey="localTitle"
             isSearchable={true}
             isSortable={true}
-            renderer={(localTitle: string, row: IprscanMetaIDB) => (
-              <>
-                <span style={{ marginRight: '1em' }}>
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'result' },
-                        result: {
-                          type: 'InterProScan',
-                          job: row.remoteID || row.localID,
-                        },
-                      },
-                    }}
-                  >
-                    {(localTitle === '∅' ? null : localTitle) ||
-                      row.remoteID ||
-                      row.localID}
-                  </Link>
-                </span>
-                {row.remoteID && !row.remoteID.startsWith('imported') && (
-                  <CopyToClipboard
-                    textToCopy={getIProScanURL(row.remoteID)}
-                    tooltipText="Copy URL"
-                  />
-                )}
-              </>
-            )}
+            renderer={(localTitle: string, row: IprscanMetaIDB) => {
+              // Handle prefixes
+              let jobName =
+                (localTitle === '∅' ? null : localTitle) ||
+                row.remoteID ||
+                row.localID;
+
+              if (jobName?.includes('internal-')) {
+                jobName = '∅';
+              }
+
+              return (
+                <>
+                  <span style={{ marginRight: '1em' }}>
+                    {jobName !== '∅' ? (
+                      <Link
+                        to={{
+                          description: {
+                            main: { key: 'result' },
+                            result: {
+                              type: 'InterProScan',
+                              job: row.remoteID || row.localID,
+                            },
+                          },
+                        }}
+                      >
+                        {jobName}
+                      </Link>
+                    ) : (
+                      jobName
+                    )}
+                  </span>
+                  {row.remoteID && !row.remoteID.startsWith('imported') && (
+                    <CopyToClipboard
+                      textToCopy={getIProScanURL(row.remoteID)}
+                      tooltipText="Copy URL"
+                    />
+                  )}
+                </>
+              );
+            }}
           >
             Results
           </Column>
@@ -280,32 +301,9 @@ export class IPScanStatus extends PureComponent<Props, State> {
                 ) : null}
                 {['finished', 'imported file', 'saved in browser'].includes(
                   status,
-                ) && (
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'result' },
-                        result: {
-                          type: 'InterProScan',
-                          accession: row.remoteID,
-                        },
-                      },
-                    }}
-                  >
-                    <span
-                      style={{ fontSize: '160%' }}
-                      className={css(
-                        'icon',
-                        'icon-common',
-                        status === 'finished'
-                          ? 'ico-confirmed'
-                          : 'icon-reviewed-data',
-                      )}
-                      data-icon="&#xf00c;"
-                      aria-label="Job ready"
-                    />
-                  </Link>
-                )}
+                ) &&
+                  (statusColumnName[status] ||
+                    status[0].toUpperCase() + status.slice(1))}
               </Tooltip>
             )}
           >

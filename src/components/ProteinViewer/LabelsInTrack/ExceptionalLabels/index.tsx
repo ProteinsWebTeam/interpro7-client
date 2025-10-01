@@ -54,13 +54,21 @@ export const isAnExceptionalLabel = (entry: ExtendedFeature): boolean => {
 
 const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
   const label = (entry.locations?.[0]?.fragments?.[0]?.seq_feature ||
+    entry.name ||
     entry.accession) as string;
 
-  if (entry.source_database === 'mobidblt') {
+  if (
+    entry.source_database === 'mobidblt' ||
+    entry.source_database === 'mobidb-lite'
+  ) {
+    const comesFromIPscan = entry.protein?.includes('iprscan');
+
     return (
       <>
         {isPrinting ? (
           <span>{entry.accession}</span>
+        ) : comesFromIPscan ? (
+          <b> {entry.accession.replace('Mobidblt-', 'MobiDB-lite: ')} </b>
         ) : (
           <Link target="_blank" href={`https://mobidb.org/${entry.protein}`}>
             {entry.accession.replace('Mobidblt-', 'MobiDB-lite: ')}
@@ -76,7 +84,10 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     );
   }
 
-  if (entry.source_database === 'funfam') {
+  if (
+    entry.source_database?.toLowerCase() === 'funfam' ||
+    entry.source_database?.toLowerCase() === 'cath-funfam'
+  ) {
     return isPrinting ? (
       <span>{label}</span>
     ) : (

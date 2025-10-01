@@ -21,6 +21,7 @@ const saveJobInIDB = (
   results: Array<Iprscan5Result>,
   remoteID: string,
   localTitle: string | null,
+  iproVersion: string,
   ipScanVersion: string,
   applications: Array<string> | string,
   importJobFromDataD: typeof importJobFromData,
@@ -37,6 +38,7 @@ const saveJobInIDB = (
   const data: IprscanDataIDB = {
     localID,
     'interproscan-version': ipScanVersion,
+    'interpro-version': iproVersion,
     results,
     applications,
   };
@@ -80,9 +82,10 @@ const LoadedFileDialog = ({
 
     saveJobInIDB(
       validFileContent.results,
-      `imported_file-${fileName}`,
+      fileName,
       null,
       iProVersion,
+      ipScanVersion,
       validFileContent.applications,
       importJobFromData,
     );

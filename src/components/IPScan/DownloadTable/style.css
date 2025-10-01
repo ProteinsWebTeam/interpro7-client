@@ -1,0 +1,11 @@
+td {
+  max-width: 500px;
+}
+
+pre,
+code {
+  font-family: monospace;
+  display: block;
+  padding: 0.5em;
+  background: #f5f5f5;
+}

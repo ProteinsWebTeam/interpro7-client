@@ -82,7 +82,8 @@ type Iprscan5ORFResult = {
 };
 
 type Iprscan5Payload = {
-  'interproscan-version': string;
+  'interproscan-version'?: string;
+  'interpro-version'?: string;
   results: Array<Iprscan5Result>;
 };
 
@@ -157,24 +158,16 @@ type RfamPayload = {
 };
 
 type AlphafoldPayload = Array<{
-  entryId: string;
-  gene: string;
+  modelEntityId: string;
   uniprotAccession: string;
   uniprotId: string;
   uniprotDescription: string;
   taxId: number;
   organismScientificName: string;
-  uniprotStart: number;
-  uniprotEnd: number;
-  uniprotSequence: string;
+  sequence: string;
   modelCreatedDate: string;
-  latestVersion: number;
-  allVersions: number[];
   cifUrl: string;
-  bcifUrl: string;
   pdbUrl: string;
-  paeImageUrl: string;
-  paeDocUrl: string;
 }>;
 type AlphafoldConfidencePayload = {
   residueNumber: Array<number>;
@@ -242,13 +235,20 @@ type DisProtPayload = {
   regions: Array<DisprotRegion>;
   disprot_consensus: DisprotConsensus;
 };
+type TEDSegment = {
+  af_start: number;
+  af_end: number;
+  segment_id: number;
+};
 type TEDDomain = {
-  ted_id: string;
-  uniprot_acc: string;
-  consensus_level: string;
-  chopping: string;
+  ted_domain_no: number;
   cath_label: string;
+  cath_assignment_level: string;
+  nres_domain: number;
+  plddt: number;
+  qscore: number;
+  segments: Array<TEDSegment>;
 };
 type TEDPayload = {
-  data: Array<TEDDomain>;
+  annotations: Array<TEDDomain>;
 };

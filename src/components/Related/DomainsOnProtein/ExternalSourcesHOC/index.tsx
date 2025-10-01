@@ -115,7 +115,7 @@ const getDisProtURL = createSelector(
 );
 
 export const getTEDURL = createSelector(
-  (state: GlobalState) => state.settings.ted,
+  (state: GlobalState) => state.settings.alphafold,
   (state: GlobalState) => state.customLocation.description.protein.accession,
   (
     { protocol, hostname, port, root }: ParsedURLServer,
@@ -126,10 +126,7 @@ export const getTEDURL = createSelector(
       protocol,
       hostname,
       port,
-      pathname: `${root}/api/v1/uniprot/summary/${accession}`.replaceAll(
-        /\/{2,}/g,
-        '/',
-      ),
+      pathname: `${root}/api/domains/${accession}`.replaceAll(/\/{2,}/g, '/'),
     });
   },
 );

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
+import config from 'config';
 
 import Link from 'components/generic/Link';
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
@@ -137,12 +138,7 @@ const Structure3DModel = ({
 
   const models = data?.payload || [];
 
-  const [modelInfo] =
-    Object.values(models).length > 0
-      ? modelId === null
-        ? models.slice(0, 1)
-        : models.filter((x) => x.entryId === modelId)
-      : [];
+  const modelInfo = models.find((x) => x.uniprotAccession === proteinAcc);
 
   const elementId = 'new-structure-model-viewer';
   return (
@@ -191,7 +187,7 @@ const Structure3DModel = ({
       {!bfvd && (
         <SequenceCheck
           proteinAccession={proteinAcc}
-          alphaFoldSequence={models?.[0]?.uniprotSequence}
+          alphaFoldSequence={models?.[0]?.sequence}
           alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
         />
       )}
@@ -252,7 +248,7 @@ const Structure3DModel = ({
                   ''
                 )}
               </li>
-              {models.length > 1 ? (
+              {/*models.length > 1 ? (
                 <li>
                   <span className={css('header')}>Prediction</span>
                   <select
@@ -262,13 +258,13 @@ const Structure3DModel = ({
                     onBlur={(event) => onModelChange(event.target.value)}
                   >
                     {models.map((model) => (
-                      <option key={model.entryId}>{model.entryId}</option>
+                      <option key={model.modelEntityId}>{model.modelEntityId}</option>
                     ))}
                   </select>
                 </li>
               ) : (
                 ''
-              )}
+              )*/}
             </ul>
             <h5>Model confidence</h5>
             <ul className={css('legend')}>
@@ -294,7 +290,7 @@ const Structure3DModel = ({
               >
                 <Link
                   className={css('control')}
-                  href={!bfvd ? modelInfo.pdbUrl : bfvdURL}
+                  href={!bfvd && modelInfo ? modelInfo.pdbUrl : bfvdURL}
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
                   <span
@@ -306,7 +302,7 @@ const Structure3DModel = ({
                 {!bfvd && (
                   <Link
                     className={css('control')}
-                    href={!bfvd ? modelInfo.cifUrl : bfvdURL}
+                    href={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
                     download={`${proteinAcc || 'download'}.model.cif`}
                   >
                     <span
@@ -344,7 +340,7 @@ const Structure3DModel = ({
           >
             <StructureViewer
               id={'fullSequence'}
-              url={bfvd ? bfvdURL : modelInfo.cifUrl}
+              url={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
               elementId={elementId}
               ext={bfvd ? 'pdb' : 'mmcif'}
               theme={bfvd ? 'bfvd' : 'af'}
@@ -389,7 +385,6 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
             pathname: isUrlToApi
               ? `${root}api/prediction/${accession}`
               : `${root}entry/${accession}`,
-            query: query,
           });
         }
       }

@@ -26,8 +26,6 @@ import {
 } from 'actions/types';
 import { rehydrateJobs, updateJob, addToast } from 'actions/creators';
 
-import config from 'config';
-
 import getTableAccess, { IPScanJobsMeta, IPScanJobsData } from 'storage/idb';
 
 const DEFAULT_SCHEDULE_DELAY = 1000 * 2; // 2 seconds
@@ -153,7 +151,27 @@ const updateJobInDB = async (
 
   (Array.isArray(data?.results) ? data?.results : []).forEach((result, i) => {
     const newLocalID = `${localID}-${i + 1}`;
-    dataT.set({ ...data, results: [result], localID: newLocalID }, newLocalID);
+
+    // Standardize IPScan5 and IPScan6 versions
+    let ipScanVersion: string = '';
+    let iProVersion: string = '';
+
+    if (data) {
+      ipScanVersion = data['interproscan-version'] || '';
+      if (data['interpro-version']) iProVersion = data['interpro-version'];
+      else iProVersion = ipScanVersion.split('-')[1];
+    }
+
+    dataT.set(
+      {
+        ...data,
+        'interproscan-version': ipScanVersion,
+        'interpro-version': iProVersion,
+        results: [result],
+        localID: newLocalID,
+      },
+      newLocalID,
+    );
   });
   if (dispatch) {
     rehydrateStoredJobs(dispatch);
@@ -225,7 +243,7 @@ const middleware: Middleware<
           body: url
             .format({
               query: {
-                email: config.IPScan.contactEmail,
+                email: meta.email,
                 title: localID,
                 sequence: input,
                 appl: applications,

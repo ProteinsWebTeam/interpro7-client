@@ -112,7 +112,9 @@ const BreadCrumbsForSearchOrResult = ({ location }: OnlyLocationProps) => {
               {job}
             </BreadCrumb>
           )}
-          {accession && (
+          {
+            // Remove internal id from breadcrumb
+            /* {accession && (
             <BreadCrumb
               to={{
                 description: {
@@ -124,6 +126,8 @@ const BreadCrumbsForSearchOrResult = ({ location }: OnlyLocationProps) => {
               {accession}
             </BreadCrumb>
           )}
+          */
+          }
           {value && <BreadCrumb>{value}</BreadCrumb>}
         </section>
         {accession && <BreadCrumbForSecondPart location={location} />}

@@ -174,6 +174,7 @@ class StructureView extends PureComponent<Props> {
       try {
         if (this.viewer) {
           await this.viewer.clear();
+
           const data = await this.viewer.builders.data.download(
             { url: url },
             { state: { isGhost: false } },
