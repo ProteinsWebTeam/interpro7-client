@@ -16,7 +16,8 @@ const _StatusTooltip = ({ status }: Props) => (
       status === 'queued' ||
       status === 'created' ||
       status === 'importing' ||
-      status === 'submitted') && (
+      status === 'submitted' ||
+      status === 'finished') && (
       <>
         <SpinningCircle />
         <div className={css('status')}>Searching</div>
@@ -33,7 +34,7 @@ const _StatusTooltip = ({ status }: Props) => (
         {status}
       </>
     ) : null}
-    {['finished', 'imported file', 'saved in browser'].includes(
+    {['finished_with_results', 'imported file', 'saved in browser'].includes(
       status || '',
     ) && (
       <>
@@ -42,7 +43,7 @@ const _StatusTooltip = ({ status }: Props) => (
           data-icon="&#xf00c;"
           aria-label="Job finished"
         />{' '}
-        {status}
+        {status?.replace('finished_with_results', 'Finished')}
       </>
     )}
   </Tooltip>

@@ -171,7 +171,9 @@ export const IPScanStatus = ({
 
   return (
     <section>
-      <IPScanVersionCheck ipScanVersion={jobIProVersion} />
+      {job?.status === 'finished_with_results' && (
+        <IPScanVersionCheck ipScanVersion={jobIProVersion} />
+      )}
 
       <h3 className={css('light')}>
         Your InterProScan Search Results (Sequences){' '}
@@ -236,7 +238,7 @@ export const IPScanStatus = ({
           <StatusTooltip status={job?.status} />
         </section>
       </section>
-      {job?.status === 'finished' && expiryDate >= new Date() && (
+      {job?.status === 'finished_with_results' && expiryDate >= new Date() && (
         <section className={css('summary-row')}>
           <header>
             Expires{' '}
@@ -255,93 +257,96 @@ export const IPScanStatus = ({
           <section>{expiryDate.toDateString()}</section>
         </section>
       )}
-      <section className={css('summary-row')}>
-        <header>Actions</header>
-        <section>
-          <Actions
-            localID={job?.localID || ''}
-            status={job?.status || ''}
-            MoreActions={
-              <>
-                <ReRun jobsData={jobsData} />
-                <DropDownButton label="Download" icon="icon-download">
-                  <DownloadAll job={job} jobsData={jobsData} />
-                </DropDownButton>
-              </>
-            }
-          />
+      {job.status === 'finished_with_results' && (
+        <section className={css('summary-row')}>
+          <header>Actions</header>
+          <section>
+            <Actions
+              localID={job?.localID || ''}
+              status={job?.status || ''}
+              MoreActions={
+                <>
+                  <ReRun jobsData={jobsData} />
+                  <DropDownButton label="Download" icon="icon-download">
+                    <DownloadAll job={job} jobsData={jobsData} />
+                  </DropDownButton>
+                </>
+              }
+            />
+          </section>
         </section>
-      </section>
-      <Table
-        dataTable={paginatedJobs}
-        rowKey="localID"
-        contentType="result"
-        actualSize={job?.entries || 1}
-        query={search}
-        showTableIcon={false}
-        // groupActions={GroupActions}
-      >
-        <Column
-          dataKey="localTitle"
-          isSearchable={true}
-          isSortable={true}
-          renderer={(localTitle: string, row: IprscanDataIDB) => (
-            <>
-              <span style={{ marginRight: '1em' }}>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'result' },
-                      result: {
-                        type: 'InterProScan',
-                        job: job?.remoteID,
-                        accession: row.localID,
+      )}
+      {job.status === 'finished_with_results' && (
+        <Table
+          dataTable={paginatedJobs}
+          rowKey="localID"
+          contentType="result"
+          actualSize={job?.entries || 1}
+          query={search}
+          showTableIcon={false}
+          // groupActions={GroupActions}
+        >
+          <Column
+            dataKey="localTitle"
+            isSearchable={true}
+            isSortable={true}
+            renderer={(localTitle: string, row: IprscanDataIDB) => (
+              <>
+                <span style={{ marginRight: '1em' }}>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'result' },
+                        result: {
+                          type: 'InterProScan',
+                          job: job?.remoteID,
+                          accession: row.localID,
+                        },
                       },
-                    },
-                  }}
-                >
-                  {(row.results[0]?.crossReferences ||
-                    row.results[0]?.xref)?.[0]?.id ||
-                    (localTitle === '∅' ? null : localTitle) ||
-                    row.localID}
-                </Link>
-              </span>
-              {/* {row.remoteID && !row.remoteID.startsWith('imported') && (
+                    }}
+                  >
+                    {(row.results[0]?.crossReferences ||
+                      row.results[0]?.xref)?.[0]?.id ||
+                      (localTitle === '∅' ? null : localTitle) ||
+                      row.localID}
+                  </Link>
+                </span>
+                {/* {row.remoteID && !row.remoteID.startsWith('imported') && (
                 <CopyToClipboard
                   textToCopy={getIProScanURL(row.remoteID)}
                   tooltipText="Copy URL"
                 />
               )} */}
-            </>
-          )}
-        >
-          Sequence
-        </Column>
-        <Column
-          defaultKey="matches"
-          dataKey="results"
-          // isSearchable={true}
-          // isSortable={true}
-          displayIf={job.seqtype !== 'n'}
-          renderer={(results: Array<Iprscan5Result>) =>
-            results[0].matches.length
-          }
-        >
-          Matches
-        </Column>
-        <Column
-          defaultKey="length"
-          dataKey="results"
-          // isSearchable={true}
-          // isSortable={true}
-          renderer={(results: Array<Iprscan5Result>) =>
-            results[0].sequence.length
-          }
-        >
-          Sequence length
-        </Column>
+              </>
+            )}
+          >
+            Sequence
+          </Column>
+          <Column
+            defaultKey="matches"
+            dataKey="results"
+            // isSearchable={true}
+            // isSortable={true}
+            displayIf={job.seqtype !== 'n'}
+            renderer={(results: Array<Iprscan5Result>) =>
+              results[0].matches.length
+            }
+          >
+            Matches
+          </Column>
+          <Column
+            defaultKey="length"
+            dataKey="results"
+            // isSearchable={true}
+            // isSortable={true}
+            renderer={(results: Array<Iprscan5Result>) =>
+              results[0].sequence.length
+            }
+          >
+            Sequence length
+          </Column>
 
-        {/* <Column
+          {/* <Column
           dataKey="localID"
           defaultKey="actions"
           headerClassName={css('table-header-center')}
@@ -352,7 +357,8 @@ export const IPScanStatus = ({
         >
           Action
         </Column> */}
-      </Table>
+        </Table>
+      )}
     </section>
   );
 };

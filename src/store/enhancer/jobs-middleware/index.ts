@@ -286,55 +286,8 @@ const middleware: Middleware<
       if (ok) {
         // dispatch action to report status in the redux state
         dispatch(updateJob({ metadata: { ...meta, status } }));
-        if (status === 'finished') {
-          const currentDesc = getState().customLocation.description;
-          if (
-            currentDesc.main.key !== 'result' ||
-            (currentDesc.result.accession &&
-              currentDesc.result.accession !== meta.localID &&
-              currentDesc.result.accession !== meta.remoteID)
-          ) {
-            // Sent notification the job is completed/imported
-            const notification = createNotification(
-              'InterProScan',
-              'Your InterProScan search results are ready to view',
-            );
-            notification.onclick = () => {
-              window.open(
-                `${window.location.origin}/interpro/result/InterProScan/${
-                  meta.remoteID || ''
-                }`,
-                '_blank',
-              );
-            };
-            dispatch(
-              addToast(
-                {
-                  title: `Job ${status}`,
-                  body: `Your job with id ${
-                    meta.remoteID || '_'
-                  } is in a “${status}” state.`,
-                  ttl: 10000, // eslint-disable-line no-magic-numbers
-                  link: {
-                    to: {
-                      description: {
-                        main: { key: 'result' },
-                        result: {
-                          type: 'InterProScan',
-                          accession: meta.remoteID,
-                        },
-                      },
-                    },
-                    children: 'Go to the result page',
-                  },
-                },
-                id(),
-              ) as unknown as UnknownAction,
-            );
-          }
-        }
+        // TODO: we need to handle the cases when the response is not OK.
       }
-      // TODO: we need to handle the cases when the response is not OK.
     }
     if (meta.status === 'finished' && !meta.hasResults) {
       const ipScanInfo = getState().settings.ipScan;
@@ -362,10 +315,61 @@ const middleware: Middleware<
         };
         dispatch(
           updateJob({
-            metadata: { ...meta, hasResults: true },
+            metadata: {
+              ...meta,
+              hasResults: true,
+              status: 'finished_with_results',
+            },
             data,
           }),
         );
+
+        // Notify user
+        const currentDesc = getState().customLocation.description;
+        if (
+          currentDesc.main.key !== 'result' ||
+          (currentDesc.result.accession &&
+            currentDesc.result.accession !== meta.localID &&
+            currentDesc.result.accession !== meta.remoteID)
+        ) {
+          // Sent notification the job is completed/imported
+          const notification = createNotification(
+            'InterProScan',
+            'Your InterProScan search results are ready to view',
+          );
+          notification.onclick = () => {
+            window.open(
+              `${window.location.origin}/interpro/result/InterProScan/${
+                meta.remoteID || ''
+              }`,
+              '_blank',
+            );
+          };
+          dispatch(
+            addToast(
+              {
+                title: `Job ${status}`,
+                body: `Your job with id ${
+                  meta.remoteID || '_'
+                } is in a “${status}” state.`,
+                ttl: 10000, // eslint-disable-line no-magic-numbers
+                link: {
+                  to: {
+                    description: {
+                      main: { key: 'result' },
+                      result: {
+                        type: 'InterProScan',
+                        accession: meta.remoteID,
+                      },
+                    },
+                  },
+                  children: 'Go to the result page',
+                },
+              },
+              id(),
+            ) as unknown as UnknownAction,
+          );
+        }
       } else {
         dispatch(
           updateJob({
@@ -382,7 +386,7 @@ const middleware: Middleware<
     if (running) return;
     // This might have been called before the scheduled run, so clear the
     // corresponding scheduled run first
-    clearTimeout(loopID);
+    clearInterval(loopID);
     running = true;
 
     // Wait to have some time to do all the maintenance
@@ -398,7 +402,7 @@ const middleware: Middleware<
     } catch (error) {
       console.error(error);
     } finally {
-      loopID = window.setTimeout(loop, DEFAULT_LOOP_TIMEOUT);
+      loopID = window.setInterval(loop, DEFAULT_LOOP_TIMEOUT);
       running = false;
     }
   };
