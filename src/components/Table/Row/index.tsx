@@ -74,10 +74,10 @@ class Row<
                 {group && i === 0 ? (
                   <div style={{ display: 'flex' }}>
                     <span>&emsp;</span>
-                    {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
+                    {renderer(lodashGet(row, dataKey, '∅') || '∅', row, extra)}
                   </div>
                 ) : (
-                  renderer(lodashGet(row, dataKey, '∅'), row, extra)
+                  renderer(lodashGet(row, dataKey, '∅') || '∅', row, extra)
                 )}
               </td>
             ),
