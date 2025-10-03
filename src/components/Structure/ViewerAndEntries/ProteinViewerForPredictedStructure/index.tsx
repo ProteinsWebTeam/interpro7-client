@@ -29,6 +29,8 @@ import { sectionsReorganization } from 'components/Related/DomainsOnProtein/util
 import { getTEDURL } from 'components/Related/DomainsOnProtein/ExternalSourcesHOC';
 import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TED';
 import Callout from 'components/SimpleCommonComponents/Callout';
+import getColor from 'src/utils/taxonomy/get-color';
+import { features } from 'process';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -148,6 +150,9 @@ export const addConfidenceTrack = (
 type Props = {
   protein: string;
   onChangeSelection: (s: Selection[] | null) => void;
+  getColorSelection?: (c: string, data: unknown) => void;
+  colorBy?: string;
+  colorSelections?: Feature[];
   isSplitScreen: boolean;
   bfvd?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
@@ -172,6 +177,8 @@ const ProteinViewerForAlphafold = ({
   matchTypeSettings,
   colorDomainsBy,
   onChangeSelection,
+  getColorSelection,
+  colorBy,
   dataTED,
   isSplitScreen = false,
 }: LoadedProps) => {
@@ -180,6 +187,8 @@ const ProteinViewerForAlphafold = ({
 
   const [fixedSelection, _setFixedSelection] = useState<Selection[]>([]);
   const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
+  const [colorGroup, setColorGroup] = useState({});
+
   const [processedTracks, setProcessedTracks] =
     useState<ProteinViewerDataObject>({});
   const hoverSelectionRef = useRef(hoverSelection);
@@ -264,6 +273,8 @@ const ProteinViewerForAlphafold = ({
                   const end = Number(parts?.[1]) || 1;
                   return { chain: 'A', start, end, color };
                 }) || [];
+
+              console.log(event?.detail);
               setHoverSelection(selection);
             }
             break;
@@ -290,6 +301,65 @@ const ProteinViewerForAlphafold = ({
       trackRef.current?.removeEventListener('change', handleChange);
     };
   }, [trackRef.current, processedTracks]);
+
+  // Color 3D model based on selection
+  useEffect(() => {
+    const {
+      interpro,
+      unintegrated,
+      representativeDomains,
+      representativeFamilies,
+    } = processedData;
+
+    const tedData = dataTED ? formatTED(dataTED) : [];
+    const tedFeatures: Feature[] = [];
+    if (tedData.length > 0)
+      for (const loc of tedData[0].locations || []) {
+        for (const frag of loc.fragments) {
+          const start = frag.start || 1;
+          const end = frag.end || 1;
+          tedFeatures.push({
+            accession: 'TED:TED',
+            start,
+            end,
+            color: (loc as ProtVistaLocation & { color: string }).color,
+          });
+        }
+      }
+
+    const groups = makeTracks({
+      interpro: interpro as Array<{ accession: string; type: string }>,
+      unintegrated: unintegrated as Array<{ accession: string; type: string }>,
+      representativeDomains: representativeDomains as Array<MinimalFeature>,
+      representativeFamilies: representativeFamilies as Array<MinimalFeature>,
+    }) as ProteinViewerDataObject<ExtendedFeature>;
+
+    const colorToObj: Record<string, Feature[]> = {
+      confidence: [] as Feature[],
+      repr_families: representativeFamilies as Feature[],
+      repr_domains: representativeDomains as Feature[],
+      ted: tedFeatures as Feature[],
+    };
+
+    if (colorBy) {
+      const colorSelections: Selection[] = [];
+      for (const feature of colorToObj[colorBy].values()) {
+        const color = feature.color as string;
+        const start = feature.start || 1;
+        const end = feature.end || 1;
+        colorSelections.push({
+          chain: String.fromCharCode(colorSelections.length + 65),
+          start,
+          end,
+          color,
+        });
+      }
+
+      console.log(hoverSelection, fixedSelection);
+      setFixedSelection(colorSelections);
+    }
+  }, [colorBy, dataTED]);
+
   if (
     !data ||
     data.loading ||
@@ -380,6 +450,7 @@ const ProteinViewerForAlphafold = ({
       tracks['external_sources'] = tedData;
       moveExternalFeatures(tracks);
     }
+
     return (
       <div ref={trackRef}>
         {interpro_NMatchesCount > 0 && (

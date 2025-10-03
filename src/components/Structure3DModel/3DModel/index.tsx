@@ -54,6 +54,8 @@ type Props = {
   proteinAcc: string;
   hasMultipleProteins: boolean;
   onModelChange: (value: string) => void;
+  onColorChange?: (value: string) => void;
+  colorBy?: string;
   modelId: string | null;
   modelUrl?: string;
   bfvd?: string;
@@ -68,6 +70,8 @@ const Structure3DModel = ({
   proteinAcc,
   hasMultipleProteins,
   onModelChange,
+  onColorChange,
+  colorBy,
   modelId,
   modelUrl,
   bfvd,
@@ -265,8 +269,24 @@ const Structure3DModel = ({
               ) : (
                 ''
               )*/}
+              <li>
+                <span className={css('header')}>Color</span>
+                <select
+                  value={colorBy}
+                  className={css('protein-list')}
+                  onChange={(event) =>
+                    onColorChange && onColorChange(event.target.value)
+                  }
+                >
+                  <option value="confidence">Model confidence</option>
+                  <option value="ted">TED domains</option>
+                  <option value="repr_families">Representative families</option>
+                  <option value="repr_domains">Representative domains</option>
+                </select>
+              </li>
             </ul>
-            <h5>Model confidence</h5>
+
+            {/* <h5>Model confidence</h5>
             <ul className={css('legend')}>
               {confidenceColors.map((item) => (
                 <li key={item.category}>
@@ -274,7 +294,7 @@ const Structure3DModel = ({
                   {item.category} ({item.range})
                 </li>
               ))}
-            </ul>
+            </ul> */}
           </div>
         )}
         <div className={css('panel-component')}>

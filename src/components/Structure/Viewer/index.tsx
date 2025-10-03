@@ -11,6 +11,10 @@ import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
 import { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory';
+import { ColorTheme, LocationColor } from 'molstar/lib/mol-theme/color';
+import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition';
+import { ThemeDataContext } from 'molstar/lib/mol-theme/theme';
+import { Location as MolLocation } from 'molstar/lib/mol-model/location';
 
 import {
   UniformColorThemeProvider,
@@ -24,6 +28,10 @@ import { Selection } from '../ViewerAndEntries';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { BFactorColorThemeProvider } from './bfvd-confidence/color';
+import {
+  StructureElement,
+  StructureProperties,
+} from 'molstar/lib/mol-model/structure';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -251,6 +259,8 @@ class StructureView extends PureComponent<Props> {
         const molSelection = Script.getStructureSelection((MS) => {
           if (!this.viewer) return;
           const atomGroups = [];
+          const positions = [];
+          const colors: Record<number, string> = {};
 
           let ShouldColourChange = true;
           for (const selection of selections) {
@@ -270,41 +280,117 @@ class StructureView extends PureComponent<Props> {
               }
               ShouldColourChange = false;
             }
-            const positions = [];
+
             for (let i = selection.start; i <= selection.end; i++) {
               positions.push(i);
             }
-            atomGroups.push(
-              MS.struct.generator.atomGroups({
-                'chain-test': MS.core.rel.eq([
-                  selection.chain,
-                  MS.ammp('auth_asym_id'),
-                ]),
-                'residue-test': MS.core.set.has([
-                  MS.set(...positions),
-                  MS.ammp('auth_seq_id'),
-                ]),
-              }),
-            );
+
+            for (let i = selection.start; i <= selection.end; i++) {
+              colors[i] = selection.color as string;
+            }
           }
+
+          atomGroups.push(
+            MS.struct.generator.atomGroups({
+              'chain-test': MS.core.rel.eq(['A', MS.ammp('auth_asym_id')]),
+              'residue-test': MS.core.set.has([
+                MS.set(...positions),
+                MS.ammp('auth_seq_id'),
+              ]),
+            }),
+          );
+
+          function hexToRgb(hex: string): { r: number; g: number; b: number } {
+            try {
+              // Remove the hash if present
+              hex = hex.replace(/^#/, '');
+
+              // Expand shorthand form (#F53 => #FF5533)
+              if (hex.length === 3) {
+                hex = hex
+                  .split('')
+                  .map((c) => c + c)
+                  .join('');
+              }
+
+              if (hex.length !== 6) return { r: 0, g: 0, b: 0 };
+
+              const r = parseInt(hex.slice(0, 2), 16);
+              const g = parseInt(hex.slice(2, 4), 16);
+              const b = parseInt(hex.slice(4, 6), 16);
+
+              return { r, g, b };
+            } catch {
+              return { r: 0, g: 0, b: 0 };
+            }
+          }
+
+          const CustomColorTheme = (
+            ctx: ThemeDataContext,
+            props: PD.Values<{}>,
+          ): ColorTheme<{}> => {
+            let color: LocationColor;
+            color = (location: MolLocation) => {
+              if (StructureElement.Location.is(location)) {
+                const rgbColor = hexToRgb(
+                  colors[StructureProperties.residue.auth_seq_id(location)],
+                );
+                console.log(rgbColor);
+                return Color.fromRgb(100, 200, 200);
+              }
+              return Color(0);
+            };
+            return {
+              factory: CustomColorTheme,
+              granularity: 'group',
+              color: color,
+              props: props,
+              description:
+                'Assigns residue colors according to the B-factor values',
+            };
+          };
+
+          const CustomResidueColorThemeProvider: ColorTheme.Provider<{}> = {
+            name: 'custom-residue-colors',
+            label: 'Custom Residue Colors',
+            category: ColorTheme.Category.Misc,
+            factory: CustomColorTheme,
+            getParams: (ctx) => ({
+              colors: PD.Value({}, { isHidden: true }),
+            }),
+            defaultValues: { colors: {} },
+            isApplicable: (ctx) => true,
+          };
+
+          this.viewer.representation.structure.themes.colorThemeRegistry.add(
+            CustomResidueColorThemeProvider,
+          );
+
           return MS.struct.combinator.merge(atomGroups);
         }, data);
+
         const loci = StructureSelection.toLociWithSourceUnits(molSelection);
+        this.applyChainIdTheme('custom-residue-colors');
+
         this.viewer.managers.interactivity.lociSelects.select({ loci });
       });
   }
 
-  applyChainIdTheme() {
+  applyChainIdTheme(custom?: string) {
     let colouringTheme: string;
-    switch (this.props.theme) {
-      case 'af':
-        colouringTheme = AfConfidenceColorThemeProvider.name;
-        break;
-      case 'bfvd':
-        colouringTheme = BFactorColorThemeProvider.name;
-        break;
-      default:
-        colouringTheme = ChainIdColorThemeProvider.name;
+    if (!custom) {
+      switch (this.props.theme) {
+        case 'af':
+          colouringTheme = AfConfidenceColorThemeProvider.name;
+          break;
+        case 'bfvd':
+          colouringTheme = BFactorColorThemeProvider.name;
+          break;
+        default:
+          colouringTheme = ChainIdColorThemeProvider.name;
+      }
+    } else {
+      colouringTheme = custom;
     }
 
     // apply colouring

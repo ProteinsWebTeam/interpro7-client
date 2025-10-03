@@ -51,6 +51,9 @@ const AlphaFoldModelSubPage = ({
   const [interproNData, setInterProNData] = useState({});
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
+  const [colorBy, setColorBy] = useState('confidence');
+  const [colorSelections, setColorSelections] = useState<Feature[]>([]);
+
   const handleProteinChange = (value: string) => {
     setProteinAcc(value);
     setModelId(null);
@@ -58,6 +61,14 @@ const AlphaFoldModelSubPage = ({
   };
   const handleModelChange = (value: string) => {
     setModelId(value);
+  };
+
+  const onColorChange = (value: string) => {
+    setColorBy(value);
+  };
+
+  const getColorSelection = (color: string, selectionsData: unknown) => {
+    console.log(color, selectionsData);
   };
 
   useEffect(() => {
@@ -84,6 +95,8 @@ const AlphaFoldModelSubPage = ({
           proteinAcc={proteinAcc}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
+          onColorChange={onColorChange}
+          colorBy={colorBy}
           modelId={modelId}
           selections={selectionsInModel}
           parentElement={container.current}
@@ -101,6 +114,8 @@ const AlphaFoldModelSubPage = ({
           <ProteinViewerForPredictedStructure
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
+            getColorSelection={getColorSelection}
+            colorBy={colorBy}
             colorDomainsBy={colorDomainsBy}
             dataInterProNMatches={dataInterProNMatches?.payload || {}}
             onChangeSelection={(selection: null | Array<Selection>) => {
