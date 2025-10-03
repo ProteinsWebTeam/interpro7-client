@@ -25,6 +25,7 @@ export function BFactorColorTheme(
   if (ctx.structure && !ctx.structure.isEmpty) {
     color = (location: Location) => {
       if (StructureElement.Location.is(location)) {
+        console.log('here');
         const atom = location.unit.model.atomicConformation;
         const bFactor = atom.B_iso_or_equiv?.value(location.element);
         if (bFactor !== undefined) {
