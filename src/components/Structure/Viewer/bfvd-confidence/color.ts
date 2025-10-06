@@ -22,6 +22,8 @@ export function BFactorColorTheme(
 ): ColorTheme<Params> {
   let color: LocationColor;
 
+  console.log('here2');
+
   if (ctx.structure && !ctx.structure.isEmpty) {
     color = (location: Location) => {
       if (StructureElement.Location.is(location)) {

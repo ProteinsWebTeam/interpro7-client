@@ -11,10 +11,6 @@ import { Script } from 'molstar/lib/mol-script/script';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ColorNames } from 'molstar/lib/mol-util/color/names';
 import { BuiltInTrajectoryFormat } from 'molstar/lib/mol-plugin-state/formats/trajectory';
-import { ColorTheme, LocationColor } from 'molstar/lib/mol-theme/color';
-import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition';
-import { ThemeDataContext } from 'molstar/lib/mol-theme/theme';
-import { Location } from 'molstar/lib/mol-model/location';
 
 import {
   UniformColorThemeProvider,
@@ -28,10 +24,6 @@ import { Selection } from '../ViewerAndEntries';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { BFactorColorThemeProvider } from './bfvd-confidence/color';
-import {
-  StructureElement,
-  StructureProperties,
-} from 'molstar/lib/mol-model/structure';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -234,8 +226,6 @@ class StructureView extends PureComponent<Props> {
   }
 
   highlightSelections(selections: Array<Selection>) {
-    const colors: Record<number, string> = {};
-
     if (!this.viewer) return;
     const data =
       this.viewer.managers.structure.hierarchy.current.structures[0]?.cell.obj
@@ -262,11 +252,11 @@ class StructureView extends PureComponent<Props> {
           if (!this.viewer) return;
           const atomGroups = [];
           const positions = [];
+          const chainPositions: Record<string, number[]> = {};
 
           let ShouldColourChange = true;
           for (const selection of selections) {
             if (ShouldColourChange) {
-              // const hexColour = parseInt(selections[0].colour.substring(1), 16);
               if (this.highlightColour !== selection.color) {
                 this.highlightColour = selection.color as number;
                 PluginCommands.Canvas3D.SetSettings(this.viewer, {
@@ -284,118 +274,39 @@ class StructureView extends PureComponent<Props> {
 
             for (let i = selection.start; i <= selection.end; i++) {
               positions.push(i);
+              if (chainPositions[selection.chain])
+                chainPositions[selection.chain].push(i);
+              else chainPositions[selection.chain] = [i];
             }
-
-            for (let i = selection.start; i <= selection.end; i++) {
-              colors[i] = selection.color as string;
-            }
-
-            atomGroups.push(
-              MS.struct.generator.atomGroups({
-                'chain-test': MS.core.rel.eq([
-                  selection.chain,
-                  MS.ammp('auth_asym_id'),
-                ]),
-                'residue-test': MS.core.set.has([
-                  MS.set(...positions),
-                  MS.ammp('auth_seq_id'),
-                ]),
-              }),
-            );
           }
+
+          atomGroups.push(
+            MS.struct.generator.atomGroups({
+              'residue-test': MS.core.set.has([
+                MS.set(...positions),
+                MS.ammp('auth_seq_id'),
+              ]),
+            }),
+          );
+
           return MS.struct.combinator.merge(atomGroups);
         }, data);
-
         const loci = StructureSelection.toLociWithSourceUnits(molSelection);
         this.viewer.managers.interactivity.lociSelects.select({ loci });
-
-        function hexToRgb(hex: string) {
-          // Remove leading # if present
-          hex = hex.replace(/^#/, '');
-
-          // Parse shorthand #abc format
-          if (hex.length === 3) {
-            hex = hex
-              .split('')
-              .map((c) => c + c)
-              .join('');
-          }
-
-          const bigint = parseInt(hex, 16);
-          const r = (bigint >> 16) & 255;
-          const g = (bigint >> 8) & 255;
-          const b = bigint & 255;
-
-          return { r, g, b };
-        }
-
-        const CustomColorTheme = (
-          ctx: ThemeDataContext,
-          props: PD.Values<{}>,
-        ): ColorTheme<{}> => {
-          let color: LocationColor;
-
-          if (ctx.structure && !ctx.structure.isEmpty) {
-            color = (location: Location) => {
-              if (StructureElement.Location.is(location)) {
-                const pos = StructureProperties.residue.auth_seq_id(location);
-                if (colors[pos] !== undefined) {
-                  const colorRGB = hexToRgb(colors[pos]);
-                  return Color.fromRgb(colorRGB.r, colorRGB.g, colorRGB.b);
-                }
-                return Color.fromRgb(170, 170, 170);
-              }
-              return Color.fromRgb(170, 170, 170);
-            };
-          } else {
-            color = () => Color.fromRgb(170, 170, 170);
-          }
-
-          return {
-            factory: CustomColorTheme,
-            granularity: 'group',
-            color: color,
-            props: props,
-            description:
-              'Assigns residue colors according to the B-factor values',
-          };
-        };
-
-        const CustomResidueColorThemeProvider: ColorTheme.Provider<{}> = {
-          name: 'custom-residue-colors',
-          label: 'Custom Residue Colors',
-          category: '',
-          factory: CustomColorTheme,
-          getParams: (ctx) => ({
-            colors: PD.Value({}, { isHidden: true }),
-          }),
-          defaultValues: { colors: {} },
-          isApplicable: (ctx) => true,
-        };
-
-        this.viewer.representation.structure.themes.colorThemeRegistry.add(
-          CustomResidueColorThemeProvider,
-        );
-        this.applyChainIdTheme('custom-residue-colors');
       });
   }
 
-  applyChainIdTheme(custom?: string) {
+  applyChainIdTheme() {
     let colouringTheme: string;
-    if (!custom) {
-      switch (this.props.theme) {
-        case 'af':
-          colouringTheme = AfConfidenceColorThemeProvider.name;
-          break;
-        case 'bfvd':
-          colouringTheme = BFactorColorThemeProvider.name;
-          break;
-        default:
-          colouringTheme = ChainIdColorThemeProvider.name;
-      }
-    } else {
-      colouringTheme = custom;
-      console.log('here');
+    switch (this.props.theme) {
+      case 'af':
+        colouringTheme = AfConfidenceColorThemeProvider.name;
+        break;
+      case 'bfvd':
+        colouringTheme = BFactorColorThemeProvider.name;
+        break;
+      default:
+        colouringTheme = ChainIdColorThemeProvider.name;
     }
 
     // apply colouring

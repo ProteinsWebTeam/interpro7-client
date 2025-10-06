@@ -351,7 +351,7 @@ const ProteinViewerForAlphafold = ({
           chain: String.fromCharCode(colorSelections.length + 65),
           start,
           end,
-          color,
+          color: parseInt(color.substring(1), 16),
         });
       }
 
