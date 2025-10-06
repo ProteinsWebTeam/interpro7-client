@@ -145,6 +145,7 @@ const Structure3DModel = ({
   const modelInfo = models.find((x) => x.uniprotAccession === proteinAcc);
 
   const elementId = 'new-structure-model-viewer';
+
   return (
     <div className={css('alphafold-model')}>
       {!isSplitScreen && (
@@ -278,7 +279,7 @@ const Structure3DModel = ({
                     onColorChange && onColorChange(event.target.value)
                   }
                 >
-                  <option value="confidence">Model confidence</option>
+                  <option value={bfvd ? 'bfvd' : 'af'}>Model confidence</option>
                   <option value="ted">TED domains</option>
                   <option value="repr_families">Representative families</option>
                   <option value="repr_domains">Representative domains</option>
@@ -363,7 +364,7 @@ const Structure3DModel = ({
               url={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
               elementId={elementId}
               ext={bfvd ? 'pdb' : 'mmcif'}
-              theme={bfvd ? 'bfvd' : 'af'}
+              theme={colorBy}
               shouldResetViewer={shouldResetViewer}
               selections={selections}
               onStructureLoaded={() => {

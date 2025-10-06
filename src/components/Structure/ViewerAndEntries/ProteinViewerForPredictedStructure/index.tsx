@@ -150,7 +150,6 @@ export const addConfidenceTrack = (
 type Props = {
   protein: string;
   onChangeSelection: (s: Selection[] | null) => void;
-  getColorSelection?: (c: string, data: unknown) => void;
   colorBy?: string;
   colorSelections?: Feature[];
   isSplitScreen: boolean;
@@ -177,7 +176,6 @@ const ProteinViewerForAlphafold = ({
   matchTypeSettings,
   colorDomainsBy,
   onChangeSelection,
-  getColorSelection,
   colorBy,
   dataTED,
   isSplitScreen = false,
@@ -273,8 +271,6 @@ const ProteinViewerForAlphafold = ({
                   const end = Number(parts?.[1]) || 1;
                   return { chain: 'A', start, end, color };
                 }) || [];
-
-              console.log(event?.detail);
               setHoverSelection(selection);
             }
             break;
@@ -327,15 +323,9 @@ const ProteinViewerForAlphafold = ({
         }
       }
 
-    const groups = makeTracks({
-      interpro: interpro as Array<{ accession: string; type: string }>,
-      unintegrated: unintegrated as Array<{ accession: string; type: string }>,
-      representativeDomains: representativeDomains as Array<MinimalFeature>,
-      representativeFamilies: representativeFamilies as Array<MinimalFeature>,
-    }) as ProteinViewerDataObject<ExtendedFeature>;
-
     const colorToObj: Record<string, Feature[]> = {
-      confidence: [] as Feature[],
+      af: [] as Feature[],
+      bfvd: [] as Feature[],
       repr_families: representativeFamilies as Feature[],
       repr_domains: representativeDomains as Feature[],
       ted: tedFeatures as Feature[],
@@ -354,8 +344,6 @@ const ProteinViewerForAlphafold = ({
           color: parseInt(color.substring(1), 16),
         });
       }
-
-      console.log(hoverSelection, fixedSelection);
       setFixedSelection(colorSelections);
     }
   }, [colorBy, dataTED]);

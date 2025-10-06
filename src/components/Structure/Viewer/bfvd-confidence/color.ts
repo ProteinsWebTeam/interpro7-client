@@ -4,6 +4,7 @@ import { ColorTheme, LocationColor } from 'molstar/lib/mol-theme/color';
 import { ThemeDataContext } from 'molstar/lib/mol-theme/theme';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition';
+import { StructureProperties } from 'molstar/lib/mol-model/structure';
 
 const BFactorColors = [
   { max: 50, color: Color.fromRgb(255, 125, 69) },
@@ -22,12 +23,9 @@ export function BFactorColorTheme(
 ): ColorTheme<Params> {
   let color: LocationColor;
 
-  console.log('here2');
-
   if (ctx.structure && !ctx.structure.isEmpty) {
     color = (location: Location) => {
       if (StructureElement.Location.is(location)) {
-        console.log('here');
         const atom = location.unit.model.atomicConformation;
         const bFactor = atom.B_iso_or_equiv?.value(location.element);
         if (bFactor !== undefined) {

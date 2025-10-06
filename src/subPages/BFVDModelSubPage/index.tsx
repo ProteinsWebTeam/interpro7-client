@@ -45,6 +45,7 @@ const BFVDModelSubPage = ({
   const [selectionsInModel, setSelectionsInModel] =
     useState<Array<Selection> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
+  const [colorBy, setColorBy] = useState('bfvd');
 
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
@@ -55,6 +56,10 @@ const BFVDModelSubPage = ({
   };
   const handleModelChange = (value: string) => {
     setModelId(value);
+  };
+
+  const onColorChange = (value: string) => {
+    setColorBy(value);
   };
 
   // Set up initial protein accession
@@ -89,6 +94,8 @@ const BFVDModelSubPage = ({
           onModelChange={handleModelChange}
           modelId={modelId}
           bfvd={bfvdURL}
+          onColorChange={onColorChange}
+          colorBy={colorBy}
           selections={selectionsInModel}
           parentElement={container.current}
           isSplitScreen={isSplitScreen}

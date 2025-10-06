@@ -51,7 +51,7 @@ const AlphaFoldModelSubPage = ({
   const [interproNData, setInterProNData] = useState({});
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
-  const [colorBy, setColorBy] = useState('confidence');
+  const [colorBy, setColorBy] = useState('af');
   const [colorSelections, setColorSelections] = useState<Feature[]>([]);
 
   const handleProteinChange = (value: string) => {
@@ -65,10 +65,6 @@ const AlphaFoldModelSubPage = ({
 
   const onColorChange = (value: string) => {
     setColorBy(value);
-  };
-
-  const getColorSelection = (color: string, selectionsData: unknown) => {
-    console.log(color, selectionsData);
   };
 
   useEffect(() => {
@@ -114,7 +110,6 @@ const AlphaFoldModelSubPage = ({
           <ProteinViewerForPredictedStructure
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
-            getColorSelection={getColorSelection}
             colorBy={colorBy}
             colorDomainsBy={colorDomainsBy}
             dataInterProNMatches={dataInterProNMatches?.payload || {}}

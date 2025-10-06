@@ -24,6 +24,7 @@ import { Selection } from '../ViewerAndEntries';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { BFactorColorThemeProvider } from './bfvd-confidence/color';
+import { TEDThemeProvider } from './ted/color';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -43,6 +44,7 @@ export type Props = {
   isSpinning?: boolean;
   shouldResetViewer?: boolean;
   selections?: Array<Selection> | null;
+  colorBy?: string;
 };
 
 const DEFAULT_EXTENSION = 'mmcif';
@@ -57,7 +59,6 @@ class StructureView extends PureComponent<Props> {
 
   constructor(props: Props) {
     super(props);
-
     this.viewer = null;
     this.name = `${this.props.id}`;
     this._structureViewer = React.createRef();
@@ -94,6 +95,10 @@ class StructureView extends PureComponent<Props> {
         // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
           AfConfidenceColorThemeProvider,
+        );
+
+        this.viewer.representation.structure.themes.colorThemeRegistry.add(
+          TEDThemeProvider,
         );
 
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
@@ -248,12 +253,11 @@ class StructureView extends PureComponent<Props> {
       })
       .then(() => {
         if (!this.viewer) return;
+
+        const colorMap: Record<number, number> = {};
         const molSelection = Script.getStructureSelection((MS) => {
           if (!this.viewer) return;
           const atomGroups = [];
-          const positions = [];
-          const chainPositions: Record<string, number[]> = {};
-
           let ShouldColourChange = true;
           for (const selection of selections) {
             if (ShouldColourChange) {
@@ -273,17 +277,14 @@ class StructureView extends PureComponent<Props> {
             }
 
             for (let i = selection.start; i <= selection.end; i++) {
-              positions.push(i);
-              if (chainPositions[selection.chain])
-                chainPositions[selection.chain].push(i);
-              else chainPositions[selection.chain] = [i];
+              colorMap[i] = selection.color as number;
             }
           }
 
           atomGroups.push(
             MS.struct.generator.atomGroups({
               'residue-test': MS.core.set.has([
-                MS.set(...positions),
+                MS.set(...Object.keys(colorMap).map((i) => parseInt(i))),
                 MS.ammp('auth_seq_id'),
               ]),
             }),
@@ -291,19 +292,29 @@ class StructureView extends PureComponent<Props> {
 
           return MS.struct.combinator.merge(atomGroups);
         }, data);
-        const loci = StructureSelection.toLociWithSourceUnits(molSelection);
-        this.viewer.managers.interactivity.lociSelects.select({ loci });
+
+        if (this.props.theme !== 'ted') {
+          const loci = StructureSelection.toLociWithSourceUnits(molSelection);
+          this.viewer.managers.interactivity.lociSelects.select({ loci });
+        } else {
+          this.viewer.managers.interactivity.lociSelects.deselectAll();
+          this.applyChainIdTheme(colorMap);
+        }
       });
   }
 
-  applyChainIdTheme() {
+  applyChainIdTheme(colorMap?: Record<number, number>) {
     let colouringTheme: string;
+
     switch (this.props.theme) {
       case 'af':
         colouringTheme = AfConfidenceColorThemeProvider.name;
         break;
       case 'bfvd':
         colouringTheme = BFactorColorThemeProvider.name;
+        break;
+      case 'ted':
+        colouringTheme = TEDThemeProvider.name;
         break;
       default:
         colouringTheme = ChainIdColorThemeProvider.name;
@@ -317,6 +328,9 @@ class StructureView extends PureComponent<Props> {
           s.components,
           {
             color: colouringTheme as typeof ChainIdColorThemeProvider.name,
+            colorParams: {
+              colorMap: colorMap,
+            } as any,
           },
         );
       }

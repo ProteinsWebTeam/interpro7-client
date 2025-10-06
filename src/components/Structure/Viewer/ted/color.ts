@@ -8,28 +8,26 @@ import {
   StructureProperties,
 } from 'molstar/lib/mol-model/structure';
 
-type ColorMap = Record<number, string>;
+type ColorMap = Record<number, number>;
 
-export const RepresentativeThemeParams = {
+export const TEDThemeParams = {
   colorMap: PD.Value<ColorMap>({} as ColorMap),
 };
 
-type Params = typeof RepresentativeThemeParams;
+type Params = typeof TEDThemeParams;
 
-export function RepresentativeTheme(
+export function TEDTheme(
   ctx: ThemeDataContext,
   props: PD.Values<Params>,
 ): ColorTheme<Params> {
   let color: LocationColor;
 
-  console.log(ctx, props);
-
   if (ctx.structure && !ctx.structure.isEmpty) {
     color = (location: Location) => {
       if (StructureElement.Location.is(location)) {
         const pos = StructureProperties.residue.auth_seq_id(location);
-        if (props.colorMap[pos] !== undefined) {
-          return Color.fromHexStyle(props.colorMap[pos].toUpperCase());
+        if (props.colorMap[pos]) {
+          return Color(props.colorMap[pos]);
         }
         return Color.fromRgb(170, 170, 170);
       }
@@ -40,23 +38,20 @@ export function RepresentativeTheme(
   }
 
   return {
-    factory: RepresentativeTheme,
-    granularity: 'instance',
+    factory: TEDTheme,
+    granularity: 'groupInstance',
     color: color,
     props: props,
     description: 'Assigns residue colors according to the B-factor values',
   };
 }
 
-export const RepresentativeThemeProvider: ColorTheme.Provider<
-  Params,
-  'representative'
-> = {
-  name: 'representative',
-  label: 'Representative',
-  factory: RepresentativeTheme,
-  getParams: () => RepresentativeThemeParams,
-  defaultValues: PD.getDefaultValues(RepresentativeThemeParams),
+export const TEDThemeProvider: ColorTheme.Provider<Params, 'ted'> = {
+  name: 'ted',
+  label: 'ted',
+  factory: TEDTheme,
+  getParams: () => TEDThemeParams,
+  defaultValues: PD.getDefaultValues(TEDThemeParams),
   isApplicable: (ctx: ThemeDataContext) => !!ctx.structure,
   category: '',
 };
