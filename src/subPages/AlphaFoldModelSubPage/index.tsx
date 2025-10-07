@@ -52,7 +52,7 @@ const AlphaFoldModelSubPage = ({
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
   const [colorBy, setColorBy] = useState('af');
-  const [colorSelections, setColorSelections] = useState<Feature[]>([]);
+  const [colorMap, setColorMap] = useState<Record<number, number>>({});
 
   const handleProteinChange = (value: string) => {
     setProteinAcc(value);
@@ -88,6 +88,7 @@ const AlphaFoldModelSubPage = ({
     >
       {proteinAcc && (
         <AlphaFoldModel
+          colorMap={colorMap}
           proteinAcc={proteinAcc}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
@@ -108,6 +109,7 @@ const AlphaFoldModelSubPage = ({
           className={css('protvista-container')}
         >
           <ProteinViewerForPredictedStructure
+            setColorMap={setColorMap}
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
             colorBy={colorBy}

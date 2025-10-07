@@ -56,6 +56,7 @@ type Props = {
   onModelChange: (value: string) => void;
   onColorChange?: (value: string) => void;
   colorBy?: string;
+  colorMap?: Record<number, number>;
   modelId: string | null;
   modelUrl?: string;
   bfvd?: string;
@@ -72,6 +73,7 @@ const Structure3DModel = ({
   onModelChange,
   onColorChange,
   colorBy,
+  colorMap,
   modelId,
   modelUrl,
   bfvd,
@@ -365,6 +367,7 @@ const Structure3DModel = ({
               elementId={elementId}
               ext={bfvd ? 'pdb' : 'mmcif'}
               theme={colorBy}
+              colorMap={colorMap}
               shouldResetViewer={shouldResetViewer}
               selections={selections}
               onStructureLoaded={() => {

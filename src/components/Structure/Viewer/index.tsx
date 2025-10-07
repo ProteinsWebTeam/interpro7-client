@@ -45,6 +45,7 @@ export type Props = {
   shouldResetViewer?: boolean;
   selections?: Array<Selection> | null;
   colorBy?: string;
+  colorMap?: Record<number, number>;
 };
 
 const DEFAULT_EXTENSION = 'mmcif';
@@ -253,11 +254,10 @@ class StructureView extends PureComponent<Props> {
       })
       .then(() => {
         if (!this.viewer) return;
-
-        const colorMap: Record<number, number> = {};
         const molSelection = Script.getStructureSelection((MS) => {
           if (!this.viewer) return;
           const atomGroups = [];
+          const positions = [];
           let ShouldColourChange = true;
           for (const selection of selections) {
             if (ShouldColourChange) {
@@ -277,14 +277,14 @@ class StructureView extends PureComponent<Props> {
             }
 
             for (let i = selection.start; i <= selection.end; i++) {
-              colorMap[i] = selection.color as number;
+              positions.push(i);
             }
           }
 
           atomGroups.push(
             MS.struct.generator.atomGroups({
               'residue-test': MS.core.set.has([
-                MS.set(...Object.keys(colorMap).map((i) => parseInt(i))),
+                MS.set(...positions),
                 MS.ammp('auth_seq_id'),
               ]),
             }),
@@ -293,17 +293,12 @@ class StructureView extends PureComponent<Props> {
           return MS.struct.combinator.merge(atomGroups);
         }, data);
 
-        if (this.props.theme !== 'ted') {
-          const loci = StructureSelection.toLociWithSourceUnits(molSelection);
-          this.viewer.managers.interactivity.lociSelects.select({ loci });
-        } else {
-          this.viewer.managers.interactivity.lociSelects.deselectAll();
-          this.applyChainIdTheme(colorMap);
-        }
+        const loci = StructureSelection.toLociWithSourceUnits(molSelection);
+        this.viewer.managers.interactivity.lociSelects.select({ loci });
       });
   }
 
-  applyChainIdTheme(colorMap?: Record<number, number>) {
+  applyChainIdTheme() {
     let colouringTheme: string;
 
     switch (this.props.theme) {
@@ -314,6 +309,12 @@ class StructureView extends PureComponent<Props> {
         colouringTheme = BFactorColorThemeProvider.name;
         break;
       case 'ted':
+        colouringTheme = TEDThemeProvider.name;
+        break;
+      case 'repr_families':
+        colouringTheme = TEDThemeProvider.name;
+        break;
+      case 'repr_domains':
         colouringTheme = TEDThemeProvider.name;
         break;
       default:
@@ -329,7 +330,7 @@ class StructureView extends PureComponent<Props> {
           {
             color: colouringTheme as typeof ChainIdColorThemeProvider.name,
             colorParams: {
-              colorMap: colorMap,
+              colorMap: this.props.colorMap,
             } as any,
           },
         );

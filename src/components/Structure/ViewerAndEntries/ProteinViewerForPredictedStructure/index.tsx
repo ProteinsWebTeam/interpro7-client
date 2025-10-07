@@ -29,8 +29,8 @@ import { sectionsReorganization } from 'components/Related/DomainsOnProtein/util
 import { getTEDURL } from 'components/Related/DomainsOnProtein/ExternalSourcesHOC';
 import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TED';
 import Callout from 'components/SimpleCommonComponents/Callout';
-import getColor from 'src/utils/taxonomy/get-color';
 import { features } from 'process';
+import { getTrackColor } from 'utils/entry-color';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -151,7 +151,7 @@ type Props = {
   protein: string;
   onChangeSelection: (s: Selection[] | null) => void;
   colorBy?: string;
-  colorSelections?: Feature[];
+  setColorMap?: (s: Record<number, number>) => void;
   isSplitScreen: boolean;
   bfvd?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
@@ -176,6 +176,7 @@ const ProteinViewerForAlphafold = ({
   matchTypeSettings,
   colorDomainsBy,
   onChangeSelection,
+  setColorMap,
   colorBy,
   dataTED,
   isSplitScreen = false,
@@ -248,6 +249,14 @@ const ProteinViewerForAlphafold = ({
       const event = rawEvent as CustomEvent;
       if (!event.detail) return;
       const { eventType, highlight } = event.detail;
+
+      console.log(
+        eventType,
+        highlight,
+        isHovering,
+        fixedSelectionRef,
+        hoverSelectionRef,
+      );
 
       if (!isHovering.current) {
         switch (eventType) {
@@ -331,22 +340,24 @@ const ProteinViewerForAlphafold = ({
       ted: tedFeatures as Feature[],
     };
 
+    console.log(representativeFamilies);
+
     if (colorBy) {
-      const colorSelections: Selection[] = [];
+      const colorMap: Record<number, number> = {};
       for (const feature of colorToObj[colorBy].values()) {
         const color = feature.color as string;
         const start = feature.start || 1;
         const end = feature.end || 1;
-        colorSelections.push({
-          chain: String.fromCharCode(colorSelections.length + 65),
-          start,
-          end,
-          color: parseInt(color.substring(1), 16),
-        });
+        for (let i = start; i <= end + 1; i++) {
+          colorMap[i] = parseInt(
+            getTrackColor(feature, colorDomainsBy).substring(1),
+            16,
+          );
+        }
       }
-      setFixedSelection(colorSelections);
+      if (setColorMap) setColorMap(colorMap);
     }
-  }, [colorBy, dataTED]);
+  }, [colorBy, dataTED, colorDomainsBy]);
 
   if (
     !data ||
