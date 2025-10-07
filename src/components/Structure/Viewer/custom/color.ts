@@ -10,13 +10,13 @@ import {
 
 type ColorMap = Record<number, number>;
 
-export const TEDThemeParams = {
+export const CustomThemeParams = {
   colorMap: PD.Value<ColorMap>({} as ColorMap),
 };
 
-type Params = typeof TEDThemeParams;
+type Params = typeof CustomThemeParams;
 
-export function TEDTheme(
+export function CustomTheme(
   ctx: ThemeDataContext,
   props: PD.Values<Params>,
 ): ColorTheme<Params> {
@@ -38,7 +38,7 @@ export function TEDTheme(
   }
 
   return {
-    factory: TEDTheme,
+    factory: CustomTheme,
     granularity: 'groupInstance',
     color: color,
     props: props,
@@ -46,12 +46,12 @@ export function TEDTheme(
   };
 }
 
-export const TEDThemeProvider: ColorTheme.Provider<Params, 'ted'> = {
-  name: 'ted',
-  label: 'ted',
-  factory: TEDTheme,
-  getParams: () => TEDThemeParams,
-  defaultValues: PD.getDefaultValues(TEDThemeParams),
+export const CustomThemeProvider: ColorTheme.Provider<Params, 'custom'> = {
+  name: 'custom',
+  label: 'custom',
+  factory: CustomTheme,
+  getParams: () => CustomThemeParams,
+  defaultValues: PD.getDefaultValues(CustomThemeParams),
   isApplicable: (ctx: ThemeDataContext) => !!ctx.structure,
   category: '',
 };

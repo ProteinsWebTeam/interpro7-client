@@ -57,6 +57,7 @@ type Props = {
   onColorChange?: (value: string) => void;
   colorBy?: string;
   colorMap?: Record<number, number>;
+  hasTED: boolean;
   modelId: string | null;
   modelUrl?: string;
   bfvd?: string;
@@ -74,6 +75,7 @@ const Structure3DModel = ({
   onColorChange,
   colorBy,
   colorMap,
+  hasTED,
   modelId,
   modelUrl,
   bfvd,
@@ -282,22 +284,28 @@ const Structure3DModel = ({
                   }
                 >
                   <option value={bfvd ? 'bfvd' : 'af'}>Model confidence</option>
-                  <option value="ted">TED domains</option>
+                  {hasTED && <option value="ted">TED domains</option>}
                   <option value="repr_families">Representative families</option>
                   <option value="repr_domains">Representative domains</option>
                 </select>
               </li>
             </ul>
 
-            {/* <h5>Model confidence</h5>
-            <ul className={css('legend')}>
-              {confidenceColors.map((item) => (
-                <li key={item.category}>
-                  <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
-                  {item.category} ({item.range})
-                </li>
-              ))}
-            </ul> */}
+            {(colorBy === 'af' || colorBy === 'bfvd') && (
+              <>
+                <h5>Model confidence</h5>
+                <ul className={css('legend')}>
+                  {confidenceColors.map((item) => (
+                    <li key={item.category}>
+                      <span style={{ backgroundColor: item.color }}>
+                        &nbsp;
+                      </span>{' '}
+                      {item.category} ({item.range})
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         )}
         <div className={css('panel-component')}>

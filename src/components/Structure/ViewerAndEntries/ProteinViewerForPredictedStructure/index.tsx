@@ -152,6 +152,7 @@ type Props = {
   onChangeSelection: (s: Selection[] | null) => void;
   colorBy?: string;
   setColorMap?: (s: Record<number, number>) => void;
+  setHasTED: (s: boolean) => void;
   isSplitScreen: boolean;
   bfvd?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
@@ -177,6 +178,7 @@ const ProteinViewerForAlphafold = ({
   colorDomainsBy,
   onChangeSelection,
   setColorMap,
+  setHasTED,
   colorBy,
   dataTED,
   isSplitScreen = false,
@@ -438,6 +440,7 @@ const ProteinViewerForAlphafold = ({
     if (tedData.length > 0) {
       tracks['external_sources'] = tedData;
       moveExternalFeatures(tracks);
+      setHasTED(true);
     }
 
     return (

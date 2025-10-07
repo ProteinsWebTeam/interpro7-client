@@ -4,7 +4,6 @@ import { ColorTheme, LocationColor } from 'molstar/lib/mol-theme/color';
 import { ThemeDataContext } from 'molstar/lib/mol-theme/theme';
 import { Color } from 'molstar/lib/mol-util/color';
 import { ParamDefinition as PD } from 'molstar/lib/mol-util/param-definition';
-import { StructureProperties } from 'molstar/lib/mol-model/structure';
 
 const BFactorColors = [
   { max: 50, color: Color.fromRgb(255, 125, 69) },

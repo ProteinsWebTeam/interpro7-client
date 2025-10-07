@@ -24,7 +24,7 @@ import { Selection } from '../ViewerAndEntries';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { BFactorColorThemeProvider } from './bfvd-confidence/color';
-import { TEDThemeProvider } from './ted/color';
+import { CustomThemeProvider } from './custom/color';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -99,7 +99,7 @@ class StructureView extends PureComponent<Props> {
         );
 
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
-          TEDThemeProvider,
+          CustomThemeProvider,
         );
 
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
@@ -309,13 +309,13 @@ class StructureView extends PureComponent<Props> {
         colouringTheme = BFactorColorThemeProvider.name;
         break;
       case 'ted':
-        colouringTheme = TEDThemeProvider.name;
+        colouringTheme = CustomThemeProvider.name;
         break;
       case 'repr_families':
-        colouringTheme = TEDThemeProvider.name;
+        colouringTheme = CustomThemeProvider.name;
         break;
       case 'repr_domains':
-        colouringTheme = TEDThemeProvider.name;
+        colouringTheme = CustomThemeProvider.name;
         break;
       default:
         colouringTheme = ChainIdColorThemeProvider.name;

@@ -19,8 +19,6 @@ import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import forSplit from 'components/Structure/ViewerAndEntries/style.css';
-import { changeSettingsRaw } from 'actions/creators';
-import { chooseColor } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 const css = cssBinder(ipro, fonts, forSplit);
 
@@ -53,6 +51,7 @@ const AlphaFoldModelSubPage = ({
   const [isSplitScreen, setSplitScreen] = useState(false);
   const [colorBy, setColorBy] = useState('af');
   const [colorMap, setColorMap] = useState<Record<number, number>>({});
+  const [hasTED, setHasTED] = useState(false);
 
   const handleProteinChange = (value: string) => {
     setProteinAcc(value);
@@ -90,6 +89,7 @@ const AlphaFoldModelSubPage = ({
         <AlphaFoldModel
           colorMap={colorMap}
           proteinAcc={proteinAcc}
+          hasTED={hasTED}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
           onColorChange={onColorChange}
@@ -110,6 +110,7 @@ const AlphaFoldModelSubPage = ({
         >
           <ProteinViewerForPredictedStructure
             setColorMap={setColorMap}
+            setHasTED={setHasTED}
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
             colorBy={colorBy}

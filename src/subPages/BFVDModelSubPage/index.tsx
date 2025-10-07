@@ -46,6 +46,8 @@ const BFVDModelSubPage = ({
     useState<Array<Selection> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
   const [colorBy, setColorBy] = useState('bfvd');
+  const [colorMap, setColorMap] = useState<Record<number, number>>({});
+  const [hasTED, setHasTED] = useState(false);
 
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
@@ -89,6 +91,8 @@ const BFVDModelSubPage = ({
     >
       {proteinAcc && (
         <BFVDModel
+          colorMap={colorMap}
+          hasTED={hasTED}
           proteinAcc={proteinAcc}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
@@ -110,9 +114,12 @@ const BFVDModelSubPage = ({
           className={css('protvista-container')}
         >
           <ProteinViewerForPredictedStructure
+            setColorMap={setColorMap}
+            setHasTED={setHasTED}
             bfvd={bfvdURL}
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
+            colorBy={colorBy}
             colorDomainsBy={colorDomainsBy}
             dataInterProNMatches={dataInterProNMatches?.payload || {}}
             onChangeSelection={(selection: null | Array<Selection>) => {
