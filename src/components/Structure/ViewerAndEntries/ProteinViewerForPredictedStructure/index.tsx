@@ -250,14 +250,6 @@ const ProteinViewerForAlphafold = ({
       if (!event.detail) return;
       const { eventType, highlight } = event.detail;
 
-      console.log(
-        eventType,
-        highlight,
-        isHovering,
-        fixedSelectionRef,
-        hoverSelectionRef,
-      );
-
       if (!isHovering.current) {
         switch (eventType) {
           case 'click':
@@ -340,15 +332,13 @@ const ProteinViewerForAlphafold = ({
       ted: tedFeatures as Feature[],
     };
 
-    console.log(representativeFamilies);
-
     if (colorBy) {
       const colorMap: Record<number, number> = {};
       for (const feature of colorToObj[colorBy].values()) {
-        const color = feature.color as string;
         const start = feature.start || 1;
         const end = feature.end || 1;
         for (let i = start; i <= end + 1; i++) {
+          if (colorBy !== 'ted') feature.color = undefined;
           colorMap[i] = parseInt(
             getTrackColor(feature, colorDomainsBy).substring(1),
             16,

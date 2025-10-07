@@ -94,7 +94,6 @@ const webComponents = [
 ];
 
 const mapToFeatures = (entry: ExtendedFeature, colorDomainsBy: string) => {
-  console.log(getTrackColor(entry, colorDomainsBy));
   if (
     !entry.accession.startsWith('IPR') &&
     domainTypes.includes(entry.type || '')
