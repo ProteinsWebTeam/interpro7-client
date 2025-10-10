@@ -100,6 +100,12 @@ export const IPScanStatus = ({
     return jobsData;
   };
 
+  const finalStatuses = [
+    'imported file',
+    'saved in browser',
+    'finished_with_results',
+  ];
+
   useEffect(() => {
     if (job) {
       getSequencesData(job).then((data) => setJobsData(data));
@@ -257,7 +263,7 @@ export const IPScanStatus = ({
           <section>{expiryDate.toDateString()}</section>
         </section>
       )}
-      {job.status === 'finished_with_results' && (
+      {finalStatuses.includes(job?.status as string) && (
         <section className={css('summary-row')}>
           <header>Actions</header>
           <section>
@@ -276,7 +282,7 @@ export const IPScanStatus = ({
           </section>
         </section>
       )}
-      {job.status === 'finished_with_results' && (
+      {finalStatuses.includes(job?.status as string) && (
         <Table
           dataTable={paginatedJobs}
           rowKey="localID"
