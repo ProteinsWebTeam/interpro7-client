@@ -100,11 +100,7 @@ export const IPScanStatus = ({
     return jobsData;
   };
 
-  const finalStatuses = [
-    'imported file',
-    'saved in browser',
-    'finished_with_results',
-  ];
+  const finalStatuses = ['imported file', 'finished_with_results'];
 
   useEffect(() => {
     if (job) {

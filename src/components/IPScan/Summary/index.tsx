@@ -344,7 +344,7 @@ const SummaryIPScanJob = ({
         </section>
       </section>
 
-      {['finished', 'imported file', 'saved in browser'].includes(status) && (
+      {['finished_with_results', 'imported file'].includes(status) && (
         <>
           <DomainsOnProteinLoaded
             mainData={{ metadata }}
