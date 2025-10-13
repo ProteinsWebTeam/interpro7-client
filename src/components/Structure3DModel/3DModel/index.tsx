@@ -275,7 +275,7 @@ const Structure3DModel = ({
                 ''
               )*/}
               <li>
-                <span className={css('header')}>Color</span>
+                <span className={css('header')}>Colour by</span>
                 <select
                   value={colorBy}
                   className={css('protein-list')}
