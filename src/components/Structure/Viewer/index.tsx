@@ -331,6 +331,7 @@ class StructureView extends PureComponent<Props> {
             color: colouringTheme as typeof ChainIdColorThemeProvider.name,
             colorParams: {
               colorMap: this.props.colorMap,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any,
           },
         );
