@@ -29,6 +29,8 @@ import { sectionsReorganization } from 'components/Related/DomainsOnProtein/util
 import { getTEDURL } from 'components/Related/DomainsOnProtein/ExternalSourcesHOC';
 import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TED';
 import Callout from 'components/SimpleCommonComponents/Callout';
+import { features } from 'process';
+import { getTrackColor } from 'utils/entry-color';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -148,6 +150,9 @@ export const addConfidenceTrack = (
 type Props = {
   protein: string;
   onChangeSelection: (s: Selection[] | null) => void;
+  colorBy?: string;
+  setColorMap?: (s: Record<number, number>) => void;
+  setHasTED: (s: boolean) => void;
   isSplitScreen: boolean;
   bfvd?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
@@ -172,6 +177,9 @@ const ProteinViewerForAlphafold = ({
   matchTypeSettings,
   colorDomainsBy,
   onChangeSelection,
+  setColorMap,
+  setHasTED,
+  colorBy,
   dataTED,
   isSplitScreen = false,
 }: LoadedProps) => {
@@ -180,6 +188,8 @@ const ProteinViewerForAlphafold = ({
 
   const [fixedSelection, _setFixedSelection] = useState<Selection[]>([]);
   const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
+  const [colorGroup, setColorGroup] = useState({});
+
   const [processedTracks, setProcessedTracks] =
     useState<ProteinViewerDataObject>({});
   const hoverSelectionRef = useRef(hoverSelection);
@@ -290,6 +300,57 @@ const ProteinViewerForAlphafold = ({
       trackRef.current?.removeEventListener('change', handleChange);
     };
   }, [trackRef.current, processedTracks]);
+
+  // Color 3D model based on selection
+  useEffect(() => {
+    const {
+      interpro,
+      unintegrated,
+      representativeDomains,
+      representativeFamilies,
+    } = processedData;
+
+    const tedData = dataTED ? formatTED(dataTED) : [];
+    const tedFeatures: Feature[] = [];
+    if (tedData.length > 0)
+      for (const loc of tedData[0].locations || []) {
+        for (const frag of loc.fragments) {
+          const start = frag.start || 1;
+          const end = frag.end || 1;
+          tedFeatures.push({
+            accession: 'TED:TED',
+            start,
+            end,
+            color: (loc as ProtVistaLocation & { color: string }).color,
+          });
+        }
+      }
+
+    const colorToObj: Record<string, Feature[]> = {
+      af: [] as Feature[],
+      bfvd: [] as Feature[],
+      repr_families: representativeFamilies as Feature[],
+      repr_domains: representativeDomains as Feature[],
+      ted: tedFeatures as Feature[],
+    };
+
+    if (colorBy) {
+      const colorMap: Record<number, number> = {};
+      for (const feature of colorToObj[colorBy].values()) {
+        const start = feature.start || 1;
+        const end = feature.end || 1;
+        for (let i = start; i <= end + 1; i++) {
+          if (colorBy !== 'ted') feature.color = undefined;
+          colorMap[i] = parseInt(
+            getTrackColor(feature, colorDomainsBy).substring(1),
+            16,
+          );
+        }
+      }
+      if (setColorMap) setColorMap(colorMap);
+    }
+  }, [colorBy, dataTED, colorDomainsBy]);
+
   if (
     !data ||
     data.loading ||
@@ -379,7 +440,9 @@ const ProteinViewerForAlphafold = ({
     if (tedData.length > 0) {
       tracks['external_sources'] = tedData;
       moveExternalFeatures(tracks);
+      setHasTED(true);
     }
+
     return (
       <div ref={trackRef}>
         {interpro_NMatchesCount > 0 && (

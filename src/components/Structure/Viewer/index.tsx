@@ -24,6 +24,7 @@ import { Selection } from '../ViewerAndEntries';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { BFactorColorThemeProvider } from './bfvd-confidence/color';
+import { CustomThemeProvider } from './custom/color';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -43,6 +44,8 @@ export type Props = {
   isSpinning?: boolean;
   shouldResetViewer?: boolean;
   selections?: Array<Selection> | null;
+  colorBy?: string;
+  colorMap?: Record<number, number>;
 };
 
 const DEFAULT_EXTENSION = 'mmcif';
@@ -57,7 +60,6 @@ class StructureView extends PureComponent<Props> {
 
   constructor(props: Props) {
     super(props);
-
     this.viewer = null;
     this.name = `${this.props.id}`;
     this._structureViewer = React.createRef();
@@ -94,6 +96,10 @@ class StructureView extends PureComponent<Props> {
         // this.viewer.managers.lociLabels.addProvider(this.labelAfConfScore);
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
           AfConfidenceColorThemeProvider,
+        );
+
+        this.viewer.representation.structure.themes.colorThemeRegistry.add(
+          CustomThemeProvider,
         );
 
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
@@ -251,11 +257,10 @@ class StructureView extends PureComponent<Props> {
         const molSelection = Script.getStructureSelection((MS) => {
           if (!this.viewer) return;
           const atomGroups = [];
-
+          const positions = [];
           let ShouldColourChange = true;
           for (const selection of selections) {
             if (ShouldColourChange) {
-              // const hexColour = parseInt(selections[0].colour.substring(1), 16);
               if (this.highlightColour !== selection.color) {
                 this.highlightColour = selection.color as number;
                 PluginCommands.Canvas3D.SetSettings(this.viewer, {
@@ -270,25 +275,24 @@ class StructureView extends PureComponent<Props> {
               }
               ShouldColourChange = false;
             }
-            const positions = [];
+
             for (let i = selection.start; i <= selection.end; i++) {
               positions.push(i);
             }
-            atomGroups.push(
-              MS.struct.generator.atomGroups({
-                'chain-test': MS.core.rel.eq([
-                  selection.chain,
-                  MS.ammp('auth_asym_id'),
-                ]),
-                'residue-test': MS.core.set.has([
-                  MS.set(...positions),
-                  MS.ammp('auth_seq_id'),
-                ]),
-              }),
-            );
           }
+
+          atomGroups.push(
+            MS.struct.generator.atomGroups({
+              'residue-test': MS.core.set.has([
+                MS.set(...positions),
+                MS.ammp('auth_seq_id'),
+              ]),
+            }),
+          );
+
           return MS.struct.combinator.merge(atomGroups);
         }, data);
+
         const loci = StructureSelection.toLociWithSourceUnits(molSelection);
         this.viewer.managers.interactivity.lociSelects.select({ loci });
       });
@@ -296,12 +300,22 @@ class StructureView extends PureComponent<Props> {
 
   applyChainIdTheme() {
     let colouringTheme: string;
+
     switch (this.props.theme) {
       case 'af':
         colouringTheme = AfConfidenceColorThemeProvider.name;
         break;
       case 'bfvd':
         colouringTheme = BFactorColorThemeProvider.name;
+        break;
+      case 'ted':
+        colouringTheme = CustomThemeProvider.name;
+        break;
+      case 'repr_families':
+        colouringTheme = CustomThemeProvider.name;
+        break;
+      case 'repr_domains':
+        colouringTheme = CustomThemeProvider.name;
         break;
       default:
         colouringTheme = ChainIdColorThemeProvider.name;
@@ -315,6 +329,9 @@ class StructureView extends PureComponent<Props> {
           s.components,
           {
             color: colouringTheme as typeof ChainIdColorThemeProvider.name,
+            colorParams: {
+              colorMap: this.props.colorMap,
+            } as any,
           },
         );
       }
