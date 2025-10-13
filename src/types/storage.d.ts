@@ -28,6 +28,7 @@ type JobStatus =
   | 'saved in browser'
   | 'running'
   | 'finished'
+  | 'finished_with_results'
   | 'queued'
   | 'error';
 

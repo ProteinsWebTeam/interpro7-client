@@ -138,7 +138,7 @@ export class IPScanStatus extends PureComponent<Props, State> {
 
     const statusColumnName: Record<string, string> = {
       'imported file': 'Imported',
-      'finished': 'Completed',
+      finished_with_results: 'Completed',
       'saved in browser': 'Saved',
     };
 
@@ -281,7 +281,8 @@ export class IPScanStatus extends PureComponent<Props, State> {
                 {(status === 'running' ||
                   status === 'created' ||
                   status === 'queued' ||
-                  status === 'submitted') && (
+                  status === 'submitted' ||
+                  status === 'finished') && (
                   <div>
                     <SpinningCircle />
                     <div>Searching</div>
@@ -299,9 +300,11 @@ export class IPScanStatus extends PureComponent<Props, State> {
                     aria-label="Job failed or not found"
                   />
                 ) : null}
-                {['finished', 'imported file', 'saved in browser'].includes(
-                  status,
-                ) &&
+                {[
+                  'finished_with_results',
+                  'imported file',
+                  'saved in browser',
+                ].includes(status) &&
                   (statusColumnName[status] ||
                     status[0].toUpperCase() + status.slice(1))}
               </Tooltip>

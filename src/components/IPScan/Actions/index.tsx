@@ -92,7 +92,7 @@ export const Actions = ({
           {!forStatus && <span>Delete Results</span>}
         </Button>
       </Tooltip>
-      {status === 'finished' && (
+      {/*status === 'finished_with_results' && (
         <Tooltip
           title={
             <div>
@@ -111,7 +111,7 @@ export const Actions = ({
             {!forStatus && <span>Save results in Browser</span>}
           </Button>
         </Tooltip>
-      )}
+      )*/}
       {versionMismatch && (
         <Tooltip
           title={
