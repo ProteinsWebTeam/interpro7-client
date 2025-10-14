@@ -3,7 +3,10 @@ import React, { PureComponent, RefObject } from 'react';
 import { get as lodashGet } from 'lodash-es';
 import { ColumnProps, Renderer } from '../Column';
 
-const defaultRenderer: Renderer = (value) => <div>{String(value)}</div>;
+const defaultRenderer: Renderer = (value) => {
+  if (value) return <div>{value as string}</div>;
+  return null;
+};
 
 const DURATION = 250;
 
@@ -74,10 +77,10 @@ class Row<
                 {group && i === 0 ? (
                   <div style={{ display: 'flex' }}>
                     <span>&emsp;</span>
-                    {renderer(lodashGet(row, dataKey, '∅') || '∅', row, extra)}
+                    {renderer(lodashGet(row, dataKey, '∅'), row, extra)}
                   </div>
                 ) : (
-                  renderer(lodashGet(row, dataKey, '∅') || '∅', row, extra)
+                  renderer(lodashGet(row, dataKey, '∅'), row, extra)
                 )}
               </td>
             ),
