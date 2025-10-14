@@ -31,16 +31,18 @@ const parseBody = (text: string) =>
     );
 
 interface LoadedProps
-  extends LoadDataProps<{
-    tag_name: string;
-    body: string;
-  }> {}
+  extends LoadDataProps<
+    Array<{
+      tag_name: string;
+      body: string;
+    }>
+  > {}
 
 export const InterProScan = ({ data }: LoadedProps) => {
   if (!data) return null;
   const { loading, payload } = data;
-  if (loading || !payload) return <Loading />;
-  const { tag_name: version, body } = payload;
+  if (loading || !payload || payload.length === 0) return <Loading />;
+  const { tag_name: version, body } = payload[0];
   const metadata = parseBody(body);
   return (
     <section>
