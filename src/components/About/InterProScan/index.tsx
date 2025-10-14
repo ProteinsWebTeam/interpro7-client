@@ -42,6 +42,7 @@ export const InterProScan = ({ data }: LoadedProps) => {
   if (!data) return null;
   const { loading, payload } = data;
   if (loading || !payload || payload.length === 0) return <Loading />;
+  if (payload[0] === undefined) return <></>;
   const { tag_name: version, body } = payload[0];
   const metadata = parseBody(body);
   return (
