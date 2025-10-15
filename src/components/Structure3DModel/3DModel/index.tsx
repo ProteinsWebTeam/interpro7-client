@@ -145,119 +145,121 @@ const Structure3DModel = ({
   }
 
   const models = data?.payload || [];
-
-  const modelInfo = models.find((x) => x.uniprotAccession === proteinAcc);
-
+  const modelsAvailable = Array.isArray(models);
+  const modelInfo =
+    modelsAvailable && models.find((x) => x.uniprotAccession === proteinAcc);
   const elementId = 'new-structure-model-viewer';
 
   return (
-    <div className={css('alphafold-model')}>
-      {!isSplitScreen && (
-        <>
-          <h3>
-            {bfvd
-              ? 'BFVD Structure Prediction'
-              : 'AlphaFold Structure Prediction'}
-            {models.length > 1 || hasMultipleProteins ? 's' : ''}
-          </h3>
-          <p>
-            The protein structure below has been predicted{' '}
-            {bfvd ? (
-              <>
-                by the{' '}
-                <Link href={'//steineggerlab.com/en'}>Steinegger Lab</Link>{' '}
-                using ColabFold (
-                <Link href={'//doi.org/10.1093/nar/gkae1119'}>
-                  Kim, R et al. 2024
-                </Link>
-                )
-              </>
-            ) : (
-              <>
-                by <Link href={'//deepmind.google/'}>Google DeepMind</Link>{' '}
-                using AlphaFold (
-                <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
-                  Jumper, J et al. 2021
-                </Link>
-                )
-              </>
-            )}
-            .
-          </p>
-        </>
-      )}
-      {hasMultipleProteins && !isSplitScreen ? (
-        <Callout type="info">
-          This entry matches several proteins with structure predictions. Use
-          the table below the structure viewer to select another protein.
-        </Callout>
-      ) : null}
-
-      {!bfvd && (
-        <SequenceCheck
-          proteinAccession={proteinAcc}
-          alphaFoldSequence={models?.[0]?.sequence}
-          alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
-        />
-      )}
-
-      <div className={css('af-container')}>
+    modelInfo &&
+    Object.keys(modelInfo).length > 0 && (
+      <div className={css('alphafold-model')}>
         {!isSplitScreen && (
-          <div className={css('panel-legends')}>
-            <h5>Information</h5>
-            <ul className={css('information')}>
-              <li>
-                <span className={css('header')}>Protein</span>
-                <Link
-                  to={{
-                    description: {
-                      main: { key: 'protein' },
-                      protein: {
-                        db: 'uniprot',
-                        accession: proteinAcc,
+          <>
+            <h3>
+              {bfvd
+                ? 'BFVD Structure Prediction'
+                : 'AlphaFold Structure Prediction'}
+              {models.length > 1 || hasMultipleProteins ? 's' : ''}
+            </h3>
+            <p>
+              The protein structure below has been predicted{' '}
+              {bfvd ? (
+                <>
+                  by the{' '}
+                  <Link href={'//steineggerlab.com/en'}>Steinegger Lab</Link>{' '}
+                  using ColabFold (
+                  <Link href={'//doi.org/10.1093/nar/gkae1119'}>
+                    Kim, R et al. 2024
+                  </Link>
+                  )
+                </>
+              ) : (
+                <>
+                  by <Link href={'//deepmind.google/'}>Google DeepMind</Link>{' '}
+                  using AlphaFold (
+                  <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
+                    Jumper, J et al. 2021
+                  </Link>
+                  )
+                </>
+              )}
+              .
+            </p>
+          </>
+        )}
+        {hasMultipleProteins && !isSplitScreen ? (
+          <Callout type="info">
+            This entry matches several proteins with structure predictions. Use
+            the table below the structure viewer to select another protein.
+          </Callout>
+        ) : null}
+
+        {!bfvd && (
+          <SequenceCheck
+            proteinAccession={proteinAcc}
+            alphaFoldSequence={models?.[0]?.sequence}
+            alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
+          />
+        )}
+
+        <div className={css('af-container')}>
+          {!isSplitScreen && (
+            <div className={css('panel-legends')}>
+              <h5>Information</h5>
+              <ul className={css('information')}>
+                <li>
+                  <span className={css('header')}>Protein</span>
+                  <Link
+                    to={{
+                      description: {
+                        main: { key: 'protein' },
+                        protein: {
+                          db: 'uniprot',
+                          accession: proteinAcc,
+                        },
                       },
-                    },
-                  }}
-                >
-                  {proteinAcc}
-                </Link>
-                <span className={css('footer')}>
-                  View on{' '}
-                  <Link
-                    href={
-                      bfvd
-                        ? `//bfvd.foldseek.com/cluster/${proteinAcc}`
-                        : modelUrl
-                    }
-                    className={css('ext')}
-                    target="_blank"
+                    }}
                   >
-                    {bfvd ? 'BFVD' : 'AlphaFold DB'}
+                    {proteinAcc}
                   </Link>
-                  <br />
-                  Find similar structures with{' '}
-                  <Link
-                    href={`//search.foldseek.com/search?accession=${proteinAcc}&source=${
-                      bfvd ? 'BFVD' : 'AlphaFoldDB'
-                    }`}
-                    className={css('ext')}
-                    target="_blank"
-                  >
-                    Foldseek
-                  </Link>
-                </span>
-              </li>
-              <li>
-                {modelInfo !== undefined ? (
-                  <>
-                    <span className={css('header')}>Organism</span>
-                    <i> {modelInfo.organismScientificName} </i>
-                  </>
-                ) : (
-                  ''
-                )}
-              </li>
-              {/*models.length > 1 ? (
+                  <span className={css('footer')}>
+                    View on{' '}
+                    <Link
+                      href={
+                        bfvd
+                          ? `//bfvd.foldseek.com/cluster/${proteinAcc}`
+                          : modelUrl
+                      }
+                      className={css('ext')}
+                      target="_blank"
+                    >
+                      {bfvd ? 'BFVD' : 'AlphaFold DB'}
+                    </Link>
+                    <br />
+                    Find similar structures with{' '}
+                    <Link
+                      href={`//search.foldseek.com/search?accession=${proteinAcc}&source=${
+                        bfvd ? 'BFVD' : 'AlphaFoldDB'
+                      }`}
+                      className={css('ext')}
+                      target="_blank"
+                    >
+                      Foldseek
+                    </Link>
+                  </span>
+                </li>
+                <li>
+                  {modelInfo !== undefined ? (
+                    <>
+                      <span className={css('header')}>Organism</span>
+                      <i> {modelInfo.organismScientificName} </i>
+                    </>
+                  ) : (
+                    ''
+                  )}
+                </li>
+                {/*models.length > 1 ? (
                 <li>
                   <span className={css('header')}>Prediction</span>
                   <select
@@ -274,118 +276,123 @@ const Structure3DModel = ({
               ) : (
                 ''
               )*/}
-              <li>
-                <span className={css('header')}>Colour by</span>
-                <select
-                  value={colorBy}
-                  className={css('protein-list')}
-                  onChange={(event) =>
-                    onColorChange && onColorChange(event.target.value)
-                  }
-                >
-                  <option value={bfvd ? 'bfvd' : 'af'}>Model confidence</option>
-                  {hasTED && <option value="ted">TED domains</option>}
-                  <option value="repr_families">Representative families</option>
-                  <option value="repr_domains">Representative domains</option>
-                </select>
-              </li>
-            </ul>
+                {!hasMultipleProteins && (
+                  <li>
+                    <span className={css('header')}>Colour by</span>
+                    <select
+                      value={colorBy}
+                      className={css('protein-list')}
+                      onChange={(event) =>
+                        onColorChange && onColorChange(event.target.value)
+                      }
+                    >
+                      <option value={bfvd ? 'bfvd' : 'af'}>
+                        Model confidence
+                      </option>
+                      {hasTED && <option value="ted">TED domains</option>}
+                      {/* <option value="repr_families">Representative families</option>
+                    <option value="repr_domains">Representative domains</option> */}
+                    </select>
+                  </li>
+                )}
+              </ul>
 
-            {(colorBy === 'af' || colorBy === 'bfvd') && (
-              <>
-                <h5>Model confidence</h5>
-                <ul className={css('legend')}>
-                  {confidenceColors.map((item) => (
-                    <li key={item.category}>
-                      <span style={{ backgroundColor: item.color }}>
-                        &nbsp;
-                      </span>{' '}
-                      {item.category} ({item.range})
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </div>
-        )}
-        <div className={css('panel-component')}>
-          <PictureInPicturePanel
-            className={css({ 'structure-viewer-split': isSplitScreen })}
-            data-testid="structure-3d-viewer"
-            OtherButtons={
-              <div
-                style={{
-                  display: isSplitScreen ? 'none' : 'block',
-                }}
-                className={css('button-bar')}
-              >
-                <Link
-                  className={css('control')}
-                  href={!bfvd && modelInfo ? modelInfo.pdbUrl : bfvdURL}
-                  download={`${proteinAcc || 'download'}.model.pdb`}
+              {(colorBy === 'af' || colorBy === 'bfvd') && (
+                <>
+                  <h5>Model confidence</h5>
+                  <ul className={css('legend')}>
+                    {confidenceColors.map((item) => (
+                      <li key={item.category}>
+                        <span style={{ backgroundColor: item.color }}>
+                          &nbsp;
+                        </span>{' '}
+                        {item.category} ({item.range})
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          )}
+          <div className={css('panel-component')}>
+            <PictureInPicturePanel
+              className={css({ 'structure-viewer-split': isSplitScreen })}
+              data-testid="structure-3d-viewer"
+              OtherButtons={
+                <div
+                  style={{
+                    display: isSplitScreen ? 'none' : 'block',
+                  }}
+                  className={css('button-bar')}
                 >
-                  <span
-                    className={css('icon', 'icon-common', 'icon-download')}
-                    data-icon="&#xf019;"
-                  />
-                  &nbsp;PDB file
-                </Link>
-                {!bfvd && (
                   <Link
                     className={css('control')}
-                    href={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
-                    download={`${proteinAcc || 'download'}.model.cif`}
+                    href={!bfvd && modelInfo ? modelInfo.pdbUrl : bfvdURL}
+                    download={`${proteinAcc || 'download'}.model.pdb`}
                   >
                     <span
                       className={css('icon', 'icon-common', 'icon-download')}
                       data-icon="&#xf019;"
                     />
-                    &nbsp;mmCIF file
+                    &nbsp;PDB file
                   </Link>
-                )}
-                <Button
-                  type="inline"
-                  icon="icon-redo"
-                  className={css('control')}
-                  onClick={() => setShouldResetViewer(true)}
-                  title="Reset image"
-                />
-                <FullScreenButton
-                  className={css('icon', 'icon-common', 'control')}
-                  tooltip="Split full screen"
-                  dataIcon="icon-columns"
-                  element={parentElement}
-                  onFullScreenHook={() => onSplitScreenChange?.(true)}
-                  onExitFullScreenHook={() => onSplitScreenChange?.(false)}
-                />{' '}
-                <FullScreenButton
-                  className={css('icon', 'icon-common', 'control')}
-                  tooltip="View the structure in full screen mode"
-                  element={isReady ? elementId : null}
-                />{' '}
-                <PIPToggleButton
-                  className={css('icon', 'icon-common', 'control')}
-                />
-              </div>
-            }
-          >
-            <StructureViewer
-              id={'fullSequence'}
-              url={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
-              elementId={elementId}
-              ext={bfvd ? 'pdb' : 'mmcif'}
-              theme={colorBy}
-              colorMap={colorMap}
-              shouldResetViewer={shouldResetViewer}
-              selections={selections}
-              onStructureLoaded={() => {
-                setReady(true);
-              }}
-            />
-          </PictureInPicturePanel>
+                  {!bfvd && (
+                    <Link
+                      className={css('control')}
+                      href={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
+                      download={`${proteinAcc || 'download'}.model.cif`}
+                    >
+                      <span
+                        className={css('icon', 'icon-common', 'icon-download')}
+                        data-icon="&#xf019;"
+                      />
+                      &nbsp;mmCIF file
+                    </Link>
+                  )}
+                  <Button
+                    type="inline"
+                    icon="icon-redo"
+                    className={css('control')}
+                    onClick={() => setShouldResetViewer(true)}
+                    title="Reset image"
+                  />
+                  <FullScreenButton
+                    className={css('icon', 'icon-common', 'control')}
+                    tooltip="Split full screen"
+                    dataIcon="icon-columns"
+                    element={parentElement}
+                    onFullScreenHook={() => onSplitScreenChange?.(true)}
+                    onExitFullScreenHook={() => onSplitScreenChange?.(false)}
+                  />{' '}
+                  <FullScreenButton
+                    className={css('icon', 'icon-common', 'control')}
+                    tooltip="View the structure in full screen mode"
+                    element={isReady ? elementId : null}
+                  />{' '}
+                  <PIPToggleButton
+                    className={css('icon', 'icon-common', 'control')}
+                  />
+                </div>
+              }
+            >
+              <StructureViewer
+                id={'fullSequence'}
+                url={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
+                elementId={elementId}
+                ext={bfvd ? 'pdb' : 'mmcif'}
+                theme={colorBy}
+                colorMap={colorMap}
+                shouldResetViewer={shouldResetViewer}
+                selections={selections}
+                onStructureLoaded={() => {
+                  setReady(true);
+                }}
+              />
+            </PictureInPicturePanel>
+          </div>
         </div>
       </div>
-    </div>
+    )
   );
 };
 
