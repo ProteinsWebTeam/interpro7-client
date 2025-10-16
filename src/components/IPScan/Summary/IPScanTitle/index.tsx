@@ -83,9 +83,7 @@ const IPScanTitle = ({
           placeholder="ø"
         />
         {editable &&
-        ['finished', 'imported file', 'saved in browser'].includes(
-          status || '',
-        ) ? (
+        ['finished_with_results', 'imported file'].includes(status || '') ? (
           <Button
             type="inline"
             onClick={changeTitle}

@@ -22,26 +22,5 @@ exports[`<Actions /> should render 1`] = `
       </span>
     </ForwardRef>
   </Tooltip>
-  <Tooltip
-    title={
-      <div>
-        <b>
-          Save results in Browser
-        </b>
-        : If you save the results of this search in your browser, you will be able to view it here even after it is deleted from our servers or when you are offline.
-      </div>
-    }
-  >
-    <ForwardRef
-      aria-label="Save results in Browser"
-      icon="icon-save"
-      onClick={[Function]}
-      type="secondary"
-    >
-      <span>
-        Save results in Browser
-      </span>
-    </ForwardRef>
-  </Tooltip>
 </nav>
 `;

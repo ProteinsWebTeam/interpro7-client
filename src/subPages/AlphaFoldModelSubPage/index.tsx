@@ -19,8 +19,6 @@ import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import forSplit from 'components/Structure/ViewerAndEntries/style.css';
-import { changeSettingsRaw } from 'actions/creators';
-import { chooseColor } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded';
 
 const css = cssBinder(ipro, fonts, forSplit);
 
@@ -51,6 +49,10 @@ const AlphaFoldModelSubPage = ({
   const [interproNData, setInterProNData] = useState({});
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
+  const [colorBy, setColorBy] = useState('af');
+  const [colorMap, setColorMap] = useState<Record<number, number>>({});
+  const [hasTED, setHasTED] = useState(false);
+
   const handleProteinChange = (value: string) => {
     setProteinAcc(value);
     setModelId(null);
@@ -58,6 +60,10 @@ const AlphaFoldModelSubPage = ({
   };
   const handleModelChange = (value: string) => {
     setModelId(value);
+  };
+
+  const onColorChange = (value: string) => {
+    setColorBy(value);
   };
 
   useEffect(() => {
@@ -81,9 +87,13 @@ const AlphaFoldModelSubPage = ({
     >
       {proteinAcc && (
         <AlphaFoldModel
+          colorMap={colorMap}
           proteinAcc={proteinAcc}
+          hasTED={hasTED}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
+          onColorChange={onColorChange}
+          colorBy={colorBy}
           modelId={modelId}
           selections={selectionsInModel}
           parentElement={container.current}
@@ -99,8 +109,11 @@ const AlphaFoldModelSubPage = ({
           className={css('protvista-container')}
         >
           <ProteinViewerForPredictedStructure
+            setColorMap={setColorMap}
+            setHasTED={setHasTED}
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
+            colorBy={colorBy}
             colorDomainsBy={colorDomainsBy}
             dataInterProNMatches={dataInterProNMatches?.payload || {}}
             onChangeSelection={(selection: null | Array<Selection>) => {

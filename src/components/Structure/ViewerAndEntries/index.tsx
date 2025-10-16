@@ -33,7 +33,7 @@ type Props = {
 };
 
 export type Selection = {
-  color: number;
+  color: number | string;
   start: number;
   end: number;
   chain: string;
