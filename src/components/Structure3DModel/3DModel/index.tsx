@@ -256,7 +256,8 @@ const Structure3DModel = ({
                   ''
                 )}
               </li>
-              {/*models.length > 1 ? (
+            </ul>
+            {/*models.length > 1 ? (
                 <li>
                   <span className={css('header')}>Prediction</span>
                   <select
@@ -273,44 +274,9 @@ const Structure3DModel = ({
               ) : (
                 ''
               )*/}
-              {!hasMultipleProteins && (
-                <li>
-                  <span className={css('header')}>Colour by</span>
-                  <select
-                    value={colorBy}
-                    className={css('protein-list')}
-                    onChange={(event) =>
-                      onColorChange && onColorChange(event.target.value)
-                    }
-                  >
-                    <option value={bfvd ? 'bfvd' : 'af'}>
-                      Model confidence
-                    </option>
-                    {hasTED && <option value="ted">TED domains</option>}
-                    {/* <option value="repr_families">Representative families</option>
-                    <option value="repr_domains">Representative domains</option> */}
-                  </select>
-                </li>
-              )}
-            </ul>
-
-            {(colorBy === 'af' || colorBy === 'bfvd') && (
-              <>
-                <h5>Model confidence</h5>
-                <ul className={css('legend')}>
-                  {confidenceColors.map((item) => (
-                    <li key={item.category}>
-                      <span style={{ backgroundColor: item.color }}>
-                        &nbsp;
-                      </span>{' '}
-                      {item.category} ({item.range})
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
           </div>
         )}
+
         <div className={css('panel-component')}>
           <PictureInPicturePanel
             className={css({ 'structure-viewer-split': isSplitScreen })}
@@ -372,6 +338,40 @@ const Structure3DModel = ({
               </div>
             }
           >
+            {!hasMultipleProteins && (
+              <>
+                <b>Colouring theme</b>
+                <select
+                  value={colorBy}
+                  onChange={(event) =>
+                    onColorChange && onColorChange(event.target.value)
+                  }
+                >
+                  <option value={bfvd ? 'bfvd' : 'af'}>Model confidence</option>
+                  {hasTED && <option value="ted">TED domains</option>}
+                  {/* <option value="repr_families">Representative families</option>
+                    <option value="repr_domains">Representative domains</option> */}
+                </select>
+              </>
+            )}
+
+            {/* {(colorBy === 'af' || colorBy === 'bfvd') && (
+            <>
+              <h5>Model confidence</h5>
+              <ul className={css('legend')}>
+                {confidenceColors.map((item) => (
+                  <li key={item.category}>
+                    <span style={{ backgroundColor: item.color }}>
+                      &nbsp;
+                    </span>{' '}
+                    {item.category} ({item.range})
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          */}
+
             <StructureViewer
               id={'fullSequence'}
               url={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}

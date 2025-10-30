@@ -65,6 +65,10 @@ select {
   max-width: 100% !important;
 }
 
+:global(.split-view) .structure-viewer-split {
+  padding: 10px;
+}
+
 div.alphafold-model .structure-viewer-split {
   height: 90vh;
 }
