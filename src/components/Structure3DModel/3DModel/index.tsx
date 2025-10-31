@@ -13,6 +13,7 @@ import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPictureP
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
 import Button from 'components/SimpleCommonComponents/Button';
+import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 import { Selection } from 'components/Structure/ViewerAndEntries';
@@ -92,6 +93,28 @@ const Structure3DModel = ({
   const [isPDBLoading, setIsPDBLoading] = useState(false);
   const [isPDBAvailable, setIsPDBAvailable] = useState(false);
   const [bfvdURL, setBfvdURL] = useState(bfvd || '');
+
+  const renderLegend = () => {
+    if (colorBy === 'af' || colorBy === 'bfvd') {
+      return (
+        <>
+          <ul className={css('legend')}>
+            <li>
+              {' '}
+              <b> Model Confidence </b>{' '}
+            </li>
+            {confidenceColors.map((item) => (
+              <li key={item.category}>
+                <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
+                {item.category} ({item.range})
+              </li>
+            ))}
+          </ul>
+        </>
+      );
+    }
+    return '';
+  };
 
   // Effect to check PDB availability (moved from BFVDModelSubPage)
   useEffect(() => {
@@ -340,8 +363,21 @@ const Structure3DModel = ({
           >
             {!hasMultipleProteins && (
               <>
-                <b>Colouring theme</b>
+                <div className={css('color-theme-title')}>
+                  <b>Colouring theme</b>
+                  <Tooltip
+                    title={renderLegend()}
+                    interactive={true}
+                    isFullScreen={true}
+                  >
+                    <span
+                      className={css('icon', 'icon-common')}
+                      data-icon="&#xf059;"
+                    />
+                  </Tooltip>
+                </div>
                 <select
+                  className={css('color-theme-select')}
                   value={colorBy}
                   onChange={(event) =>
                     onColorChange && onColorChange(event.target.value)
@@ -354,23 +390,6 @@ const Structure3DModel = ({
                 </select>
               </>
             )}
-
-            {/* {(colorBy === 'af' || colorBy === 'bfvd') && (
-            <>
-              <h5>Model confidence</h5>
-              <ul className={css('legend')}>
-                {confidenceColors.map((item) => (
-                  <li key={item.category}>
-                    <span style={{ backgroundColor: item.color }}>
-                      &nbsp;
-                    </span>{' '}
-                    {item.category} ({item.range})
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-          */}
 
             <StructureViewer
               id={'fullSequence'}
