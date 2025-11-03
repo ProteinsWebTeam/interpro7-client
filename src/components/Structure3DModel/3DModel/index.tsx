@@ -59,6 +59,7 @@ type Props = {
   colorBy?: string;
   colorMap?: Record<number, number>;
   hasTED: boolean;
+  hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
   modelId: string | null;
   modelUrl?: string;
   bfvd?: string;
@@ -77,6 +78,7 @@ const Structure3DModel = ({
   colorBy,
   colorMap,
   hasTED,
+  hasRepresentativeData,
   modelId,
   modelUrl,
   bfvd,
@@ -93,6 +95,21 @@ const Structure3DModel = ({
   const [isPDBLoading, setIsPDBLoading] = useState(false);
   const [isPDBAvailable, setIsPDBAvailable] = useState(false);
   const [bfvdURL, setBfvdURL] = useState(bfvd || '');
+
+  useEffect(() => {
+    const selectedValueToKey: Record<string, 'family' | 'domain'> = {
+      repr_families: 'family',
+      repr_domains: 'domain',
+    };
+    if (
+      colorBy &&
+      hasRepresentativeData &&
+      hasRepresentativeData[selectedValueToKey[colorBy]] === null &&
+      onColorChange
+    ) {
+      onColorChange(bfvd ? 'bfvd' : 'af');
+    }
+  }, [colorBy, hasRepresentativeData]);
 
   const renderLegend = () => {
     if (colorBy === 'af' || colorBy === 'bfvd') {
@@ -112,6 +129,26 @@ const Structure3DModel = ({
           </ul>
         </>
       );
+    } else if (colorBy == 'ted') {
+      return (
+        <ul className={css('legend')}>
+          <li>
+            {' '}
+            <b> Ted </b>{' '}
+          </li>
+          <li> Highlight all TED domains </li>
+        </ul>
+      );
+    } else if (colorBy?.includes('repr')) {
+      return (
+        <ul className={css('legend')}>
+          <li>
+            {' '}
+            <b> Representative data </b>{' '}
+          </li>
+          <li> Highlight {colorBy.replace('repr_', 'representative ')} </li>
+        </ul>
+      );
     }
     return '';
   };
@@ -124,7 +161,6 @@ const Structure3DModel = ({
       fetch(bfvd, { method: 'GET' })
         .then((res) => {
           if (res.ok) {
-            console.log(res);
             setIsPDBAvailable(true);
           }
           setIsPDBLoading(false);
@@ -365,11 +401,7 @@ const Structure3DModel = ({
               <>
                 <div className={css('color-theme-title')}>
                   <b>Colouring theme</b>
-                  <Tooltip
-                    title={renderLegend()}
-                    interactive={true}
-                    isFullScreen={true}
-                  >
+                  <Tooltip html={renderLegend()} isFullScreen={true}>
                     <span
                       className={css('icon', 'icon-common')}
                       data-icon="&#xf059;"
@@ -379,14 +411,20 @@ const Structure3DModel = ({
                 <select
                   className={css('color-theme-select')}
                   value={colorBy}
-                  onChange={(event) =>
-                    onColorChange && onColorChange(event.target.value)
-                  }
+                  onChange={(event) => {
+                    if (onColorChange) onColorChange(event.target.value);
+                  }}
                 >
                   <option value={bfvd ? 'bfvd' : 'af'}>Model confidence</option>
                   {hasTED && <option value="ted">TED domains</option>}
-                  {/* <option value="repr_families">Representative families</option>
-                    <option value="repr_domains">Representative domains</option> */}
+                  {hasRepresentativeData && hasRepresentativeData['family'] && (
+                    <option value="repr_families">
+                      Representative families
+                    </option>
+                  )}
+                  {hasRepresentativeData && hasRepresentativeData['domain'] && (
+                    <option value="repr_domains">Representative domains</option>
+                  )}
                 </select>
               </>
             )}
