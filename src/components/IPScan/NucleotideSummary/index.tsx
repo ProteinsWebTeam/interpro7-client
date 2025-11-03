@@ -44,20 +44,12 @@ const NucleotideSummary = ({
     };
     return (
       <>
-        <Callout type="info" showIcon icon="icon-dna">
-          <b>Nucleotide Sequence</b>
-          <div>
-            This analysis was the result of an InterProScan execution over a
-            nucleotide sequence. The data below correspond to a single ORF from
-            such sequence.
-          </div>
-        </Callout>
         <section className={f('summary-row')}>
           <header>DNA Sequence ID</header>
           <section>{nPayload.crossReferences[0].id}</section>
         </section>
         <section className={f('summary-row')}>
-          <header>Current ORF</header>
+          <header>Open Reading Frame</header>
           <section>
             <select onChange={handleORFChange} value={orf}>
               {nPayload.openReadingFrames.map((frame, i) => (
@@ -66,36 +58,6 @@ const NucleotideSummary = ({
                 </option>
               ))}
             </select>
-          </section>
-        </section>
-        <section className={f('summary-row')}>
-          <header>Open Reading Frame</header>
-
-          <section>
-            <section className={f('summary-row')}>
-              <header>Location</header>
-              <section>
-                <Link
-                  to={({ description }) => ({
-                    description: {
-                      ...description,
-                      [description.main.key]: {
-                        ...description[description.main.key],
-                        detail: 'sequence',
-                      },
-                    },
-                    search: { orf },
-                    hash: 'nucleotides',
-                  })}
-                >
-                  {currentORF.start}-{currentORF.end}
-                </Link>
-              </section>
-            </section>
-            <section className={f('summary-row')}>
-              <header>Strand</header>
-              <section>{currentORF.strand}</section>
-            </section>
           </section>
         </section>
       </>

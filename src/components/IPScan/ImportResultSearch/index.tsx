@@ -6,6 +6,7 @@ import { goToCustomLocation } from 'actions/creators';
 import blockEvent from 'utils/block-event';
 
 import Button from 'components/SimpleCommonComponents/Button';
+import Link from 'components/generic/Link';
 
 import LoadedFileDialog from './LoadedFileDialog';
 
@@ -119,36 +120,30 @@ const ImportResultSearch = ({ goToCustomLocation }: Props) => {
       onDragExit={_handleUndragging}
       onDragLeave={_handleUndragging}
     >
-      <label className={css('import-label')} htmlFor="interproScanId">
-        Import:
-      </label>
       <input
         name="interproScanId"
         type="text"
-        placeholder="InterProScan ID"
+        placeholder="Retrieve your job using ID (e.g. iprscan5-R20251028-215031-0803-66247021-p1m)"
         value={id}
         onChange={handleChange}
         onKeyUp={handleKeyPress}
       />
-      <Button
-        disabled={!isValid}
-        aria-label={`${TITLE} from server with ID`}
-        onClick={handleImport}
-        icon="icon-cloud-download-alt"
-      />
+
+      <Link disabled={!isValid} buttonType="primary" onClick={handleImport}>
+        Retrieve
+      </Link>
 
       <label
         aria-label={`${TITLE} from file`}
         className={`vf-button ${css(
-          'icon',
-          'icon-common',
+          'import-label',
           'vf-button',
           'vf-button--primary',
           'vf-button--sm',
         )}`}
-        data-icon="&#xf093;"
+        data-icon=""
       >
-        {' '}
+        {'Import results'}
         <input type="file" onChange={_handleFileChange} hidden accept=".json" />
       </label>
       <div className={css('dragging-overlay')}>Drop your file here</div>

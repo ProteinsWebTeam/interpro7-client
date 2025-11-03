@@ -253,7 +253,6 @@ const SummaryIPScanJob = ({
   const reg = /(.+)(-\d+)$/;
   const match = reg.exec(jobAccession);
   const rootAccession = match?.[1] ?? jobAccession;
-
   const jobVersion = bPayload['interpro-version'] || '';
 
   return (
@@ -261,51 +260,16 @@ const SummaryIPScanJob = ({
       <section>
         <IPScanVersionCheck ipScanVersion={jobVersion} />
 
-        <IPScanTitle
-          type="sequence"
-          accession={seqAccession}
-          payload={payload as Iprscan5Result}
-          status={status}
-          editable={jobType !== 'n'}
-        />
+        {!(typeof orf === 'number') && (
+          <IPScanTitle
+            type="sequence"
+            accession={seqAccession}
+            payload={payload as Iprscan5Result}
+            status={status}
+            editable={false}
+          />
+        )}
 
-        <section className={css('summary-row')}>
-          <header>
-            Job ID{' '}
-            <Tooltip title={'Case sensitive'}>
-              <span
-                className={css('small', 'icon', 'icon-common')}
-                data-icon="&#xf129;"
-                aria-label={'Case sensitive'}
-              />
-            </Tooltip>
-          </header>
-          <section style={{ display: 'flex' }}>
-            <Link
-              to={{
-                description: {
-                  main: { key: 'result' },
-                  result: {
-                    job: jobAccession,
-                    type: 'InterProScan',
-                  },
-                },
-              }}
-            >
-              <Accession accession={jobAccession} title="Job ID" />{' '}
-            </Link>
-            <CopyToClipboard
-              textToCopy={getIProScanURL(jobAccession)}
-              tooltipText="Copy URL"
-            />
-          </section>
-        </section>
-        <section className={css('summary-row')}>
-          <header>Status</header>
-          <section>
-            <StatusTooltip status={status} />
-          </section>
-        </section>
         {/* {localID && (
           <section className={css('summary-row')}>
             <header>Job Actions</header>
@@ -350,29 +314,7 @@ const SummaryIPScanJob = ({
             mainData={{ metadata }}
             dataMerged={mergedData}
             loading={false}
-          >
-            <Exporter includeSettings={false}>
-              <ul>
-                {['tsv', 'json', 'xml', 'gff', 'sequence'].map((type) => (
-                  <li key={type}>
-                    <Link
-                      target="_blank"
-                      href={
-                        expired
-                          ? dataURL
-                          : `${dataURL}/${rootAccession}/${type}`
-                      }
-                      buttonType="secondary"
-                      download={`InterProScan.${type}`}
-                      disabled={expired && type !== 'json'}
-                    >
-                      {type.toUpperCase()}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Exporter>
-          </DomainsOnProteinLoaded>
+          ></DomainsOnProteinLoaded>
           <GoTerms terms={interProGoTerms} type="protein" />
           <GoTerms terms={pantherGoTerms} type="entry" db="PANTHER" />
         </>

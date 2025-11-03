@@ -45,22 +45,14 @@ const ReRun = ({ jobsData, goToCustomLocation }: Props) => {
   };
 
   return (
-    <Tooltip
-      title={
-        <div>
-          Start a new sequence search using the same sequences as this job.
-        </div>
-      }
+    <Button
+      type="secondary"
+      onClick={handleReRun}
+      icon="icon-undo"
+      aria-label="Resubmit all sequences"
     >
-      <Button
-        type="secondary"
-        onClick={handleReRun}
-        icon="icon-undo"
-        aria-label="Resubmit all sequences"
-      >
-        <span>Resubmit All</span>
-      </Button>
-    </Tooltip>
+      <span>Resubmit</span>
+    </Button>
   );
 };
 

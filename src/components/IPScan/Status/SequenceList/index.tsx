@@ -191,16 +191,7 @@ export const IPScanStatus = ({
       />
 
       <section className={css('summary-row')}>
-        <header>
-          Job ID{' '}
-          <Tooltip title={'Case sensitive'}>
-            <span
-              className={css('small', 'icon', 'icon-common')}
-              data-icon="&#xf129;"
-              aria-label={'Case sensitive'}
-            />
-          </Tooltip>
-        </header>
+        <header>Job ID </header>
         <section style={{ display: 'flex' }}>
           <Accession
             accession={job?.remoteID || job?.localID || ''}
@@ -242,12 +233,11 @@ export const IPScanStatus = ({
       </section>
       {job?.status === 'finished_with_results' && expiryDate >= new Date() && (
         <section className={css('summary-row')}>
-          <header>
-            Expires{' '}
+          <header>Expires </header>
+          <section>
+            {expiryDate.toDateString()}{' '}
             <Tooltip
-              title={
-                'InterProScan Jobs are only kept in our servers for 1 week.'
-              }
+              title={'InterProScan search results remain available for 7 days'}
             >
               <span
                 className={css('small', 'icon', 'icon-common')}
@@ -255,8 +245,7 @@ export const IPScanStatus = ({
                 aria-label={'Case sensitive'}
               />
             </Tooltip>
-          </header>
-          <section>{expiryDate.toDateString()}</section>
+          </section>
         </section>
       )}
       {finalStatuses.includes(job?.status as string) && (
@@ -269,7 +258,11 @@ export const IPScanStatus = ({
               MoreActions={
                 <>
                   <ReRun jobsData={jobsData} />
-                  <DropDownButton label="Download" icon="icon-download">
+                  <DropDownButton
+                    disabled={expiryDate < new Date()}
+                    label="Download"
+                    icon="icon-download"
+                  >
                     <DownloadAll job={job} jobsData={jobsData} />
                   </DropDownButton>
                 </>

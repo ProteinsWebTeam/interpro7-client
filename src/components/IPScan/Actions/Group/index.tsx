@@ -69,7 +69,7 @@ const GroupActions = ({ group, jobs, deleteJob }: Props) => {
                 type="hollow"
                 onClick={handleDelete}
                 icon="icon-trash"
-                aria-label="Delete Results"
+                aria-label="Delete"
               >
                 Delete All
               </Button>
