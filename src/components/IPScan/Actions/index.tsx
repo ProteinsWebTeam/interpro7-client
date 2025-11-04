@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
@@ -9,6 +9,9 @@ import {
   goToCustomLocation,
   keepJobAsLocal,
 } from 'actions/creators';
+
+import ReRun from './Group/ReRun';
+import { getSequencesData } from '../Status/SequenceList';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -27,6 +30,7 @@ type Props = {
   goToCustomLocation?: typeof goToCustomLocation;
   keepJobAsLocal?: typeof keepJobAsLocal;
   sequence?: string;
+  job?: MinimalJobMetadata;
   attributes?: {
     applications?: string[] | null;
     goterms?: string[] | null;
@@ -46,27 +50,14 @@ export const Actions = ({
   versionMismatch,
   attributes,
   sequence,
+  job,
   MoreActions,
 }: Props) => {
-  const _handleReRun = () => {
-    const search: InterProLocationSearch = {};
-    if (attributes?.applications) {
-      search.applications =
-        typeof attributes.applications === 'string'
-          ? [attributes.applications]
-          : attributes.applications;
-    }
-    goToCustomLocation?.({
-      description: {
-        main: { key: 'search' },
-        search: {
-          type: 'sequence',
-          value: ((sequence || '').match(/(.{1,60})/g) || []).join('\n'),
-        },
-      },
-      search,
-    });
-  };
+  useEffect(() => {
+    if (job) getSequencesData(job).then((data) => setJobsData(data));
+  }, []);
+
+  const [jobsData, setJobsData] = useState<Array<IprscanDataIDB>>([]);
 
   const _handleDelete = () => {
     deleteJob?.({ metadata: { localID } });
@@ -90,45 +81,7 @@ export const Actions = ({
       >
         {!forStatus && <span>Delete</span>}
       </Button>
-      {/*status === 'finished_with_results' && (
-        <Tooltip
-          title={
-            <div>
-              <b>Save results in Browser</b>: If you save the results of this
-              search in your browser, you will be able to view it here even
-              after it is deleted from our servers or when you are offline.
-            </div>
-          }
-        >
-          <Button
-            type={forStatus ? 'inline' : 'secondary'}
-            icon="icon-save"
-            onClick={() => keepJobAsLocal?.(localID)}
-            aria-label="Save results in Browser"
-          >
-            {!forStatus && <span>Save results in Browser</span>}
-          </Button>
-        </Tooltip>
-      )*/}
-      {versionMismatch && (
-        <Tooltip
-          title={
-            <div>
-              <b>Execute the job again</b>: We detected the current results were
-              executed with a previous version of InterProScan. Click in the
-              button to create a new job with the most recent version.
-            </div>
-          }
-        >
-          <Button
-            type="hollow"
-            icon="icon-history"
-            onClick={_handleReRun}
-            aria-label="Execute the job again"
-            textColor="var(--colors-light-txt)"
-          />
-        </Tooltip>
-      )}
+      {!MoreActions && <ReRun jobsPage={true} jobsData={jobsData} />}
       {MoreActions ? MoreActions : null}
     </nav>
   );

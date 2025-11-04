@@ -74,6 +74,18 @@ type Props = {
   updateJobTitle: typeof updateJobTitle;
 };
 
+export const getSequencesData = async (job: MinimalJobMetadata) => {
+  const dataT = await getTableAccess(IPScanJobsData);
+  const jobsData: Array<IprscanDataIDB> = [];
+  const data = (await dataT.get(job?.localID)) as IprscanDataIDB;
+  if (data && data.results?.length) jobsData.push(data);
+  for (let i = 1; i <= (job?.entries || 1); i++) {
+    const data = await dataT.get(`${job?.localID}-${i}`);
+    if (data) jobsData.push(data);
+  }
+  return jobsData;
+};
+
 export const IPScanStatus = ({
   ipScan,
   job,
@@ -88,17 +100,6 @@ export const IPScanStatus = ({
   const [shouldImportResults, setShouldImportResults] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   // const [versionMismatch, setVersionMismatch] = useState(false);
-  const getSequencesData = async (job: MinimalJobMetadata) => {
-    const dataT = await getTableAccess(IPScanJobsData);
-    const jobsData: Array<IprscanDataIDB> = [];
-    const data = (await dataT.get(job?.localID)) as IprscanDataIDB;
-    if (data && data.results?.length) jobsData.push(data);
-    for (let i = 1; i <= (job?.entries || 1); i++) {
-      const data = await dataT.get(`${job?.localID}-${i}`);
-      if (data) jobsData.push(data);
-    }
-    return jobsData;
-  };
 
   const finalStatuses = ['imported file', 'finished_with_results'];
 
