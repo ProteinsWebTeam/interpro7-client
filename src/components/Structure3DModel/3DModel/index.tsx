@@ -101,7 +101,6 @@ const Structure3DModel = ({
       fetch(bfvd, { method: 'GET' })
         .then((res) => {
           if (res.ok) {
-            console.log(res);
             setIsPDBAvailable(true);
           }
           setIsPDBLoading(false);
