@@ -129,7 +129,7 @@ const Structure3DModel = ({
           </ul>
         </>
       );
-    } else if (colorBy == 'ted') {
+    } else if (colorBy === 'ted') {
       return (
         <ul className={css('legend')}>
           <li>
