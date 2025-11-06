@@ -113,7 +113,7 @@ const Structure3DModel = ({
 
   const renderLegend = (display: string = '') => {
     return (
-      <div className={css('legend-container')}>
+      <div className={css(display ? 'inline-legend-container' : '')}>
         {(colorBy === 'af' || colorBy === 'bfvd') && (
           <>
             <b> Model Confidence </b>

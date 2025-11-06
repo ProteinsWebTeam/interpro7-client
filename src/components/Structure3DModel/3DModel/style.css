@@ -43,7 +43,8 @@ ul.inline-legend {
   gap: 5px;
 }
 
-.legend-container {
+.inline-legend-container {
+  margin-top: -6em;
   height: 4em;
 }
 
