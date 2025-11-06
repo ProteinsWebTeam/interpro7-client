@@ -36,9 +36,6 @@ export const getTrackColor = (
   // eslint-disable-next-line default-case
   switch (colorMode) {
     case EntryColorMode.ACCESSION:
-      if (entry.parent) {
-        entry = entry.parent;
-      }
       acc = entry.accession.startsWith('residue:')
         ? entry.accession
             .split('residue:')[1]

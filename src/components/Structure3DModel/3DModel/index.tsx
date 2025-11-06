@@ -111,46 +111,24 @@ const Structure3DModel = ({
     }
   }, [colorBy, hasRepresentativeData]);
 
-  const renderLegend = () => {
-    if (colorBy === 'af' || colorBy === 'bfvd') {
-      return (
-        <>
-          <ul className={css('legend')}>
-            <li>
-              {' '}
-              <b> Model Confidence </b>{' '}
-            </li>
-            {confidenceColors.map((item) => (
-              <li key={item.category}>
-                <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
-                {item.category} ({item.range})
-              </li>
-            ))}
-          </ul>
-        </>
-      );
-    } else if (colorBy === 'ted') {
-      return (
-        <ul className={css('legend')}>
-          <li>
-            {' '}
-            <b> Ted </b>{' '}
-          </li>
-          <li> Highlight all TED domains </li>
-        </ul>
-      );
-    } else if (colorBy?.includes('repr')) {
-      return (
-        <ul className={css('legend')}>
-          <li>
-            {' '}
-            <b> Representative data </b>{' '}
-          </li>
-          <li> Highlight {colorBy.replace('repr_', 'representative ')} </li>
-        </ul>
-      );
-    }
-    return '';
+  const renderLegend = (display: string = '') => {
+    return (
+      <div className={css('legend-container')}>
+        {(colorBy === 'af' || colorBy === 'bfvd') && (
+          <>
+            <b> Model Confidence </b>
+            <ul className={css('legend', display)}>
+              {confidenceColors.map((item) => (
+                <li key={item.category}>
+                  <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
+                  {item.category} ({item.range})
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    );
   };
 
   // Effect to check PDB availability (moved from BFVDModelSubPage)
@@ -315,24 +293,8 @@ const Structure3DModel = ({
                   ''
                 )}
               </li>
+              <li> {renderLegend()} </li>
             </ul>
-            {/*models.length > 1 ? (
-                <li>
-                  <span className={css('header')}>Prediction</span>
-                  <select
-                    value={modelId || ''}
-                    className={css('protein-list')}
-                    onChange={(event) => onModelChange(event.target.value)}
-                    onBlur={(event) => onModelChange(event.target.value)}
-                  >
-                    {models.map((model) => (
-                      <option key={model.modelEntityId}>{model.modelEntityId}</option>
-                    ))}
-                  </select>
-                </li>
-              ) : (
-                ''
-              )*/}
           </div>
         )}
 
@@ -399,15 +361,7 @@ const Structure3DModel = ({
           >
             {!hasMultipleProteins && (
               <>
-                <div className={css('color-theme-title')}>
-                  <b>Colouring theme</b>
-                  <Tooltip html={renderLegend()} isFullScreen={true}>
-                    <span
-                      className={css('icon', 'icon-common')}
-                      data-icon="&#xf059;"
-                    />
-                  </Tooltip>
-                </div>
+                <b>Colour by</b>
                 <select
                   className={css('color-theme-select')}
                   value={colorBy}
@@ -442,6 +396,7 @@ const Structure3DModel = ({
                 setReady(true);
               }}
             />
+            {isSplitScreen && renderLegend('inline-legend')}
           </PictureInPicturePanel>
         </div>
       </div>

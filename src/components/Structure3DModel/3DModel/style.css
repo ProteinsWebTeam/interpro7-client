@@ -33,7 +33,18 @@ ul.legend {
 ul.legend {
   display: flex;
   flex-direction: column;
+  font-size: 1em;
+}
+
+ul.inline-legend {
+  display: flex;
+  flex-direction: row;
   font-size: 0.9em;
+  gap: 5px;
+}
+
+.legend-container {
+  height: 4em;
 }
 
 ul.information > li:nth-child(n + 2) {
@@ -83,7 +94,7 @@ div.alphafold-model .structure-viewer-split {
 }
 
 .color-theme-select {
-  height: 50px;
+  min-height: 40px;
 }
 
 .color-theme-title {
