@@ -121,8 +121,9 @@ def output_list():
       <%     } 
            }%>sys.stdout.write("\n")
       <% } else if (fileType === "fasta") { %>
+      
       entries = None
-      elif ("entries" in item):
+      if ("entries" in item):
         entries = item["entries"]
       
       if entries is not None:
@@ -139,7 +140,7 @@ def output_list():
         sys.stdout.write(">" + item["metadata"]["accession"] + HEADER_SEPARATOR
                           + entries_header + HEADER_SEPARATOR
                           + item["metadata"]["name"] + "\n")
-      else:
+      else: 
         sys.stdout.write(">" + item["metadata"]["accession"] + HEADER_SEPARATOR + item["metadata"]["name"] + "\n")
 
       seq = item["extra_fields"]["sequence"]
