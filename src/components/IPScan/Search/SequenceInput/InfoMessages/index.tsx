@@ -52,6 +52,14 @@ const InfoMessages = ({ sequenceIssues }: Props) => {
                     <div className={css('header')}>{issue.header}</div>
                   </li>
                 );
+              case 'tooLong':
+                return (
+                  <li>
+                    The sequence with the header below is too long (max: 50k
+                    characters).{' '}
+                    <div className={css('header')}>{issue.header}</div>
+                  </li>
+                );
               case 'tooMany':
                 return (
                   <li>

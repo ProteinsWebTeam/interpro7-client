@@ -35,7 +35,7 @@ const IPScanTitle = ({
   editable = true,
 }: Props) => {
   const [title, setTitle] = useState(localTitle || '');
-  const [readOnly, setReadOnly] = useState(true);
+  const [readOnly, setReadOnly] = useState(!editable);
   const titleInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     setTitle(localTitle || (payload as Iprscan5Result).xref?.[0].name || '');
@@ -57,7 +57,7 @@ const IPScanTitle = ({
       setTitle(value);
     }
 
-    setReadOnly(true);
+    setReadOnly(!editable);
   };
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -69,6 +69,12 @@ const IPScanTitle = ({
     <section className={css('summary-row')}>
       <header>{type === 'sequence' ? 'Sequence ID' : 'Name'}</header>
       <section>
+        {editable && (
+          <span
+            className={css('icon', 'icon-common', 'icon-pencil-alt', 'small')}
+            data-icon="&#xf303;"
+          />
+        )}{' '}
         <input
           ref={titleInputRef}
           className={css('title')}
@@ -81,17 +87,6 @@ const IPScanTitle = ({
           placeholder="ø"
           tabIndex={-1}
         />
-        {editable && (
-          <Button
-            type="inline"
-            onClick={() => {
-              setReadOnly(false);
-              if (titleInputRef.current) titleInputRef.current.focus();
-            }}
-            icon={'icon-pencil-alt'}
-            title={'Rename'}
-          />
-        )}
       </section>
     </section>
   );

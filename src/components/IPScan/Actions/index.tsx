@@ -72,15 +72,27 @@ export const Actions = ({
   return (
     <nav className={css('buttons', { centered: forStatus })}>
       {withTitle && 'Actions: '}
-      {}
-      <Button
-        type={forStatus ? 'inline' : 'secondary'}
-        icon="icon-trash"
-        onClick={_handleDelete}
-        aria-label="Delete"
-      >
-        {!forStatus && <span>Delete</span>}
-      </Button>
+
+      {forStatus ? (
+        <Tooltip title={'Delete this job'}>
+          <Button
+            type={'inline'}
+            icon="icon-trash"
+            onClick={_handleDelete}
+            aria-label="Delete"
+          ></Button>
+        </Tooltip>
+      ) : (
+        <Button
+          type={'secondary'}
+          icon="icon-trash"
+          onClick={_handleDelete}
+          aria-label="Delete"
+        >
+          <span>Delete</span>
+        </Button>
+      )}
+
       {!MoreActions && <ReRun jobsPage={true} jobsData={jobsData} />}
       {MoreActions ? MoreActions : null}
     </nav>

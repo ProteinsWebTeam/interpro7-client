@@ -298,15 +298,9 @@ export class IPScanStatus extends PureComponent<Props, State> {
               />
             )}
           >
-            Action
+            Actions
           </Column>
         </Table>
-        <ClearAllDialog
-          show={this.state.show}
-          closeModal={() => this.setState({ show: false })}
-          jobs={this.state.jobsToRemove}
-          from={this.state.from}
-        />
       </div>
     );
   }

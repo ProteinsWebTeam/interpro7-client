@@ -11,7 +11,7 @@ const css = cssBinder(fonts, style);
 
 type Props = { status?: string };
 const _StatusTooltip = ({ status }: Props) => (
-  <Tooltip title={`Job ${status}`}>
+  <>
     {(status === 'running' ||
       status === 'queued' ||
       status === 'created' ||
@@ -46,7 +46,7 @@ const _StatusTooltip = ({ status }: Props) => (
         {status?.replace('finished_with_results', 'Finished')}
       </>
     )}
-  </Tooltip>
+  </>
 );
 
 const StatusTooltip = React.memo(_StatusTooltip);

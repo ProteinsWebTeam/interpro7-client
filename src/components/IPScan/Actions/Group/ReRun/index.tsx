@@ -45,14 +45,23 @@ const ReRun = ({ jobsData, jobsPage, goToCustomLocation }: Props) => {
     });
   };
 
-  return (
+  return jobsPage ? (
+    <Tooltip title={'Resubmit this job'}>
+      <Button
+        type={'inline'}
+        onClick={handleReRun}
+        icon={'icon-undo'}
+        aria-label="Resubmit all sequences"
+      ></Button>
+    </Tooltip>
+  ) : (
     <Button
-      type={jobsPage ? 'inline' : 'secondary'}
+      type={'secondary'}
       onClick={handleReRun}
-      icon={jobsPage ? 'icon-history' : 'icon-undo'}
+      icon={'icon-undo'}
       aria-label="Resubmit all sequences"
     >
-      {!jobsPage && <span>Resubmit</span>}
+      <span>Resubmit</span>
     </Button>
   );
 };

@@ -12,6 +12,7 @@ import Link from 'components/generic/Link';
 import { filterSubset, sortSubsetBy } from 'components/Table/FullyLoadedTable';
 import Table, { Column } from 'components/Table';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
+import Loading from 'components/SimpleCommonComponents/Loading';
 import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 
 import TooltipAndRTDLink from 'components/Help/TooltipAndRTDLink';
@@ -94,7 +95,7 @@ export const IPScanStatus = ({
   updateJobStatus,
   // updateJobTitle,
 }: Props) => {
-  const [jobsData, setJobsData] = useState<Array<IprscanDataIDB>>([]);
+  const [jobsData, setJobsData] = useState<Array<IprscanDataIDB> | null>(null);
   const [expiryDate, setExpiryDate] = useState(new Date());
 
   const [shouldImportResults, setShouldImportResults] = useState(false);
@@ -154,7 +155,12 @@ export const IPScanStatus = ({
       />
     );
   const keys = ['localTitle', 'matches', 'sequence'];
-  let paginatedJobs = [...jobsData];
+
+  let paginatedJobs: Array<IprscanDataIDB> = [];
+  if (jobsData) {
+    paginatedJobs = [...jobsData];
+  }
+
   sortSubsetBy<IprscanDataIDB>(paginatedJobs, search, keys, {
     localTitle: (localID, row) =>
       row?.results?.[0].xref?.[0]?.name || (localID as string),
@@ -258,13 +264,13 @@ export const IPScanStatus = ({
               status={job?.status || ''}
               MoreActions={
                 <>
-                  <ReRun jobsData={jobsData} />
+                  <ReRun jobsData={jobsData || []} />
                   <DropDownButton
                     disabled={expiryDate < new Date()}
                     label="Download"
                     icon="icon-download"
                   >
-                    <DownloadAll job={job} jobsData={jobsData} />
+                    <DownloadAll job={job} jobsData={jobsData || []} />
                   </DropDownButton>
                 </>
               }
@@ -272,77 +278,80 @@ export const IPScanStatus = ({
           </section>
         </section>
       )}
-      {finalStatuses.includes(job?.status as string) && (
-        <Table
-          dataTable={paginatedJobs}
-          rowKey="localID"
-          contentType="result"
-          actualSize={job?.entries || 1}
-          query={search}
-          showTableIcon={false}
-          // groupActions={GroupActions}
-        >
-          <Column
-            dataKey="localTitle"
-            isSearchable={true}
-            isSortable={true}
-            renderer={(localTitle: string, row: IprscanDataIDB) => (
-              <>
-                <span style={{ marginRight: '1em' }}>
-                  <Link
-                    to={{
-                      description: {
-                        main: { key: 'result' },
-                        result: {
-                          type: 'InterProScan',
-                          job: job?.remoteID,
-                          accession: row.localID,
+      {jobsData === null ? (
+        <Loading />
+      ) : (
+        finalStatuses.includes(job?.status as string) && (
+          <Table
+            dataTable={paginatedJobs}
+            rowKey="localID"
+            contentType="result"
+            actualSize={job?.entries || 1}
+            query={search}
+            showTableIcon={false}
+            // groupActions={GroupActions}
+          >
+            <Column
+              dataKey="localTitle"
+              isSearchable={true}
+              isSortable={true}
+              renderer={(localTitle: string, row: IprscanDataIDB) => (
+                <>
+                  <span style={{ marginRight: '1em' }}>
+                    <Link
+                      to={{
+                        description: {
+                          main: { key: 'result' },
+                          result: {
+                            type: 'InterProScan',
+                            job: job?.remoteID,
+                            accession: row.localID,
+                          },
                         },
-                      },
-                    }}
-                  >
-                    {(row.results[0]?.crossReferences ||
-                      row.results[0]?.xref)?.[0]?.id ||
-                      (localTitle === '∅' ? null : localTitle) ||
-                      row.localID}
-                  </Link>
-                </span>
-                {/* {row.remoteID && !row.remoteID.startsWith('imported') && (
+                      }}
+                    >
+                      {(row.results[0]?.crossReferences ||
+                        row.results[0]?.xref)?.[0]?.id ||
+                        (localTitle === '∅' ? null : localTitle) ||
+                        row.localID}
+                    </Link>
+                  </span>
+                  {/* {row.remoteID && !row.remoteID.startsWith('imported') && (
                 <CopyToClipboard
                   textToCopy={getIProScanURL(row.remoteID)}
                   tooltipText="Copy URL"
                 />
               )} */}
-              </>
-            )}
-          >
-            Sequence
-          </Column>
-          <Column
-            defaultKey="matches"
-            dataKey="results"
-            // isSearchable={true}
-            // isSortable={true}
-            displayIf={job.seqtype !== 'n'}
-            renderer={(results: Array<Iprscan5Result>) =>
-              results[0].matches.length
-            }
-          >
-            Matches
-          </Column>
-          <Column
-            defaultKey="length"
-            dataKey="results"
-            // isSearchable={true}
-            // isSortable={true}
-            renderer={(results: Array<Iprscan5Result>) =>
-              results[0].sequence.length
-            }
-          >
-            Sequence length
-          </Column>
+                </>
+              )}
+            >
+              Sequence
+            </Column>
+            <Column
+              defaultKey="matches"
+              dataKey="results"
+              // isSearchable={true}
+              // isSortable={true}
+              displayIf={job.seqtype !== 'n'}
+              renderer={(results: Array<Iprscan5Result>) =>
+                results[0].matches.length
+              }
+            >
+              Matches
+            </Column>
+            <Column
+              defaultKey="length"
+              dataKey="results"
+              // isSearchable={true}
+              // isSortable={true}
+              renderer={(results: Array<Iprscan5Result>) =>
+                results[0].sequence.length
+              }
+            >
+              Sequence length
+            </Column>
 
-          {/* <Column
+            {/* <Column
           dataKey="localID"
           defaultKey="actions"
           headerClassName={css('table-header-center')}
@@ -353,7 +362,8 @@ export const IPScanStatus = ({
         >
           Action
         </Column> */}
-        </Table>
+          </Table>
+        )
       )}
     </section>
   );
