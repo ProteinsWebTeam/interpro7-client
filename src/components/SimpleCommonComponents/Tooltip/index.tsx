@@ -41,6 +41,7 @@ const Tooltip = ({
   children,
   distance = 0,
   interactive = false,
+  isFullScreen = false,
   classNames = [],
   ...rest
 }: Props) => {
@@ -85,22 +86,29 @@ const Tooltip = ({
         }
       }, TOOLTIP_DELAY);
   };
+
+  const tooltipElement = (
+    <div
+      ref={refs.setFloating}
+      style={floatingStyles}
+      className={css(['popper', ...classNames].join(' '))}
+      onMouseEnter={() => setOverTooltip(true)}
+      onMouseLeave={() => setOverTooltip(false)}
+    >
+      <FloatingArrow ref={arrowRef} context={context} />
+      {content}
+    </div>
+  );
+
   return (
     <>
-      {hide ? null : (
-        <FloatingPortal>
-          <div
-            ref={refs.setFloating}
-            style={floatingStyles}
-            className={css('popper', ...classNames)}
-            onMouseEnter={() => setOverTooltip(true)}
-            onMouseLeave={() => setOverTooltip(false)}
-          >
-            <FloatingArrow ref={arrowRef} context={context} />
-            {content}
-          </div>
-        </FloatingPortal>
-      )}
+      {!hide &&
+        (isFullScreen ? (
+          tooltipElement
+        ) : (
+          <FloatingPortal>{tooltipElement}</FloatingPortal>
+        ))}
+
       <div
         {...rest}
         ref={refs.setReference}

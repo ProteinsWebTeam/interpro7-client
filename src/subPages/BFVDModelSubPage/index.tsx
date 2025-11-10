@@ -48,6 +48,13 @@ const BFVDModelSubPage = ({
   const [colorBy, setColorBy] = useState('bfvd');
   const [colorMap, setColorMap] = useState<Record<number, number>>({});
   const [hasTED, setHasTED] = useState(false);
+  const [hasRepresentativeData, setHasRepresentativeData] = useState<{
+    family: boolean | null;
+    domain: boolean | null;
+  }>({
+    family: null,
+    domain: null,
+  });
 
   const [modelId, setModelId] = useState<string | null>(null);
   const [isSplitScreen, setSplitScreen] = useState(false);
@@ -89,10 +96,11 @@ const BFVDModelSubPage = ({
       })}
       ref={container}
     >
-      {proteinAcc && (
+      {proteinAcc && hasRepresentativeData !== null && (
         <BFVDModel
           colorMap={colorMap}
           hasTED={hasTED}
+          hasRepresentativeData={hasRepresentativeData}
           proteinAcc={proteinAcc}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
@@ -126,6 +134,8 @@ const BFVDModelSubPage = ({
               setSelectionsInModel(selection);
             }}
             isSplitScreen={isSplitScreen}
+            setHasRepresentativeData={setHasRepresentativeData}
+            hasRepresentativeData={hasRepresentativeData}
           />
         </div>
       )}

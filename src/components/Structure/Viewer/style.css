@@ -1,5 +1,5 @@
 .viewer-resizer {
-  height: calc(100% - 2 * var(--height-bar));
+  height: 95%;
 
   & .structure-and-label {
     height: 100%;
@@ -8,8 +8,7 @@
     & .structure-viewer-ref {
       align-items: center;
       justify-content: center;
-      height: 88%;
-      max-width: 80vw;
+      height: 90%;
     }
 
     & .structure-label {

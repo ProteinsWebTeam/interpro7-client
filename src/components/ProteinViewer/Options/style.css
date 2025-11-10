@@ -18,15 +18,18 @@
   .view-options-title {
     font-size: 1rem;
     font-weight: 500;
-    flex-shrink: 0;
   }
 }
 
 .view-options {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: 90%;
+  display: grid;
+  grid-auto-flow: column;
+  margin-left: auto;
+}
+
+:global(.split-view) .view-options {
+  display: grid;
+  grid-auto-flow: row;
   margin-left: auto;
 }
 
