@@ -63,7 +63,6 @@ const RepresentativeTrack = ({
 
   // Update data with track color based on the selected color mode
   useEffect(() => {
-    console.log(entries);
     setData(
       entries.map((entry) => ({
         ...entry,
