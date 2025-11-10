@@ -3,17 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
-import config from 'config';
 
 import Link from 'components/generic/Link';
-import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Callout from 'components/SimpleCommonComponents/Callout';
 import Button from 'components/SimpleCommonComponents/Button';
-import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 
 import StructureViewer from 'components/Structure/ViewerOnDemand';
 import { Selection } from 'components/Structure/ViewerAndEntries';
