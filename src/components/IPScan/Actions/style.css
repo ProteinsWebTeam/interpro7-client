@@ -4,9 +4,9 @@
 
 body nav.buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   &.centered {
-    justify-content: space-evenly;
+    justify-content: center;
   }
   & button,
   & a.group,
