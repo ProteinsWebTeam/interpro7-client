@@ -31,6 +31,8 @@ import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TE
 import Callout from 'components/SimpleCommonComponents/Callout';
 import { features } from 'process';
 import { getTrackColor } from 'utils/entry-color';
+import Link from 'components/generic/Link';
+import config from 'config';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -463,7 +465,14 @@ const ProteinViewerForAlphafold = ({
               longer).
               <br />
               To change the display mode, open the <i>Options</i> menu below and
-              select your preferred setting.
+              select your preferred setting. See{' '}
+              <Link
+                href={`${config.root.readthedocs.href}protein_viewer.html#interpro-n-display-modes`}
+                target="_blank"
+              >
+                our documentation
+              </Link>{' '}
+              for an explanation of each display mode.
             </Callout>
           </>
         )}
