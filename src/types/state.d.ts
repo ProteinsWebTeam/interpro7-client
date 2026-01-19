@@ -217,8 +217,7 @@ type Server =
   | 'bfvd'
   | 'repeatsDB'
   | 'disprot'
-  | 'proteinsAPI'
-  | 'ted';
+  | 'proteinsAPI';
 type ServerStatus = {
   status: boolean | null;
   lastCheck: number | null;

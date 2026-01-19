@@ -9,6 +9,7 @@ type IprscanMetaIDB = {
   type: string;
   times: JobTimes;
   entries?: number;
+  email: string;
   seqtype?: 'p' | 'n';
 };
 
@@ -27,6 +28,7 @@ type JobStatus =
   | 'saved in browser'
   | 'running'
   | 'finished'
+  | 'finished_with_results'
   | 'queued'
   | 'error';
 

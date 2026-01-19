@@ -30,10 +30,12 @@ import local from './style.css';
 import searchPageCss from 'pages/Search/style.css';
 import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
+import config from 'config';
 
 const css = cssBinder(searchPageCss, local, blocks, buttonCSS, fonts);
 
 export const MAX_NUMBER_OF_SEQUENCES = 100;
+const NR_PER_HOUR_JOBS_THRESHOLD = 5;
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -53,6 +55,24 @@ const isXChecked = (x: string) => (form: HTMLElement) =>
 
 const isStayChecked = isXChecked('stay');
 
+function isWithinLast60Minutes(timestamp: number) {
+  const now = Date.now(); // current time in milliseconds
+  const sixtyMinutesInMs = 60 * 60 * 1000; // 60 minutes in milliseconds
+
+  return now - timestamp <= sixtyMinutesInMs;
+}
+
+const getLast60MinSingleSequenceJobs = (
+  jobs: JobsState,
+): { metadata: MinimalJobMetadata }[] =>
+  Object.values(jobs).filter((job) => {
+    return (
+      job['metadata']['status'] !== 'imported file' &&
+      job.metadata?.entries === 1 &&
+      isWithinLast60Minutes(job.metadata?.times?.created || 0)
+    );
+  });
+
 type Props = {
   createJob: typeof createJob;
   goToCustomLocation: typeof goToCustomLocation;
@@ -60,6 +80,7 @@ type Props = {
   value?: string | null;
   main?: string;
   search?: InterProLocationSearch;
+  jobs: JobsState;
 };
 
 type State = {
@@ -68,6 +89,7 @@ type State = {
   submittedJob: string | null;
   sequenceIssues: Array<SequenceIssue>;
   dragging: boolean;
+  last60minIpScanJobs?: number;
 };
 
 export class IPScanSearch extends PureComponent<Props, State> {
@@ -83,6 +105,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
     if (props.search) {
       initialAdvancedOptions = props.search;
     }
+
     this.state = {
       title: undefined,
       initialAdvancedOptions,
@@ -96,7 +119,25 @@ export class IPScanSearch extends PureComponent<Props, State> {
     if (this.props.value) this.sequenceToSet = this.props.value;
   }
 
-  componentDidUpdate() {
+  componentDidMount(): void {
+    if (this.props.jobs) {
+      let last60minIpScanJobs: {
+        metadata: MinimalJobMetadata;
+      }[] = [];
+
+      last60minIpScanJobs = getLast60MinSingleSequenceJobs(this.props.jobs);
+      this.setState({ last60minIpScanJobs: last60minIpScanJobs.length });
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.jobs !== prevProps.jobs) {
+      let last60minIpScanJobs: {
+        metadata: MinimalJobMetadata;
+      }[] = [];
+      last60minIpScanJobs = getLast60MinSingleSequenceJobs(this.props.jobs);
+      this.setState({ last60minIpScanJobs: last60minIpScanJobs.length });
+    }
     if (this.sequenceToSet && this._editorRef.current) {
       this._handleReset(this.sequenceToSet);
       this.sequenceToSet = null;
@@ -146,12 +187,18 @@ export class IPScanSearch extends PureComponent<Props, State> {
     const entries =
       editorContent.split('\n').filter((line) => line.trim().startsWith('>'))
         .length || 1;
+
     this.props.createJob({
       metadata: {
         localID,
         entries,
         localTitle: this.state.title,
         type: 'InterProScan',
+        email:
+          this.state.last60minIpScanJobs &&
+          this.state.last60minIpScanJobs >= NR_PER_HOUR_JOBS_THRESHOLD
+            ? config.IPScan.lowPriorityEmail
+            : config.IPScan.contactEmail,
         seqtype: isXChecked('seqtype')(this._formRef.current) ? 'n' : 'p',
       },
       data: {
@@ -225,6 +272,7 @@ export class IPScanSearch extends PureComponent<Props, State> {
     const allOk = this.state.sequenceIssues.length === 0;
     const hasText =
       !!this._editorRef.current && this._editorRef.current?.hasText();
+
     return (
       <section className={css('vf-stack', 'vf-stack--400')}>
         <form
@@ -376,11 +424,13 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ipScan,
   (state: GlobalState) => state.customLocation.description,
   (state: GlobalState) => state.customLocation.search,
-  (ipScan, desc, search) => ({
+  (state: GlobalState) => state.jobs,
+  (ipScan, desc, search, jobs) => ({
     ipScan,
     value: desc.search.value,
     main: desc.main.key!,
     search,
+    jobs,
   }),
 );
 

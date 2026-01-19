@@ -19,10 +19,11 @@ const mergeSequences = (results: Array<Iprscan5Result>) => {
 
 type Props = {
   jobsData?: Array<IprscanDataIDB>;
+  jobsPage?: boolean;
   goToCustomLocation: typeof goToCustomLocation;
 };
 
-const ReRun = ({ jobsData, goToCustomLocation }: Props) => {
+const ReRun = ({ jobsData, jobsPage, goToCustomLocation }: Props) => {
   const handleReRun = async () => {
     const search: InterProLocationSearch = {};
     // All jobs should have the same applications so we can t=ake this from the first one.
@@ -44,23 +45,24 @@ const ReRun = ({ jobsData, goToCustomLocation }: Props) => {
     });
   };
 
-  return (
-    <Tooltip
-      title={
-        <div>
-          Start a new sequence search using the same sequences as this job.
-        </div>
-      }
-    >
+  return jobsPage ? (
+    <Tooltip title={'Resubmit this job'}>
       <Button
-        type="secondary"
+        type={'inline'}
         onClick={handleReRun}
-        icon="icon-undo"
+        icon={'icon-undo'}
         aria-label="Resubmit all sequences"
-      >
-        <span>Resubmit All</span>
-      </Button>
+      ></Button>
     </Tooltip>
+  ) : (
+    <Button
+      type={'secondary'}
+      onClick={handleReRun}
+      icon={'icon-undo'}
+      aria-label="Resubmit all sequences"
+    >
+      <span>Resubmit</span>
+    </Button>
   );
 };
 

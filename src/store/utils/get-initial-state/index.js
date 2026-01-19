@@ -71,12 +71,6 @@ export default (historyWrapper) => {
         port: config.root.proteinsAPI.port || DEFAULT_HTTP_PORT,
         root: config.root.proteinsAPI.pathname,
       };
-      settings.ted = {
-        protocol: config.root.ted.protocol,
-        hostname: config.root.ted.hostname,
-        port: config.root.ted.port || DEFAULT_HTTP_PORT,
-        root: config.root.ted.pathname,
-      };
     }
   }
   let description = { other: ['NotFound'] };

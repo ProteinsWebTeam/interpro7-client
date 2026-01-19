@@ -69,6 +69,21 @@ type Props = PropsWithChildren<{
   showConservationButton?: boolean;
   /** `DISABLED` - conservation data is currently disabled */
   handleConservationLoad?: () => void;
+
+  setHasRepresentativeData?: (s: {
+    family: boolean | null;
+    domain: boolean | null;
+  }) => void;
+  hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
+  setRepresentativeDataForStructure?: (s: {
+    family: ExtendedFeature[];
+    domain: ExtendedFeature[];
+  }) => void;
+  representativeDataForStructure?: {
+    family: ExtendedFeature[];
+    domain: ExtendedFeature[];
+  };
+
   /** `DISABLED` - conservation data is currently disabled */
   conservationError?: string;
   /** TO include loading animation in the header */
@@ -119,6 +134,10 @@ export const ProteinViewer = ({
   changeSettingsRaw,
   showMoreSettings,
   handleConservationLoad,
+  setHasRepresentativeData,
+  hasRepresentativeData,
+  setRepresentativeDataForStructure,
+  representativeDataForStructure,
   conservationError,
   dataBase,
   loading = false,
@@ -239,6 +258,15 @@ export const ProteinViewer = ({
     setHideCategory(newHideCategory);
   }, [showMoreSettings]);
 
+  useEffect(() => {
+    if (setHasRepresentativeData) {
+      setHasRepresentativeData({ family: null, domain: null });
+    }
+    if (setRepresentativeDataForStructure) {
+      setRepresentativeDataForStructure({ family: [], domain: [] });
+    }
+  }, [matchTypeSettings]);
+
   return (
     <div
       ref={mainRef}
@@ -357,6 +385,22 @@ export const ProteinViewer = ({
                     let hideDiv: string = '';
                     if (!showMore && !mainTracks.includes(type)) {
                       hideDiv = 'none';
+                    }
+
+                    if (type === 'domain' || type === 'family') {
+                      if (setHasRepresentativeData && hasRepresentativeData) {
+                        hasRepresentativeData[type] = reprEntries.length > 0;
+                        setHasRepresentativeData(hasRepresentativeData);
+                      }
+                      if (
+                        setRepresentativeDataForStructure &&
+                        representativeDataForStructure
+                      ) {
+                        representativeDataForStructure[type] = reprEntries;
+                        setRepresentativeDataForStructure(
+                          representativeDataForStructure,
+                        );
+                      }
                     }
 
                     return (

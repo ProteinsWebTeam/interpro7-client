@@ -554,7 +554,7 @@ export const resultTypeHandler: Handler = handlerConstructor({
   },
 });
 export const IPscanRegex =
-  /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}(-\d+)?|internal-[1-9]\d*-[1-9]\d*)|imported_file-.+(-\d+)?$/;
+  /^(iprscan5-[SRI]\d{8}-\d{6}-\d{4}-\d+-\w{2,4}(-\d+)?|internal-[1-9]\d*-[1-9]\d*)|.+(-\d+)?$/;
 export const resultIPScanJobHandler: Handler = handlerConstructor({
   name: {
     value: 'resultIPScanJobHandler',

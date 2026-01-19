@@ -82,7 +82,7 @@
 
 .disableDropdown {
   & .dropdown-button {
-    background: var(--colors-gray);
+    background: var(--colors-ulightgray);
     cursor: not-allowed;
   }
 }

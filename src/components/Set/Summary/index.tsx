@@ -73,7 +73,7 @@ const getLiterature = (literature: Array<Reference>): [string, Reference][] => {
 };
 
 const SetLiterature = ({ literature }: { literature: Array<Reference> }) => {
-  if (!literature) return null;
+  if (literature.length === 0) return null;
   const literatureEntries = getLiterature(literature);
   return (
     <>

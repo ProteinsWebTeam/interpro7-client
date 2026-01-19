@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { format } from 'url';
+import config from 'config';
 
 export const getAlphaFoldPredictionURL = createSelector(
   (state: GlobalState) => state.settings.alphafold,
@@ -15,13 +16,13 @@ export const getAlphaFoldPredictionURL = createSelector(
           hostname,
           port,
           pathname: `${root}api/prediction/${accession}`,
-          query: query,
         });
       }
     }
     return null;
   },
 );
+
 type StartsWithData = `data${string}`;
 export const getConfidenceURLFromPayload = (namespace: string) =>
   createSelector(

@@ -16,7 +16,6 @@ root:
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
-  ted: https://ted.cathdb.info/
 
 github:
   InterProClient:
@@ -40,6 +39,7 @@ title: InterPro
 
 IPScan:
   contactEmail: interpro-team@ebi.ac.uk
+  lowPriorityEmail: interpro-team-normal-priority@ebi.ac.uk
 pages:
   entry:
     plural: entries

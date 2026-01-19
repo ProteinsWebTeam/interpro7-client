@@ -41,14 +41,18 @@ export const Paragraph = ({
   let match = null;
   const parts = [];
 
-  while (
-    (match = text.match(CITATIONS_REGEX)) ||
-    (match = text.match(PMID_REGEX))
-  ) {
-    parts.push(...text.slice(0, match.index).split(TAG_REGEX));
-    parts.push(match[0]);
-    text = text.slice((match.index || 0) + match[0].length);
-  }
+  if (literature.length === 0) {
+    const re = /\s*,?\s*\[PMID:\d+(?:,PMID:\d+)*\]\s*,?/g;
+    text = text.replaceAll(re, '');
+  } else
+    while (
+      (match = text.match(CITATIONS_REGEX)) ||
+      (match = text.match(PMID_REGEX))
+    ) {
+      parts.push(...text.slice(0, match.index).split(TAG_REGEX));
+      parts.push(match[0]);
+      text = text.slice((match.index || 0) + match[0].length);
+    }
   parts.push(...text.split(TAG_REGEX));
 
   return (

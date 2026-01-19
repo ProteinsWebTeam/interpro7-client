@@ -165,7 +165,7 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
 
 const CitingInterPro = () => (
   <p className={f('cite')}>
-    If you use InterPro, please cite our latest publication:
+    If you use InterPro and/or Pfam, please cite our latest publications:
     <InterProCitation />
   </p>
 );

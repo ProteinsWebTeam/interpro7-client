@@ -118,9 +118,15 @@ type SourceOrganism = {
   fullName: string;
   taxId: number;
 };
+
+type IPScanProteinName = {
+  name: string;
+  short: string;
+};
+
 interface ProteinMetadata extends Metadata {
   id?: string;
-  name: string;
+  name: string | IPScanProteinName;
   description: Array<string>;
   source_database: 'uniprot' | 'reviewed' | 'unreviewed';
   length: number;

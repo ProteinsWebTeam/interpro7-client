@@ -109,14 +109,6 @@ export const getDefaultSettingsFor = <T extends keyof SettingsState>(
         root: config.root.bfvd.pathname,
         query: config.root.bfvd.query,
       } as SettingsState[T];
-    case 'ted':
-      return {
-        protocol: config.root.ted.protocol,
-        hostname: config.root.ted.hostname,
-        port: config.root.ted.port || DEFAULT_HTTP_PORT,
-        root: config.root.ted.pathname,
-        query: config.root.ted.query,
-      } as SettingsState[T];
     default:
       return null;
   }
