@@ -15,7 +15,7 @@ const Accession = ({ withTitle, accession, title }: Props) => {
   return (
     <div>
       {title !== '' && withTitle ? <span> {title || 'Accession'}:</span> : null}
-      {title === 'Job ID' ? <span> {accession}</span> : accession}
+      {title === 'Job ID' ? <span>{accession}</span> : accession}
     </div>
   );
 };
