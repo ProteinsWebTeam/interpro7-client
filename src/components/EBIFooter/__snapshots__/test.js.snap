@@ -366,7 +366,7 @@ exports[`<EBIFooter /> should render 1`] = `
         className="vf-footer__legal-text"
       >
         Copyright © EMBL 
-        2025
+        2026
       </span>
        
       <span
