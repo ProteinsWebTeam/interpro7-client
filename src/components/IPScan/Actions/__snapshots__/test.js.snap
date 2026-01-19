@@ -4,23 +4,19 @@ exports[`<Actions /> should render 1`] = `
 <nav
   className="buttons"
 >
-  <Tooltip
-    title={
-      <div>
-        Delete this job
-      </div>
-    }
+  <ForwardRef
+    aria-label="Delete"
+    icon="icon-trash"
+    onClick={[Function]}
+    type="secondary"
   >
-    <ForwardRef
-      aria-label="Delete Results"
-      icon="icon-trash"
-      onClick={[Function]}
-      type="secondary"
-    >
-      <span>
-        Delete Results
-      </span>
-    </ForwardRef>
-  </Tooltip>
+    <span>
+      Delete
+    </span>
+  </ForwardRef>
+  <Memo(Connect(ReRun))
+    jobsData={[]}
+    jobsPage={true}
+  />
 </nav>
 `;

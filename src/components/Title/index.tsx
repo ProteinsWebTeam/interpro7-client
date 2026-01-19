@@ -116,7 +116,7 @@ export class Title extends PureComponent<LoadedProps> {
               </div>
             )
         }
-        {metadata && (
+        {metadata.accession && (
           <Helmet
             titleTemplate={`${longName} (${metadata.accession}) - ${
               isEntry ? dbLabel : ' '

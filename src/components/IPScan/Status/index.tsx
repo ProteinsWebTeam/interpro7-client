@@ -149,15 +149,13 @@ export class IPScanStatus extends PureComponent<Props, State> {
           <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
         </h3>
         <p className={css('info')}>
-          Your InterProScan search results are shown below. Searches may take
-          varying times to complete. You can navigate to other pages and once
-          the search is finished, you will receive a notification. The results
-          will be available for 7 days.
+          Your InterProScan search results are displayed below. You may navigate
+          to other pages while searches are running; you will be notified when
+          they complete. Results remain available for 7 days.
         </p>
         <p className={css('info')}>
-          Alternatively, you can import the results of an InterProScan run (in
-          JSON format) into this page in order to view your search results
-          interactively.
+          You can also import results from an InterProScan run (JSON format) to
+          visualise hits in the sequence context.
         </p>
         <SchemaOrgData
           data={{
@@ -170,7 +168,6 @@ export class IPScanStatus extends PureComponent<Props, State> {
         <div className={css('button-bar')}>
           <div className={css('button-group')}>
             <GoToNewSearch />
-            <RefreshButton />
           </div>
           <ImportResultSearch />
         </div>
@@ -183,25 +180,6 @@ export class IPScanStatus extends PureComponent<Props, State> {
           showTableIcon={false}
           // groupActions={GroupActions}
         >
-          <ExtraOptions>
-            <DropDownButton label="Clear All" icon="icon-trash">
-              <ul>
-                <li>
-                  <Button type="hollow" onClick={() => this.deleteAll('file')}>
-                    Loaded from File
-                  </Button>
-                </li>
-                <li>
-                  <Button
-                    type="hollow"
-                    onClick={() => this.deleteAll('server')}
-                  >
-                    Loaded from Servers
-                  </Button>
-                </li>
-              </ul>
-            </DropDownButton>
-          </ExtraOptions>
           <Column
             dataKey="localTitle"
             isSearchable={true}
@@ -238,17 +216,11 @@ export class IPScanStatus extends PureComponent<Props, State> {
                       jobName
                     )}
                   </span>
-                  {row.remoteID && !row.remoteID.startsWith('imported') && (
-                    <CopyToClipboard
-                      textToCopy={getIProScanURL(row.remoteID)}
-                      tooltipText="Copy URL"
-                    />
-                  )}
                 </>
               );
             }}
           >
-            Results
+            Job ID
           </Column>
           <Column dataKey="entries" isSearchable={true} isSortable={true}>
             Sequences
@@ -318,18 +290,17 @@ export class IPScanStatus extends PureComponent<Props, State> {
             headerClassName={css('table-header-center')}
             cellClassName={css('table-center', 'font-ml')}
             renderer={(localID: string, row: IprscanMetaIDB) => (
-              <Actions localID={localID} forStatus={true} status={row.status} />
+              <Actions
+                job={row as MinimalJobMetadata}
+                localID={localID}
+                forStatus={true}
+                status={row.status}
+              />
             )}
           >
-            Action
+            Actions
           </Column>
         </Table>
-        <ClearAllDialog
-          show={this.state.show}
-          closeModal={() => this.setState({ show: false })}
-          jobs={this.state.jobsToRemove}
-          from={this.state.from}
-        />
       </div>
     );
   }

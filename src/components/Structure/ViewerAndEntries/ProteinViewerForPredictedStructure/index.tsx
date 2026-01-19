@@ -31,6 +31,8 @@ import formatTED from 'components/Related/DomainsOnProtein/ExternalSourcesHOC/TE
 import Callout from 'components/SimpleCommonComponents/Callout';
 import { features } from 'process';
 import { getTrackColor } from 'utils/entry-color';
+import Link from 'components/generic/Link';
+import config from 'config';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -153,6 +155,11 @@ type Props = {
   colorBy?: string;
   setColorMap?: (s: Record<number, number>) => void;
   setHasTED: (s: boolean) => void;
+  setHasRepresentativeData?: (s: {
+    family: boolean | null;
+    domain: boolean | null;
+  }) => void;
+  hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
   isSplitScreen: boolean;
   bfvd?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
@@ -179,6 +186,8 @@ const ProteinViewerForAlphafold = ({
   onChangeSelection,
   setColorMap,
   setHasTED,
+  setHasRepresentativeData,
+  hasRepresentativeData,
   colorBy,
   dataTED,
   isSplitScreen = false,
@@ -189,6 +198,12 @@ const ProteinViewerForAlphafold = ({
   const [fixedSelection, _setFixedSelection] = useState<Selection[]>([]);
   const [hoverSelection, _setHoverSelection] = useState<Selection[]>([]);
   const [colorGroup, setColorGroup] = useState({});
+
+  const [representativeDataForStructure, setRepresentativeDataForStructure] =
+    useState<{ family: ExtendedFeature[]; domain: ExtendedFeature[] }>({
+      family: [],
+      domain: [],
+    });
 
   const [processedTracks, setProcessedTracks] =
     useState<ProteinViewerDataObject>({});
@@ -303,13 +318,6 @@ const ProteinViewerForAlphafold = ({
 
   // Color 3D model based on selection
   useEffect(() => {
-    const {
-      interpro,
-      unintegrated,
-      representativeDomains,
-      representativeFamilies,
-    } = processedData;
-
     const tedData = dataTED ? formatTED(dataTED) : [];
     const tedFeatures: Feature[] = [];
     if (tedData.length > 0)
@@ -329,8 +337,8 @@ const ProteinViewerForAlphafold = ({
     const colorToObj: Record<string, Feature[]> = {
       af: [] as Feature[],
       bfvd: [] as Feature[],
-      repr_families: representativeFamilies as Feature[],
-      repr_domains: representativeDomains as Feature[],
+      repr_families: representativeDataForStructure['family'],
+      repr_domains: representativeDataForStructure['domain'] as Feature[],
       ted: tedFeatures as Feature[],
     };
 
@@ -349,7 +357,7 @@ const ProteinViewerForAlphafold = ({
       }
       if (setColorMap) setColorMap(colorMap);
     }
-  }, [colorBy, dataTED, colorDomainsBy]);
+  }, [colorBy, dataTED, colorDomainsBy, representativeDataForStructure]);
 
   if (
     !data ||
@@ -457,7 +465,14 @@ const ProteinViewerForAlphafold = ({
               longer).
               <br />
               To change the display mode, open the <i>Options</i> menu below and
-              select your preferred setting.
+              select your preferred setting. See{' '}
+              <Link
+                href={`${config.root.readthedocs.href}protein_viewer.html#interpro-n-display-modes`}
+                target="_blank"
+              >
+                our documentation
+              </Link>{' '}
+              for an explanation of each display mode.
             </Callout>
           </>
         )}
@@ -468,6 +483,10 @@ const ProteinViewerForAlphafold = ({
           title="Protein domains"
           showOptions={!isSplitScreen}
           matchesAvailable={matchesAvailable}
+          setHasRepresentativeData={setHasRepresentativeData}
+          hasRepresentativeData={hasRepresentativeData}
+          setRepresentativeDataForStructure={setRepresentativeDataForStructure}
+          representativeDataForStructure={representativeDataForStructure}
         />
       </div>
     );

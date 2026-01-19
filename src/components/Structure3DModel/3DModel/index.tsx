@@ -3,10 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
-import config from 'config';
 
 import Link from 'components/generic/Link';
-import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 import PictureInPicturePanel from 'components/SimpleCommonComponents/PictureInPicturePanel';
 import PIPToggleButton from 'components/SimpleCommonComponents/PictureInPicturePanel/ToggleButton';
@@ -58,6 +56,7 @@ type Props = {
   colorBy?: string;
   colorMap?: Record<number, number>;
   hasTED: boolean;
+  hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
   modelId: string | null;
   modelUrl?: string;
   bfvd?: string;
@@ -76,6 +75,7 @@ const Structure3DModel = ({
   colorBy,
   colorMap,
   hasTED,
+  hasRepresentativeData,
   modelId,
   modelUrl,
   bfvd,
@@ -93,6 +93,41 @@ const Structure3DModel = ({
   const [isPDBAvailable, setIsPDBAvailable] = useState(false);
   const [bfvdURL, setBfvdURL] = useState(bfvd || '');
 
+  useEffect(() => {
+    const selectedValueToKey: Record<string, 'family' | 'domain'> = {
+      repr_families: 'family',
+      repr_domains: 'domain',
+    };
+    if (
+      colorBy &&
+      hasRepresentativeData &&
+      hasRepresentativeData[selectedValueToKey[colorBy]] === null &&
+      onColorChange
+    ) {
+      onColorChange(bfvd ? 'bfvd' : 'af');
+    }
+  }, [colorBy, hasRepresentativeData]);
+
+  const renderLegend = (display: string = '') => {
+    return (
+      <div className={css(display ? 'inline-legend-container' : '')}>
+        {(colorBy === 'af' || colorBy === 'bfvd') && (
+          <>
+            <b> Model Confidence </b>
+            <ul className={css('legend', display)}>
+              {confidenceColors.map((item) => (
+                <li key={item.category}>
+                  <span style={{ backgroundColor: item.color }}>&nbsp;</span>{' '}
+                  {item.category} ({item.range})
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    );
+  };
+
   // Effect to check PDB availability (moved from BFVDModelSubPage)
   useEffect(() => {
     setIsPDBLoading(true);
@@ -101,7 +136,6 @@ const Structure3DModel = ({
       fetch(bfvd, { method: 'GET' })
         .then((res) => {
           if (res.ok) {
-            console.log(res);
             setIsPDBAvailable(true);
           }
           setIsPDBLoading(false);
@@ -256,61 +290,11 @@ const Structure3DModel = ({
                   ''
                 )}
               </li>
-              {/*models.length > 1 ? (
-                <li>
-                  <span className={css('header')}>Prediction</span>
-                  <select
-                    value={modelId || ''}
-                    className={css('protein-list')}
-                    onChange={(event) => onModelChange(event.target.value)}
-                    onBlur={(event) => onModelChange(event.target.value)}
-                  >
-                    {models.map((model) => (
-                      <option key={model.modelEntityId}>{model.modelEntityId}</option>
-                    ))}
-                  </select>
-                </li>
-              ) : (
-                ''
-              )*/}
-              {!hasMultipleProteins && (
-                <li>
-                  <span className={css('header')}>Colour by</span>
-                  <select
-                    value={colorBy}
-                    className={css('protein-list')}
-                    onChange={(event) =>
-                      onColorChange && onColorChange(event.target.value)
-                    }
-                  >
-                    <option value={bfvd ? 'bfvd' : 'af'}>
-                      Model confidence
-                    </option>
-                    {hasTED && <option value="ted">TED domains</option>}
-                    {/* <option value="repr_families">Representative families</option>
-                    <option value="repr_domains">Representative domains</option> */}
-                  </select>
-                </li>
-              )}
+              <li> {renderLegend()} </li>
             </ul>
-
-            {(colorBy === 'af' || colorBy === 'bfvd') && (
-              <>
-                <h5>Model confidence</h5>
-                <ul className={css('legend')}>
-                  {confidenceColors.map((item) => (
-                    <li key={item.category}>
-                      <span style={{ backgroundColor: item.color }}>
-                        &nbsp;
-                      </span>{' '}
-                      {item.category} ({item.range})
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
           </div>
         )}
+
         <div className={css('panel-component')}>
           <PictureInPicturePanel
             className={css({ 'structure-viewer-split': isSplitScreen })}
@@ -372,6 +356,30 @@ const Structure3DModel = ({
               </div>
             }
           >
+            {!hasMultipleProteins && (
+              <>
+                <b>Colour by</b>
+                <select
+                  className={css('color-theme-select')}
+                  value={colorBy}
+                  onChange={(event) => {
+                    if (onColorChange) onColorChange(event.target.value);
+                  }}
+                >
+                  <option value={bfvd ? 'bfvd' : 'af'}>Model confidence</option>
+                  {hasTED && <option value="ted">TED domains</option>}
+                  {hasRepresentativeData && hasRepresentativeData['family'] && (
+                    <option value="repr_families">
+                      Representative families
+                    </option>
+                  )}
+                  {hasRepresentativeData && hasRepresentativeData['domain'] && (
+                    <option value="repr_domains">Representative domains</option>
+                  )}
+                </select>
+              </>
+            )}
+
             <StructureViewer
               id={'fullSequence'}
               url={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
@@ -385,6 +393,7 @@ const Structure3DModel = ({
                 setReady(true);
               }}
             />
+            {isSplitScreen && renderLegend('inline-legend')}
           </PictureInPicturePanel>
         </div>
       </div>

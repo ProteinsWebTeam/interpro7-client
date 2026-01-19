@@ -1,5 +1,5 @@
-@import '../../../styles/fonts.css';
-@import '../../../styles/colors.css';
+@import "../../../styles/fonts.css";
+@import "../../../styles/colors.css";
 
 .import-result {
   font: initial;
@@ -7,13 +7,13 @@
   display: flex;
   position: relative;
   flex-wrap: nowrap;
+  flex-grow: 0;
   width: 50%;
   padding: 1px;
-  & label.import-label {
-    font-size: 1.1em;
-    color: var(--colors-gray);
-    padding-right: 0.5em;
-  }
+}
+
+.import-label {
+  white-space: nowrap;
 }
 
 .dragging {

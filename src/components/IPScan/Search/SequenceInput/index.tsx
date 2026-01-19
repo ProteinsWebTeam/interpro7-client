@@ -30,6 +30,7 @@ import InfoMessages from './InfoMessages';
 const css = cssBinder(local, blocks, searchPageCss, buttonCSS);
 
 const MIN_LENGTH = 3;
+const MAX_LENGTH = 50000;
 
 const classedSpan = (className: string) => {
   const Span = ({
@@ -175,7 +176,12 @@ export const cleanUpBlocks = (blocks: RawDraftContentBlock[]) => {
 };
 
 export type SequenceIssue = {
-  type: 'invalidCharacters' | 'tooShort' | 'tooMany' | 'duplicatedHeaders';
+  type:
+    | 'invalidCharacters'
+    | 'tooShort'
+    | 'tooLong'
+    | 'tooMany'
+    | 'duplicatedHeaders';
   header?: string;
   detail?: string;
 };
@@ -219,6 +225,8 @@ export const checkLines = (lines: Array<string>): Array<SequenceIssue> => {
   // last sequence
   if (count < MIN_LENGTH)
     issues.push({ type: 'tooShort', header: currentHeader });
+  if (count > MAX_LENGTH)
+    issues.push({ type: 'tooLong', header: currentHeader });
   if (numberOfSequences > MAX_NUMBER_OF_SEQUENCES) {
     issues.push({ type: 'tooMany' });
   }

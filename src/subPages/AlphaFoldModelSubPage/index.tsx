@@ -52,6 +52,13 @@ const AlphaFoldModelSubPage = ({
   const [colorBy, setColorBy] = useState('af');
   const [colorMap, setColorMap] = useState<Record<number, number>>({});
   const [hasTED, setHasTED] = useState(false);
+  const [hasRepresentativeData, setHasRepresentativeData] = useState<{
+    family: boolean | null;
+    domain: boolean | null;
+  }>({
+    family: null,
+    domain: null,
+  });
 
   const handleProteinChange = (value: string) => {
     setProteinAcc(value);
@@ -85,11 +92,12 @@ const AlphaFoldModelSubPage = ({
       })}
       ref={container}
     >
-      {proteinAcc && (
+      {proteinAcc && hasRepresentativeData !== null && (
         <AlphaFoldModel
           colorMap={colorMap}
           proteinAcc={proteinAcc}
           hasTED={hasTED}
+          hasRepresentativeData={hasRepresentativeData}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
           onColorChange={onColorChange}
@@ -120,6 +128,8 @@ const AlphaFoldModelSubPage = ({
               setSelectionsInModel(selection);
             }}
             isSplitScreen={isSplitScreen}
+            setHasRepresentativeData={setHasRepresentativeData}
+            hasRepresentativeData={hasRepresentativeData}
           />
         </div>
       )}

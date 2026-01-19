@@ -35,7 +35,7 @@ const IPScanTitle = ({
   editable = true,
 }: Props) => {
   const [title, setTitle] = useState(localTitle || '');
-  const [readable, setReadable] = useState(true);
+  const [readOnly, setReadOnly] = useState(!editable);
   const titleInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     setTitle(localTitle || (payload as Iprscan5Result).xref?.[0].name || '');
@@ -43,54 +43,50 @@ const IPScanTitle = ({
 
   const changeTitle = () => {
     if (!titleInputRef.current) return;
-    if (titleInputRef.current.readOnly) {
-      titleInputRef.current.focus();
-    } else {
-      if (titleInputRef.current.value !== '') {
-        const value = titleInputRef.current.value;
-        if (type === 'sequence') {
-          (payload as Iprscan5Result).xref[0].name = value;
-          updateSequenceJobTitle?.(accession, value);
-        }
-        if (type === 'job') {
-          (payload as IprscanMetaIDB).localTitle = value;
-          updateJobTitle?.(accession, value);
-        }
-        setTitle(value);
+
+    if (titleInputRef.current.value !== '') {
+      const value = titleInputRef.current.value;
+      if (type === 'sequence') {
+        (payload as Iprscan5Result).xref[0].name = value;
+        updateSequenceJobTitle?.(accession, value);
       }
+      if (type === 'job') {
+        (payload as IprscanMetaIDB).localTitle = value;
+        updateJobTitle?.(accession, value);
+      }
+      setTitle(value);
     }
-    setReadable(!titleInputRef.current.readOnly);
+
+    setReadOnly(!editable);
   };
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      changeTitle();
+      titleInputRef.current?.blur();
     }
   };
 
   return (
     <section className={css('summary-row')}>
-      <header>Title</header>
+      <header>{type === 'sequence' ? 'Sequence ID' : 'Name'}</header>
       <section>
+        {editable && (
+          <span
+            className={css('icon', 'icon-common', 'icon-pencil-alt', 'small')}
+            data-icon="&#xf303;"
+          />
+        )}{' '}
         <input
           ref={titleInputRef}
           className={css('title')}
           value={title}
-          readOnly={readable || !editable}
+          readOnly={readOnly || !editable}
           style={{ width: `${Math.max(title?.length, 10)}ch` }}
           onChange={(event) => setTitle(event.target.value)}
-          onDoubleClick={() => setReadable(false || !editable)}
+          onBlur={changeTitle}
           onKeyUp={handleKeyPress}
           placeholder="ø"
+          tabIndex={-1}
         />
-        {editable &&
-        ['finished_with_results', 'imported file'].includes(status || '') ? (
-          <Button
-            type="inline"
-            onClick={changeTitle}
-            icon={readable ? 'icon-pencil-alt' : 'icon-save'}
-            title={readable ? 'Rename' : 'Save'}
-          />
-        ) : null}
       </section>
     </section>
   );

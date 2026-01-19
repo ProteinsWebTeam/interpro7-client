@@ -68,33 +68,23 @@ const DownloadAll = ({ job, jobsData, data, dataURL }: LoadedProps) => {
       const extension = type === 'sequence' ? 'fasta' : type;
       return (
         <li key={type}>
-          <Tooltip
-            title={
-              <div>
-                This will download the data that was originally loaded to our
-                servers. This is only available for 7 days after running the
-                job.
-              </div>
-            }
+          <Link
+            target="_blank"
+            href={`${dataURL}/${remoteID}/${type}`}
+            download={`InterProScan-${remoteID}.${extension}`}
+            buttonType="hollow"
+            className={css('download-option')}
           >
-            <Link
-              target="_blank"
-              href={`${dataURL}/${remoteID}/${type}`}
-              download={`InterProScan-${remoteID}.${extension}`}
-              buttonType="hollow"
-              className={css('download-option')}
-            >
-              <span
-                className={css(
-                  'icon',
-                  'icon-fileformats',
-                  `icon-${extension.toUpperCase()}`,
-                )}
-              />{' '}
-              {extension.toUpperCase()}{' '}
-              {extension === 'fasta' ? 'input' : 'output'}
-            </Link>
-          </Tooltip>
+            <span
+              className={css(
+                'icon',
+                'icon-fileformats',
+                `icon-${extension.toUpperCase()}`,
+              )}
+            />{' '}
+            {extension.toUpperCase()}{' '}
+            {extension === 'fasta' ? 'input' : 'output'}
+          </Link>
         </li>
       );
     })

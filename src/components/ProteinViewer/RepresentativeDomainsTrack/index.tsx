@@ -73,7 +73,9 @@ const RepresentativeTrack = ({
                   ? { accession: entry.integrated }
                   : null,
               }
-            : entry,
+            : colorDomainsBy === EntryColorMode.ACCESSION
+              ? { accession: entry.accession }
+              : entry,
           colorDomainsBy,
         ),
       })),

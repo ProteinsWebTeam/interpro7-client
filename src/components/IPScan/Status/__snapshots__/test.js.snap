@@ -16,12 +16,12 @@ exports[`<IPScanStatus /> should render 1`] = `
   <p
     className="info"
   >
-    Your InterProScan search results are shown below. Searches may take varying times to complete. You can navigate to other pages and once the search is finished, you will receive a notification. The results will be available for 7 days.
+    Your InterProScan search results are displayed below. You may navigate to other pages while searches are running; you will be notified when they complete. Results remain available for 7 days.
   </p>
   <p
     className="info"
   >
-    Alternatively, you can import the results of an InterProScan run (in JSON format) into this page in order to view your search results interactively.
+    You can also import results from an InterProScan run (JSON format) to visualise hits in the sequence context.
   </p>
   <Memo(Loadable)
     data={
@@ -39,7 +39,6 @@ exports[`<IPScanStatus /> should render 1`] = `
       className="button-group"
     >
       <GoToNewSearch />
-      <Memo(Connect(RefreshButton)) />
     </div>
     <Memo(Connect(ImportResultSearch)) />
   </div>
@@ -51,38 +50,13 @@ exports[`<IPScanStatus /> should render 1`] = `
     rowKey="localID"
     showTableIcon={false}
   >
-    <ExtraOptions>
-      <DropDownButton
-        icon="icon-trash"
-        label="Clear All"
-      >
-        <ul>
-          <li>
-            <ForwardRef
-              onClick={[Function]}
-              type="hollow"
-            >
-              Loaded from File
-            </ForwardRef>
-          </li>
-          <li>
-            <ForwardRef
-              onClick={[Function]}
-              type="hollow"
-            >
-              Loaded from Servers
-            </ForwardRef>
-          </li>
-        </ul>
-      </DropDownButton>
-    </ExtraOptions>
     <Column
       dataKey="localTitle"
       isSearchable={true}
       isSortable={true}
       renderer={[Function]}
     >
-      Results
+      Job ID
     </Column>
     <Column
       dataKey="entries"
@@ -114,14 +88,8 @@ exports[`<IPScanStatus /> should render 1`] = `
       headerClassName="table-header-center"
       renderer={[Function]}
     >
-      Action
+      Actions
     </Column>
   </Table>
-  <Memo(Connect(ClearAllDialog))
-    closeModal={[Function]}
-    from={null}
-    jobs={[]}
-    show={false}
-  />
 </div>
 `;
