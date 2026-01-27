@@ -63,7 +63,6 @@ export const UniParcProtein = ({ data, md5 }: Props) => {
     organisedData = mergeData(matches, metadata.length);
   }
 
-  console.log(organisedData);
   return (
     <>
       <section className={css('vf-grid', 'summary-grid')}>
@@ -71,25 +70,24 @@ export const UniParcProtein = ({ data, md5 }: Props) => {
           <table className={css('vf-table', 'left-headers')}>
             <tbody>
               <tr>
-                <td style={{ maxWidth: '50%' }}>Short name</td>
+                <td style={{ maxWidth: '50%' }}>UniProt ID</td>
                 <td>
                   <i
                     className={css('shortname')}
                     data-testid="protein-shortname"
                   >
-                    {metadata.id}
+                    {metadata.accession}
                   </i>
                 </td>
               </tr>
               <tr>
                 <td>Length</td>
                 <td data-testid="protein-length">
-                  <Length metadata={metadata} />
+                  {metadata.length} amino acids
                 </td>
-                x
               </tr>
               <tr>
-                <td>Species</td>
+                <td>Taxonomy</td>
                 <td data-testid="protein-species">
                   <Species
                     fullName={metadata.source_organism.fullName}
@@ -216,24 +214,6 @@ export const UniParcProtein = ({ data, md5 }: Props) => {
                 //     minWidth={"20"}
                 // /> */}
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label style={{ marginBottom: '0.4rem' }}>
-              <FileExporter
-                description={{
-                  main: { key: 'protein' },
-                  protein: {
-                    db: metadata.source_database,
-                    accession: metadata.accession,
-                  },
-                  entry: { integration: 'all' },
-                }}
-                count={metadata.counters!.entries as number}
-                fileType="tsv"
-                primary="entry"
-                secondary="protein"
-                minWidth={20}
-                label="Download matches (TSV)"
-              />
-            </label>
             <DownloadButton
               sequence={metadata.sequence}
               accession={metadata.accession}

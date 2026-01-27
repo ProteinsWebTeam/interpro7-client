@@ -147,21 +147,20 @@ class Summary extends PureComponent {
     }
 
     /* UniParc edge case */
-    if (
-      status == 204 &&
-      payloadUniParc.results &&
-      payloadUniParc.results.length > 0
-    ) {
-      const uniParcResult = payloadUniParc.results[0];
-      const taxonInfo =
-        uniParcResult.commonTaxons[uniParcResult.commonTaxons.length - 1];
+    if (status == 204 && payloadUniParc.results.length > 0) {
       const uniprotAccession =
         customLocation.description[customLocation.description.main.key]
           .accession;
-      console.log(uniParcResult);
+      const uniParcResult = payloadUniParc.results.filter((res) =>
+        res.uniProtKBAccessions.some((acc) => acc.includes(uniprotAccession)),
+      )[0];
+
+      const taxonInfo =
+        uniParcResult.commonTaxons[uniParcResult.commonTaxons.length - 1];
+
       const standardizedData = {
         metadata: {
-          name: 'test',
+          name: '',
           counters: {},
           accession: uniprotAccession,
           id: uniParcResult.uniParcId,
@@ -179,11 +178,7 @@ class Summary extends PureComponent {
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
               <UnconnectedErrorBoundary customLocation={customLocation}>
-                <h3>
-                  {' '}
-                  UniParc Entry {standardizedData.metadata.id} (
-                  {uniprotAccession}){' '}
-                </h3>
+                <h3> UniParc Entry {standardizedData.metadata.id}</h3>
               </UnconnectedErrorBoundary>
             </div>
           </div>
