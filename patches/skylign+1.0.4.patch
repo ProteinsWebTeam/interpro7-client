@@ -1,0 +1,25 @@
+diff --git a/node_modules/skylign/src/skylign.js b/node_modules/skylign/src/skylign.js
+index 6268c9f..8e1df36 100644
+--- a/node_modules/skylign/src/skylign.js
++++ b/node_modules/skylign/src/skylign.js
+@@ -1733,11 +1733,15 @@ const hmmLogo = function(logoElement, options = {}) {
+     const theoryHelp = '';
+     const obsHelp = '';
+ 
+-    if (logo.data.max_height_obs === logo.data.max_height) {
+-      obsChecked = 'checked';
+-    } else {
+-      theoryChecked = 'checked';
+-    }
++    // if (logo.data.max_height_obs === logo.data.max_height) {
++    //   obsChecked = 'checked';
++    // } else {
++    //   theoryChecked = 'checked';
++    // }
++
++    // Make observed height the default
++    obsChecked = 'checked';
++    logo.toggle_scale("obs");
+ 
+     /*
+     if (options.help) {
