@@ -147,7 +147,7 @@ class Summary extends PureComponent {
     }
 
     /* UniParc edge case */
-    if (status == 204 && payloadUniParc.results.length > 0) {
+    if (status === 204 && payloadUniParc.results.length > 0) {
       const uniprotAccession =
         customLocation.description[customLocation.description.main.key]
           .accession;
@@ -155,19 +155,14 @@ class Summary extends PureComponent {
         res.uniProtKBAccessions.some((acc) => acc.includes(uniprotAccession)),
       )[0];
 
-      const taxonInfo =
-        uniParcResult.commonTaxons[uniParcResult.commonTaxons.length - 1];
-
       const standardizedData = {
         metadata: {
           name: '',
           counters: {},
           accession: uniprotAccession,
           id: uniParcResult.uniParcId,
-          source_organism: {
-            fullName: taxonInfo.commonTaxon,
-            taxId: taxonInfo.commonTaxonId,
-          },
+          source_organism: '',
+          taxonomies: uniParcResult.commonTaxons,
           length: uniParcResult.sequence.length,
           sequence: uniParcResult.sequence.value,
         },
@@ -177,19 +172,7 @@ class Summary extends PureComponent {
         <>
           <div className={f('row')}>
             <div className={f('medium-12', 'large-12', 'columns')}>
-              <UnconnectedErrorBoundary customLocation={customLocation}>
-                <h3> UniParc Entry {standardizedData.metadata.id}</h3>
-              </UnconnectedErrorBoundary>
-            </div>
-          </div>
-          <div className={f('row')}>
-            <div className={f('medium-12', 'large-12', 'columns')}>
               <section className={f('menu-and-content')}>
-                <nav>
-                  <UnconnectedErrorBoundary customLocation={customLocation}>
-                    {/*<EntryMenu metadata={payload.metadata} />*/}
-                  </UnconnectedErrorBoundary>
-                </nav>
                 <section>
                   <UnconnectedErrorBoundary customLocation={customLocation}>
                     <UniParcProtein
