@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
+import { format } from 'url';
+import loadData from 'higherOrder/loadData/ts';
 
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
@@ -83,7 +85,16 @@ type Props = {
   isoform?: string;
 };
 
-export const SummaryProtein = ({ data, loading, isoform }: Props) => {
+interface LoadedProps
+  extends Props,
+    LoadDataProps<AlphafoldPayload, 'Prediction'> {}
+
+export const SummaryProtein = ({
+  data,
+  loading,
+  isoform,
+  dataPrediction,
+}: LoadedProps) => {
   const comparisonContainerRef = useRef<HTMLElement | null>(null);
   const [renderComparisonButton, setRenderComparisonButton] = useState(false);
   const [comparisonMode, setComparisonMode] = useState(false);
@@ -92,6 +103,18 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
     Record<string, unknown>
   > | null>(null);
   const [subfamilies, setSubfamilies] = useState<Array<string> | null>(null);
+  const [bfvdModelLinkPattern, setBfvdModelLinkPattern] = useState<string>('');
+
+  useEffect(() => {
+    if (dataPrediction) {
+      setBfvdModelLinkPattern(
+        `https://alphafold.ebi.ac.uk/entry/${
+          dataPrediction.payload?.[0]?.modelEntityId || ''
+        }`,
+      );
+    }
+  }, [dataPrediction]);
+
   useEffect(() => {
     setRenderComparisonButton(true);
   }, [comparisonContainerRef]);
@@ -284,14 +307,25 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
                 {metadata.in_bfvd ? (
                   <>
                     <li>
-                      <BaseLink
-                        id={metadata.accession}
-                        target={'_blank'}
-                        pattern="https://bfvd.foldseek.com/cluster/{id}"
-                        className={css('ext')}
-                      >
-                        BFVD
-                      </BaseLink>
+                      {' '}
+                      {bfvdModelLinkPattern ? (
+                        <Link
+                          href={bfvdModelLinkPattern}
+                          className={css('ext')}
+                          target="_blank"
+                        >
+                          BFVD
+                        </Link>
+                      ) : (
+                        <BaseLink
+                          id={metadata.accession}
+                          target={'_blank'}
+                          pattern={bfvdModelLinkPattern}
+                          className={css('ext')}
+                        >
+                          BFVD
+                        </BaseLink>
+                      )}
                     </li>
                     <li>
                       <BaseLink
@@ -399,9 +433,29 @@ export const SummaryProtein = ({ data, loading, isoform }: Props) => {
   );
 };
 
+const getBFVDAlphafoldModel = createSelector(
+  (state: GlobalState) => state.settings.alphafold,
+  (state: GlobalState) =>
+    state.customLocation.description.protein?.accession || '',
+  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
+    const url = format({
+      protocol,
+      hostname,
+      port,
+      pathname: root + 'api/prediction/' + accession,
+    });
+    return url;
+  },
+);
+
 const mapStateToProps = createSelector(
   (state) => state.customLocation.search,
   ({ isoform }) => ({ isoform }),
 );
 
-export default connect(mapStateToProps)(SummaryProtein);
+export default connect(mapStateToProps)(
+  loadData<AlphafoldPayload, 'Prediction'>({
+    getUrl: getBFVDAlphafoldModel,
+    propNamespace: 'Prediction',
+  } as LoadDataParameters)(SummaryProtein),
+);
