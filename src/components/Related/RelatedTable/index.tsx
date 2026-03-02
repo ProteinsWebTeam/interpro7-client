@@ -68,6 +68,7 @@ const primariesAndSecondaries: Record<
       secondary: 'structure',
     },
   },
+  isoform: {},
   taxonomy: {
     entry: {
       primary: 'entry',

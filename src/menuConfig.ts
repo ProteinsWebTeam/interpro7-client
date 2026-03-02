@@ -254,6 +254,30 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     },
   ],
   [
+    'isoform',
+    {
+      to(customLocation: InterProLocation) {
+        const key = customLocation.description.main.key as Endpoint;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'isoform',
+            },
+          },
+          search:
+            typeof customLocation.search.orf !== 'undefined'
+              ? { orf: String(customLocation.search.orf) }
+              : undefined,
+        };
+      },
+      name: 'Isoform',
+      counter: 'isoforms',
+    },
+  ],
+  [
     'structure',
     {
       to(customLocation: InterProLocation) {

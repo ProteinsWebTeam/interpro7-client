@@ -243,7 +243,7 @@ export const getUrlForApi = (...parameters) =>
     .replace('/subfamilies', '/')
     .replace('/pathways', '/')
     .replace('/feedback', '/')
-    .replace('/sequence', '/')
+    .replace('/isoform', '/')
     .replace('/similar_proteins', '/')
     .replace('/curation', '/')
     // To simplify set calls to use a single endpoint

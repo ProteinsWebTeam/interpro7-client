@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import config from 'config';
+import { stat } from 'fs';
+import search from 'src/reducers/custom-location/search';
 
 export const getAlphaFoldPredictionURL = createSelector(
   (state: GlobalState) => state.settings.alphafold,
@@ -27,11 +29,19 @@ type StartsWithData = `data${string}`;
 export const getConfidenceURLFromPayload = (namespace: string) =>
   createSelector(
     (
-      _: GlobalState,
+      state: GlobalState,
       props: { [d: StartsWithData]: RequestedData<AlphafoldPayload> },
-    ) => props[`data${namespace}`],
-    (dataPrediction: RequestedData<AlphafoldPayload>) => {
-      const cifURL = dataPrediction?.payload?.[0]?.cifUrl;
+    ) => ({
+      dataPrediction: props[`data${namespace}`],
+      accession: state.customLocation.description.protein.accession,
+      search: state.customLocation.search,
+    }),
+    ({ dataPrediction, accession, search }) => {
+      const uniprotAccession = search.isoform || accession;
+      const cifURL = dataPrediction?.payload?.find(
+        (item) => item.uniprotAccession === uniprotAccession,
+      )?.cifUrl;
+
       return cifURL?.length
         ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')
         : null;

@@ -63,6 +63,7 @@ const schemamap: Record<
     entry: 'bio:hasProteinAnnotation',
     structure: 'bio:isContainedIn',
   },
+  isoform: {},
   structure: {
     entry: 'bio:ProteinAnnotation',
     protein: 'bio:contains',
