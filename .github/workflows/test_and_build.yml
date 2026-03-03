@@ -15,7 +15,7 @@ jobs:
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
-          npm ci
+          npm ci --verbose
 
       - name: 🏗 - Build (dev)
         run: |
