@@ -273,7 +273,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
               : undefined,
         };
       },
-      name: 'Isoform',
+      name: 'Isoforms',
       counter: 'isoforms',
     },
   ],

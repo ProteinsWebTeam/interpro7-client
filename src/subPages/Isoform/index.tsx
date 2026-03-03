@@ -1,72 +1,30 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 
-import Sequence, { InnerSequence } from 'components/Protein/Sequence';
+import IsoformSelector from 'components/Protein/Isoforms/Selector';
+import IsoformViewer from 'components/Protein/Isoforms/Viewer';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 type Props = {
-  data: RequestedData<MetadataPayload<ProteinMetadata> | IprscanDataIDB>;
-  localPayload: LocalPayload;
-  localTitle: string;
-  orf?: number;
+  data: RequestedData<MetadataPayload<ProteinMetadata>>;
+  isoform?: string;
 };
 
-const SequenceSubPage = ({ data, localPayload, localTitle, orf }: Props) => {
-  let accession;
-  let sequence;
-  let name;
-  const local = localPayload;
-  let payload = null;
-  const { loading, ok } = data;
-  const hasORF =
-    (local as Iprscan5NucleotideResult)?.openReadingFrames?.length &&
-    typeof orf !== 'undefined';
-  const currentORF = hasORF
-    ? (local as Iprscan5NucleotideResult)?.openReadingFrames?.[orf!]
-    : undefined;
-  const protein = currentORF?.protein;
+const IsoformSubPage = ({ data, isoform }: Props) => {
+  if (!data || data.loading || !data.payload?.metadata) return <Loading />;
 
-  if (ok && !loading && !payload && data?.payload) {
-    payload = data?.payload;
-  }
-  if (!payload && !local) return null;
-  if ((payload as MetadataPayload)?.metadata) {
-    const metadata = (payload as MetadataPayload<ProteinMetadata>)?.metadata;
-    accession = metadata?.accession;
-    sequence = metadata?.sequence;
-    name = (metadata?.name as unknown as NameObject)?.name || metadata?.name;
-    // TODO: Remove by October 2024 - I think this case is never reached.
-    // } else if ((payload as IprscanDataIDB)?.results) {
-    //   const results = (payload as IprscanDataIDB).results;
-    //   accession = results?.[0]?.xref?.accession;
-    //   sequence = results?.[0]?.xref?.sequence;
-    //   name = results?.[0]?.xref?.name?.name;
-  } else if (hasORF && protein) {
-    accession = protein.xref[0].id || '';
-    name = protein.xref[0].name || '';
-    sequence = protein.sequence;
-  } else {
-    const result = local as Iprscan5Result;
-    accession = result.xref[0].id || '';
-    name = localTitle || result.xref[0].name || '';
-    sequence = result.sequence;
-  }
   return (
-    <>
-      <Sequence accession={accession} sequence={sequence} name={name} />
-      {hasORF && protein ? (
-        <section id="nucleotides">
-          <h5>Nucleotide Sequence</h5>
-          <InnerSequence
-            sequence={local?.sequence}
-            start={currentORF.start}
-            end={currentORF.end}
-            name={protein.xref[0].name}
-          />
-        </section>
-      ) : (
-        ''
-      )}
-    </>
+    <div>
+      <IsoformSelector />
+      {isoform && <IsoformViewer />}
+    </div>
   );
 };
 
-export default SequenceSubPage;
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.customLocation.search,
+  ({ isoform }) => ({ isoform: isoform as string | undefined }),
+);
+
+export default connect(mapStateToProps)(IsoformSubPage);

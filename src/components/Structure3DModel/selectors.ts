@@ -1,8 +1,5 @@
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import config from 'config';
-import { stat } from 'fs';
-import search from 'src/reducers/custom-location/search';
 
 export const getAlphaFoldPredictionURL = createSelector(
   (state: GlobalState) => state.settings.alphafold,
@@ -37,10 +34,18 @@ export const getConfidenceURLFromPayload = (namespace: string) =>
       search: state.customLocation.search,
     }),
     ({ dataPrediction, accession, search }) => {
-      const uniprotAccession = search.isoform || accession;
-      const cifURL = dataPrediction?.payload?.find(
-        (item) => item.uniprotAccession === uniprotAccession,
-      )?.cifUrl;
+      // Try the isoform accession first; AlphaFold only stores the canonical,
+      // so fall back to the canonical accession if no match is found.
+      const isoformAccession = search.isoform as string | undefined;
+      const cifURL =
+        (isoformAccession
+          ? dataPrediction?.payload?.find(
+              (item) => item.uniprotAccession === isoformAccession,
+            )?.cifUrl
+          : undefined) ??
+        dataPrediction?.payload?.find(
+          (item) => item.uniprotAccession === accession,
+        )?.cifUrl;
 
       return cifURL?.length
         ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')

@@ -115,7 +115,6 @@ export class EntryMenuWithoutData extends PureComponent<LoadedProps, State> {
     if (mainAccession && mainType && config.pages[mainType]) {
       tabs = [singleEntity.get('overview')];
       for (const subPage of config.pages[mainType].subPages) {
-        console.log(singleEntity.get(subPage));
         tabs.push(singleEntity.get(subPage));
       }
       tabs = tabs.filter(Boolean);
@@ -123,8 +122,6 @@ export class EntryMenuWithoutData extends PureComponent<LoadedProps, State> {
     if (loading || !payload || !payload.metadata) {
       return <Loading />;
     }
-
-    console.log(mainType, tabs);
     return (
       <ul
         className={css('tabs', className, {
