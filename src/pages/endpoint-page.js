@@ -22,6 +22,7 @@ import RemovedEntrySummary from 'components/Entry/RemovedEntrySummary';
 import Title from 'components/Title';
 import EdgeCase from 'components/EdgeCase';
 import { getMessageIfLocationRemoved } from 'utils/removed-pages';
+import { UniParcProtein } from '/src/components/Protein/UniParcProtein';
 
 import {
   // schemaProcessDataRecord,
@@ -50,6 +51,7 @@ const propTypes = {
   }).isRequired,
   match: T.string,
   dataBase: dataPropType.isRequired,
+  dataUniParc: dataPropType.isRequired,
   subPagesForEndpoint: T.oneOfType([T.func, T.object]),
 };
 
@@ -57,6 +59,7 @@ class SummaryComponent extends PureComponent {
   static propTypes = {
     data: dataPropType.isRequired,
     dataBase: dataPropType.isRequired,
+    dataUniParc: dataPropType.isRequired,
     customLocation: T.object.isRequired,
     SummaryAsync: T.oneOfType([T.func, T.object]),
   };
@@ -65,6 +68,7 @@ class SummaryComponent extends PureComponent {
     const {
       data: { payload, loading },
       dataBase: { payload: payloadDB, loading: loadingDB },
+      dataUniParc: { payload: payloadUniParc, loading: loadingUniParc },
       customLocation,
       SummaryAsync,
     } = this.props;
@@ -103,9 +107,11 @@ class Summary extends PureComponent {
     const {
       data: { status, loading, payload },
       dataBase: { payload: payloadDB, loading: loadingDB },
+      dataUniParc: { payload: payloadUniParc, loading: loadingUniParc },
       customLocation,
       subPagesForEndpoint,
     } = this.props;
+
     const {
       description: {
         main: { key: endpoint },
@@ -137,6 +143,48 @@ class Summary extends PureComponent {
           status={410}
           shouldRedirect={false}
         />
+      );
+    }
+
+    /* UniParc edge case */
+    if (status === 204 && payloadUniParc.results.length > 0) {
+      const uniprotAccession =
+        customLocation.description[customLocation.description.main.key]
+          .accession;
+      const uniParcResult = payloadUniParc.results.filter((res) =>
+        res.uniProtKBAccessions.some((acc) => acc.includes(uniprotAccession)),
+      )[0];
+
+      const standardizedData = {
+        metadata: {
+          name: '',
+          counters: {},
+          accession: uniprotAccession,
+          id: uniParcResult.uniParcId,
+          source_organism: '',
+          taxonomies: uniParcResult.commonTaxons,
+          length: uniParcResult.sequence.length,
+          sequence: uniParcResult.sequence.value,
+        },
+      };
+
+      return (
+        <>
+          <div className={f('row')}>
+            <div className={f('medium-12', 'large-12', 'columns')}>
+              <section className={f('menu-and-content')}>
+                <section>
+                  <UnconnectedErrorBoundary customLocation={customLocation}>
+                    <UniParcProtein
+                      data={standardizedData}
+                      md5={uniParcResult.sequence.md5}
+                    />
+                  </UnconnectedErrorBoundary>
+                </section>
+              </section>
+            </div>
+          </div>
+        </>
       );
     }
 
@@ -337,8 +385,23 @@ const mapStateToProps = createSelector(
   }),
 );
 
+const getUniParc = createSelector(
+  (state) =>
+    state.customLocation.description[state.customLocation.description.main.key]
+      .accession,
+  (accession) => {
+    if (!accession) return null;
+    return `https://rest.uniprot.org/uniparc/search?query=${accession}`;
+  },
+);
+
 export default loadData({
   getUrl: getUrlForMeta,
   propNamespace: 'Base',
   mapStateToProps,
-})(loadData(getUrlForApi)(EndPointPage));
+})(
+  loadData({
+    getUrl: getUniParc,
+    propNamespace: 'UniParc',
+  })(loadData(getUrlForApi)(EndPointPage)),
+);
