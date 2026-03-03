@@ -46,11 +46,13 @@
     "storybook": "storybook dev -p 6006"
   },
   "contributors": [
-    "Aurélien Luciani <luciani@ebi.ac.uk> (https://github.com/aurel-l/)",
-    "Gustavo A. Salazar <gsalazar@ebi.ac.uk> (https://github.com/4ndr01d3/)",
-    "Matloob Qureshi <maq@ebi.ac.uk> (https://github.com/CodeGit/)",
+    "Aurélien Luciani (https://github.com/aurel-l)",
+    "Gustavo A. Salazar (https://github.com/4ndr01d3)",
+    "Matloob Qureshi (https://github.com/CodeGit)",
     "Sebastien Pesseat (https://github.com/sebpca)",
-    "Swaathi Kandasaamy <swaathik@ebi.ac.uk> (https://github.com/Swaathik/)"
+    "Swaathi Kandasaamy (https://github.com/Swaathik)",
+    "Matthias Blum (https://github.com/matthiasblum)",
+    "Alessandro Polignano (https://github.com/apolignano)"
   ],
   "husky": {
     "hooks": {

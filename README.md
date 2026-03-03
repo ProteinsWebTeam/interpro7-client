@@ -45,5 +45,3 @@ and run them as stand-alone commands
 -   `scripts` The scripts executed when various `npm run` options selected
 -   `src`  The source code for the website
 -   `tests` Functional tests for the website
-
-
