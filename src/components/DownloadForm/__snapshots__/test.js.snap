@@ -40,6 +40,11 @@ exports[`<DownloadForm /> should render 1`] = `
           Protein
         </option>
         <option
+          value="isoform"
+        >
+          Isoform
+        </option>
+        <option
           value="structure"
         >
           Structure
@@ -92,6 +97,14 @@ exports[`<DownloadForm /> should render 1`] = `
           value="protein"
         >
           Protein
+        </ForwardRef>
+        <ForwardRef
+          data-key="description.isoform.isFilter"
+          data-value={true}
+          onClick={[Function]}
+          value="isoform"
+        >
+          Isoform
         </ForwardRef>
         <ForwardRef
           data-key="description.structure.isFilter"
