@@ -5,18 +5,20 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.4.0'
+          node-version: 24
           cache: 'npm'
+
 
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
-          npm i -g npm@11.4.2 --verbose
-          npm ci
+          npm ci --verbose
 
       - name: 🏗 - Build (dev)
         run: |
