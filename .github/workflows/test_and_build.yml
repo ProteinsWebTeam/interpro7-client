@@ -12,6 +12,9 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+      
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
