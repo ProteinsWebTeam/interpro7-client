@@ -14,7 +14,13 @@ jobs:
 
       - name: Clear npm cache
         run: npm cache clean --force
-      
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-v3-${{ hashFiles('**/package-lock.json') }}
+     
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
