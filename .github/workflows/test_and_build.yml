@@ -6,10 +6,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NODE_OPTIONS: --max-old-space-size=4096
+      NODE_OPTIONS: --max-old-space-size=102400
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       CHROMIUM_PATH: /usr/bin/google-chrome
-      
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
