@@ -5,11 +5,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      NODE_OPTIONS: --max-old-space-size=102400
-      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-      CHROMIUM_PATH: /usr/bin/google-chrome
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,7 +16,8 @@ jobs:
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
-          npm ci --verbose
+          npm ci --ignore-scripts
+          npx patch-package
 
       - name: 🏗 - Build (dev)
         run: |
