@@ -34,18 +34,10 @@ export const getConfidenceURLFromPayload = (namespace: string) =>
       search: state.customLocation.search,
     }),
     ({ dataPrediction, accession, search }) => {
-      // Try the isoform accession first; AlphaFold only stores the canonical,
-      // so fall back to the canonical accession if no match is found.
-      const isoformAccession = search.isoform as string | undefined;
-      const cifURL =
-        (isoformAccession
-          ? dataPrediction?.payload?.find(
-              (item) => item.uniprotAccession === isoformAccession,
-            )?.cifUrl
-          : undefined) ??
-        dataPrediction?.payload?.find(
-          (item) => item.uniprotAccession === accession,
-        )?.cifUrl;
+      const isoformAccession = (search.isoform as string) || accession;
+      const cifURL = dataPrediction?.payload?.find(
+        (item) => item.uniprotAccession === isoformAccession,
+      )?.cifUrl;
 
       return cifURL?.length
         ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')
