@@ -1,5 +1,8 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
-import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForPredictedStructure';
+import {
+  addBFVDConfidenceTrack,
+  addConfidenceTrack,
+} from 'components/Structure/ViewerAndEntries/ProteinViewerForPredictedStructure';
 import loadable from 'higherOrder/loadable';
 import {
   groupByEntryType,
@@ -139,11 +142,11 @@ export const addPTMTrack = (
 type Props = PropsWithChildren<{
   mainData:
     | {
-        metadata: MinimalProteinMetadata;
+        metadata: ProteinMetadata | MinimalProteinMetadata;
       }
     | {
         payload: {
-          metadata: MinimalProteinMetadata;
+          metadata: ProteinMetadata | MinimalProteinMetadata;
         };
       };
   dataMerged: ProteinViewerDataObject;
@@ -220,8 +223,9 @@ const DomainsOnProteinLoaded = ({
 
   let flattenedData = undefined;
 
-  if (dataConfidence)
+  if (dataConfidence) {
     addConfidenceTrack(dataConfidence, protein.accession, processedDataMerged);
+  }
 
   let interpro_NMatchesCount = 0;
   if (
@@ -236,6 +240,7 @@ const DomainsOnProteinLoaded = ({
     const allTracks = Object.keys(processedDataMerged);
     const unaffectedTracks = [
       'alphafold_confidence',
+      'bfvd_confidence',
       'intrinsically_disordered_regions',
       'funfam',
       'cath-funfam',

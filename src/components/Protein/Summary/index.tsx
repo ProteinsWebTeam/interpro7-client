@@ -103,11 +103,11 @@ export const SummaryProtein = ({
     Record<string, unknown>
   > | null>(null);
   const [subfamilies, setSubfamilies] = useState<Array<string> | null>(null);
-  const [bfvdModelLinkPattern, setBfvdModelLinkPattern] = useState<string>('');
+  const [afdbModelLinkPattern, setAfdbModelLinkPattern] = useState<string>('');
 
   useEffect(() => {
     if (dataPrediction) {
-      setBfvdModelLinkPattern(
+      setAfdbModelLinkPattern(
         `https://alphafold.ebi.ac.uk/entry/${
           dataPrediction.payload?.[0]?.modelEntityId || ''
         }`,
@@ -308,22 +308,22 @@ export const SummaryProtein = ({
                   <>
                     <li>
                       {' '}
-                      {bfvdModelLinkPattern ? (
+                      {afdbModelLinkPattern ? (
                         <Link
-                          href={bfvdModelLinkPattern}
+                          href={afdbModelLinkPattern}
                           className={css('ext')}
                           target="_blank"
                         >
-                          BFVD
+                          Alphafold DB
                         </Link>
                       ) : (
                         <BaseLink
                           id={metadata.accession}
                           target={'_blank'}
-                          pattern={bfvdModelLinkPattern}
+                          pattern={`https://bfvd.foldseek.com/cluster/{id}`}
                           className={css('ext')}
                         >
-                          BFVD
+                          Alphafold DB
                         </BaseLink>
                       )}
                     </li>
