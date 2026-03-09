@@ -103,17 +103,6 @@ export const SummaryProtein = ({
     Record<string, unknown>
   > | null>(null);
   const [subfamilies, setSubfamilies] = useState<Array<string> | null>(null);
-  const [afdbModelLinkPattern, setAfdbModelLinkPattern] = useState<string>('');
-
-  useEffect(() => {
-    if (dataPrediction) {
-      setAfdbModelLinkPattern(
-        `https://alphafold.ebi.ac.uk/entry/${
-          dataPrediction.payload?.[0]?.modelEntityId || ''
-        }`,
-      );
-    }
-  }, [dataPrediction]);
 
   useEffect(() => {
     setRenderComparisonButton(true);
