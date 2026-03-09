@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash-es';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
@@ -78,19 +79,14 @@ type Props = {
 
 interface LoadedProps extends Props {}
 
-export const SummaryProtein = ({ data, loading, isoform }: LoadedProps) => {
+export const SummaryProtein = ({ data, loading }: LoadedProps) => {
   const comparisonContainerRef = useRef<HTMLElement | null>(null);
-  const [renderComparisonButton, setRenderComparisonButton] = useState(false);
-  const [comparisonMode, setComparisonMode] = useState(false);
   const [matchesLoaded, setMatchesLoaded] = useState(false);
   const [families, setFamilies] = useState<Array<
     Record<string, unknown>
   > | null>(null);
   const [subfamilies, setSubfamilies] = useState<Array<string> | null>(null);
 
-  useEffect(() => {
-    setRenderComparisonButton(true);
-  }, [comparisonContainerRef]);
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
 
