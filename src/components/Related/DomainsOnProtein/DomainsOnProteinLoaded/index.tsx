@@ -1,8 +1,5 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react';
-import {
-  addBFVDConfidenceTrack,
-  addConfidenceTrack,
-} from 'components/Structure/ViewerAndEntries/ProteinViewerForPredictedStructure';
+import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForPredictedStructure';
 import loadable from 'higherOrder/loadable';
 import {
   groupByEntryType,
@@ -240,7 +237,6 @@ const DomainsOnProteinLoaded = ({
     const allTracks = Object.keys(processedDataMerged);
     const unaffectedTracks = [
       'alphafold_confidence',
-      'bfvd_confidence',
       'intrinsically_disordered_regions',
       'funfam',
       'cath-funfam',
