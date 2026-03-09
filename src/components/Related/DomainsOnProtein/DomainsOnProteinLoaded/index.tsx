@@ -139,11 +139,11 @@ export const addPTMTrack = (
 type Props = PropsWithChildren<{
   mainData:
     | {
-        metadata: ProteinMetadata | MinimalProteinMetadata;
+        metadata: MinimalProteinMetadata;
       }
     | {
         payload: {
-          metadata: ProteinMetadata | MinimalProteinMetadata;
+          metadata: MinimalProteinMetadata;
         };
       };
   dataMerged: ProteinViewerDataObject;
@@ -220,9 +220,8 @@ const DomainsOnProteinLoaded = ({
 
   let flattenedData = undefined;
 
-  if (dataConfidence) {
+  if (dataConfidence)
     addConfidenceTrack(dataConfidence, protein.accession, processedDataMerged);
-  }
 
   let interpro_NMatchesCount = 0;
   if (
