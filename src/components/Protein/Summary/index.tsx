@@ -85,16 +85,9 @@ type Props = {
   isoform?: string;
 };
 
-interface LoadedProps
-  extends Props,
-    LoadDataProps<AlphafoldPayload, 'Prediction'> {}
+interface LoadedProps extends Props {}
 
-export const SummaryProtein = ({
-  data,
-  loading,
-  isoform,
-  dataPrediction,
-}: LoadedProps) => {
+export const SummaryProtein = ({ data, loading, isoform }: LoadedProps) => {
   const comparisonContainerRef = useRef<HTMLElement | null>(null);
   const [renderComparisonButton, setRenderComparisonButton] = useState(false);
   const [comparisonMode, setComparisonMode] = useState(false);
