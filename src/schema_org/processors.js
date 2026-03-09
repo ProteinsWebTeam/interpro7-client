@@ -169,6 +169,7 @@ export const isTranscribedFrom = ({ gene }) => ({
 export const endpoint2type = {
   entry: 'bio:ProteinAnnotation',
   protein: 'bio:Protein',
+  isoform: 'bio:Isoform',
   taxonomy: 'bio:Taxon',
   proteome: 'bio:DataRecord',
   structure: 'bio:ProteinStructure',

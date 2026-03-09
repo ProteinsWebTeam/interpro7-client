@@ -9,13 +9,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
 
       - name: 🔧 - Install
         run: |
           cp config.yml.example config.yml
-          npm ci
+          npm ci --ignore-scripts
+          npx patch-package
 
       - name: 🏗 - Build (dev)
         run: |

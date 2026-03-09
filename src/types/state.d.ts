@@ -16,6 +16,7 @@ type GlobalState = {
 type Endpoint =
   | 'entry'
   | 'protein'
+  | 'isoform'
   | 'structure'
   | 'taxonomy'
   | 'proteome'
@@ -24,6 +25,7 @@ type Endpoint =
 type EndpointPlural =
   | 'entries'
   | 'proteins'
+  | 'isoforms'
   | 'structures'
   | 'taxa'
   | 'proteomes'
@@ -71,6 +73,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   };
   entry?: Location & EntryLocation;
   protein?: Location;
+  isoform?: Location;
   structure?: EndpointPartialLocation & {
     chain?: string | null;
   };

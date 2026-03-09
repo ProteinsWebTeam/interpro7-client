@@ -40,7 +40,7 @@ export const UniParcProtein = ({ data, md5 }: Props) => {
 
     const fetchMatches = async () => {
       try {
-        const response = await fetch(`${config.root.matches}/${md5}`);
+        const response = await fetch(`${config.root.matches.href}/${md5}`);
         const data = await response.json();
         setMatches(data.matches || []);
       } catch (error) {

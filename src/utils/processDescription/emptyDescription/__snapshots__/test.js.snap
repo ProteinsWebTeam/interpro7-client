@@ -12,6 +12,13 @@ exports[`getEmptyDescription should return new empty description object 1`] = `
     "memberDBAccession": null,
     "order": null,
   },
+  "isoform": {
+    "accession": null,
+    "db": null,
+    "detail": null,
+    "isFilter": null,
+    "order": null,
+  },
   "main": {
     "key": null,
     "numberOfFilters": 0,

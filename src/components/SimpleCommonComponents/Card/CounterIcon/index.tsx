@@ -36,6 +36,7 @@ type Props = {
 const icon: Record<Endpoint | 'domain architecture', string> = {
   entry: 'icon-entries',
   protein: 'icon-proteins',
+  isoform: 'icon-isoforms',
   proteome: 'icon-count-proteome',
   taxonomy: 'icon-count-species',
   structure: 'icon-structures',
