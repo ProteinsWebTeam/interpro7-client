@@ -17,6 +17,10 @@ const Sequence = loadable({
   loader: () => import(/* webpackChunkName: "sequence-subpage" */ './Sequence'),
 });
 
+const Isoform = loadable({
+  loader: () => import(/* webpackChunkName: "isoform-subpage" */ './Isoform'),
+});
+
 const DomainArchitecture = loadable({
   loader: () =>
     import(
@@ -171,6 +175,7 @@ const subPages = new Map([
   ['subfamilies', SubfamiliesSubPage],
   ['alphafold', AlphaFoldModelSubPage],
   ['bfvd', BFVDModelSubPage],
+  ['isoform', Isoform],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],

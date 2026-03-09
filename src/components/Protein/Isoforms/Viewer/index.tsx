@@ -19,6 +19,11 @@ import {
   selectRepresentativeData,
   ExtendedFeature,
 } from 'components/ProteinViewer/utils';
+import { addConfidenceTrack } from 'components/Structure/ViewerAndEntries/ProteinViewerForPredictedStructure';
+import {
+  getAlphaFoldPredictionURL,
+  getConfidenceURLFromPayload,
+} from 'components/Structure3DModel/selectors';
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import loadable from 'higherOrder/loadable';
@@ -114,7 +119,11 @@ const features2protvista = (features: FeatureMap) => {
 type Props = {
   isoform?: string;
 };
-interface LoadedProps extends Props, LoadDataProps<IsoformPayload> {}
+interface LoadedProps
+  extends Props,
+    LoadDataProps<IsoformPayload>,
+    LoadDataProps<AlphafoldPayload, 'Prediction'>,
+    LoadDataProps<AlphafoldConfidencePayload, 'Confidence'> {}
 
 type HeaderProps = { accession: string; length: number };
 export const IsoformHeader = ({ accession, length }: HeaderProps) => {
@@ -127,7 +136,7 @@ export const IsoformHeader = ({ accession, length }: HeaderProps) => {
     </header>
   );
 };
-const Viewer = ({ isoform, data }: LoadedProps) => {
+const Viewer = ({ isoform, data, dataConfidence }: LoadedProps) => {
   if (!isoform) return null;
   if (
     !data ||
@@ -142,23 +151,29 @@ const Viewer = ({ isoform, data }: LoadedProps) => {
   const dataProtvista = features2protvista(features);
 
   // Reorganize isoform viewer
+
   let proteinDataRecord = Object.fromEntries(
     dataProtvista,
   ) as ProteinViewerDataObject;
+  if (dataConfidence) {
+    addConfidenceTrack(dataConfidence, accession, proteinDataRecord);
+  }
   proteinDataRecord = sectionsReorganization(proteinDataRecord);
   proteinDataRecord = proteinViewerReorganization(
     undefined,
     proteinDataRecord,
     false,
   );
-  const proteinViewerData = Object.entries(proteinDataRecord);
-
+  const proteinViewerData = Object.entries(proteinDataRecord)
+    .sort(byEntryType)
+    .map(([key, value]) => [key.replace('_', ' '), value]);
   return (
     <div className={css('isoform-panel')}>
       <IsoformHeader accession={accession} length={length} />
       <ProteinViewer
-        protein={{ sequence, length: sequence.length }}
+        protein={{ accession, sequence, length: sequence.length }}
         data={proteinViewerData}
+        viewerType="isoform"
         title="Entry matches to this isoform"
       />
     </div>
@@ -196,6 +211,16 @@ const getIsoformURL = createSelector(
   },
 );
 export default loadData({
-  getUrl: getIsoformURL,
-  mapStateToProps,
-} as LoadDataParameters)(Viewer);
+  getUrl: getAlphaFoldPredictionURL,
+  propNamespace: 'Prediction',
+} as LoadDataParameters)(
+  loadData<AlphafoldConfidencePayload, 'Confidence'>({
+    getUrl: getConfidenceURLFromPayload('Prediction'),
+    propNamespace: 'Confidence',
+  } as LoadDataParameters)(
+    loadData({
+      getUrl: getIsoformURL,
+      mapStateToProps,
+    } as LoadDataParameters)(Viewer),
+  ),
+);

@@ -155,6 +155,7 @@ g:global(.child-location-group.clg-5) path {
 }
 .margin-bottom-large {
   min-height: 600px; /*To fit option menu*/
+  background-color: white;
 }
 table.matches-in-table {
   margin: 0;

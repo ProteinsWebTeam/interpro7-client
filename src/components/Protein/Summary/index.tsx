@@ -1,6 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import React, { useState } from 'react';
 import { isEqual } from 'lodash-es';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
@@ -22,18 +20,12 @@ import {
 
 import DescriptionReadMore from 'components/Description/DescriptionReadMore';
 
-import IsoformSelector from 'components/Protein/Isoforms/Selector';
-import IsoformViewer, {
-  IsoformHeader,
-} from 'components/Protein/Isoforms/Viewer';
-
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
 // import HmmerButton from 'components/Protein/Sequence/HmmerButton';
 import IPScanButton from 'components/Protein/Sequence/IPScanButton';
 import FileExporter from 'components/Matches/FileExporter';
 import PantherGoTerms from 'components/Protein/PantherGoTerms';
-import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import DownloadButton from '../Sequence/DownloadButton';
 
@@ -82,7 +74,6 @@ type Props = {
     metadata: ProteinMetadata & { name?: NameObject };
   };
   loading: boolean;
-  isoform?: string;
 };
 
 interface LoadedProps extends Props {}
@@ -233,46 +224,6 @@ export const SummaryProtein = ({ data, loading, isoform }: LoadedProps) => {
                   />
                 </td>
               </tr>
-
-              {metadata?.counters?.isoforms &&
-              (metadata.counters.isoforms as number) > 0 ? (
-                <tr>
-                  <td data-testid="protein-function">
-                    Isoforms{' '}
-                    <Tooltip
-                      title={`This protein has ${metadata.counters.isoforms} isoforms`}
-                    >
-                      <span
-                        className={css('small', 'icon', 'icon-common')}
-                        data-icon="&#xf129;"
-                        aria-label={`This protein has ${metadata.counters.isoforms} isoforms`}
-                      />
-                    </Tooltip>
-                  </td>
-                  <td style={{ display: 'flex' }}>
-                    <IsoformSelector />
-                    {renderComparisonButton ? (
-                      <FullScreenButton
-                        element={comparisonContainerRef.current}
-                        className={css(
-                          'vf-button',
-                          'vf-button--secondary',
-                          'vf-button--sm',
-                          'comparison-button',
-                          'icon',
-                          'icon-common',
-                          { disabled: !isoform },
-                        )}
-                        disabled={!isoform}
-                        dataIcon="icon-columns"
-                        tooltip="Compare side-by-side with canonical sequence"
-                        onFullScreenHook={() => setComparisonMode(true)}
-                        onExitFullScreenHook={() => setComparisonMode(false)}
-                      />
-                    ) : null}
-                  </td>
-                </tr>
-              ) : null}
             </tbody>
           </table>
         </div>
@@ -382,23 +333,12 @@ export const SummaryProtein = ({ data, loading, isoform }: LoadedProps) => {
           </section>
         </div>
       </section>
-      <section
-        ref={comparisonContainerRef}
-        className={css('vf-stack', 'vf-stack--200', {
-          splitfullscreen: comparisonMode,
-        })}
-      >
-        <IsoformViewer />
-        <section>
-          {isoform ? (
-            <IsoformHeader accession="Canonical" length={metadata.length} />
-          ) : null}
-          <DomainsOnProtein
-            mainData={data}
-            onMatchesLoaded={getSubfamiliesFromMatches}
-            onFamiliesFound={handleInterProFamilies}
-          />
-        </section>
+      <section className={css('vf-stack', 'vf-stack--200')}>
+        <DomainsOnProtein
+          mainData={data}
+          onMatchesLoaded={getSubfamiliesFromMatches}
+          onFamiliesFound={handleInterProFamilies}
+        />
       </section>
       {metadata.go_terms && (
         <GoTerms terms={metadata.go_terms} type="protein" />
@@ -408,9 +348,4 @@ export const SummaryProtein = ({ data, loading, isoform }: LoadedProps) => {
   );
 };
 
-const mapStateToProps = createSelector(
-  (state) => state.customLocation.search,
-  ({ isoform }) => ({ isoform }),
-);
-
-export default connect(mapStateToProps)(SummaryProtein);
+export default SummaryProtein;

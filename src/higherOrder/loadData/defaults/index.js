@@ -243,6 +243,7 @@ export const getUrlForApi = (...parameters) =>
     .replace('/subfamilies', '/')
     .replace('/pathways', '/')
     .replace('/feedback', '/')
+    .replace('/isoform', '/')
     .replace('/sequence', '/')
     .replace('/similar_proteins', '/')
     .replace('/curation', '/')

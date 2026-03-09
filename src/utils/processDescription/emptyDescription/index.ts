@@ -21,6 +21,13 @@ export default () => Object.freeze({
     detail: null,
     order: null,
   }),
+  isoform: Object.seal({
+    isFilter: null,
+    db: null,
+    accession: null,
+    detail: null,
+    order: null,
+  }),
   structure: Object.seal({
     isFilter: null,
     db: null,

@@ -16,6 +16,7 @@ root:
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
+  matches: https://www.ebi.ac.uk/interpro/matches/api/matches
 
 github:
   InterProClient:
@@ -62,6 +63,7 @@ pages:
   protein:
     subPages:
       - entry
+      - isoform
       - structure
       - alphafold
       - bfvd
