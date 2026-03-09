@@ -16,6 +16,7 @@ jobs:
         run: |
           cp config.yml.example config.yml
           npm ci --ignore-scripts
+          npm rebuild canvas gl node-sass sharp
           npx patch-package
 
       - name: 🏗 - Build (dev)
