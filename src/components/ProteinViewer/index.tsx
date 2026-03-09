@@ -354,10 +354,6 @@ export const ProteinViewer = ({
                       entry.protein = protein.accession;
                     });
 
-                    if (type.includes('confidence')) {
-                      console.log(entries);
-                    }
-
                     const LabelComponent = component?.component || 'span';
                     const reprEntries: ExtendedFeature[] = [];
                     const tedEntries: ExtendedFeature[] = [];

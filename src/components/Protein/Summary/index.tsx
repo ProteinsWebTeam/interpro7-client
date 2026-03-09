@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 import { isEqual } from 'lodash-es';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
-
+import config from 'config';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
@@ -308,24 +308,17 @@ export const SummaryProtein = ({
                   <>
                     <li>
                       {' '}
-                      {afdbModelLinkPattern ? (
-                        <Link
-                          href={afdbModelLinkPattern}
-                          className={css('ext')}
-                          target="_blank"
-                        >
-                          Alphafold DB
-                        </Link>
-                      ) : (
-                        <BaseLink
-                          id={metadata.accession}
-                          target={'_blank'}
-                          pattern={`https://bfvd.foldseek.com/cluster/{id}`}
-                          className={css('ext')}
-                        >
-                          Alphafold DB
-                        </BaseLink>
-                      )}
+                      <Link
+                        href={
+                          config.root.alphafold.href +
+                          'entry/' +
+                          metadata.accession
+                        }
+                        className={css('ext')}
+                        target="_blank"
+                      >
+                        Alphafold DB
+                      </Link>
                     </li>
                     <li>
                       <BaseLink
@@ -433,29 +426,9 @@ export const SummaryProtein = ({
   );
 };
 
-const getBFVDAlphafoldModel = createSelector(
-  (state: GlobalState) => state.settings.alphafold,
-  (state: GlobalState) =>
-    state.customLocation.description.protein?.accession || '',
-  ({ protocol, hostname, port, root }: ParsedURLServer, accession: string) => {
-    const url = format({
-      protocol,
-      hostname,
-      port,
-      pathname: root + 'api/prediction/' + accession,
-    });
-    return url;
-  },
-);
-
 const mapStateToProps = createSelector(
   (state) => state.customLocation.search,
   ({ isoform }) => ({ isoform }),
 );
 
-export default connect(mapStateToProps)(
-  loadData<AlphafoldPayload, 'Prediction'>({
-    getUrl: getBFVDAlphafoldModel,
-    propNamespace: 'Prediction',
-  } as LoadDataParameters)(SummaryProtein),
-);
+export default connect(mapStateToProps)(SummaryProtein);

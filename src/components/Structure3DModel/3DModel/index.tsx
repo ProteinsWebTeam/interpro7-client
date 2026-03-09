@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
+import config from 'config';
 
 import Link from 'components/generic/Link';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
@@ -257,15 +258,11 @@ const Structure3DModel = ({
                 <span className={css('footer')}>
                   View on{' '}
                   <Link
-                    href={
-                      bfvd
-                        ? `//bfvd.foldseek.com/cluster/${proteinAcc}`
-                        : modelUrl
-                    }
+                    href={config.root.alphafold.href + 'entry/' + proteinAcc}
                     className={css('ext')}
                     target="_blank"
                   >
-                    {bfvd ? 'BFVD' : 'AlphaFold DB'}
+                    Alphafold DB
                   </Link>
                   <br />
                   Find similar structures with{' '}
@@ -421,7 +418,10 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
         description['main']['key'] === 'entry' ||
         description['main']['key'] === 'protein'
       ) {
-        if (description[description['main']['key']]['detail'] === 'alphafold') {
+        if (
+          description[description['main']['key']]['detail'] === 'alphafold' ||
+          description[description['main']['key']]['detail'] === 'bfvd'
+        ) {
           modelUrl = format({
             protocol,
             hostname,

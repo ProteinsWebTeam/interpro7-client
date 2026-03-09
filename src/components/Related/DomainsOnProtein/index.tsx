@@ -22,7 +22,6 @@ import DomainsOnProteinLoaded, { makeTracks } from './DomainsOnProteinLoaded';
 import loadExternalSources, { ExtenalSourcesProps } from './ExternalSourcesHOC';
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 import { proteinViewerReorganization } from './utils';
-import { sortTracks } from './DomainsOnProteinLoaded/utils';
 import { connect } from 'react-redux';
 import { changeSettingsRaw } from 'actions/creators';
 
