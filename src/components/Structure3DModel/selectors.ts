@@ -8,15 +8,12 @@ export const getAlphaFoldPredictionURL = createSelector(
   ({ protocol, hostname, port, root, query }, accession, description) => {
     const descriptionKey = description['main']['key'];
     if (descriptionKey === 'entry' || descriptionKey === 'protein') {
-      if (description[descriptionKey]['detail'] !== 'bfvd') {
-        // Avoid making this request when we're on the BFVD page.
-        return format({
-          protocol,
-          hostname,
-          port,
-          pathname: `${root}api/prediction/${accession}`,
-        });
-      }
+      return format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}api/prediction/${accession}`,
+      });
     }
     return null;
   },
