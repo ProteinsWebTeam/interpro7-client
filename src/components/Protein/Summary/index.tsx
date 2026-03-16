@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash-es';
-
+import { format } from 'url';
+import loadData from 'higherOrder/loadData/ts';
+import config from 'config';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
@@ -74,12 +77,16 @@ type Props = {
   loading: boolean;
 };
 
-export const SummaryProtein = ({ data, loading }: Props) => {
+interface LoadedProps extends Props {}
+
+export const SummaryProtein = ({ data, loading }: LoadedProps) => {
+  const comparisonContainerRef = useRef<HTMLElement | null>(null);
   const [matchesLoaded, setMatchesLoaded] = useState(false);
   const [families, setFamilies] = useState<Array<
     Record<string, unknown>
   > | null>(null);
   const [subfamilies, setSubfamilies] = useState<Array<string> | null>(null);
+
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
 
@@ -229,14 +236,18 @@ export const SummaryProtein = ({ data, loading }: Props) => {
                 {metadata.in_bfvd ? (
                   <>
                     <li>
-                      <BaseLink
-                        id={metadata.accession}
-                        target={'_blank'}
-                        pattern="https://bfvd.foldseek.com/cluster/{id}"
+                      {' '}
+                      <Link
+                        href={
+                          config.root.alphafold.href +
+                          'entry/' +
+                          metadata.accession
+                        }
                         className={css('ext')}
+                        target="_blank"
                       >
-                        BFVD
-                      </BaseLink>
+                        Alphafold DB
+                      </Link>
                     </li>
                     <li>
                       <BaseLink
