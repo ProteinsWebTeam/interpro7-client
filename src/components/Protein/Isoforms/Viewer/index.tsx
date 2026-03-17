@@ -152,8 +152,6 @@ const Viewer = ({ protein, isoform, data, dataConfidence }: LoadedProps) => {
   const dataProtvista = features2protvista(features);
 
   // Reorganize isoform viewer
-  console.log(data);
-
   let proteinDataRecord = Object.fromEntries(
     dataProtvista,
   ) as ProteinViewerDataObject;
