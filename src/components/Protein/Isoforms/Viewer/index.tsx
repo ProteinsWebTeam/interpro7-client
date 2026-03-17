@@ -117,6 +117,7 @@ const features2protvista = (features: FeatureMap) => {
   return sortedCategories;
 };
 type Props = {
+  protein: ProteinMetadata;
   isoform?: string;
 };
 interface LoadedProps
@@ -136,7 +137,7 @@ export const IsoformHeader = ({ accession, length }: HeaderProps) => {
     </header>
   );
 };
-const Viewer = ({ isoform, data, dataConfidence }: LoadedProps) => {
+const Viewer = ({ protein, isoform, data, dataConfidence }: LoadedProps) => {
   if (!isoform) return null;
   if (
     !data ||
@@ -151,12 +152,16 @@ const Viewer = ({ isoform, data, dataConfidence }: LoadedProps) => {
   const dataProtvista = features2protvista(features);
 
   // Reorganize isoform viewer
-
   let proteinDataRecord = Object.fromEntries(
     dataProtvista,
   ) as ProteinViewerDataObject;
   if (dataConfidence) {
-    addConfidenceTrack(dataConfidence, accession, proteinDataRecord);
+    addConfidenceTrack(
+      dataConfidence,
+      accession,
+      proteinDataRecord,
+      protein.in_bfvd ? 'bfvd' : 'alphafold',
+    );
   }
   proteinDataRecord = sectionsReorganization(proteinDataRecord);
   proteinDataRecord = proteinViewerReorganization(

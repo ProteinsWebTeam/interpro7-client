@@ -136,12 +136,53 @@ export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
   protein: string,
   tracks: ProteinViewerDataObject,
+  type: string,
 ) => {
+  const bfvdScoreToCategory = (score: number): string => {
+    if (score <= 50) return 'D';
+    else if (score <= 70) return 'L';
+    else if (score <= 90) return 'M';
+    else return 'H';
+  };
+
+  let confidenceCategories: string[] = [];
+  if (type === 'bfvd' && dataConfidence?.payload?.confidenceCategory) {
+    // Create map of index/residues to handle missing scores. Missing scores will be set to -1.
+    let indexToAminoacid: Map<number, number> = new Map();
+    dataConfidence.payload.residueNumber.map((resNum, index) =>
+      indexToAminoacid.set(resNum, index),
+    );
+
+    // Available scores get converted to categories as defined above,
+    // overriding the category system returned by the API
+    for (
+      let i = 1;
+      i <= Math.max(...dataConfidence.payload.residueNumber);
+      i++
+    ) {
+      let score: number = 0;
+      if (indexToAminoacid.has(i)) {
+        score =
+          dataConfidence.payload.confidenceScore[
+            indexToAminoacid.get(i) as number
+          ];
+      } else {
+        score = -1;
+      }
+      confidenceCategories.push(bfvdScoreToCategory(score));
+    }
+  } else if (
+    type === 'alphafold' &&
+    dataConfidence?.payload?.confidenceCategory
+  ) {
+    confidenceCategories = dataConfidence.payload.confidenceCategory;
+  }
+
   if (dataConfidence?.payload?.confidenceCategory?.length) {
-    tracks['alphafold_confidence'] = [];
-    tracks['alphafold_confidence'][0] = {
+    tracks[`${type}_confidence`] = [];
+    tracks[`${type}_confidence`][0] = {
       accession: `confidence_af_${protein}`,
-      data: dataConfidence.payload.confidenceCategory.join(''),
+      data: confidenceCategories.join(''),
       type: 'confidence',
       protein,
       source_database: 'alphafold',
@@ -242,22 +283,15 @@ const ProteinViewerForAlphafold = ({
     const newGroups = { ...groups };
 
     if (dataConfidence) {
-      addConfidenceTrack(dataConfidence, protein, newGroups);
+      addConfidenceTrack(
+        dataConfidence,
+        protein,
+        newGroups,
+        bfvd && dataProtein?.payload ? 'bfvd' : 'alphafold',
+      );
     }
-
     // For synchronous operations, we can set state immediately
     setProcessedTracks(newGroups);
-
-    // For the async BFVD data, update state when it's ready
-    if (bfvd && dataProtein?.payload) {
-      addBFVDConfidenceTrack(
-        bfvd,
-        newGroups,
-        dataProtein.payload['metadata'],
-      ).then(() => {
-        setProcessedTracks(newGroups);
-      });
-    }
   }, [processedData, dataConfidence, bfvd, protein]);
 
   useEffect(() => {
@@ -389,6 +423,7 @@ const ProteinViewerForAlphafold = ({
 
   const allTracks = Object.keys({ ...groups });
   const unaffectedTracks = [
+    'bfvd_confidence',
     'alphafold_confidence',
     'intrinsically_disordered_regions',
     'funfam',

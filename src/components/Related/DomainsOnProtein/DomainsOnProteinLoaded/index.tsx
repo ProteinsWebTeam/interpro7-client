@@ -221,7 +221,12 @@ const DomainsOnProteinLoaded = ({
   let flattenedData = undefined;
 
   if (dataConfidence)
-    addConfidenceTrack(dataConfidence, protein.accession, processedDataMerged);
+    addConfidenceTrack(
+      dataConfidence,
+      protein.accession,
+      processedDataMerged,
+      protein.in_bfvd ? 'bfvd' : 'alphafold',
+    );
 
   let interpro_NMatchesCount = 0;
   if (
@@ -235,6 +240,7 @@ const DomainsOnProteinLoaded = ({
     const interProNData = dataInterProNMatches.payload;
     const allTracks = Object.keys(processedDataMerged);
     const unaffectedTracks = [
+      'bfvd_confidence',
       'alphafold_confidence',
       'intrinsically_disordered_regions',
       'funfam',

@@ -17,7 +17,7 @@ const IsoformSubPage = ({ data, isoform }: Props) => {
   return (
     <div>
       <IsoformSelector />
-      {isoform && <IsoformViewer />}
+      {isoform && <IsoformViewer protein={data.payload.metadata} />}
     </div>
   );
 };
