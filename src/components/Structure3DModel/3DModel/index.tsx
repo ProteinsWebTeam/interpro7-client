@@ -23,6 +23,7 @@ import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 import buttonBar from 'components/Structure/ViewerAndEntries/button-bar.css';
+import AlphaFoldStructuresTable from '../AlphaFoldStructuresTable';
 
 const css = cssBinder(style, buttonBar, ipro, fonts);
 
@@ -49,6 +50,43 @@ const confidenceColors = [
   },
 ];
 
+type PredictionLoaderProps = {
+  entryId: string | null;
+  onLoaded: (model: AlphafoldModelInfo) => void;
+};
+interface LoadedPredictionProps
+  extends PredictionLoaderProps,
+    LoadDataProps<AlphafoldModelInfo[]> {}
+
+const PredictionLoader = ({ data, onLoaded }: LoadedPredictionProps) => {
+  useEffect(() => {
+    const model = data?.payload?.[0];
+    if (model) onLoaded(model);
+  }, [data?.payload]);
+  return null;
+};
+
+const getPredictionUrl = createSelector(
+  (state: GlobalState) => state.settings.alphafold,
+  (_: GlobalState, props?: PredictionLoaderProps) => props?.entryId,
+  (
+    { protocol, hostname, port, root }: ParsedURLServer,
+    entryId: string | null | undefined,
+  ) => {
+    if (!entryId) return null;
+    return format({
+      protocol,
+      hostname,
+      port,
+      pathname: `${root}api/prediction/${entryId}`,
+    });
+  },
+);
+
+const ConnectedPredictionLoader = loadData({
+  getUrl: getPredictionUrl,
+} as LoadDataParameters)(PredictionLoader);
+
 type Props = {
   proteinAcc: string;
   hasMultipleProteins: boolean;
@@ -66,7 +104,7 @@ type Props = {
   isSplitScreen: boolean;
   onSplitScreenChange?: (v: boolean) => void;
 };
-interface LoadedProps extends Props, LoadDataProps<AlphafoldPayload> {}
+interface LoadedProps extends Props, LoadDataProps<MultimerAlphafoldPayload> {}
 
 const Structure3DModel = ({
   proteinAcc,
@@ -93,6 +131,10 @@ const Structure3DModel = ({
   const [isPDBLoading, setIsPDBLoading] = useState(false);
   const [isPDBAvailable, setIsPDBAvailable] = useState(false);
   const [bfvdURL, setBfvdURL] = useState(bfvd || '');
+  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] = useState<AlphafoldModelInfo | null>(
+    null,
+  );
 
   useEffect(() => {
     const selectedValueToKey: Record<string, 'family' | 'domain'> = {
@@ -154,6 +196,14 @@ const Structure3DModel = ({
     }
   }, [shouldResetViewer]);
 
+  useEffect(() => {
+    const docs = data?.payload?.docs || [];
+    if (docs.length > 0 && selectedEntryId === null) {
+      const first = docs[0];
+      setSelectedEntryId(first.entryId);
+    }
+  }, [data]);
+
   // Show warning if PDB is not available
   if (bfvd) {
     if (isPDBLoading) {
@@ -170,7 +220,7 @@ const Structure3DModel = ({
   } else {
     if (data?.loading) return <Loading />;
 
-    if ((data?.payload || []).length === 0) {
+    if ((data?.payload?.docs || []).length === 0) {
       return (
         <div>
           <h3>Structure prediction</h3>
@@ -180,8 +230,6 @@ const Structure3DModel = ({
     }
   }
 
-  const models = data?.payload || [];
-  const modelInfo = models.find((x) => x.uniprotAccession === proteinAcc);
   const elementId = 'new-structure-model-viewer';
 
   return (
@@ -192,7 +240,9 @@ const Structure3DModel = ({
             {bfvd
               ? 'BFVD Structure Prediction'
               : 'AlphaFold Structure Prediction'}
-            {models.length > 1 || hasMultipleProteins ? 's' : ''}
+            {(data?.payload?.docs || []).length > 1 || hasMultipleProteins
+              ? 's'
+              : ''}
           </h3>
           <p>
             The protein structure below has been predicted{' '}
@@ -230,8 +280,8 @@ const Structure3DModel = ({
       {!bfvd && (
         <SequenceCheck
           proteinAccession={proteinAcc}
-          alphaFoldSequence={models?.[0]?.sequence}
-          alphaFoldCreationDate={models?.[0]?.modelCreatedDate}
+          alphaFoldSequence={selectedModel?.sequence}
+          alphaFoldCreationDate={selectedModel?.modelCreatedDate}
         />
       )}
 
@@ -278,10 +328,10 @@ const Structure3DModel = ({
                 </span>
               </li>
               <li>
-                {modelInfo !== undefined ? (
+                {selectedModel !== null ? (
                   <>
                     <span className={css('header')}>Organism</span>
-                    <i> {modelInfo.organismScientificName} </i>
+                    <i> {selectedModel.organismScientificName} </i>
                   </>
                 ) : (
                   ''
@@ -305,7 +355,7 @@ const Structure3DModel = ({
               >
                 <Link
                   className={css('control')}
-                  href={!bfvd && modelInfo ? modelInfo.pdbUrl : bfvdURL}
+                  href={!bfvd && selectedModel ? selectedModel.pdbUrl : bfvdURL}
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
                   <span
@@ -317,7 +367,9 @@ const Structure3DModel = ({
                 {!bfvd && (
                   <Link
                     className={css('control')}
-                    href={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
+                    href={
+                      !bfvd && selectedModel ? selectedModel.cifUrl : bfvdURL
+                    }
                     download={`${proteinAcc || 'download'}.model.cif`}
                   >
                     <span
@@ -379,7 +431,7 @@ const Structure3DModel = ({
 
             <StructureViewer
               id={'fullSequence'}
-              url={!bfvd && modelInfo ? modelInfo.cifUrl : bfvdURL}
+              url={!bfvd && selectedModel ? selectedModel.cifUrl : bfvdURL}
               elementId={elementId}
               ext={bfvd ? 'pdb' : 'mmcif'}
               theme={colorBy}
@@ -394,17 +446,31 @@ const Structure3DModel = ({
           </PictureInPicturePanel>
         </div>
       </div>
+
+      {!bfvd && (
+        <>
+          <ConnectedPredictionLoader
+            entryId={selectedEntryId}
+            onLoaded={setSelectedModel}
+          />
+          <AlphaFoldStructuresTable
+            docs={data?.payload?.docs || []}
+            onSelect={setSelectedEntryId}
+            selectedId={selectedEntryId}
+          />
+        </>
+      )}
     </div>
   );
 };
 
-const getModelInfoUrl = (isUrlToApi: boolean) =>
+const getModelsInfoUrl = (isUrlToApi: boolean) =>
   createSelector(
     (state: GlobalState) => state.settings.alphafold,
     (state: GlobalState) => state.customLocation.description,
     (_: GlobalState, props?: Props) => {
       const proteinFromPayload =
-        (props as LoadedProps)?.data?.payload?.[0]?.uniprotAccession || '';
+        (props as LoadedProps)?.data?.payload?.docs[0]?.uniprotAccession || '';
       return props?.proteinAcc || proteinFromPayload;
     },
     (
@@ -412,7 +478,11 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
       description: InterProDescription,
       accession: string,
     ) => {
-      let modelUrl = null;
+      let modelsUrl = null;
+
+      const url = new URL(`${root}api/search`, window.location.origin);
+      url.searchParams.set('q', `(uniprotAccession:${accession})`);
+      url.searchParams.set('type', 'main');
 
       if (
         description['main']['key'] === 'entry' ||
@@ -422,23 +492,26 @@ const getModelInfoUrl = (isUrlToApi: boolean) =>
           description[description['main']['key']]['detail'] === 'alphafold' ||
           description[description['main']['key']]['detail'] === 'bfvd'
         ) {
-          modelUrl = format({
+          modelsUrl = format({
             protocol,
             hostname,
             port,
             pathname: isUrlToApi
-              ? `${root}api/prediction/${accession}`
+              ? `${root}api/search`
               : `${root}entry/${accession}`,
+            search: isUrlToApi
+              ? `?q=(uniprotAccession:${accession})&type=main`
+              : undefined,
           });
         }
       }
 
-      if (isUrlToApi) return modelUrl;
-      return { modelUrl };
+      if (isUrlToApi) return modelsUrl;
+      return { modelsUrl };
     },
   );
 
 export default loadData({
-  getUrl: getModelInfoUrl(true),
-  mapStateToProps: getModelInfoUrl(false),
+  getUrl: getModelsInfoUrl(true),
+  mapStateToProps: getModelsInfoUrl(false),
 } as LoadDataParameters)(Structure3DModel);
