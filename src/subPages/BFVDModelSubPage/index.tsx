@@ -45,7 +45,7 @@ const BFVDModelSubPage = ({
   const [selectionsInModel, setSelectionsInModel] =
     useState<Array<Selection> | null>(null);
   const [proteinAcc, setProteinAcc] = useState('');
-  const [colorBy, setColorBy] = useState('bfvd');
+  const [colorBy, setColorBy] = useState('af');
   const [colorMap, setColorMap] = useState<Record<number, number>>({});
   const [hasTED, setHasTED] = useState(false);
   const [hasRepresentativeData, setHasRepresentativeData] = useState<{
@@ -82,10 +82,6 @@ const BFVDModelSubPage = ({
 
   if (data?.loading) return <Loading />;
 
-  // Generate BFVD URL here but let the 3DModel component handle availability check
-  const bfvdURL = proteinAcc
-    ? `https://bfvd.steineggerlab.workers.dev/pdb/${proteinAcc}.pdb`
-    : '';
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
 
@@ -105,7 +101,6 @@ const BFVDModelSubPage = ({
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
           modelId={modelId}
-          bfvd={bfvdURL}
           onColorChange={onColorChange}
           colorBy={colorBy}
           selections={selectionsInModel}
@@ -124,7 +119,6 @@ const BFVDModelSubPage = ({
           <ProteinViewerForPredictedStructure
             setColorMap={setColorMap}
             setHasTED={setHasTED}
-            bfvd={bfvdURL}
             protein={proteinAcc}
             matchTypeSettings={matchTypeSettings}
             colorBy={colorBy}

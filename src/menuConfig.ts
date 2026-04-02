@@ -486,7 +486,7 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
             main: { key },
             [key]: {
               ...customLocation.description[key],
-              detail: 'bfvd',
+              detail: 'alphafold',
             },
           },
         };
