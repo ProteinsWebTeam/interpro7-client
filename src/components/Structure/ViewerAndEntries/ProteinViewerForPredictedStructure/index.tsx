@@ -40,7 +40,7 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
-export const addBFVDConfidenceTrack = async (
+export const addConfidenceTrackFromPDB = async (
   pdbURL: string,
   tracks: ProteinViewerDataObject,
   dataProtein: ProteinMetadata,
@@ -98,7 +98,7 @@ export const addBFVDConfidenceTrack = async (
     tracks['bfvd_confidence'] = [];
     tracks['bfvd_confidence'][0] = {
       accession: `confidence_bfvd_${protein}`,
-      data: mapBFactorsToLetters(residueAverageBFactors),
+      data: mapBFactorsToCategories(residueAverageBFactors),
       type: 'confidence',
       protein,
       source_database: 'bfvd',
@@ -111,7 +111,7 @@ export const addBFVDConfidenceTrack = async (
   }
 };
 
-export const mapBFactorsToLetters = (bFactors: number[]): string => {
+export const mapBFactorsToCategories = (bFactors: number[]): string => {
   // Map B-factor values to letters
   return bFactors
     .map((bFactor) => {
@@ -138,7 +138,7 @@ export const addConfidenceTrack = (
   tracks: ProteinViewerDataObject,
   type: string,
 ) => {
-  const bfvdScoreToCategory = (score: number): string => {
+  const scoreToCategory = (score: number): string => {
     if (score <= 50) return 'D';
     else if (score <= 70) return 'L';
     else if (score <= 90) return 'M';
@@ -169,12 +169,10 @@ export const addConfidenceTrack = (
       } else {
         score = -1;
       }
-      confidenceCategories.push(bfvdScoreToCategory(score));
+      confidenceCategories.push(scoreToCategory(score));
     }
-  } else if (
-    type === 'alphafold' &&
-    dataConfidence?.payload?.confidenceCategory
-  ) {
+  } else if (type === 'alphafold' && dataConfidence?.payload?.confidenceScore) {
+    let scores = dataConfidence.payload.confidenceScore;
     const chains = dataConfidence.payload.chains;
     if (chains && chains.length > 1) {
       // For multimers, restrict to the first chain only — both chains map to
@@ -182,16 +180,12 @@ export const addConfidenceTrack = (
       // but residueNumber runs continuously across all chains (1→N*chainLength).
       const firstChain = chains[0];
       const chainLength = firstChain.sequenceEnd - firstChain.sequenceStart + 1;
-      confidenceCategories = dataConfidence.payload.confidenceCategory.slice(
-        0,
-        chainLength,
-      );
-    } else {
-      confidenceCategories = dataConfidence.payload.confidenceCategory;
+      scores = scores.slice(0, chainLength);
     }
+    confidenceCategories = scores.map(scoreToCategory);
   }
 
-  if (dataConfidence?.payload?.confidenceCategory?.length) {
+  if (confidenceCategories.length) {
     tracks[`${type}_confidence`] = [];
     tracks[`${type}_confidence`][0] = {
       accession: `confidence_af_${protein}`,
