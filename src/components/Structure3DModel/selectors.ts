@@ -24,17 +24,23 @@ export const getConfidenceURLFromPayload = (namespace: string) =>
   createSelector(
     (
       state: GlobalState,
-      props: { [d: StartsWithData]: RequestedData<AlphafoldPayload> },
+      props: {
+        [d: StartsWithData]: RequestedData<AlphafoldPayload>;
+        selectedCifUrl?: string;
+      },
     ) => ({
       dataPrediction: props[`data${namespace}`],
       accession: state.customLocation.description.protein.accession,
       search: state.customLocation.search,
+      selectedCifUrl: props.selectedCifUrl,
     }),
-    ({ dataPrediction, accession, search }) => {
-      const isoformAccession = (search.isoform as string) || accession;
-      const cifURL = dataPrediction?.payload?.find(
-        (item) => item.uniprotAccession === isoformAccession,
-      )?.cifUrl;
+    ({ dataPrediction, accession, search, selectedCifUrl }) => {
+      const cifURL =
+        selectedCifUrl ||
+        dataPrediction?.payload?.find(
+          (item) =>
+            item.uniprotAccession === ((search.isoform as string) || accession),
+        )?.cifUrl;
 
       return cifURL?.length
         ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')

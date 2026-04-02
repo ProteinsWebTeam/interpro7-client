@@ -175,7 +175,20 @@ export const addConfidenceTrack = (
     type === 'alphafold' &&
     dataConfidence?.payload?.confidenceCategory
   ) {
-    confidenceCategories = dataConfidence.payload.confidenceCategory;
+    const chains = dataConfidence.payload.chains;
+    if (chains && chains.length > 1) {
+      // For multimers, restrict to the first chain only — both chains map to
+      // the same UniProt sequence (sequenceStart/End are identical for homodimers),
+      // but residueNumber runs continuously across all chains (1→N*chainLength).
+      const firstChain = chains[0];
+      const chainLength = firstChain.sequenceEnd - firstChain.sequenceStart + 1;
+      confidenceCategories = dataConfidence.payload.confidenceCategory.slice(
+        0,
+        chainLength,
+      );
+    } else {
+      confidenceCategories = dataConfidence.payload.confidenceCategory;
+    }
   }
 
   if (dataConfidence?.payload?.confidenceCategory?.length) {
@@ -203,6 +216,7 @@ type Props = {
   hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
   isSplitScreen: boolean;
   bfvd?: string;
+  selectedCifUrl?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
   matchTypeSettings?: MatchTypeUISettings;
   colorDomainsBy?: string;

@@ -193,10 +193,18 @@ type AlphafoldModelInfo = {
 
 type AlphafoldPayload = Array<AlphafoldModelInfo>;
 
+type AlphafoldConfidenceChain = {
+  name: string;
+  label_asym_id: string;
+  sequenceStart: number;
+  sequenceEnd: number;
+};
+
 type AlphafoldConfidencePayload = {
   residueNumber: Array<number>;
   confidenceScore: Array<number>;
   confidenceCategory: Array<string>;
+  chains?: Array<AlphafoldConfidenceChain>;
 };
 
 type RepeatsDBAnnotation = {

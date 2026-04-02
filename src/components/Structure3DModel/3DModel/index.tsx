@@ -103,6 +103,7 @@ type Props = {
   parentElement?: HTMLElement | null;
   isSplitScreen: boolean;
   onSplitScreenChange?: (v: boolean) => void;
+  onModelLoaded?: (cifUrl: string) => void;
 };
 interface LoadedProps extends Props, LoadDataProps<MultimerAlphafoldPayload> {}
 
@@ -123,6 +124,7 @@ const Structure3DModel = ({
   parentElement,
   isSplitScreen,
   onSplitScreenChange,
+  onModelLoaded,
 }: LoadedProps) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   const [isReady, setReady] = useState(false);
@@ -231,6 +233,15 @@ const Structure3DModel = ({
   }
 
   const elementId = 'new-structure-model-viewer';
+
+  // Derive cifUrl immediately from the already-loaded search doc so the
+  // structure viewer updates on click without waiting for the prediction API.
+  const selectedDoc = (data?.payload?.docs || []).find(
+    (d) => d.entryId === selectedEntryId,
+  );
+  const selectedCifUrl = selectedDoc
+    ? `${config.root.alphafold.href}files/${selectedDoc.entryId}-model_v${selectedDoc.latestVersion}.cif`
+    : selectedModel?.cifUrl;
 
   return (
     <div className={css('alphafold-model')}>
@@ -355,7 +366,11 @@ const Structure3DModel = ({
               >
                 <Link
                   className={css('control')}
-                  href={!bfvd && selectedModel ? selectedModel.pdbUrl : bfvdURL}
+                  href={
+                    !bfvd && selectedCifUrl
+                      ? selectedCifUrl.replace('.cif', '.pdb')
+                      : bfvdURL
+                  }
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
                   <span
@@ -367,9 +382,7 @@ const Structure3DModel = ({
                 {!bfvd && (
                   <Link
                     className={css('control')}
-                    href={
-                      !bfvd && selectedModel ? selectedModel.cifUrl : bfvdURL
-                    }
+                    href={!bfvd && selectedCifUrl ? selectedCifUrl : bfvdURL}
                     download={`${proteinAcc || 'download'}.model.cif`}
                   >
                     <span
@@ -431,7 +444,7 @@ const Structure3DModel = ({
 
             <StructureViewer
               id={'fullSequence'}
-              url={!bfvd && selectedModel ? selectedModel.cifUrl : bfvdURL}
+              url={!bfvd && selectedCifUrl ? selectedCifUrl : bfvdURL}
               elementId={elementId}
               ext={bfvd ? 'pdb' : 'mmcif'}
               theme={colorBy}
@@ -444,22 +457,24 @@ const Structure3DModel = ({
             />
             {isSplitScreen && renderLegend('inline-legend')}
           </PictureInPicturePanel>
+          {!bfvd && (
+            <>
+              <ConnectedPredictionLoader
+                entryId={selectedEntryId}
+                onLoaded={(model) => {
+                  setSelectedModel(model);
+                  onModelLoaded?.(model.cifUrl);
+                }}
+              />
+              <AlphaFoldStructuresTable
+                docs={data?.payload?.docs || []}
+                onSelect={setSelectedEntryId}
+                selectedId={selectedEntryId}
+              />
+            </>
+          )}
         </div>
       </div>
-
-      {!bfvd && (
-        <>
-          <ConnectedPredictionLoader
-            entryId={selectedEntryId}
-            onLoaded={setSelectedModel}
-          />
-          <AlphaFoldStructuresTable
-            docs={data?.payload?.docs || []}
-            onSelect={setSelectedEntryId}
-            selectedId={selectedEntryId}
-          />
-        </>
-      )}
     </div>
   );
 };
