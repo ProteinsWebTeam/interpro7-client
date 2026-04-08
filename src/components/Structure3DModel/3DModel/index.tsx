@@ -98,7 +98,6 @@ type Props = {
   hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
   modelId: string | null;
   modelUrl?: string;
-  bfvd?: string;
   selections: Selection[] | null;
   parentElement?: HTMLElement | null;
   isSplitScreen: boolean;
@@ -118,7 +117,6 @@ const Structure3DModel = ({
   hasRepresentativeData,
   modelId,
   modelUrl,
-  bfvd,
   data,
   selections,
   parentElement,
@@ -128,11 +126,6 @@ const Structure3DModel = ({
 }: LoadedProps) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   const [isReady, setReady] = useState(false);
-
-  // Added states for PDB availability check (moved from BFVDModelSubPage)
-  const [isPDBLoading, setIsPDBLoading] = useState(false);
-  const [isPDBAvailable, setIsPDBAvailable] = useState(false);
-  const [bfvdURL, setBfvdURL] = useState(bfvd || '');
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState<AlphafoldModelInfo | null>(
     null,
@@ -149,14 +142,14 @@ const Structure3DModel = ({
       hasRepresentativeData[selectedValueToKey[colorBy]] === null &&
       onColorChange
     ) {
-      onColorChange(bfvd ? 'bfvd' : 'af');
+      onColorChange('af');
     }
   }, [colorBy, hasRepresentativeData]);
 
   const renderLegend = (display: string = '') => {
     return (
       <div className={css(display ? 'inline-legend-container' : '')}>
-        {(colorBy === 'af' || colorBy === 'bfvd') && (
+        {colorBy === 'af' && (
           <>
             <b> Model Confidence </b>
             <ul className={css('legend', display)}>
@@ -173,25 +166,6 @@ const Structure3DModel = ({
     );
   };
 
-  // Effect to check PDB availability (moved from BFVDModelSubPage)
-  useEffect(() => {
-    setIsPDBLoading(true);
-    if (bfvd && proteinAcc.length > 0) {
-      setBfvdURL(bfvd);
-      fetch(bfvd, { method: 'GET' })
-        .then((res) => {
-          if (res.ok) {
-            setIsPDBAvailable(true);
-          }
-          setIsPDBLoading(false);
-        })
-        .catch((error) => {
-          setIsPDBLoading(false);
-          setIsPDBAvailable(false);
-        });
-    }
-  }, [proteinAcc, bfvd]);
-
   useEffect(() => {
     if (shouldResetViewer) {
       requestAnimationFrame(() => setShouldResetViewer(false));
@@ -206,30 +180,15 @@ const Structure3DModel = ({
     }
   }, [data]);
 
-  // Show warning if PDB is not available
-  if (bfvd) {
-    if (isPDBLoading) {
-      return <Loading />;
-    } else {
-      if (!isPDBAvailable) {
-        return (
-          <Callout type="warning">
-            Structure Viewer currently not available for this entry.
-          </Callout>
-        );
-      }
-    }
-  } else {
-    if (data?.loading) return <Loading />;
+  if (data?.loading) return <Loading />;
 
-    if ((data?.payload?.docs || []).length === 0) {
-      return (
-        <div>
-          <h3>Structure prediction</h3>
-          <p>There is no structural model associated to {proteinAcc}.</p>
-        </div>
-      );
-    }
+  if ((data?.payload?.docs || []).length === 0) {
+    return (
+      <div>
+        <h3>Structure prediction</h3>
+        <p>There is no structural model associated to {proteinAcc}.</p>
+      </div>
+    );
   }
 
   const elementId = 'new-structure-model-viewer';
@@ -248,36 +207,19 @@ const Structure3DModel = ({
       {!isSplitScreen && (
         <>
           <h3>
-            {bfvd
-              ? 'BFVD Structure Prediction'
-              : 'AlphaFold Structure Prediction'}
+            AlphaFold Structure Prediction
             {(data?.payload?.docs || []).length > 1 || hasMultipleProteins
               ? 's'
               : ''}
           </h3>
           <p>
-            The protein structure below has been predicted{' '}
-            {bfvd ? (
-              <>
-                by the{' '}
-                <Link href={'//steineggerlab.com/en'}>Steinegger Lab</Link>{' '}
-                using ColabFold (
-                <Link href={'//doi.org/10.1093/nar/gkae1119'}>
-                  Kim, R et al. 2024
-                </Link>
-                )
-              </>
-            ) : (
-              <>
-                by <Link href={'//deepmind.google/'}>Google DeepMind</Link>{' '}
-                using AlphaFold (
-                <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
-                  Jumper, J et al. 2021
-                </Link>
-                )
-              </>
-            )}
-            .
+            The protein structure below has been predicted by{' '}
+            <Link href={'//deepmind.google/'}>Google DeepMind</Link> using
+            AlphaFold (
+            <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
+              Jumper, J et al. 2021
+            </Link>
+            )
           </p>
         </>
       )}
@@ -288,13 +230,11 @@ const Structure3DModel = ({
         </Callout>
       ) : null}
 
-      {!bfvd && (
-        <SequenceCheck
-          proteinAccession={proteinAcc}
-          alphaFoldSequence={selectedModel?.sequence}
-          alphaFoldCreationDate={selectedModel?.modelCreatedDate}
-        />
-      )}
+      <SequenceCheck
+        proteinAccession={proteinAcc}
+        alphaFoldSequence={selectedModel?.sequence}
+        alphaFoldCreationDate={selectedModel?.modelCreatedDate}
+      />
 
       <div className={css('af-container')}>
         {!isSplitScreen && (
@@ -328,9 +268,7 @@ const Structure3DModel = ({
                   <br />
                   Find similar structures with{' '}
                   <Link
-                    href={`//search.foldseek.com/search?accession=${proteinAcc}&source=${
-                      bfvd ? 'BFVD' : 'AlphaFoldDB'
-                    }`}
+                    href={`//search.foldseek.com/search?accession=${proteinAcc}&source=AlphaFoldDB`}
                     className={css('ext')}
                     target="_blank"
                   >
@@ -367,9 +305,7 @@ const Structure3DModel = ({
                 <Link
                   className={css('control')}
                   href={
-                    !bfvd && selectedCifUrl
-                      ? selectedCifUrl.replace('.cif', '.pdb')
-                      : bfvdURL
+                    selectedCifUrl && selectedCifUrl.replace('.cif', '.pdb')
                   }
                   download={`${proteinAcc || 'download'}.model.pdb`}
                 >
@@ -379,19 +315,17 @@ const Structure3DModel = ({
                   />
                   &nbsp;PDB file
                 </Link>
-                {!bfvd && (
-                  <Link
-                    className={css('control')}
-                    href={!bfvd && selectedCifUrl ? selectedCifUrl : bfvdURL}
-                    download={`${proteinAcc || 'download'}.model.cif`}
-                  >
-                    <span
-                      className={css('icon', 'icon-common', 'icon-download')}
-                      data-icon="&#xf019;"
-                    />
-                    &nbsp;mmCIF file
-                  </Link>
-                )}
+                <Link
+                  className={css('control')}
+                  href={selectedCifUrl}
+                  download={`${proteinAcc || 'download'}.model.cif`}
+                >
+                  <span
+                    className={css('icon', 'icon-common', 'icon-download')}
+                    data-icon="&#xf019;"
+                  />
+                  &nbsp;mmCIF file
+                </Link>
                 <Button
                   type="inline"
                   icon="icon-redo"
@@ -428,7 +362,7 @@ const Structure3DModel = ({
                     if (onColorChange) onColorChange(event.target.value);
                   }}
                 >
-                  <option value={bfvd ? 'bfvd' : 'af'}>Model confidence</option>
+                  <option value={'af'}>Model confidence</option>
                   {hasTED && <option value="ted">TED domains</option>}
                   {hasRepresentativeData && hasRepresentativeData['family'] && (
                     <option value="repr_families">
@@ -444,9 +378,9 @@ const Structure3DModel = ({
 
             <StructureViewer
               id={'fullSequence'}
-              url={!bfvd && selectedCifUrl ? selectedCifUrl : bfvdURL}
+              url={selectedCifUrl}
               elementId={elementId}
-              ext={bfvd ? 'pdb' : 'mmcif'}
+              ext={'mmcif'}
               theme={colorBy}
               colorMap={colorMap}
               shouldResetViewer={shouldResetViewer}
@@ -457,22 +391,20 @@ const Structure3DModel = ({
             />
             {isSplitScreen && renderLegend('inline-legend')}
           </PictureInPicturePanel>
-          {!bfvd && (
-            <>
-              <ConnectedPredictionLoader
-                entryId={selectedEntryId}
-                onLoaded={(model) => {
-                  setSelectedModel(model);
-                  onModelLoaded?.(model.cifUrl);
-                }}
-              />
-              <AlphaFoldStructuresTable
-                docs={data?.payload?.docs || []}
-                onSelect={setSelectedEntryId}
-                selectedId={selectedEntryId}
-              />
-            </>
-          )}
+          <>
+            <ConnectedPredictionLoader
+              entryId={selectedEntryId}
+              onLoaded={(model) => {
+                setSelectedModel(model);
+                onModelLoaded?.(model.cifUrl);
+              }}
+            />
+            <AlphaFoldStructuresTable
+              docs={data?.payload?.docs || []}
+              onSelect={setSelectedEntryId}
+              selectedId={selectedEntryId}
+            />
+          </>
         </div>
       </div>
     </div>
@@ -503,10 +435,7 @@ const getModelsInfoUrl = (isUrlToApi: boolean) =>
         description['main']['key'] === 'entry' ||
         description['main']['key'] === 'protein'
       ) {
-        if (
-          description[description['main']['key']]['detail'] === 'alphafold' ||
-          description[description['main']['key']]['detail'] === 'bfvd'
-        ) {
+        if (description[description['main']['key']]['detail'] === 'alphafold') {
           modelsUrl = format({
             protocol,
             hostname,

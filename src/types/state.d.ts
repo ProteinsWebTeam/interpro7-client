@@ -141,7 +141,6 @@ type SettingsState = {
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
-  bfvd: ParsedURLServer;
   uniprot: ParsedURLServer;
   rfam: ParsedURLServer;
   proteinsAPI: ParsedURLServer;
@@ -217,7 +216,6 @@ type Server =
   | 'ipScan'
   | 'wikipedia'
   | 'alphafold'
-  | 'bfvd'
   | 'repeatsDB'
   | 'disprot'
   | 'proteinsAPI';

@@ -9,7 +9,6 @@ export default combineReducers({
   ipScan: server('ipScan'),
   wikipedia: server('wikipedia'),
   alphafold: server('alphafold'),
-  bfvd: server('bfvd'),
 });
 
 export const serverStatusesSelector = (state: GlobalState) =>
@@ -23,4 +22,3 @@ export const ebiServerStatus = serverStatusSelectorFor('ebi');
 export const ipScanServerStatus = serverStatusSelectorFor('ipScan');
 export const wikipediaServerStatus = serverStatusSelectorFor('wikipedia');
 export const alphaFoldServerStatus = serverStatusSelectorFor('alphafold');
-export const bfvdServerStatus = serverStatusSelectorFor('bfvd');

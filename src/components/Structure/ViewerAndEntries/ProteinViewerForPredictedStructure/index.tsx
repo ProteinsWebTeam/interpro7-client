@@ -40,77 +40,6 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
-export const addConfidenceTrackFromPDB = async (
-  pdbURL: string,
-  tracks: ProteinViewerDataObject,
-  dataProtein: ProteinMetadata,
-): Promise<ProteinViewerDataObject> => {
-  try {
-    // Fetch the PDB file
-    const response = await fetch(pdbURL);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch PDB file: ${response.status}`);
-    }
-
-    const protein = dataProtein.name;
-    const sequence = dataProtein.sequence;
-    const pdbText = await response.text();
-    const lines = pdbText.split('\n');
-
-    const residueBFactors: Map<number, number[]> = new Map();
-    const aminoacidNumbers = [...Array(sequence.length).keys()];
-    aminoacidNumbers.forEach((num) => residueBFactors.set(num, [-1]));
-
-    for (const line of lines) {
-      if (line.startsWith('ATOM') || line.startsWith('HETATM')) {
-        const residueNumStr = line.substring(22, 26).trim();
-        const residueNum = parseInt(residueNumStr);
-
-        const bFactorStr = line.substring(60, 66).trim();
-        const bFactor = parseFloat(bFactorStr);
-
-        if (!isNaN(residueNum) && !isNaN(bFactor)) {
-          if (residueBFactors.get(residueNum)?.[0] == -1) {
-            residueBFactors.set(residueNum, []);
-          }
-          residueBFactors.get(residueNum)?.push(bFactor);
-        }
-      }
-    }
-
-    // Second pass: calculate average B-factor for each residue
-    const residueAverageBFactors: number[] = [];
-
-    // Sort residue numbers to ensure correct order
-    const sortedResidueNumbers = Array.from(residueBFactors.keys()).sort(
-      (a, b) => a - b,
-    );
-
-    for (const residueNum of sortedResidueNumbers) {
-      const bFactors = residueBFactors.get(residueNum) || [];
-      // Calculate average B-factor for this residue
-      const averageBFactor =
-        bFactors.reduce((sum, bf) => sum + bf, 0) / bFactors.length;
-      residueAverageBFactors.push(averageBFactor);
-    }
-
-    // Add the track with amino acid-based B-factors
-    tracks['bfvd_confidence'] = [];
-    tracks['bfvd_confidence'][0] = {
-      accession: `confidence_bfvd_${protein}`,
-      data: mapBFactorsToCategories(residueAverageBFactors),
-      type: 'confidence',
-      protein,
-      source_database: 'bfvd',
-    };
-
-    return tracks;
-  } catch (error) {
-    console.error('Error extracting B-factors:', error);
-    throw error;
-  }
-};
-
 export const mapBFactorsToCategories = (bFactors: number[]): string => {
   // Map B-factor values to letters
   return bFactors
@@ -146,32 +75,8 @@ export const addConfidenceTrack = (
   };
 
   let confidenceCategories: string[] = [];
-  if (type === 'bfvd' && dataConfidence?.payload?.confidenceCategory) {
-    // Create map of index/residues to handle missing scores. Missing scores will be set to -1.
-    let indexToAminoacid: Map<number, number> = new Map();
-    dataConfidence.payload.residueNumber.map((resNum, index) =>
-      indexToAminoacid.set(resNum, index),
-    );
 
-    // Available scores get converted to categories as defined above,
-    // overriding the category system returned by the API
-    for (
-      let i = 1;
-      i <= Math.max(...dataConfidence.payload.residueNumber);
-      i++
-    ) {
-      let score: number = 0;
-      if (indexToAminoacid.has(i)) {
-        score =
-          dataConfidence.payload.confidenceScore[
-            indexToAminoacid.get(i) as number
-          ];
-      } else {
-        score = -1;
-      }
-      confidenceCategories.push(scoreToCategory(score));
-    }
-  } else if (type === 'alphafold' && dataConfidence?.payload?.confidenceScore) {
+  if (type === 'alphafold' && dataConfidence?.payload?.confidenceScore) {
     let scores = dataConfidence.payload.confidenceScore;
     const chains = dataConfidence.payload.chains;
     if (chains && chains.length > 1) {
@@ -209,7 +114,6 @@ type Props = {
   }) => void;
   hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
   isSplitScreen: boolean;
-  bfvd?: string;
   selectedCifUrl?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
   matchTypeSettings?: MatchTypeUISettings;
@@ -226,7 +130,6 @@ interface LoadedProps
 const ProteinViewerForAlphafold = ({
   data,
   protein,
-  bfvd,
   dataProtein,
   dataInterProNMatches,
   dataConfidence,
@@ -291,16 +194,11 @@ const ProteinViewerForAlphafold = ({
     const newGroups = { ...groups };
 
     if (dataConfidence) {
-      addConfidenceTrack(
-        dataConfidence,
-        protein,
-        newGroups,
-        bfvd && dataProtein?.payload ? 'bfvd' : 'alphafold',
-      );
+      addConfidenceTrack(dataConfidence, protein, newGroups, 'alphafold');
     }
     // For synchronous operations, we can set state immediately
     setProcessedTracks(newGroups);
-  }, [processedData, dataConfidence, bfvd, protein]);
+  }, [processedData, dataConfidence, protein]);
 
   useEffect(() => {
     const currentTrack = trackRef.current;
@@ -378,7 +276,6 @@ const ProteinViewerForAlphafold = ({
 
     const colorToObj: Record<string, Feature[]> = {
       af: [] as Feature[],
-      bfvd: [] as Feature[],
       repr_families: representativeDataForStructure['family'],
       repr_domains: representativeDataForStructure['domain'] as Feature[],
       ted: tedFeatures as Feature[],
@@ -431,7 +328,6 @@ const ProteinViewerForAlphafold = ({
 
   const allTracks = Object.keys({ ...groups });
   const unaffectedTracks = [
-    'bfvd_confidence',
     'alphafold_confidence',
     'intrinsically_disordered_regions',
     'funfam',

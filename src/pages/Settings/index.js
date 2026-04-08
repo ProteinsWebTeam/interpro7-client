@@ -611,9 +611,6 @@ const WikipediaEndpointSettings = connect(getStatusForEndpoint('wikipedia'))(
 const AlphaFoldEndpointSettings = connect(getStatusForEndpoint('alphafold'))(
   EndpointSettings,
 );
-const BFVDEndpointSettings = connect(getStatusForEndpoint('bfvd'))(
-  EndpointSettings,
-);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -741,7 +738,6 @@ type SettingsProps = {
     disprot: Object,
     wikipedia: Object,
     alphafold: Object,
-    bfvd: Object,
     proteinsAPI: Object,
   },
   changeSettings: function,
@@ -766,7 +762,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
       ipScan: T.object.isRequired,
       wikipedia: T.object.isRequired,
       alphafold: T.object.isRequired,
-      bfvd: T.object.isRequired,
     }).isRequired,
     changeSettings: T.func.isRequired,
     changeSettingsRaw: T.func.isRequired,
@@ -816,7 +811,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
         ipScan = {},
         wikipedia = {},
         alphafold = {},
-        bfvd = {},
       },
       changeSettings,
       changeSettingsRaw,
@@ -910,9 +904,6 @@ class Settings extends PureComponent /*:: <SettingsProps, SettingsState> */ {
                     AlphaFold API Settings{' '}
                     {!DEV && '(modification temporarily disabled)'}
                   </AlphaFoldEndpointSettings>
-                  <BFVDEndpointSettings category="bfvd" endpointDetails={bfvd}>
-                    BFVD API Settings
-                  </BFVDEndpointSettings>
 
                   <Button onClick={this._handleReset}>
                     Reset settings to default values

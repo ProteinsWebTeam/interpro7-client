@@ -23,7 +23,6 @@ import Labels from './Labels';
 import { Selection } from '../ViewerAndEntries';
 import { AfConfidenceProvider } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
-import { BFactorColorThemeProvider } from './bfvd-confidence/color';
 import { CustomThemeProvider } from './custom/color';
 
 import cssBinder from 'styles/cssBinder';
@@ -100,10 +99,6 @@ class StructureView extends PureComponent<Props> {
 
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
           CustomThemeProvider,
-        );
-
-        this.viewer.representation.structure.themes.colorThemeRegistry.add(
-          BFactorColorThemeProvider,
         );
       }
       // mouseover ?????
@@ -304,9 +299,6 @@ class StructureView extends PureComponent<Props> {
     switch (this.props.theme) {
       case 'af':
         colouringTheme = AfConfidenceColorThemeProvider.name;
-        break;
-      case 'bfvd':
-        colouringTheme = BFactorColorThemeProvider.name;
         break;
       case 'ted':
         colouringTheme = CustomThemeProvider.name;

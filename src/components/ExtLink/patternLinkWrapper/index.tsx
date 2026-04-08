@@ -29,9 +29,4 @@ export const AlphafoldLink = patternLinkWrapper(
 );
 AlphafoldLink.displayName = 'AlphafoldLink';
 
-export const BFVDLink = patternLinkWrapper(
-  'https://bfvd.foldseek.com/cluster/{id}',
-);
-BFVDLink.displayName = 'BFVDLink';
-
 export default patternLinkWrapper;

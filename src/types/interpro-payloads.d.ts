@@ -110,7 +110,6 @@ interface EntryMetadata extends Metadata {
   is_reviewed_llm?: boolean;
   is_updated_llm?: boolean;
   in_alphafold?: boolean;
-  in_bfvd?: boolean;
   entry_annotations?: Record<string, unknown>;
 }
 
@@ -136,7 +135,6 @@ interface ProteinMetadata extends Metadata {
   protein_evidence: number;
   is_fragment: boolean;
   in_alphafold: boolean;
-  in_bfvd: boolean;
   ida_accession: string;
   source_organism: SourceOrganism;
 }

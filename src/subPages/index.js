@@ -66,11 +66,6 @@ const AlphaFoldModelSubPage = loadable({
     ),
 });
 
-const BFVDModelSubPage = loadable({
-  loader: () =>
-    import(/* webpackChunkName: "bfvd-model-subpage" */ './BFVDModelSubPage'),
-});
-
 const defaultMapStateToProps = createSelector(
   (state) => state.settings.api,
   (state) => state.settings.navigation.pageSize,
@@ -174,7 +169,6 @@ const subPages = new Map([
   ],
   ['subfamilies', SubfamiliesSubPage],
   ['alphafold', AlphaFoldModelSubPage],
-  ['bfvd', BFVDModelSubPage],
   ['isoform', Isoform],
   ['entry_alignments', EntryAlignments],
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
