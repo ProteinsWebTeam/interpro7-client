@@ -148,7 +148,7 @@ export const addConfidenceTrack = (
   let confidenceCategories: string[] = [];
   if (type === 'bfvd' && dataConfidence?.payload?.confidenceCategory) {
     // Create map of index/residues to handle missing scores. Missing scores will be set to -1.
-    let indexToAminoacid: Map<number, number> = new Map();
+    const indexToAminoacid: Map<number, number> = new Map();
     dataConfidence.payload.residueNumber.map((resNum, index) =>
       indexToAminoacid.set(resNum, index),
     );
