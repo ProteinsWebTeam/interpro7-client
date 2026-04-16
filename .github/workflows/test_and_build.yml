@@ -22,6 +22,9 @@ jobs:
           npm ci
           npx patch-package
 
+      - name: 🧪 - Test
+        run: npm test
+
       - name: 🏗 - Build (dev)
         run: |
           cp config/dev_config.yml config.yml
