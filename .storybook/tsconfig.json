@@ -1,5 +1,8 @@
 {
-    "extends": "../tsconfig.json",
-    "include": ["src/**/*", "../src/custom.d.ts"]
-  }
-  
+  "extends": "../tsconfig.json",
+  "include": [
+    "./**/*",
+    "../src/**/*",
+    "../src/types/**/*.d.ts"
+  ]
+}
