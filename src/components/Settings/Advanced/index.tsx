@@ -26,7 +26,7 @@ const Advanced = () => {
     <section>
       <DiskUsage />
       <div>
-        <h5> Build commit </h5>
+        <h5>Build commit </h5>
         <code>{devInfo.git.commit}</code>
       </div>
     </section>
