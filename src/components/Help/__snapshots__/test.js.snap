@@ -281,7 +281,7 @@ exports[`<Help /> should render 1`] = `
         <li>
           <Memo(Connect(Link))
             className="ext"
-            href="          https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+            href="https://interpro-documentation.readthedocs.io/en/latest/api.html"
             target="_blank"
           >
             Programmatic access
