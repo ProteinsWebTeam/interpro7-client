@@ -1,10 +1,13 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { addToast } from 'actions/creators';
 import { format } from 'url';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
+
+import { HCAPTCHA_SITE_KEY } from 'config';
 
 import Button from 'components/SimpleCommonComponents/Button';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -47,6 +50,12 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
   const [email, setEmail] = useState('');
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackType, setFeedbackType] = useState<'info' | 'warning'>('info');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
+
+  const handleVerificationSuccess = (token: string) => {
+    setCaptchaToken(token);
+  };
 
   const entry = `${metadata.name.name} (${metadata.accession})`;
   const queue =
@@ -65,6 +74,8 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
       method: 'POST',
       body: data,
     }).then((response) => {
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
       // eslint-disable-next-line no-magic-numbers
       if (response.status === 200) {
         setFeedbackText('Your feedback has been successfully submitted.');
@@ -186,11 +197,25 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
         rows={5}
         required
       />
-      <div className={css('flex-space-evenly')}>
-        <Button submit>Submit</Button>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <Button type="tertiary" onClick={clearFields}>
           Clear
         </Button>
+        {captchaToken ? (
+          <Button submit>Submit</Button>
+        ) : (
+          <HCaptcha
+            sitekey={HCAPTCHA_SITE_KEY}
+            onVerify={(token, _) => handleVerificationSuccess(token)}
+            ref={captchaRef}
+          />
+        )}
       </div>
     </form>
   );
