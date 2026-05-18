@@ -207,7 +207,7 @@ const Help = () => {
           <ul>
             <li>
               <Link
-                href="          https://github.com/ProteinsWebTeam/interpro7-api/tree/master/docs"
+                href="https://interpro-documentation.readthedocs.io/en/latest/api.html"
                 className={css('ext')}
                 target="_blank"
               >
