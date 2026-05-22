@@ -1,10 +1,13 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useRef, useState } from 'react';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { addToast } from 'actions/creators';
 import { format } from 'url';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
+
+import { HCAPTCHA_SITE_KEY } from 'config';
 
 import Button from 'components/SimpleCommonComponents/Button';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -45,8 +48,16 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
 
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
-  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackText, setFeedbackText] = useState<string | React.ReactNode>(
+    '',
+  );
   const [feedbackType, setFeedbackType] = useState<'info' | 'warning'>('info');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
+
+  const handleVerificationSuccess = (token: string) => {
+    setCaptchaToken(token);
+  };
 
   const entry = `${metadata.name.name} (${metadata.accession})`;
   const queue =
@@ -64,19 +75,38 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
     fetch(apiUrl, {
       method: 'POST',
       body: data,
-    }).then((response) => {
+    }).then(async (response) => {
+      captchaRef.current?.resetCaptcha();
+      setCaptchaToken(null);
       // eslint-disable-next-line no-magic-numbers
       if (response.status === 200) {
         setFeedbackText('Your feedback has been successfully submitted.');
         setFeedbackType('info');
         // eslint-disable-next-line no-magic-numbers
+      } else if (response.status === 400) {
+        const data = await response.json();
+        setFeedbackText(
+          <>
+            Sorry, we couldn't send your feedback due to the following error:{' '}
+            <b>{data.error}</b>.
+          </>,
+        );
+        setFeedbackType('warning');
       } else if (response.status === 429) {
         setFeedbackText(
           'Request aborted as too many requests are made within a minute',
         );
         setFeedbackType('warning');
       } else {
-        setFeedbackText('Invalid request');
+        setFeedbackText(
+          <>
+            Sorry, we couldn't send your feedback. You can submit it through our{' '}
+            <a href="https://www.ebi.ac.uk/about/contact/support/interpro">
+              contact form
+            </a>{' '}
+            instead. Please mention that you encountered a sending error.
+          </>,
+        );
         setFeedbackType('warning');
       }
       /* addToast(
@@ -186,11 +216,25 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
         rows={5}
         required
       />
-      <div className={css('flex-space-evenly')}>
-        <Button submit>Submit</Button>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <Button type="tertiary" onClick={clearFields}>
           Clear
         </Button>
+        {captchaToken ? (
+          <Button submit>Submit</Button>
+        ) : (
+          <HCaptcha
+            sitekey={HCAPTCHA_SITE_KEY}
+            onVerify={(token, _) => handleVerificationSuccess(token)}
+            ref={captchaRef}
+          />
+        )}
       </div>
     </form>
   );

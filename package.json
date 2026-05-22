@@ -73,6 +73,7 @@
   "dependencies": {
     "@floating-ui/react": "0.26.5",
     "@floating-ui/react-dom": "2.0.5",
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@hedgedoc/html-to-react": "2.1.1",
     "@lit/react": "1.0.2",
     "@nightingale-elements/nightingale-colored-sequence": "5.0.0",
