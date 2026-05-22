@@ -48,7 +48,9 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
 
   const [message, setMessage] = useState('');
   const [email, setEmail] = useState('');
-  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackText, setFeedbackText] = useState<string | React.ReactNode>(
+    '',
+  );
   const [feedbackType, setFeedbackType] = useState<'info' | 'warning'>('info');
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const captchaRef = useRef<HCaptcha>(null);
@@ -73,7 +75,7 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
     fetch(apiUrl, {
       method: 'POST',
       body: data,
-    }).then((response) => {
+    }).then(async (response) => {
       captchaRef.current?.resetCaptcha();
       setCaptchaToken(null);
       // eslint-disable-next-line no-magic-numbers
@@ -81,13 +83,30 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
         setFeedbackText('Your feedback has been successfully submitted.');
         setFeedbackType('info');
         // eslint-disable-next-line no-magic-numbers
+      } else if (response.status === 400) {
+        const data = await response.json();
+        setFeedbackText(
+          <>
+            Sorry, we couldn't send your feedback due to the following error:{' '}
+            <b>{data.error}</b>.
+          </>,
+        );
+        setFeedbackType('warning');
       } else if (response.status === 429) {
         setFeedbackText(
           'Request aborted as too many requests are made within a minute',
         );
         setFeedbackType('warning');
       } else {
-        setFeedbackText('Invalid request');
+        setFeedbackText(
+          <>
+            Sorry, we couldn't send your feedback. You can submit it through our{' '}
+            <a href="https://www.ebi.ac.uk/about/contact/support/interpro">
+              contact form
+            </a>{' '}
+            instead. Please mention that you encountered a sending error.
+          </>,
+        );
         setFeedbackType('warning');
       }
       /* addToast(
