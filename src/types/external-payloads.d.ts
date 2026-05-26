@@ -167,6 +167,7 @@ type AlphafoldSearchDoc = {
   uniprotStart: number;
   uniprotEnd: number;
   oligomericState: string;
+  assemblyType?: string;
   latestVersion: number;
   provider?: string;
 };

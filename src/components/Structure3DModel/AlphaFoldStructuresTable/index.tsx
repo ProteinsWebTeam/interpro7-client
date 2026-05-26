@@ -78,7 +78,12 @@ const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
                 <td>{doc.uniprotStart}</td>
                 <td>{doc.uniprotEnd}</td>
                 <td>{doc.provider || 'AlphaFold'}</td>
-                <td>{doc.oligomericState || '-'}</td>
+                <td>
+                  {doc.assemblyType
+                    ? doc.assemblyType + doc.oligomericState
+                    : String(doc.oligomericState).charAt(0).toUpperCase() +
+                      String(doc.oligomericState).slice(1)}
+                </td>
               </tr>
             ))}
           </tbody>

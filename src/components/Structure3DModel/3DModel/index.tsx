@@ -389,22 +389,39 @@ const Structure3DModel = ({
                 setReady(true);
               }}
             />
-            {isSplitScreen && renderLegend('inline-legend')}
+            {isSplitScreen && renderLegend('inline-legend') && (
+              <>
+                <ConnectedPredictionLoader
+                  entryId={selectedEntryId}
+                  onLoaded={(model) => {
+                    setSelectedModel(model);
+                    onModelLoaded?.(model.cifUrl);
+                  }}
+                />
+                <AlphaFoldStructuresTable
+                  docs={data?.payload?.docs || []}
+                  onSelect={setSelectedEntryId}
+                  selectedId={selectedEntryId}
+                />
+              </>
+            )}
           </PictureInPicturePanel>
-          <>
-            <ConnectedPredictionLoader
-              entryId={selectedEntryId}
-              onLoaded={(model) => {
-                setSelectedModel(model);
-                onModelLoaded?.(model.cifUrl);
-              }}
-            />
-            <AlphaFoldStructuresTable
-              docs={data?.payload?.docs || []}
-              onSelect={setSelectedEntryId}
-              selectedId={selectedEntryId}
-            />
-          </>
+          {!isSplitScreen && (
+            <>
+              <ConnectedPredictionLoader
+                entryId={selectedEntryId}
+                onLoaded={(model) => {
+                  setSelectedModel(model);
+                  onModelLoaded?.(model.cifUrl);
+                }}
+              />
+              <AlphaFoldStructuresTable
+                docs={data?.payload?.docs || []}
+                onSelect={setSelectedEntryId}
+                selectedId={selectedEntryId}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>
