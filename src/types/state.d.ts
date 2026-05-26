@@ -267,4 +267,5 @@ type UIState = {
   emblMapNav: boolean;
   sideNav: boolean;
   stuck: boolean;
+  sequenceMismatch: boolean;
 };

@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import ReactDiffViewer from 'react-diff-viewer-continued';
+
+import { connect } from 'react-redux';
+import { setSequenceMismatch } from 'actions/creators';
 
 import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -14,6 +17,7 @@ type Props = {
   proteinAccession: string;
   alphaFoldSequence?: string;
   alphaFoldCreationDate?: string;
+  setSequenceMismatch: typeof setSequenceMismatch;
 };
 
 interface LoadedProps
@@ -24,12 +28,31 @@ const SequenceCheck = ({
   alphaFoldSequence,
   alphaFoldCreationDate,
   data,
+  setSequenceMismatch,
 }: LoadedProps) => {
   const { loading, payload } = data || {};
   const [showDiff, setShowDiff] = useState(false);
-  if (!alphaFoldSequence || loading) return <Loading inline />;
+
   const uniprotSequence = payload?.metadata?.sequence || '';
-  if (alphaFoldSequence === uniprotSequence) return null;
+  const hasMismatch =
+    !loading &&
+    !!alphaFoldSequence &&
+    alphaFoldSequence !== uniprotSequence + 'X';
+
+  useEffect(() => {
+    if (!loading && alphaFoldSequence) {
+      setSequenceMismatch(hasMismatch);
+    }
+  }, [hasMismatch, loading, alphaFoldSequence]);
+
+  useEffect(() => {
+    return () => {
+      setSequenceMismatch(false);
+    };
+  }, []);
+
+  if (!alphaFoldSequence || loading) return <Loading inline />;
+  if (!hasMismatch) return null;
   return (
     <Callout type="warning">
       <div>
@@ -84,4 +107,6 @@ const getUrlForProtein = createSelector(
   },
 );
 
-export default loadData(getUrlForProtein as LoadDataParameters)(SequenceCheck);
+export default connect(null, { setSequenceMismatch })(
+  loadData(getUrlForProtein as LoadDataParameters)(SequenceCheck),
+);

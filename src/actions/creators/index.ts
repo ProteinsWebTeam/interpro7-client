@@ -7,6 +7,7 @@ import {
   IPScanAction,
   IPScanMetadataAction,
   LocationAction,
+  SequenceMismatchAction,
   SettingsAction,
   StatusAction,
   ToastAction,
@@ -363,3 +364,10 @@ export const unmarkFavourite = (id: string) =>
     type: types.UNMARK_FAVOURITE,
     id,
   }) as FavouritesAction;
+
+// alphafold sequence mismatch
+export const setSequenceMismatch = (hasMismatch: boolean) =>
+  ({
+    type: types.SET_SEQUENCE_MISMATCH,
+    hasMismatch,
+  }) as SequenceMismatchAction;

@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import loadData from 'higherOrder/loadData/ts';
 import loadable from 'higherOrder/loadable';
 import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -118,6 +119,7 @@ type Props = {
   dataInterProNMatches?: Record<string, InterProN_Match>;
   matchTypeSettings?: MatchTypeUISettings;
   colorDomainsBy?: string;
+  sequenceMismatch?: boolean;
 };
 
 interface LoadedProps
@@ -143,6 +145,7 @@ const ProteinViewerForAlphafold = ({
   colorBy,
   dataTED,
   isSplitScreen = false,
+  sequenceMismatch = false,
 }: LoadedProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const isHovering = useRef(false);
@@ -383,6 +386,10 @@ const ProteinViewerForAlphafold = ({
       dl: interpro_NMatchesCount > 0, // Computed above
     };
 
+    if (sequenceMismatch) {
+      delete tracks['alphafold_confidence'];
+    }
+
     const tedData = dataTED ? formatTED(dataTED) : [];
     if (tedData.length > 0) {
       tracks['external_sources'] = tedData;
@@ -471,24 +478,31 @@ const getInterproRelatedEntriesURL = createSelector(
   },
 );
 
-export default loadData<AlphafoldPayload, 'Prediction'>({
-  getUrl: getAlphaFoldPredictionURL,
-  propNamespace: 'Prediction',
-} as LoadDataParameters)(
-  loadData<AlphafoldConfidencePayload, 'Confidence'>({
-    getUrl: getConfidenceURLFromPayload('Prediction'),
-    propNamespace: 'Confidence',
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.ui.sequenceMismatch,
+  (sequenceMismatch) => ({ sequenceMismatch }),
+);
+
+export default connect(mapStateToProps)(
+  loadData<AlphafoldPayload, 'Prediction'>({
+    getUrl: getAlphaFoldPredictionURL,
+    propNamespace: 'Prediction',
   } as LoadDataParameters)(
-    loadData<TEDPayload, 'TED'>({
-      getUrl: getTEDURL,
-      propNamespace: 'TED',
+    loadData<AlphafoldConfidencePayload, 'Confidence'>({
+      getUrl: getConfidenceURLFromPayload('Prediction'),
+      propNamespace: 'Confidence',
     } as LoadDataParameters)(
-      loadData<{ metadata: ProteinMetadata }, 'Protein'>({
-        getUrl: getProteinURL,
-        propNamespace: 'Protein',
+      loadData<TEDPayload, 'TED'>({
+        getUrl: getTEDURL,
+        propNamespace: 'TED',
       } as LoadDataParameters)(
-        loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
-          ProteinViewerForAlphafold,
+        loadData<{ metadata: ProteinMetadata }, 'Protein'>({
+          getUrl: getProteinURL,
+          propNamespace: 'Protein',
+        } as LoadDataParameters)(
+          loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
+            ProteinViewerForAlphafold,
+          ),
         ),
       ),
     ),

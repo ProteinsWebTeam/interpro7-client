@@ -135,6 +135,13 @@ export interface UIAction
   status?: 'open' | 'close';
 }
 
+// alphafold sequence mismatch
+export const SET_SEQUENCE_MISMATCH = 'SET_SEQUENCE_MISMATCH';
+export interface SequenceMismatchAction
+  extends Action<typeof SET_SEQUENCE_MISMATCH> {
+  hasMismatch: boolean;
+}
+
 // toast messages
 export const ADD_TOAST = 'ADD_TOAST';
 export const REMOVE_TOAST = 'REMOVE_TOAST';
