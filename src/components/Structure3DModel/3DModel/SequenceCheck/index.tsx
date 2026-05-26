@@ -35,9 +35,7 @@ const SequenceCheck = ({
 
   const uniprotSequence = payload?.metadata?.sequence || '';
   const hasMismatch =
-    !loading &&
-    !!alphaFoldSequence &&
-    alphaFoldSequence !== uniprotSequence + 'X';
+    !loading && !!alphaFoldSequence && alphaFoldSequence !== uniprotSequence;
 
   useEffect(() => {
     if (!loading && alphaFoldSequence) {

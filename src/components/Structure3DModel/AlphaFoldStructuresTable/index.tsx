@@ -10,10 +10,29 @@ type Props = {
   selectedId: string | null;
 };
 
+const oligomericStateOrder = (state: string): number => {
+  const s = (state || '').toLowerCase();
+  if (s === 'monomer') return 0;
+  if (s.includes('dimer')) return 1;
+  return 2;
+};
+
 const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
   const [isVisible, setIsVisible] = useState(true);
 
   if (docs.length === 0) return null;
+
+  const sortedDocs = [...docs].sort((a, b) => {
+    const providerA = (a.provider || 'AlphaFold').toLowerCase();
+    const providerB = (b.provider || 'AlphaFold').toLowerCase();
+    const providerOrder = (p: string) => (p === 'alphafold' ? 0 : 1);
+    if (providerOrder(providerA) !== providerOrder(providerB))
+      return providerOrder(providerA) - providerOrder(providerB);
+    return (
+      oligomericStateOrder(a.oligomericState) -
+      oligomericStateOrder(b.oligomericState)
+    );
+  });
 
   return (
     <div>
@@ -46,7 +65,7 @@ const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {docs.map((doc) => (
+            {sortedDocs.map((doc) => (
               <tr
                 key={doc.entryId}
                 onClick={() => onSelect(doc.entryId)}
