@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import cssBinder from 'styles/cssBinder';
 import tableStyles from 'components/Table/style.css';
+import localStyles from './style.css';
+import fonts from 'EBI-Icon-fonts/fonts.css';
 
-const css = cssBinder(tableStyles);
+const css = cssBinder(tableStyles, localStyles, fonts);
 
 type Props = {
   docs: AlphafoldSearchDoc[];
@@ -35,59 +37,62 @@ const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
   });
 
   return (
-    <div>
-      <h5>
-        Available structures ({docs.length}){' '}
+    <div className={css('alphafold-structures-table')}>
+      <h5 className={css('title')}>
+        <span>Available structures ({docs.length})</span>
         <button
           onClick={() => setIsVisible((v) => !v)}
-          style={{
-            cursor: 'pointer',
-            border: 'none',
-            background: 'none',
-            color: 'inherit',
-            textDecoration: 'underline',
-            padding: 0,
-            fontSize: '0.85em',
-          }}
+          className={css('toggle-button')}
+          aria-label={isVisible ? 'Collapse table' : 'Expand table'}
+          title={isVisible ? 'Collapse table' : 'Expand table'}
         >
-          [{isVisible ? 'Hide' : 'Show'}]
+          <span
+            className={css(
+              'icon',
+              'icon-common',
+              isVisible ? 'icon-chevron-up' : 'icon-chevron-down',
+            )}
+            data-icon={isVisible ? '\uF077' : '\uF078'}
+          />
         </button>
       </h5>
       {isVisible && (
-        <table className={css('light')}>
-          <thead>
-            <tr>
-              <th>Model name</th>
-              <th>UniProt start</th>
-              <th>UniProt end</th>
-              <th>Provider</th>
-              <th>Oligomeric state</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedDocs.map((doc) => (
-              <tr
-                key={doc.entryId}
-                onClick={() => onSelect(doc.entryId)}
-                style={{
-                  cursor: 'pointer',
-                  fontWeight: doc.entryId === selectedId ? 'bold' : 'normal',
-                }}
-              >
-                <td>{doc.entryId}</td>
-                <td>{doc.uniprotStart}</td>
-                <td>{doc.uniprotEnd}</td>
-                <td>{doc.provider || 'AlphaFold'}</td>
-                <td>
-                  {doc.assemblyType
-                    ? doc.assemblyType + doc.oligomericState
-                    : String(doc.oligomericState).charAt(0).toUpperCase() +
-                      String(doc.oligomericState).slice(1)}
-                </td>
+        <div className={css('table-scroll-area')}>
+          <table className={css('light', 'structures-table')}>
+            <thead>
+              <tr>
+                <th className={css('table-header-cell')}>Model name</th>
+                <th className={css('table-header-cell')}>UniProt start</th>
+                <th className={css('table-header-cell')}>UniProt end</th>
+                <th className={css('table-header-cell')}>Provider</th>
+                <th className={css('table-header-cell')}>Oligomeric state</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sortedDocs.map((doc) => (
+                <tr
+                  key={doc.entryId}
+                  onClick={() => onSelect(doc.entryId)}
+                  className={css({
+                    'structure-row': true,
+                    selected: doc.entryId === selectedId,
+                  })}
+                >
+                  <td>{doc.entryId}</td>
+                  <td>{doc.uniprotStart}</td>
+                  <td>{doc.uniprotEnd}</td>
+                  <td>{doc.provider || 'AlphaFold'}</td>
+                  <td>
+                    {doc.assemblyType
+                      ? doc.assemblyType + doc.oligomericState
+                      : String(doc.oligomericState).charAt(0).toUpperCase() +
+                        String(doc.oligomericState).slice(1)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
