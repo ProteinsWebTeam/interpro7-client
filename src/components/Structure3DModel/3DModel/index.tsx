@@ -178,6 +178,11 @@ const Structure3DModel = ({
   }, [shouldResetViewer]);
 
   useEffect(() => {
+    setSelectedEntryId(null);
+    setSelectedModel(null);
+  }, [proteinAcc]);
+
+  useEffect(() => {
     const docs = data?.payload?.docs || [];
     if (docs.length > 0 && selectedEntryId === null) {
       const first = docs[0];
@@ -229,11 +234,13 @@ const Structure3DModel = ({
         </Callout>
       ) : null}
 
-      <SequenceCheck
-        proteinAccession={proteinAcc}
-        alphaFoldSequence={selectedModel?.sequence}
-        alphaFoldCreationDate={selectedModel?.modelCreatedDate}
-      />
+      {selectedModel && (
+        <SequenceCheck
+          proteinAccession={proteinAcc}
+          alphaFoldSequence={selectedModel.sequence}
+          alphaFoldCreationDate={selectedModel.modelCreatedDate}
+        />
+      )}
 
       <div className={css('af-container')}>
         {!isSplitScreen && (
