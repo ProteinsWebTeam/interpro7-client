@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import loadData from 'higherOrder/loadData/ts';
 import config from 'config';
+
+import { setAlphafoldModelCount } from 'actions/creators';
 
 import Link from 'components/generic/Link';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
@@ -103,6 +106,7 @@ type Props = {
   isSplitScreen: boolean;
   onSplitScreenChange?: (v: boolean) => void;
   onModelLoaded?: (cifUrl: string) => void;
+  setAlphafoldModelCount?: (accession: string, count: number) => void;
 };
 interface LoadedProps extends Props, LoadDataProps<MultimerAlphafoldPayload> {}
 
@@ -123,6 +127,7 @@ const Structure3DModel = ({
   isSplitScreen,
   onSplitScreenChange,
   onModelLoaded,
+  setAlphafoldModelCount,
 }: LoadedProps) => {
   const [shouldResetViewer, setShouldResetViewer] = useState(false);
   const [isReady, setReady] = useState(false);
@@ -177,6 +182,9 @@ const Structure3DModel = ({
     if (docs.length > 0 && selectedEntryId === null) {
       const first = docs[0];
       setSelectedEntryId(first.entryId);
+    }
+    if (!data?.loading && data?.payload && setAlphafoldModelCount) {
+      setAlphafoldModelCount(proteinAcc, docs.length);
     }
   }, [data]);
 
@@ -463,7 +471,9 @@ const getModelsInfoUrl = (isUrlToApi: boolean) =>
     },
   );
 
-export default loadData({
-  getUrl: getModelsInfoUrl(true),
-  mapStateToProps: getModelsInfoUrl(false),
-} as LoadDataParameters)(Structure3DModel);
+export default connect(null, { setAlphafoldModelCount })(
+  loadData({
+    getUrl: getModelsInfoUrl(true),
+    mapStateToProps: getModelsInfoUrl(false),
+  } as LoadDataParameters)(Structure3DModel),
+);

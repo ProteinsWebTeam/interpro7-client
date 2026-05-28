@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+import alphafold from './alphafold';
 import customLocation from './custom-location';
 import dataProgress from './data-progress';
 import download from './download';
@@ -15,6 +16,7 @@ import ui from './ui';
 // import 'utils/global-message';
 
 export default combineReducers({
+  alphafold,
   customLocation,
   dataProgress,
   download,

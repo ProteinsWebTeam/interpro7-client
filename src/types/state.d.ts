@@ -1,4 +1,5 @@
 type GlobalState = {
+  alphafold: Record<string, number>;
   customLocation: InterProLocation;
   dataProgress: DataProgress;
   download: DownloadState;

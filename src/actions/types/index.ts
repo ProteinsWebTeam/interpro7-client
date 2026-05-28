@@ -165,5 +165,13 @@ export interface FavouritesAction
   content?: MetadataPayload<Metadata>;
 }
 
+// Alphafold model count
+export const SET_ALPHAFOLD_MODEL_COUNT = 'SET_ALPHAFOLD_MODEL_COUNT';
+export interface AlphafoldModelCountAction
+  extends Action<typeof SET_ALPHAFOLD_MODEL_COUNT> {
+  accession: string;
+  count: number;
+}
+
 // For use in tests
 export const TEST = '@TEST';
