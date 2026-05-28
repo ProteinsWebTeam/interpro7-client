@@ -30,10 +30,11 @@ const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
     const providerOrder = (p: string) => (p === 'alphafold' ? 0 : 1);
     if (providerOrder(providerA) !== providerOrder(providerB))
       return providerOrder(providerA) - providerOrder(providerB);
-    return (
+    const oligomericDiff =
       oligomericStateOrder(a.oligomericState) -
-      oligomericStateOrder(b.oligomericState)
-    );
+      oligomericStateOrder(b.oligomericState);
+    if (oligomericDiff !== 0) return oligomericDiff;
+    return (a.uniprotStart || 0) - (b.uniprotStart || 0);
   });
 
   return (

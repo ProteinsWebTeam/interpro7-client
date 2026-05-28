@@ -56,13 +56,11 @@ const SequenceCheck = ({
       <div>
         <b>AlphaFold Prediction Mismatch</b>
         <p>
-          The AlphaFold prediction displayed below was generated on{' '}
-          {new Date(alphaFoldCreationDate || '').toLocaleDateString()} using a
-          sequence that has since been updated in the UniProt database. Please
-          note that the displayed prediction may not accurately represent the
-          current structure of the protein due to the sequence mismatch.
+          This structure prediction was generated from a sequence that differs
+          from the current UniProt sequence. The displayed structure may
+          therefore be inaccurate or incomplete.
         </p>
-        <Button
+        {/*<Button
           type="secondary"
           onClick={() => setShowDiff(!showDiff)}
           style={{ width: '10rem' }}
@@ -78,8 +76,7 @@ const SequenceCheck = ({
               leftTitle={'AlphaFold / Uniprot'}
               hideLineNumbers={true}
             />
-          </div>
-        )}
+          </div>*/}
       </div>
     </Callout>
   );
