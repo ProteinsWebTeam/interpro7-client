@@ -25,8 +25,8 @@ const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
   if (docs.length === 0) return null;
 
   const sortedDocs = [...docs].sort((a, b) => {
-    const providerA = (a.provider || 'AlphaFold').toLowerCase();
-    const providerB = (b.provider || 'AlphaFold').toLowerCase();
+    const providerA = (a.providerId || 'AlphaFold').toLowerCase();
+    const providerB = (b.providerId || 'AlphaFold').toLowerCase();
     const providerOrder = (p: string) => (p === 'alphafold' ? 0 : 1);
     if (providerOrder(providerA) !== providerOrder(providerB))
       return providerOrder(providerA) - providerOrder(providerB);
@@ -81,7 +81,7 @@ const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
                   <td>{doc.entryId}</td>
                   <td>{doc.uniprotStart}</td>
                   <td>{doc.uniprotEnd}</td>
-                  <td>{doc.provider || 'AlphaFold'}</td>
+                  <td>{doc.providerId || 'AlphaFold'}</td>
                   <td>
                     {doc.assemblyType
                       ? doc.assemblyType + doc.oligomericState

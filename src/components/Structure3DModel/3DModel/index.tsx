@@ -212,15 +212,6 @@ const Structure3DModel = ({
               ? 's'
               : ''}
           </h3>
-          <p>
-            The protein structure below has been predicted by{' '}
-            <Link href={'//deepmind.google/'}>Google DeepMind</Link> using
-            AlphaFold (
-            <Link href={'//www.nature.com/articles/s41586-021-03819-2'}>
-              Jumper, J et al. 2021
-            </Link>
-            )
-          </p>
         </>
       )}
       {hasMultipleProteins && !isSplitScreen ? (
@@ -461,7 +452,7 @@ const getModelsInfoUrl = (isUrlToApi: boolean) =>
               ? `${root}api/search`
               : `${root}entry/${accession}`,
             search: isUrlToApi
-              ? `?q=(uniprotAccession:${accession})&type=main`
+              ? `?q=(uniprotAccession:${accession})&type=main&start=0&rows=100`
               : undefined,
           });
         }

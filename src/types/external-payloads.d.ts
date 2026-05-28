@@ -169,7 +169,7 @@ type AlphafoldSearchDoc = {
   oligomericState: string;
   assemblyType?: string;
   latestVersion: number;
-  provider?: string;
+  providerId?: string;
 };
 
 type AlphafoldModelInfo = {
