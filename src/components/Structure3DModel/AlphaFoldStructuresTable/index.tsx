@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cssBinder from 'styles/cssBinder';
 import tableStyles from 'components/Table/style.css';
 import localStyles from './style.css';
@@ -21,21 +21,35 @@ const oligomericStateOrder = (state: string): number => {
 
 const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
   const [isVisible, setIsVisible] = useState(true);
+  const [docsSorted, setDocsSorted] = useState<boolean>(false);
+  const [sortedDocs, setSortedDocs] = useState<AlphafoldSearchDoc[]>([]);
 
   if (docs.length === 0) return null;
 
-  const sortedDocs = [...docs].sort((a, b) => {
-    const providerA = (a.providerId || 'AlphaFold').toLowerCase();
-    const providerB = (b.providerId || 'AlphaFold').toLowerCase();
-    const providerOrder = (p: string) => (p === 'alphafold' ? 0 : 1);
-    if (providerOrder(providerA) !== providerOrder(providerB))
-      return providerOrder(providerA) - providerOrder(providerB);
-    const oligomericDiff =
-      oligomericStateOrder(a.oligomericState) -
-      oligomericStateOrder(b.oligomericState);
-    if (oligomericDiff !== 0) return oligomericDiff;
-    return (a.uniprotStart || 0) - (b.uniprotStart || 0);
-  });
+  useEffect(() => {
+    if (!docsSorted) {
+      const sortedDocs = [...docs].sort((a, b) => {
+        const providerA = (a.providerId || 'AlphaFold').toLowerCase();
+        const providerB = (b.providerId || 'AlphaFold').toLowerCase();
+        const providerOrder = (p: string) => (p === 'alphafold' ? 0 : 1);
+        if (providerOrder(providerA) !== providerOrder(providerB))
+          return providerOrder(providerA) - providerOrder(providerB);
+        const oligomericDiff =
+          oligomericStateOrder(a.oligomericState) -
+          oligomericStateOrder(b.oligomericState);
+        if (oligomericDiff !== 0) return oligomericDiff;
+        return (a.uniprotStart || 0) - (b.uniprotStart || 0);
+      });
+      setDocsSorted(true);
+      setSortedDocs(sortedDocs);
+    }
+  }, [docs]);
+
+  useEffect(() => {
+    if (sortedDocs.length > 0) {
+      onSelect(sortedDocs[0].entryId);
+    }
+  }, [sortedDocs]);
 
   return (
     <div className={css('alphafold-structures-table')}>
