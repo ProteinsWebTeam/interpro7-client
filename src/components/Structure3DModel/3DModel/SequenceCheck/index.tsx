@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import { format } from 'url';
 import ReactDiffViewer from 'react-diff-viewer-continued';
+
+import { connect } from 'react-redux';
+import { setSequenceMismatch } from 'actions/creators';
 
 import loadData from 'higherOrder/loadData/ts';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -14,6 +17,7 @@ type Props = {
   proteinAccession: string;
   alphaFoldSequence?: string;
   alphaFoldCreationDate?: string;
+  setSequenceMismatch: typeof setSequenceMismatch;
 };
 
 interface LoadedProps
@@ -24,24 +28,39 @@ const SequenceCheck = ({
   alphaFoldSequence,
   alphaFoldCreationDate,
   data,
+  setSequenceMismatch,
 }: LoadedProps) => {
   const { loading, payload } = data || {};
   const [showDiff, setShowDiff] = useState(false);
-  if (!alphaFoldSequence || loading) return <Loading inline />;
+
   const uniprotSequence = payload?.metadata?.sequence || '';
-  if (alphaFoldSequence === uniprotSequence) return null;
+  const hasMismatch =
+    !loading && !!alphaFoldSequence && alphaFoldSequence !== uniprotSequence;
+
+  useEffect(() => {
+    if (!loading && alphaFoldSequence) {
+      setSequenceMismatch(hasMismatch);
+    }
+  }, [hasMismatch, loading, alphaFoldSequence]);
+
+  useEffect(() => {
+    return () => {
+      setSequenceMismatch(false);
+    };
+  }, []);
+
+  if (!alphaFoldSequence || loading) return <Loading inline />;
+  if (!hasMismatch) return null;
   return (
     <Callout type="warning">
       <div>
         <b>AlphaFold Prediction Mismatch</b>
         <p>
-          The AlphaFold prediction displayed below was generated on{' '}
-          {new Date(alphaFoldCreationDate || '').toLocaleDateString()} using a
-          sequence that has since been updated in the UniProt database. Please
-          note that the displayed prediction may not accurately represent the
-          current structure of the protein due to the sequence mismatch.
+          This structure prediction was generated from a sequence that differs
+          from the current UniProt sequence. The displayed structure may
+          therefore be inaccurate or incomplete.
         </p>
-        <Button
+        {/*<Button
           type="secondary"
           onClick={() => setShowDiff(!showDiff)}
           style={{ width: '10rem' }}
@@ -57,8 +76,7 @@ const SequenceCheck = ({
               leftTitle={'AlphaFold / Uniprot'}
               hideLineNumbers={true}
             />
-          </div>
-        )}
+          </div>*/}
       </div>
     </Callout>
   );
@@ -84,4 +102,6 @@ const getUrlForProtein = createSelector(
   },
 );
 
-export default loadData(getUrlForProtein as LoadDataParameters)(SequenceCheck);
+export default connect(null, { setSequenceMismatch })(
+  loadData(getUrlForProtein as LoadDataParameters)(SequenceCheck),
+);

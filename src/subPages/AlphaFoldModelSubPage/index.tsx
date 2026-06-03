@@ -51,6 +51,9 @@ const AlphaFoldModelSubPage = ({
   const [isSplitScreen, setSplitScreen] = useState(false);
   const [colorBy, setColorBy] = useState('af');
   const [colorMap, setColorMap] = useState<Record<number, number>>({});
+  const [selectedCifUrl, setSelectedCifUrl] = useState<string | undefined>(
+    undefined,
+  );
   const [hasTED, setHasTED] = useState(false);
   const [hasRepresentativeData, setHasRepresentativeData] = useState<{
     family: boolean | null;
@@ -100,6 +103,7 @@ const AlphaFoldModelSubPage = ({
           hasRepresentativeData={hasRepresentativeData}
           hasMultipleProteins={hasMultipleProteins}
           onModelChange={handleModelChange}
+          onModelLoaded={setSelectedCifUrl}
           onColorChange={onColorChange}
           colorBy={colorBy}
           modelId={modelId}
@@ -120,6 +124,7 @@ const AlphaFoldModelSubPage = ({
             setColorMap={setColorMap}
             setHasTED={setHasTED}
             protein={proteinAcc}
+            selectedCifUrl={selectedCifUrl}
             matchTypeSettings={matchTypeSettings}
             colorBy={colorBy}
             colorDomainsBy={colorDomainsBy}

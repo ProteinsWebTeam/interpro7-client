@@ -197,7 +197,6 @@ const BreadCrumbForEntityDetail = ({
 
   if (detail) {
     if (detailToRender?.includes('alphafold')) detailToRender = 'AlphaFold';
-    else if (detailToRender?.includes('bfvd')) detailToRender = 'BFVD';
   }
 
   return (

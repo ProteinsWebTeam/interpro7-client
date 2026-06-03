@@ -157,22 +157,55 @@ type RfamPayload = {
   [key: string]: unknown;
 };
 
-type AlphafoldPayload = Array<{
+type MultimerAlphafoldPayload = {
+  docs: AlphafoldSearchDoc[];
+};
+
+type AlphafoldSearchDoc = {
+  entryId: string;
+  uniprotAccession: string;
+  uniprotStart: number;
+  uniprotEnd: number;
+  oligomericState: string;
+  assemblyType?: string;
+  latestVersion: number;
+  providerId?: string;
+};
+
+type AlphafoldModelInfo = {
+  entryId: string;
   modelEntityId: string;
   uniprotAccession: string;
   uniprotId: string;
   uniprotDescription: string;
   taxId: number;
   organismScientificName: string;
+  isComplex: boolean;
+  uniprotStart: number;
+  uniprotEnd: number;
+  oligomericState?: string;
+  latestVersion?: number;
+  provider?: string;
   sequence: string;
   modelCreatedDate: string;
   cifUrl: string;
   pdbUrl: string;
-}>;
+};
+
+type AlphafoldPayload = Array<AlphafoldModelInfo>;
+
+type AlphafoldConfidenceChain = {
+  name: string;
+  label_asym_id: string;
+  sequenceStart: number;
+  sequenceEnd: number;
+};
+
 type AlphafoldConfidencePayload = {
   residueNumber: Array<number>;
   confidenceScore: Array<number>;
   confidenceCategory: Array<string>;
+  chains?: Array<AlphafoldConfidenceChain>;
 };
 
 type RepeatsDBAnnotation = {

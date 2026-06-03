@@ -553,11 +553,8 @@ const Matches = ({
       <Column
         dataKey="in_alphafold"
         displayIf={primary === 'protein'}
-        renderer={(
-          inAlphafold: boolean,
-          { accession, in_bfvd }: ProteinMetadata,
-        ) =>
-          inAlphafold ? (
+        renderer={(inAlphafold: boolean, { accession }: ProteinMetadata) =>
+          inAlphafold && (
             <Link
               to={{
                 description: {
@@ -568,22 +565,7 @@ const Matches = ({
             >
               AlphaFold
             </Link>
-          ) : in_bfvd ? (
-            <Link
-              to={{
-                description: {
-                  main: { key: 'protein' },
-                  protein: {
-                    db: 'uniprot',
-                    accession,
-                    detail: 'bfvd',
-                  },
-                },
-              }}
-            >
-              BFVD
-            </Link>
-          ) : null
+          )
         }
       >
         Predicted structure

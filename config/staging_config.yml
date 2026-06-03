@@ -9,7 +9,6 @@ root:
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   wikipedia: https://en.wikipedia.org/w/api.php
   alphafold: https://alphafold.ebi.ac.uk/
-  bfvd: https://bfvd.foldseek.com/
   repeatsDB: https://repeatsdb.org/api/production/annotations/
   disprot: https://disprot.org/api/
   LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
@@ -53,7 +52,6 @@ pages:
       - model
       - logo
       - alphafold
-      - bfvd
       - entry_alignments
       - interactions
       - pathways
@@ -66,7 +64,6 @@ pages:
       - isoform
       - structure
       - alphafold
-      - bfvd
       - sequence
       - similar_proteins
   structure:

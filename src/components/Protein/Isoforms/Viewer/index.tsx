@@ -160,7 +160,7 @@ const Viewer = ({ protein, isoform, data, dataConfidence }: LoadedProps) => {
       dataConfidence,
       accession,
       proteinDataRecord,
-      protein.in_bfvd ? 'bfvd' : 'alphafold',
+      'alphafold',
     );
   }
   proteinDataRecord = sectionsReorganization(proteinDataRecord);

@@ -1,4 +1,5 @@
 type GlobalState = {
+  alphafold: Record<string, number>;
   customLocation: InterProLocation;
   dataProgress: DataProgress;
   download: DownloadState;
@@ -141,7 +142,6 @@ type SettingsState = {
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
-  bfvd: ParsedURLServer;
   uniprot: ParsedURLServer;
   rfam: ParsedURLServer;
   proteinsAPI: ParsedURLServer;
@@ -217,7 +217,6 @@ type Server =
   | 'ipScan'
   | 'wikipedia'
   | 'alphafold'
-  | 'bfvd'
   | 'repeatsDB'
   | 'disprot'
   | 'proteinsAPI';
@@ -269,4 +268,5 @@ type UIState = {
   emblMapNav: boolean;
   sideNav: boolean;
   stuck: boolean;
+  sequenceMismatch: boolean;
 };

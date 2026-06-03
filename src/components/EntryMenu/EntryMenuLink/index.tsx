@@ -35,6 +35,7 @@ type Props = {
   collapsed?: boolean;
   mainKey?: string | null;
   entryDB?: string | null;
+  alphafoldModelCount?: number | null;
 };
 
 export const EntryMenuLink = ({
@@ -48,6 +49,7 @@ export const EntryMenuLink = ({
   collapsed,
   mainKey,
   entryDB,
+  alphafoldModelCount,
 }: Props) => {
   let value: null | number = null;
   let shouldPointToAll = false;
@@ -87,14 +89,12 @@ export const EntryMenuLink = ({
       mainKey?.toLowerCase() === 'protein' &&
       name.toLowerCase() === 'alphafold'
     ) {
-      value = (payload.metadata as EntryMetadata).in_alphafold ? 1 : 0;
-    } else if (
-      mainKey?.toLowerCase() === 'protein' &&
-      name.toLowerCase() === 'bfvd'
-    ) {
-      value = (payload.metadata as EntryMetadata).in_bfvd ? 1 : 0;
+      if (alphafoldModelCount != null) {
+        value = alphafoldModelCount;
+      } else {
+        value = (payload.metadata as EntryMetadata).in_alphafold ? 1 : 0;
+      }
     }
-
     /**
      * Enabling the menuitems that appear in the entry_annotations array,
      * i.e. only enable the menu item if there is info for it.
@@ -156,7 +156,16 @@ export const EntryMenuLink = ({
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description.main.key,
   (state: GlobalState) => state.customLocation.description.entry.db,
-  (mainKey, entryDB) => ({ mainKey, entryDB }),
+  (state: GlobalState) => state.customLocation.description.protein.accession,
+  (state: GlobalState) => state.alphafold,
+  (mainKey, entryDB, proteinAccession, alphafold) => ({
+    mainKey,
+    entryDB,
+    alphafoldModelCount:
+      mainKey?.toLowerCase() === 'protein' && proteinAccession
+        ? alphafold[proteinAccession] ?? null
+        : null,
+  }),
 );
 
 export default connect(mapStateToProps)(EntryMenuLink);

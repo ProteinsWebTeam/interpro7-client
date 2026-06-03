@@ -23,6 +23,7 @@ import Title from 'components/Title';
 import EdgeCase from 'components/EdgeCase';
 import { getMessageIfLocationRemoved } from 'utils/removed-pages';
 import { UniParcProtein } from '/src/components/Protein/UniParcProtein';
+import AlphafoldCountLoader from 'components/Structure3DModel/AlphafoldCountLoader';
 
 import {
   // schemaProcessDataRecord,
@@ -239,6 +240,9 @@ class Summary extends PureComponent {
                   <EntryMenu metadata={payload.metadata} />
                 </UnconnectedErrorBoundary>
               </nav>
+              {endpoint === 'protein' && payload.metadata.in_alphafold && (
+                <AlphafoldCountLoader accession={payload.metadata.accession} />
+              )}
               <section>
                 <UnconnectedErrorBoundary customLocation={customLocation}>
                   <Switch

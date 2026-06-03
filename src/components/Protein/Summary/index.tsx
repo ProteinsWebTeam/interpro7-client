@@ -233,34 +233,6 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
                     UniProt
                   </UniProtLink>
                 </li>
-                {metadata.in_bfvd ? (
-                  <>
-                    <li>
-                      {' '}
-                      <Link
-                        href={
-                          config.root.alphafold.href +
-                          'entry/' +
-                          metadata.accession
-                        }
-                        className={css('ext')}
-                        target="_blank"
-                      >
-                        Alphafold DB
-                      </Link>
-                    </li>
-                    <li>
-                      <BaseLink
-                        id={metadata.accession}
-                        target={'_blank'}
-                        pattern="https://search.foldseek.com/search?accession={id}&source=BFVD"
-                        className={css('ext')}
-                      >
-                        Foldseek
-                      </BaseLink>
-                    </li>
-                  </>
-                ) : null}
                 {metadata.in_alphafold ? (
                   <>
                     <li>

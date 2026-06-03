@@ -135,6 +135,13 @@ export interface UIAction
   status?: 'open' | 'close';
 }
 
+// alphafold sequence mismatch
+export const SET_SEQUENCE_MISMATCH = 'SET_SEQUENCE_MISMATCH';
+export interface SequenceMismatchAction
+  extends Action<typeof SET_SEQUENCE_MISMATCH> {
+  hasMismatch: boolean;
+}
+
 // toast messages
 export const ADD_TOAST = 'ADD_TOAST';
 export const REMOVE_TOAST = 'REMOVE_TOAST';
@@ -156,6 +163,14 @@ export interface FavouritesAction
   favourites?: Array<string>;
   id?: string;
   content?: MetadataPayload<Metadata>;
+}
+
+// Alphafold model count
+export const SET_ALPHAFOLD_MODEL_COUNT = 'SET_ALPHAFOLD_MODEL_COUNT';
+export interface AlphafoldModelCountAction
+  extends Action<typeof SET_ALPHAFOLD_MODEL_COUNT> {
+  accession: string;
+  count: number;
 }
 
 // For use in tests
