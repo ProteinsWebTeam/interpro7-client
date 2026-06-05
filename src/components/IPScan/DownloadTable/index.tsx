@@ -72,7 +72,7 @@ export const DownloadTable = ({
       </p>
       <h4>InterProScan 5</h4>
       <Callout type="warning">
-        InterProScan {interProScan5Version} is the finale release of
+        InterProScan {interProScan5Version} is the final release of
         InterProScan 5. To annotate sequences with future InterPro releases,
         please upgrade to InterProScan 6.
       </Callout>
