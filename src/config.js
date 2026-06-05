@@ -73,3 +73,5 @@ export const PROD = process.env.NODE_ENV === 'production';
 export const DEV = !PROD;
 
 export const STAGING = process.env.STAGING;
+
+export const HCAPTCHA_SITE_KEY = _config.hcaptchaSiteKey || '';

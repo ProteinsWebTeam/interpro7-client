@@ -254,6 +254,30 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     },
   ],
   [
+    'isoform',
+    {
+      to(customLocation: InterProLocation) {
+        const key = customLocation.description.main.key as Endpoint;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'isoform',
+            },
+          },
+          search:
+            typeof customLocation.search.orf !== 'undefined'
+              ? { orf: String(customLocation.search.orf) }
+              : undefined,
+        };
+      },
+      name: 'Isoforms',
+      counter: 'isoforms',
+    },
+  ],
+  [
     'structure',
     {
       to(customLocation: InterProLocation) {
@@ -449,26 +473,6 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
       },
       name: 'AlphaFold',
       counter: 'structural_models.alphafold',
-    },
-  ],
-  [
-    'bfvd',
-    {
-      to(customLocation: InterProLocation) {
-        const key = customLocation.description.main.key as Endpoint;
-        return {
-          description: {
-            ...getEmptyDescription(),
-            main: { key },
-            [key]: {
-              ...customLocation.description[key],
-              detail: 'bfvd',
-            },
-          },
-        };
-      },
-      name: 'BFVD',
-      counter: 'structural_models.bfvd',
     },
   ],
   [
@@ -844,7 +848,6 @@ const _NOT_MEMBER_DBS = [
   'CATH-FUNFAM',
   'PFAM-N',
   'ALPHAFOLD',
-  'BFVD',
   'ELM',
 ];
 

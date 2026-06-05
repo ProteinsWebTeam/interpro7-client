@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import loadData from 'higherOrder/loadData/ts';
 import loadable from 'higherOrder/loadable';
 import { createSelector } from 'reselect';
+import { connect } from 'react-redux';
 
 import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
@@ -40,78 +41,7 @@ const ProteinViewer = loadable({
   loading: null,
 });
 
-export const addBFVDConfidenceTrack = async (
-  pdbURL: string,
-  tracks: ProteinViewerDataObject,
-  dataProtein: ProteinMetadata,
-): Promise<ProteinViewerDataObject> => {
-  try {
-    // Fetch the PDB file
-    const response = await fetch(pdbURL);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch PDB file: ${response.status}`);
-    }
-
-    const protein = dataProtein.name;
-    const sequence = dataProtein.sequence;
-    const pdbText = await response.text();
-    const lines = pdbText.split('\n');
-
-    const residueBFactors: Map<number, number[]> = new Map();
-    const aminoacidNumbers = [...Array(sequence.length).keys()];
-    aminoacidNumbers.forEach((num) => residueBFactors.set(num, [-1]));
-
-    for (const line of lines) {
-      if (line.startsWith('ATOM') || line.startsWith('HETATM')) {
-        const residueNumStr = line.substring(22, 26).trim();
-        const residueNum = parseInt(residueNumStr);
-
-        const bFactorStr = line.substring(60, 66).trim();
-        const bFactor = parseFloat(bFactorStr);
-
-        if (!isNaN(residueNum) && !isNaN(bFactor)) {
-          if (residueBFactors.get(residueNum)?.[0] == -1) {
-            residueBFactors.set(residueNum, []);
-          }
-          residueBFactors.get(residueNum)?.push(bFactor);
-        }
-      }
-    }
-
-    // Second pass: calculate average B-factor for each residue
-    const residueAverageBFactors: number[] = [];
-
-    // Sort residue numbers to ensure correct order
-    const sortedResidueNumbers = Array.from(residueBFactors.keys()).sort(
-      (a, b) => a - b,
-    );
-
-    for (const residueNum of sortedResidueNumbers) {
-      const bFactors = residueBFactors.get(residueNum) || [];
-      // Calculate average B-factor for this residue
-      const averageBFactor =
-        bFactors.reduce((sum, bf) => sum + bf, 0) / bFactors.length;
-      residueAverageBFactors.push(averageBFactor);
-    }
-
-    // Add the track with amino acid-based B-factors
-    tracks['bfvd_confidence'] = [];
-    tracks['bfvd_confidence'][0] = {
-      accession: `confidence_bfvd_${protein}`,
-      data: mapBFactorsToLetters(residueAverageBFactors),
-      type: 'confidence',
-      protein,
-      source_database: 'bfvd',
-    };
-
-    return tracks;
-  } catch (error) {
-    console.error('Error extracting B-factors:', error);
-    throw error;
-  }
-};
-
-export const mapBFactorsToLetters = (bFactors: number[]): string => {
+export const mapBFactorsToCategories = (bFactors: number[]): string => {
   // Map B-factor values to letters
   return bFactors
     .map((bFactor) => {
@@ -136,12 +66,36 @@ export const addConfidenceTrack = (
   dataConfidence: RequestedData<AlphafoldConfidencePayload>,
   protein: string,
   tracks: ProteinViewerDataObject,
+  type: string,
 ) => {
-  if (dataConfidence?.payload?.confidenceCategory?.length) {
-    tracks['alphafold_confidence'] = [];
-    tracks['alphafold_confidence'][0] = {
+  const scoreToCategory = (score: number): string => {
+    if (score <= 50) return 'D';
+    else if (score <= 70) return 'L';
+    else if (score <= 90) return 'M';
+    else return 'H';
+  };
+
+  let confidenceCategories: string[] = [];
+
+  if (type === 'alphafold' && dataConfidence?.payload?.confidenceScore) {
+    let scores = dataConfidence.payload.confidenceScore;
+    const chains = dataConfidence.payload.chains;
+    if (chains && chains.length > 1) {
+      // For multimers, restrict to the first chain only — both chains map to
+      // the same UniProt sequence (sequenceStart/End are identical for homodimers),
+      // but residueNumber runs continuously across all chains (1→N*chainLength).
+      const firstChain = chains[0];
+      const chainLength = firstChain.sequenceEnd - firstChain.sequenceStart + 1;
+      scores = scores.slice(0, chainLength);
+    }
+    confidenceCategories = scores.map(scoreToCategory);
+  }
+
+  if (confidenceCategories.length) {
+    tracks[`${type}_confidence`] = [];
+    tracks[`${type}_confidence`][0] = {
       accession: `confidence_af_${protein}`,
-      data: dataConfidence.payload.confidenceCategory.join(''),
+      data: confidenceCategories.join(''),
       type: 'confidence',
       protein,
       source_database: 'alphafold',
@@ -161,10 +115,11 @@ type Props = {
   }) => void;
   hasRepresentativeData?: { family: boolean | null; domain: boolean | null };
   isSplitScreen: boolean;
-  bfvd?: string;
+  selectedCifUrl?: string;
   dataInterProNMatches?: Record<string, InterProN_Match>;
   matchTypeSettings?: MatchTypeUISettings;
   colorDomainsBy?: string;
+  sequenceMismatch?: boolean;
 };
 
 interface LoadedProps
@@ -177,7 +132,6 @@ interface LoadedProps
 const ProteinViewerForAlphafold = ({
   data,
   protein,
-  bfvd,
   dataProtein,
   dataInterProNMatches,
   dataConfidence,
@@ -191,6 +145,7 @@ const ProteinViewerForAlphafold = ({
   colorBy,
   dataTED,
   isSplitScreen = false,
+  sequenceMismatch = false,
 }: LoadedProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const isHovering = useRef(false);
@@ -242,23 +197,11 @@ const ProteinViewerForAlphafold = ({
     const newGroups = { ...groups };
 
     if (dataConfidence) {
-      addConfidenceTrack(dataConfidence, protein, newGroups);
+      addConfidenceTrack(dataConfidence, protein, newGroups, 'alphafold');
     }
-
     // For synchronous operations, we can set state immediately
     setProcessedTracks(newGroups);
-
-    // For the async BFVD data, update state when it's ready
-    if (bfvd && dataProtein?.payload) {
-      addBFVDConfidenceTrack(
-        bfvd,
-        newGroups,
-        dataProtein.payload['metadata'],
-      ).then(() => {
-        setProcessedTracks(newGroups);
-      });
-    }
-  }, [processedData, dataConfidence, bfvd, protein]);
+  }, [processedData, dataConfidence, protein]);
 
   useEffect(() => {
     const currentTrack = trackRef.current;
@@ -336,7 +279,6 @@ const ProteinViewerForAlphafold = ({
 
     const colorToObj: Record<string, Feature[]> = {
       af: [] as Feature[],
-      bfvd: [] as Feature[],
       repr_families: representativeDataForStructure['family'],
       repr_domains: representativeDataForStructure['domain'] as Feature[],
       ted: tedFeatures as Feature[],
@@ -444,6 +386,10 @@ const ProteinViewerForAlphafold = ({
       dl: interpro_NMatchesCount > 0, // Computed above
     };
 
+    if (sequenceMismatch) {
+      delete tracks['alphafold_confidence'];
+    }
+
     const tedData = dataTED ? formatTED(dataTED) : [];
     if (tedData.length > 0) {
       tracks['external_sources'] = tedData;
@@ -532,24 +478,31 @@ const getInterproRelatedEntriesURL = createSelector(
   },
 );
 
-export default loadData<AlphafoldPayload, 'Prediction'>({
-  getUrl: getAlphaFoldPredictionURL,
-  propNamespace: 'Prediction',
-} as LoadDataParameters)(
-  loadData<AlphafoldConfidencePayload, 'Confidence'>({
-    getUrl: getConfidenceURLFromPayload('Prediction'),
-    propNamespace: 'Confidence',
+const mapStateToProps = createSelector(
+  (state: GlobalState) => state.ui.sequenceMismatch,
+  (sequenceMismatch) => ({ sequenceMismatch }),
+);
+
+export default connect(mapStateToProps)(
+  loadData<AlphafoldPayload, 'Prediction'>({
+    getUrl: getAlphaFoldPredictionURL,
+    propNamespace: 'Prediction',
   } as LoadDataParameters)(
-    loadData<TEDPayload, 'TED'>({
-      getUrl: getTEDURL,
-      propNamespace: 'TED',
+    loadData<AlphafoldConfidencePayload, 'Confidence'>({
+      getUrl: getConfidenceURLFromPayload('Prediction'),
+      propNamespace: 'Confidence',
     } as LoadDataParameters)(
-      loadData<{ metadata: ProteinMetadata }, 'Protein'>({
-        getUrl: getProteinURL,
-        propNamespace: 'Protein',
+      loadData<TEDPayload, 'TED'>({
+        getUrl: getTEDURL,
+        propNamespace: 'TED',
       } as LoadDataParameters)(
-        loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
-          ProteinViewerForAlphafold,
+        loadData<{ metadata: ProteinMetadata }, 'Protein'>({
+          getUrl: getProteinURL,
+          propNamespace: 'Protein',
+        } as LoadDataParameters)(
+          loadData(getInterproRelatedEntriesURL as LoadDataParameters)(
+            ProteinViewerForAlphafold,
+          ),
         ),
       ),
     ),

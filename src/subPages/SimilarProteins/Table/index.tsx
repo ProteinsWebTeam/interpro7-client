@@ -217,11 +217,8 @@ const SimilarProteinTable = ({
         <Column dataKey="gene">Gene</Column>
         <Column
           dataKey="in_alphafold"
-          renderer={(
-            inAlphafold: boolean,
-            { accession, in_bfvd }: ProteinMetadata,
-          ) =>
-            inAlphafold ? (
+          renderer={(inAlphafold: boolean, { accession }: ProteinMetadata) =>
+            inAlphafold && (
               <Link
                 to={{
                   description: {
@@ -232,22 +229,7 @@ const SimilarProteinTable = ({
               >
                 AlphaFold
               </Link>
-            ) : in_bfvd ? (
-              <Link
-                to={{
-                  description: {
-                    main: { key: 'protein' },
-                    protein: {
-                      db: 'uniprot',
-                      accession,
-                      detail: 'bfvd',
-                    },
-                  },
-                }}
-              >
-                BFVD
-              </Link>
-            ) : null
+            )
           }
         >
           Predicted structure

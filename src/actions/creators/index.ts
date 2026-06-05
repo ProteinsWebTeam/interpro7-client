@@ -1,12 +1,14 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 import {
+  AlphafoldModelCountAction,
   DataProgressAction,
   DownloadAction,
   FavouritesAction,
   IPScanAction,
   IPScanMetadataAction,
   LocationAction,
+  SequenceMismatchAction,
   SettingsAction,
   StatusAction,
   ToastAction,
@@ -363,3 +365,18 @@ export const unmarkFavourite = (id: string) =>
     type: types.UNMARK_FAVOURITE,
     id,
   }) as FavouritesAction;
+
+// alphafold sequence mismatch
+export const setSequenceMismatch = (hasMismatch: boolean) =>
+  ({
+    type: types.SET_SEQUENCE_MISMATCH,
+    hasMismatch,
+  }) as SequenceMismatchAction;
+
+// Alphafold model count
+export const setAlphafoldModelCount = (accession: string, count: number) =>
+  ({
+    type: types.SET_ALPHAFOLD_MODEL_COUNT,
+    accession,
+    count,
+  }) as AlphafoldModelCountAction;

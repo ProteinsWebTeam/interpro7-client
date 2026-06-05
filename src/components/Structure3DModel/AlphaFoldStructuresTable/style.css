@@ -1,0 +1,54 @@
+.alphafold-structures-table {
+  display: flex;
+  flex: 1 0 14rem;
+  flex-direction: column;
+  min-height: 14rem;
+  padding: 0.5em 0;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  margin: 0 0 0.5rem;
+}
+
+.toggle-button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  font-size: 1rem;
+}
+
+.table-scroll-area {
+  flex: 1 1 auto;
+  min-height: 10rem;
+  overflow-y: auto;
+}
+
+.structures-table {
+  width: 100%;
+}
+
+.table-header-cell {
+  position: static;
+  top: auto;
+}
+
+.structure-row {
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.structure-row.selected {
+  font-weight: bold;
+}

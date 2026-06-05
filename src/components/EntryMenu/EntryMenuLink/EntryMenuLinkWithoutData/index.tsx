@@ -15,6 +15,7 @@ const icons = new Map([
   ['Overview', { icon: '\uF2BB', class: 'icon-common' }],
   ['Entries', { icon: '\uF1C0', class: 'icon-common' }],
   ['Proteins', { icon: 'P', class: 'icon-conceptual' }],
+  ['Isoforms', { icon: 'I', class: 'icon-conceptual' }],
   ['Structures', { icon: 's', class: 'icon-conceptual' }],
   ['Domain Architectures', { icon: undefined, class: 'icon-count-ida' }],
   ['Taxonomy', { icon: undefined, class: 'icon-count-species' }],

@@ -9,13 +9,13 @@ root:
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   wikipedia: https://en.wikipedia.org/w/api.php
   alphafold: https://alphafold.ebi.ac.uk/
-  bfvd: https://bfvd.foldseek.com/
   repeatsDB: https://repeatsdb.org/api/production/annotations/
   disprot: https://disprot.org/api/
   LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
+  matches: https://www.ebi.ac.uk/interpro/matches/api/matches
 
 github:
   InterProClient:
@@ -52,7 +52,6 @@ pages:
       - model
       - logo
       - alphafold
-      - bfvd
       - entry_alignments
       - interactions
       - pathways
@@ -62,9 +61,9 @@ pages:
   protein:
     subPages:
       - entry
+      - isoform
       - structure
       - alphafold
-      - bfvd
       - sequence
       - similar_proteins
   structure:

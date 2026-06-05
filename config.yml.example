@@ -1,4 +1,6 @@
 googleAnalytics: UA-XXXXXXXX-X
+hcaptchaSiteKey: hcaptcha-sitekey
+
 root:
   website: http://localhost:8080/interpro/
   API: https://www.ebi.ac.uk/interpro/api/
@@ -7,6 +9,7 @@ root:
   wikipedia: https://en.wikipedia.org/w/api.php
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   alphafold: https://alphafold.ebi.ac.uk/
+  bfvd: https://bfvd.foldseek.com/
   repeatsDB: https://repeatsdb.org/api/production/annotations/
   disprot: https://disprot.org/api/
   LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
@@ -48,6 +51,7 @@ pages:
       - taxonomy
       - proteome
       - alphafold
+      - bfvd
       - logo
       - entry_alignments
       - interactions
@@ -60,6 +64,7 @@ pages:
       - entry
       - structure
       - alphafold
+      - bfvd
       - sequence
       - similar_proteins
   structure:

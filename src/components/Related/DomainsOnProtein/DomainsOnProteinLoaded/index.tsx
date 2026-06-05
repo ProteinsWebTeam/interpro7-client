@@ -221,7 +221,12 @@ const DomainsOnProteinLoaded = ({
   let flattenedData = undefined;
 
   if (dataConfidence)
-    addConfidenceTrack(dataConfidence, protein.accession, processedDataMerged);
+    addConfidenceTrack(
+      dataConfidence,
+      protein.accession,
+      processedDataMerged,
+      'alphafold',
+    );
 
   let interpro_NMatchesCount = 0;
   if (

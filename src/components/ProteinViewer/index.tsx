@@ -149,7 +149,6 @@ export const ProteinViewer = ({
   const [isPrinting, setPrinting] = useState(false);
 
   const mainTracks = [
-    'bfvd confidence',
     'alphafold confidence',
     'domain',
     'family',

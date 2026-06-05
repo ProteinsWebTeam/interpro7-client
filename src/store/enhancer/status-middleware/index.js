@@ -30,9 +30,6 @@ const checkStatusesAndDispatch = async function (
       case 'alphafold':
         testEndPoint = 'api/prediction/Q5VSL9';
         break;
-      case 'bfvd':
-        testEndPoint = 'api/cluster/A0A2Z4HFS2';
-        break;
       default:
     }
 
@@ -43,9 +40,7 @@ const checkStatusesAndDispatch = async function (
     url = endpoint === 'wikipedia' ? `${url}?origin=*` : url;
     try {
       const response = await customFetch(url, {
-        method: ['bfvd', 'alphafold', 'wikipedia'].includes(endpoint)
-          ? 'GET'
-          : 'HEAD',
+        method: ['alphafold', 'wikipedia'].includes(endpoint) ? 'GET' : 'HEAD',
         useCache: false,
       });
       dispatch(serverStatus(endpoint, response.ok));

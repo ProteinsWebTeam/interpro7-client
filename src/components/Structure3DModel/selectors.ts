@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import { format } from 'url';
-import config from 'config';
 
 export const getAlphaFoldPredictionURL = createSelector(
   (state: GlobalState) => state.settings.alphafold,
@@ -9,15 +8,12 @@ export const getAlphaFoldPredictionURL = createSelector(
   ({ protocol, hostname, port, root, query }, accession, description) => {
     const descriptionKey = description['main']['key'];
     if (descriptionKey === 'entry' || descriptionKey === 'protein') {
-      if (description[descriptionKey]['detail'] !== 'bfvd') {
-        // Avoid making this request when we're on the BFVD page.
-        return format({
-          protocol,
-          hostname,
-          port,
-          pathname: `${root}api/prediction/${accession}`,
-        });
-      }
+      return format({
+        protocol,
+        hostname,
+        port,
+        pathname: `${root}api/prediction/${accession}`,
+      });
     }
     return null;
   },
@@ -27,11 +23,25 @@ type StartsWithData = `data${string}`;
 export const getConfidenceURLFromPayload = (namespace: string) =>
   createSelector(
     (
-      _: GlobalState,
-      props: { [d: StartsWithData]: RequestedData<AlphafoldPayload> },
-    ) => props[`data${namespace}`],
-    (dataPrediction: RequestedData<AlphafoldPayload>) => {
-      const cifURL = dataPrediction?.payload?.[0]?.cifUrl;
+      state: GlobalState,
+      props: {
+        [d: StartsWithData]: RequestedData<AlphafoldPayload>;
+        selectedCifUrl?: string;
+      },
+    ) => ({
+      dataPrediction: props[`data${namespace}`],
+      accession: state.customLocation.description.protein.accession,
+      search: state.customLocation.search,
+      selectedCifUrl: props.selectedCifUrl,
+    }),
+    ({ dataPrediction, accession, search, selectedCifUrl }) => {
+      const cifURL =
+        selectedCifUrl ||
+        dataPrediction?.payload?.find(
+          (item) =>
+            item.uniprotAccession === ((search.isoform as string) || accession),
+        )?.cifUrl;
+
       return cifURL?.length
         ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')
         : null;

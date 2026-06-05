@@ -3,6 +3,7 @@ import { get, set } from 'lodash-es';
 type PossibleMain =
   | 'entry'
   | 'protein'
+  | 'isoform'
   | 'structure'
   | 'taxonomy'
   | 'proteome'
@@ -330,6 +331,7 @@ export const proteinAccessionHandler: Handler = handlerConstructor({
       /^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/i,
   },
 });
+
 export const orderHandler: Handler = handlerConstructor({
   name: {
     value: 'orderHandler',
@@ -345,6 +347,8 @@ export const orderHandler: Handler = handlerConstructor({
     value: /^(\d+)$/i,
   },
 });
+
+export const isoformHandler: Handler = typeConstructor('isoform');
 
 // Structure handlers
 export const structureHandler: Handler = typeConstructor('structure');
@@ -698,6 +702,7 @@ memberDBAccessionHandler.children = new Set([
 // Protein
 proteinHandler.children = new Set([
   proteinDBHandler,
+  isoformHandler,
   entryHandler,
   structureHandler,
   taxonomyHandler,

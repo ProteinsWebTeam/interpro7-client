@@ -1,7 +1,7 @@
 import React from 'react';
 
 import loadData from 'higherOrder/loadData/ts';
-import { getUrlForRelease } from 'higherOrder/loadData/defaults';
+import { getUrlForRelease, getUrlForMeta } from 'higherOrder/loadData/defaults';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 import Link from 'components/generic/Link';
@@ -11,6 +11,7 @@ import cssBinder from 'styles/cssBinder';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import local from './style.css';
 import tableCSS from 'components/Table/style.css';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 const css = cssBinder(tableCSS, fonts, local);
 
@@ -20,20 +21,61 @@ type ReleasePayload = Array<{
 
 interface LoadedProps
   extends LoadDataProps<ReleasePayload, 'IPScan'>,
-    LoadDataProps<ReleasePayload, 'IPScan6'> {}
+    LoadDataProps<ReleasePayload, 'IPScan6'>,
+    LoadDataProps<RootAPIPayload, 'Meta'> {}
 
-export const DownloadTable = ({ dataIPScan, dataIPScan6 }: LoadedProps) => {
+export const DownloadTable = ({
+  dataIPScan,
+  dataIPScan6,
+  dataMeta,
+}: LoadedProps) => {
   if (!dataIPScan || !dataIPScan6) return null;
   if (dataIPScan?.loading || dataIPScan6?.loading) return <Loading />;
 
-  const version = dataIPScan.payload?.[0].tag_name;
-  const version6 = dataIPScan6.payload?.[0].tag_name;
-
-  //const [_, dataVersion] = version.split('-');
+  const interProScan5Version = dataIPScan.payload?.[0].tag_name;
+  const interProScan6Version = dataIPScan6.payload?.[0].tag_name;
+  const interProVersion = dataMeta?.payload?.databases?.interpro?.version;
 
   return (
     <>
-      <h4> InterProScan 5 </h4>
+      <h4>InterProScan 6</h4>
+      <p>The latest version of InterProScan is {interProScan6Version}.</p>
+      <p>
+        To get started, install Nextflow (version 25.10 or later) along with a
+        container runtime such as Docker, SingularityCE, or Apptainer. Nextflow
+        will automatically retrieve the workflow from GitHub, and required data
+        can be downloaded during execution.
+      </p>
+      <p>
+        If you have Docker and Nextflow installed, run the following command to
+        test InterProScan and download required data:
+      </p>
+      <p>
+        <pre>
+          <code>
+            nextflow run ebi-pf-team/interproscan6 <br /> -r{' '}
+            {interProScan6Version} <br /> -profile docker,test <br /> --datadir
+            data <br /> --interpro {interProVersion}{' '}
+          </code>
+        </pre>
+      </p>
+      <p>
+        You will find more examples and documentation on{' '}
+        <a
+          href="https://github.com/ebi-pf-team/interproscan6"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+        .
+      </p>
+      <h4>InterProScan 5</h4>
+      <Callout type="warning">
+        InterProScan {interProScan5Version} is the final release of
+        InterProScan 5. To annotate sequences with future InterPro releases,
+        please upgrade to InterProScan 6.
+      </Callout>
       <table className={css('vf-table')}>
         <thead>
           <tr>
@@ -45,16 +87,16 @@ export const DownloadTable = ({ dataIPScan, dataIPScan6 }: LoadedProps) => {
         <tbody>
           <tr>
             <td>Binaries and data</td>
-            <td>{version}</td>
+            <td>{interProScan5Version}</td>
             <td>
               <Link
-                href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz`}
+                href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${interProScan5Version}/interproscan-${interProScan5Version}-64-bit.tar.gz`}
               >
                 tar
               </Link>
               ,{' '}
               <Link
-                href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${version}/interproscan-${version}-64-bit.tar.gz.md5`}
+                href={`https://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${interProScan5Version}/interproscan-${interProScan5Version}-64-bit.tar.gz.md5`}
               >
                 md5
               </Link>
@@ -81,38 +123,6 @@ export const DownloadTable = ({ dataIPScan, dataIPScan6 }: LoadedProps) => {
         </Link>
         .
       </p>
-
-      <h4> InterProScan 6 </h4>
-      <p> The latest version of InterProScan6 is {version6}. </p>
-      <p>
-        To get started, install Nextflow (version 24.10.04 or later) along with
-        a container runtime such as Docker, SingularityCE, or Apptainer.
-        Nextflow will automatically retrieve the workflow from GitHub, and
-        required data can be downloaded during execution.
-      </p>
-      <p>
-        If you have Docker and Nextflow installed, run the following command to
-        test InterProScan and download required data:
-      </p>
-      <p>
-        <pre>
-          <code>
-            nextflow run ebi-pf-team/interproscan6 <br /> -r {version6} <br />{' '}
-            -profile docker,test <br /> --datadir data <br /> --interpro latest{' '}
-          </code>
-        </pre>
-      </p>
-      <p>
-        You will find more examples and documentation on{' '}
-        <a
-          href="https://github.com/ebi-pf-team/interproscan6"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub
-        </a>
-        .
-      </p>
     </>
   );
 };
@@ -124,5 +134,10 @@ export default loadData<ReleasePayload, 'IPScan'>({
   loadData<ReleasePayload, 'IPScan6'>({
     getUrl: getUrlForRelease('IPScan6'),
     propNamespace: 'IPScan6',
-  } as LoadDataParameters)(DownloadTable),
+  } as LoadDataParameters)(
+    loadData<RootAPIPayload, 'Meta'>({
+      getUrl: getUrlForMeta,
+      propNamespace: 'Meta',
+    } as LoadDataParameters)(DownloadTable),
+  ),
 );

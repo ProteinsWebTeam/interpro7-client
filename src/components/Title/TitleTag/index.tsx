@@ -13,6 +13,7 @@ const rtdLinks = {
     dbs: 'member-database-page',
   },
   protein: 'protein-entry-page',
+  isoform: 'isoform-entry-page',
   structure: 'structure-entry-page',
   taxonomy: 'taxonomy-entry-page',
   proteome: 'proteome-entry-page',

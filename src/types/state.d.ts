@@ -1,4 +1,5 @@
 type GlobalState = {
+  alphafold: Record<string, number>;
   customLocation: InterProLocation;
   dataProgress: DataProgress;
   download: DownloadState;
@@ -16,6 +17,7 @@ type GlobalState = {
 type Endpoint =
   | 'entry'
   | 'protein'
+  | 'isoform'
   | 'structure'
   | 'taxonomy'
   | 'proteome'
@@ -24,6 +26,7 @@ type Endpoint =
 type EndpointPlural =
   | 'entries'
   | 'proteins'
+  | 'isoforms'
   | 'structures'
   | 'taxa'
   | 'proteomes'
@@ -71,6 +74,7 @@ type InterProPartialDescription<Location = EndpointPartialLocation> = {
   };
   entry?: Location & EntryLocation;
   protein?: Location;
+  isoform?: Location;
   structure?: EndpointPartialLocation & {
     chain?: string | null;
   };
@@ -138,7 +142,6 @@ type SettingsState = {
   disprot: ParsedURLServer;
   wikipedia: ParsedURLServer;
   alphafold: ParsedURLServer;
-  bfvd: ParsedURLServer;
   uniprot: ParsedURLServer;
   rfam: ParsedURLServer;
   proteinsAPI: ParsedURLServer;
@@ -214,7 +217,6 @@ type Server =
   | 'ipScan'
   | 'wikipedia'
   | 'alphafold'
-  | 'bfvd'
   | 'repeatsDB'
   | 'disprot'
   | 'proteinsAPI';
@@ -266,4 +268,5 @@ type UIState = {
   emblMapNav: boolean;
   sideNav: boolean;
   stuck: boolean;
+  sequenceMismatch: boolean;
 };

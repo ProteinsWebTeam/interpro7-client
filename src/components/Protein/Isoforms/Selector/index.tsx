@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 
 import { format } from 'url';
 import { createSelector } from 'reselect';
@@ -12,6 +12,7 @@ import Loading from 'components/SimpleCommonComponents/Loading';
 
 import cssBinder from 'styles/cssBinder';
 import style from '../style.css';
+import _ from 'node_modules/@types/lodash';
 const css = cssBinder(style);
 
 type Props = {
@@ -31,6 +32,17 @@ const Selector = ({
   if (!data || data.loading || !data.payload) return <Loading />;
   const isoforms = data.payload.results;
 
+  useEffect(() => {
+    if (!customLocation) return;
+    const newLocation: InterProLocation = {
+      ...customLocation,
+      search: {},
+    };
+    newLocation.search.isoform =
+      customLocation.description.protein.accession + '-1';
+    goToCustomLocation?.(newLocation);
+  }, [isoforms]);
+
   const onChange = (event: FormEvent) => {
     if (!customLocation) return;
     const newLocation: InterProLocation = {
@@ -42,15 +54,13 @@ const Selector = ({
     }
     goToCustomLocation?.(newLocation);
   };
+
   return (
     <select
       onChange={onChange}
       value={isoform}
       className={css('vf-form__select')}
     >
-      <option className={css('placeholder')} value="">
-        Select an isoform
-      </option>
       {isoforms
         .sort((a: string, b: string) => {
           const i = Number.parseInt(a.split('-')[1]);
@@ -59,7 +69,7 @@ const Selector = ({
         })
         .map((acc) => (
           <option value={acc} key={acc}>
-            {acc.endsWith('-1') ? 'Canonical' : acc}
+            {acc.endsWith('-1') ? acc + ' (Canonical)' : acc}
           </option>
         ))}
     </select>

@@ -9,7 +9,6 @@ export const UNDERSCORE = /_/g;
 
 const FIRST_IN_ORDER = [
   'alphafold_confidence',
-  'bfvd_confidence',
   'secondary_structure',
   'family',
   'domain',
