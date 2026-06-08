@@ -12,10 +12,20 @@ COPY package*.json ./
 RUN apk add --no-cache git
 
 # Install app dependencies
-RUN npm install
+RUN npm ci
 
 # Copy the app's source code to the working directory
 COPY . .
+
+# Select which config to bundle (staging, production, dev, ...)
+ARG CONFIG=dev
+RUN cp config/${CONFIG}_config.yml config.yml
+
+# Bundle the app with webpack
+RUN npm run deploy
+
+# Run in production mode
+ENV NODE_ENV=production
 
 # Expose the port that the app will run on
 EXPOSE 8080
