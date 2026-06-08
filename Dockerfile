@@ -11,6 +11,10 @@ COPY package*.json ./
 # Install git (Alpine uses apk, not apt-get)
 RUN apk add --no-cache git
 
+# Skip husky hooks and Chromium download during install
+ENV HUSKY=0
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+
 # Install app dependencies
 RUN npm ci
 
@@ -18,7 +22,7 @@ RUN npm ci
 COPY . .
 
 # Select which config to bundle (staging, production, dev, ...)
-ARG CONFIG=dev
+ARG CONFIG=staging
 RUN cp config/${CONFIG}_config.yml config.yml
 
 # Bundle the app with webpack
