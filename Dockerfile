@@ -22,7 +22,7 @@ RUN npm ci
 COPY . .
 
 # Select which config to bundle (staging, production, dev, ...)
-ARG CONFIG=staging
+ARG CONFIG=dev
 RUN cp config/${CONFIG}_config.yml config.yml
 
 # Bundle the app with webpack
