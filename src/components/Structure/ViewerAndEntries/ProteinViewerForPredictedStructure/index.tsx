@@ -34,6 +34,7 @@ import { features } from 'process';
 import { getTrackColor } from 'utils/entry-color';
 import Link from 'components/generic/Link';
 import config from 'config';
+import { setAfConfidenceChainFilter } from 'actions/creators';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -67,6 +68,9 @@ export const addConfidenceTrack = (
   protein: string,
   tracks: ProteinViewerDataObject,
   type: string,
+  sequenceStart?: number,
+  sequenceEnd?: number,
+  dispatch?: (action: ReturnType<typeof setAfConfidenceChainFilter>) => void,
 ) => {
   const scoreToCategory = (score: number): string => {
     if (score <= 50) return 'D';
@@ -81,12 +85,38 @@ export const addConfidenceTrack = (
     let scores = dataConfidence.payload.confidenceScore;
     const chains = dataConfidence.payload.chains;
     if (chains && chains.length > 1) {
-      // For multimers, restrict to the first chain only — both chains map to
-      // the same UniProt sequence (sequenceStart/End are identical for homodimers),
-      // but residueNumber runs continuously across all chains (1→N*chainLength).
-      const firstChain = chains[0];
-      const chainLength = firstChain.sequenceEnd - firstChain.sequenceStart + 1;
-      scores = scores.slice(0, chainLength);
+      // For multimers, restrict to the chain that matches the selected protein.
+      // Match by name (UniProt accession) and, when available, sequence start/end.
+      // Fall back to name-only match, then to the first chain.
+      const matchedChain =
+        chains.find(
+          (c) =>
+            c.name === protein &&
+            (sequenceStart === undefined ||
+              c.sequenceStart === sequenceStart) &&
+            (sequenceEnd === undefined || c.sequenceEnd === sequenceEnd),
+        ) ??
+        chains.find((c) => c.name === protein) ??
+        chains[0];
+
+      // Tell the 3D viewer which chain to color
+      dispatch?.(
+        setAfConfidenceChainFilter({
+          label_asym_id: matchedChain.label_asym_id,
+          sequenceStart: matchedChain.sequenceStart,
+          sequenceEnd: matchedChain.sequenceEnd,
+        }),
+      );
+
+      const chainLength =
+        matchedChain.sequenceEnd - matchedChain.sequenceStart + 1;
+
+      const chainOffset = chains
+        .slice(0, chains.indexOf(matchedChain))
+        .reduce((acc, c) => acc + (c.sequenceEnd - c.sequenceStart + 1), 0);
+      scores = scores.slice(chainOffset, chainOffset + chainLength);
+    } else {
+      dispatch?.(setAfConfidenceChainFilter(null));
     }
     confidenceCategories = scores.map(scoreToCategory);
   }
@@ -128,7 +158,11 @@ interface LoadedProps
     LoadDataProps<{ metadata: ProteinMetadata }, 'Protein'>,
     LoadDataProps<AlphafoldConfidencePayload, 'Confidence'>,
     LoadDataProps<AlphafoldPayload, 'Prediction'>,
-    LoadDataProps<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>> {}
+    LoadDataProps<PayloadList<EndpointWithMatchesPayload<EntryMetadata>>> {
+  dispatchChainFilter: (
+    action: ReturnType<typeof setAfConfidenceChainFilter>,
+  ) => void;
+}
 const ProteinViewerForAlphafold = ({
   data,
   protein,
@@ -146,6 +180,7 @@ const ProteinViewerForAlphafold = ({
   dataTED,
   isSplitScreen = false,
   sequenceMismatch = false,
+  dispatchChainFilter,
 }: LoadedProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const isHovering = useRef(false);
@@ -197,7 +232,15 @@ const ProteinViewerForAlphafold = ({
     const newGroups = { ...groups };
 
     if (dataConfidence) {
-      addConfidenceTrack(dataConfidence, protein, newGroups, 'alphafold');
+      addConfidenceTrack(
+        dataConfidence,
+        protein,
+        newGroups,
+        'alphafold',
+        undefined,
+        undefined,
+        dispatchChainFilter,
+      );
     }
     // For synchronous operations, we can set state immediately
     setProcessedTracks(newGroups);
@@ -483,7 +526,16 @@ const mapStateToProps = createSelector(
   (sequenceMismatch) => ({ sequenceMismatch }),
 );
 
-export default connect(mapStateToProps)(
+const mapDispatchToProps = (
+  dispatch: (action: ReturnType<typeof setAfConfidenceChainFilter>) => void,
+) => ({
+  dispatchChainFilter: dispatch,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(
   loadData<AlphafoldPayload, 'Prediction'>({
     getUrl: getAlphaFoldPredictionURL,
     propNamespace: 'Prediction',

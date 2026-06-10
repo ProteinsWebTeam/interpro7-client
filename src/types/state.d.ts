@@ -269,4 +269,14 @@ type UIState = {
   sideNav: boolean;
   stuck: boolean;
   sequenceMismatch: boolean;
+
+  // .value === undefined: confidence data not yet loaded
+  // null:     loaded, no filter needed (monomer)
+  // .value === object:  loaded, restrict to this chain (multimer)
+  afConfidenceChainFilter: {
+    value:
+      | { label_asym_id: string; sequenceStart: number; sequenceEnd: number }
+      | null
+      | undefined;
+  };
 };

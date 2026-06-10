@@ -25,8 +25,51 @@ import { CustomModelProperty } from 'molstar/lib/mol-model-props/common/custom-m
 import { CustomPropertyDescriptor } from 'molstar/lib/mol-model/custom-property';
 import { dateToUtcString } from 'molstar/lib/mol-util/date';
 import { arraySetAdd } from 'molstar/lib/mol-util/array';
+import { PluginContext } from 'molstar/lib/mol-plugin/context';
+import { AfConfidenceChainFilterValue } from 'actions/types';
 
 export { AfConfidence };
+
+let _getChainFilter: (() => AfConfidenceChainFilterValue) | null = null;
+
+export function registerChainFilterGetter(
+  getter: (() => AfConfidenceChainFilterValue) | null,
+): void {
+  _getChainFilter = getter;
+}
+
+/**
+ * Re-compute and re-inject the confidence score map into all models currently
+ * loaded in the given plugin.  Call this when the chain filter changes so the
+ * 3D viewer reflects the correct chain even when the CIF was loaded before the
+ * confidence JSON arrived.
+ */
+export async function reapplyAfConfidence(
+  plugin: PluginContext,
+): Promise<void> {
+  // fromCif does not use ctx, so a stub is fine here.
+  const stubCtx = {} as CustomProperty.Context;
+  for (const s of plugin.managers.structure.hierarchy.current.structures) {
+    const model = s.cell.obj?.data.models[0] as Model | undefined;
+    if (!model) continue;
+    const info = AfConfidence.fromCif(stubCtx, model);
+    if (!info) continue;
+    AfConfidenceProvider.set(
+      model,
+      PD.getDefaultValues(AfConfidenceParams),
+      info,
+    );
+  }
+  // Re-apply the colour theme so the viewport updates.
+  await plugin.dataTransaction(async () => {
+    for (const s of plugin.managers.structure.hierarchy.current.structures) {
+      await plugin.managers.structure.component.updateRepresentationsTheme(
+        s.components,
+        { color: 'af-confidence' as never },
+      );
+    }
+  });
+}
 
 type AfConfidence = PropertyWrapper<
   | {
@@ -64,7 +107,7 @@ namespace AfConfidence {
   // eslint-disable-next-line no-inner-declarations
   function tryGetInfoFromCif(
     categoryName: string,
-    model: Model
+    model: Model,
   ): undefined | Info {
     if (
       !MmcifFormat.is(model.sourceData) ||
@@ -75,7 +118,7 @@ namespace AfConfidence {
 
     const timestampField =
       model.sourceData.data.frame.categories[categoryName].getField(
-        'metric_value'
+        'metric_value',
       );
     if (!timestampField || timestampField.rowCount === 0) return;
 
@@ -86,7 +129,7 @@ namespace AfConfidence {
 
   export function fromCif(
     ctx: CustomProperty.Context,
-    model: Model
+    model: Model,
   ): AfConfidence | undefined {
     const info = tryGetInfoFromCif('ma_qa_metric_local', model);
     if (!info) return;
@@ -97,7 +140,7 @@ namespace AfConfidence {
 
   export async function fromCifOrServer(
     ctx: CustomProperty.Context,
-    model: Model
+    model: Model,
   ): Promise<unknown> {
     const cif = fromCif(ctx, model);
     return { value: cif };
@@ -126,7 +169,7 @@ namespace AfConfidence {
     return {
       residues: toTable(
         Schema.local_metric_values,
-        model.sourceData.data.frame.categories.ma_qa_metric_local
+        model.sourceData.data.frame.categories.ma_qa_metric_local,
       ),
     };
   }
@@ -155,7 +198,7 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
   //@ts-ignore
   obtain: async (
     ctx: CustomProperty.Context,
-    data: Model
+    data: Model,
     // props: Partial<AfConfidenceProps>
   ) => {
     // const p = { ...PD.getDefaultValues(AfConfidenceParams), ...props };
@@ -165,20 +208,34 @@ export const AfConfidenceProvider: CustomModelProperty.Provider<
 
 function createScoreMapFromCif(
   modelData: Model,
-  residueData: Table<typeof AfConfidence.Schema.local_metric_values>
+  residueData: Table<typeof AfConfidence.Schema.local_metric_values>,
 ): AfConfidence['data'] | undefined {
   const ret = new Map<ResidueIndex, [number, string]>();
   const { label_asym_id, label_seq_id, metric_value, _rowCount } = residueData;
 
   const categories: string[] = [];
+  const chainFilter = _getChainFilter?.() ?? null;
 
   for (let i = 0; i < _rowCount; i++) {
     const confidenceScore = metric_value.value(i);
+    const asymId = label_asym_id.value(i);
+    const seqId = label_seq_id.value(i);
+
+    // When a chain filter is active (heterodimer/multimer), only map scores
+    // for the selected chain's residues.
+    if (chainFilter !== null) {
+      if (asymId !== chainFilter.label_asym_id) continue;
+      if (seqId < chainFilter.sequenceStart || seqId > chainFilter.sequenceEnd)
+        continue;
+    }
+
+    const entityId =
+      modelData.properties.structAsymMap.get(asymId)?.entity_id ?? '1';
     const idx = modelData.atomicHierarchy.index.findResidue(
-      '1',
-      label_asym_id.value(i),
-      label_seq_id.value(i),
-      ''
+      entityId,
+      asymId,
+      seqId,
+      '',
     );
 
     let confidencyCategory = 'Very low';

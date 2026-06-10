@@ -1,4 +1,5 @@
 import React, { PureComponent, RefObject } from 'react';
+import { connect } from 'react-redux';
 
 import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
@@ -21,9 +22,15 @@ import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
 
 import Labels from './Labels';
 import { Selection } from '../ViewerAndEntries';
-import { AfConfidenceProvider } from './af-confidence/prop';
+import {
+  AfConfidenceProvider,
+  reapplyAfConfidence,
+  registerChainFilterGetter,
+} from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { CustomThemeProvider } from './custom/color';
+import { afConfidenceChainFilterSelector } from 'reducers/ui/afConfidenceChainFilter';
+import type { AfConfidenceChainFilterValue } from 'actions/types';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -45,6 +52,7 @@ export type Props = {
   selections?: Array<Selection> | null;
   colorBy?: string;
   colorMap?: Record<number, number>;
+  afConfidenceChainFilter?: AfConfidenceChainFilterValue | undefined;
 };
 
 const DEFAULT_EXTENSION = 'mmcif';
@@ -100,6 +108,12 @@ class StructureView extends PureComponent<Props> {
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
           CustomThemeProvider,
         );
+
+        // Register a getter so createScoreMapFromCif can read the current
+        // chain filter from Redux without importing the store directly.
+        registerChainFilterGetter(
+          () => this.props.afConfidenceChainFilter ?? null,
+        );
       }
       // mouseover ?????
       // window.viewer = this.viewer;
@@ -116,6 +130,10 @@ class StructureView extends PureComponent<Props> {
         'mmcif',
       );
     }
+  }
+
+  componentWillUnmount() {
+    registerChainFilterGetter(null);
   }
 
   delay(ms: number) {
@@ -156,6 +174,17 @@ class StructureView extends PureComponent<Props> {
         );
       }
     }
+
+    if (
+      this.viewer &&
+      this.props.theme === 'af' &&
+      prevProps.afConfidenceChainFilter === undefined &&
+      this.props.afConfidenceChainFilter !== undefined
+    ) {
+      reapplyAfConfidence(this.viewer).then(() => this.applyChainIdTheme());
+      return;
+    }
+
     if (this.viewer) {
       this.setSpin(this.props.isSpinning);
       if (this.props.shouldResetViewer) {
@@ -198,13 +227,21 @@ class StructureView extends PureComponent<Props> {
             },
           );
           if (outcome)
-            outcome.then(() => {
+            outcome.then(async () => {
               // populate the entry map object used for entry highlighting
               if (this.props.onStructureLoaded) {
                 this.props.onStructureLoaded();
               }
               // spin/stop spinning the structure
               this.setSpin(this.props.isSpinning);
+
+              if (
+                this.viewer &&
+                this.props.theme === 'af' &&
+                this.props.afConfidenceChainFilter !== undefined
+              ) {
+                await reapplyAfConfidence(this.viewer);
+              }
               this.applyChainIdTheme();
             });
         }
@@ -298,6 +335,7 @@ class StructureView extends PureComponent<Props> {
 
     switch (this.props.theme) {
       case 'af':
+        if (this.props.afConfidenceChainFilter === undefined) return;
         colouringTheme = AfConfidenceColorThemeProvider.name;
         break;
       case 'ted':
@@ -369,4 +407,8 @@ class StructureView extends PureComponent<Props> {
   }
 }
 
-export default StructureView;
+const mapStateToProps = (state: GlobalState) => ({
+  afConfidenceChainFilter: afConfidenceChainFilterSelector(state),
+});
+
+export default connect(mapStateToProps)(StructureView);
