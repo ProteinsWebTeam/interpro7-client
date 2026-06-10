@@ -420,19 +420,19 @@ class StructureView extends PureComponent<Props, State> {
                 ref={this._structureViewer}
                 className={css('structure-viewer-ref')}
               >
-                {/* Keep the canvas mounted and hide it until the colouring is applied, 
-                so the user never sees a mis-coloured (whole-structure) flash. */}
-                <canvas
-                  ref={this._structureViewerCanvas}
+                {/* The canvas stays visible; a white overlay sits on top and
+                fades out once the colouring is applied, so the user never sees
+                a mis-coloured (whole-structure) flash and there's no flicker. */}
+                <canvas ref={this._structureViewerCanvas} />
+                <div
+                  className={css('loading-overlay')}
                   style={{
-                    visibility: this.state.coloringReady ? 'visible' : 'hidden',
+                    opacity: this.state.coloringReady ? 0 : 1,
+                    pointerEvents: this.state.coloringReady ? 'none' : 'auto',
                   }}
-                />
-                {!this.state.coloringReady && (
-                  <div className={css('loading-overlay')}>
-                    <Loading />
-                  </div>
-                )}
+                >
+                  <Loading />
+                </div>
               </div>
               <Labels viewer={this.viewer} accession={this.name} />
             </div>

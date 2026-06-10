@@ -21,6 +21,7 @@
         align-items: center;
         justify-content: center;
         background: white;
+        transition: opacity 0.15s ease-out;
       }
     }
 
