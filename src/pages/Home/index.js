@@ -47,6 +47,7 @@ import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import embl from '../../images/thirdparty/funding/logo_embl.png';
 import wellcome from '../../images/thirdparty/funding/logo_wellcome.jpg';
 import bbsrc from '../../images/thirdparty/funding/logo_bbsrc.png';
+import Callout from 'components/SimpleCommonComponents/Callout';
 
 // Bind css with style object
 const f = foundationPartial(
@@ -164,10 +165,12 @@ const SchemaOrgDataWithData = loadData(getUrlForMeta)(
 );
 
 const CitingInterPro = () => (
-  <p className={f('cite')}>
-    If you use InterPro and/or Pfam, please cite our latest publications:
+  <>
+    <p className={f('cite')}>
+      If you use InterPro and/or Pfam, please cite our latest publications:
+    </p>
     <InterProCitation />
-  </p>
+  </>
 );
 
 const description = `
@@ -267,6 +270,21 @@ class Home extends PureComponent {
               <div className={f('intro-content')} data-testid="intro-content">
                 <h3>Classification of protein families</h3>
                 <Description textBlocks={[description]} />
+                <br></br>
+                <Callout type="info">
+                  We're pleased to announce the{' '}
+                  <a
+                    href="https://doi.org/10.1093/bioadv/vbag141"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    publication of the InterProScan 6 paper
+                  </a>
+                  , describing the latest generation of our sequence analysis
+                  pipeline. Please note that matches in the current release
+                  (InterPro 109.0) were calculated with InterProScan 5. We will
+                  transition to InterProScan 6 in mid-summer 2026.
+                </Callout>
                 <CitingInterPro />
               </div>
             </div>

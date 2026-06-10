@@ -255,14 +255,24 @@ const Help = () => {
                 withReferrer
               >
                 <span
-                  className={css('icon', 'icon-common')}
+                  className={css('icon', 'icon-common', 'icon-medkit')}
                   data-icon="&#x6e;"
                 />{' '}
-                Submit a ticket
+                Helpdesk
               </Link>
             </li>
             <li>
               <Twitter />
+            </li>
+            <li>
+              <Link
+                href="https://bsky.app/profile/interprodb.bsky.social"
+                target="_blank"
+                withReferrer
+              >
+                <span className={css('icon', 'icon-common', 'icon-bluesky')} />{' '}
+                Bluesky
+              </Link>
             </li>
             <li>
               <Link
@@ -274,7 +284,7 @@ const Help = () => {
                   className={css('icon', 'icon-common')}
                   data-icon="&#xf08c;"
                 />{' '}
-                LinkedIn account
+                LinkedIn
               </Link>
             </li>
           </ul>
@@ -293,7 +303,7 @@ const Help = () => {
                   className={css('icon', 'icon-common')}
                   data-icon="&#x6e;"
                 />{' '}
-                Submit a ticket
+                Helpdesk
               </Link>
             </li>
             <li>
