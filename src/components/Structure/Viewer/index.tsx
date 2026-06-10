@@ -19,6 +19,7 @@ import {
 } from 'molstar/lib/mol-theme/color/uniform';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import Labels from './Labels';
 import { Selection } from '../ViewerAndEntries';
@@ -57,7 +58,16 @@ export type Props = {
 
 const DEFAULT_EXTENSION = 'mmcif';
 
-class StructureView extends PureComponent<Props> {
+// While the structure is loading (and, for the af-confidence theme, while we
+// wait for the chain filter reducer to resolve and the colouring to be
+// applied), the canvas is hidden behind a loading overlay. This prevents the
+// user from briefly seeing the whole structure coloured before the correct
+// per-chain confidence colouring is in place.
+type State = {
+  coloringReady: boolean;
+};
+
+class StructureView extends PureComponent<Props, State> {
   _structureViewer: RefObject<HTMLDivElement>;
   _structureViewerCanvas: RefObject<HTMLCanvasElement>;
   viewer: PluginContext | null;
@@ -73,6 +83,7 @@ class StructureView extends PureComponent<Props> {
     this._structureViewerCanvas = React.createRef();
     this.highlightColour = null;
     this.selections = null;
+    this.state = { coloringReady: false };
   }
 
   async componentDidMount() {
@@ -178,8 +189,9 @@ class StructureView extends PureComponent<Props> {
     if (
       this.viewer &&
       this.props.theme === 'af' &&
-      prevProps.afConfidenceChainFilter === undefined &&
-      this.props.afConfidenceChainFilter !== undefined
+      this.props.afConfidenceChainFilter !== undefined &&
+      (prevProps.afConfidenceChainFilter === undefined ||
+        prevProps.theme !== 'af')
     ) {
       reapplyAfConfidence(this.viewer).then(() => this.applyChainIdTheme());
       return;
@@ -200,6 +212,9 @@ class StructureView extends PureComponent<Props> {
   }
 
   loadStructureInViewer(url: string, format: string) {
+    if (this.state.coloringReady) {
+      this.setState({ coloringReady: false });
+    }
     requestAnimationFrame(async () => {
       try {
         if (this.viewer) {
@@ -351,22 +366,31 @@ class StructureView extends PureComponent<Props> {
         colouringTheme = ChainIdColorThemeProvider.name;
     }
 
+    if (!this.viewer) return;
+
     // apply colouring
-    this.viewer?.dataTransaction(async () => {
-      for (const s of this.viewer?.managers.structure.hierarchy.current
-        .structures || []) {
-        await this.viewer?.managers.structure.component.updateRepresentationsTheme(
-          s.components,
-          {
-            color: colouringTheme as typeof ChainIdColorThemeProvider.name,
-            colorParams: {
-              colorMap: this.props.colorMap,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any,
-          },
-        );
-      }
-    });
+    this.viewer
+      .dataTransaction(async () => {
+        for (const s of this.viewer?.managers.structure.hierarchy.current
+          .structures || []) {
+          await this.viewer?.managers.structure.component.updateRepresentationsTheme(
+            s.components,
+            {
+              color: colouringTheme as typeof ChainIdColorThemeProvider.name,
+              colorParams: {
+                colorMap: this.props.colorMap,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              } as any,
+            },
+          );
+        }
+      })
+      .then(() => {
+        // Colouring is now applied; reveal the canvas.
+        if (!this.state.coloringReady) {
+          this.setState({ coloringReady: true });
+        }
+      });
   }
 
   clearSelections() {
@@ -396,7 +420,19 @@ class StructureView extends PureComponent<Props> {
                 ref={this._structureViewer}
                 className={css('structure-viewer-ref')}
               >
-                <canvas ref={this._structureViewerCanvas} />
+                {/* Keep the canvas mounted and hide it until the colouring is applied, 
+                so the user never sees a mis-coloured (whole-structure) flash. */}
+                <canvas
+                  ref={this._structureViewerCanvas}
+                  style={{
+                    visibility: this.state.coloringReady ? 'visible' : 'hidden',
+                  }}
+                />
+                {!this.state.coloringReady && (
+                  <div className={css('loading-overlay')}>
+                    <Loading />
+                  </div>
+                )}
               </div>
               <Labels viewer={this.viewer} accession={this.name} />
             </div>
