@@ -304,7 +304,7 @@ class StructureView extends PureComponent<Props, State> {
         const molSelection = Script.getStructureSelection((MS) => {
           if (!this.viewer) return;
           const atomGroups = [];
-          const positions = [];
+          const positionsByChain: Record<string, number[]> = {};
           let ShouldColourChange = true;
           for (const selection of selections) {
             if (ShouldColourChange) {
@@ -323,19 +323,31 @@ class StructureView extends PureComponent<Props, State> {
               ShouldColourChange = false;
             }
 
+            const chain = selection.chain || '';
+            if (!positionsByChain[chain]) positionsByChain[chain] = [];
             for (let i = selection.start; i <= selection.end; i++) {
-              positions.push(i);
+              positionsByChain[chain].push(i);
             }
           }
 
-          atomGroups.push(
-            MS.struct.generator.atomGroups({
-              'residue-test': MS.core.set.has([
-                MS.set(...positions),
-                MS.ammp('auth_seq_id'),
-              ]),
-            }),
-          );
+          for (const [chain, positions] of Object.entries(positionsByChain)) {
+            atomGroups.push(
+              MS.struct.generator.atomGroups({
+                'residue-test': MS.core.set.has([
+                  MS.set(...positions),
+                  MS.ammp('auth_seq_id'),
+                ]),
+                ...(chain
+                  ? {
+                      'chain-test': MS.core.rel.eq([
+                        MS.ammp('label_asym_id'),
+                        chain,
+                      ]),
+                    }
+                  : {}),
+              }),
+            );
+          }
 
           return MS.struct.combinator.merge(atomGroups);
         }, data);
@@ -379,6 +391,9 @@ class StructureView extends PureComponent<Props, State> {
               color: colouringTheme as typeof ChainIdColorThemeProvider.name,
               colorParams: {
                 colorMap: this.props.colorMap,
+                // Restrict custom (TED/domains/families) colouring to the chain
+                // being viewed so a heterodimer's other chain isn't coloured.
+                chain: this.props.afConfidenceChainFilter?.label_asym_id || '',
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } as any,
             },

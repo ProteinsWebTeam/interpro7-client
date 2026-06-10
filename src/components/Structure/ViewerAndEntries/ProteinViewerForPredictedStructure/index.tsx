@@ -35,6 +35,7 @@ import { getTrackColor } from 'utils/entry-color';
 import Link from 'components/generic/Link';
 import config from 'config';
 import { setAfConfidenceChainFilter } from 'actions/creators';
+import { afConfidenceChainFilterSelector } from 'reducers/ui/afConfidenceChainFilter';
 
 const ProteinViewer = loadable({
   loader: () =>
@@ -150,6 +151,7 @@ type Props = {
   matchTypeSettings?: MatchTypeUISettings;
   colorDomainsBy?: string;
   sequenceMismatch?: boolean;
+  afConfidenceChainFilter?: import('actions/types').AfConfidenceChainFilterValue;
 };
 
 interface LoadedProps
@@ -181,6 +183,7 @@ const ProteinViewerForAlphafold = ({
   isSplitScreen = false,
   sequenceMismatch = false,
   dispatchChainFilter,
+  afConfidenceChainFilter,
 }: LoadedProps) => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const isHovering = useRef(false);
@@ -199,6 +202,10 @@ const ProteinViewerForAlphafold = ({
     useState<ProteinViewerDataObject>({});
   const hoverSelectionRef = useRef(hoverSelection);
   const fixedSelectionRef = useRef(fixedSelection);
+  // Keep the latest chain filter in a ref so the (memoised) hover handler reads
+  // the current value rather than a stale closure.
+  const chainFilterRef = useRef(afConfidenceChainFilter);
+  chainFilterRef.current = afConfidenceChainFilter;
   const processedData = useProcessData(data?.payload?.results, 'protein');
   const setFixedSelection = (data: Selection[]) => {
     fixedSelectionRef.current = data;
@@ -268,12 +275,15 @@ const ProteinViewerForAlphafold = ({
               isHovering.current = true;
               const color =
                 parseInt(event?.detail?.feature?.color?.substring(1), 16) || 0;
+              // Use the chain matched for the protein being viewed and that was
+              // set in addConfidenceTrack
+              const chain = chainFilterRef.current?.label_asym_id || 'A';
               const selection =
                 highlight?.split(',').map((block: string) => {
                   const parts = block.split(':');
                   const start = Number(parts?.[0]) || 1;
                   const end = Number(parts?.[1]) || 1;
-                  return { chain: 'A', start, end, color };
+                  return { chain, start, end, color };
                 }) || [];
               setHoverSelection(selection);
             }
@@ -523,7 +533,11 @@ const getInterproRelatedEntriesURL = createSelector(
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.ui.sequenceMismatch,
-  (sequenceMismatch) => ({ sequenceMismatch }),
+  afConfidenceChainFilterSelector,
+  (sequenceMismatch, afConfidenceChainFilter) => ({
+    sequenceMismatch,
+    afConfidenceChainFilter,
+  }),
 );
 
 const mapDispatchToProps = (
