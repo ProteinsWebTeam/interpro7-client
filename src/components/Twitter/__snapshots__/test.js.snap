@@ -18,8 +18,7 @@ exports[`<Twitter /> should render 1`] = `
     target="_blank"
   >
      
-    Posts by @
-    InterProDB
+    X (Twitter)
   </Memo(Connect(Link))>
 </div>
 `;
