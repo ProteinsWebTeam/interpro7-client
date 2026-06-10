@@ -26,7 +26,7 @@ import { Selection } from '../ViewerAndEntries';
 import {
   AfConfidenceProvider,
   reapplyAfConfidence,
-  registerChainFilterGetter,
+  registerChainFilter,
 } from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { CustomThemeProvider } from './custom/color';
@@ -58,11 +58,13 @@ export type Props = {
 
 const DEFAULT_EXTENSION = 'mmcif';
 
-// While the structure is loading (and, for the af-confidence theme, while we
-// wait for the chain filter reducer to resolve and the colouring to be
-// applied), the canvas is hidden behind a loading overlay. This prevents the
-// user from briefly seeing the whole structure coloured before the correct
-// per-chain confidence colouring is in place.
+/* 
+While the structure is loading (and, for the af-confidence theme, while we
+wait for the chain filter reducer to resolve and the colouring to be
+applied), the canvas is hidden behind a loading overlay. This prevents the
+user from  seeing the whole structure mis-coloured before the correct
+per-chain confidence colouring is in place. 
+*/
 type State = {
   coloringReady: boolean;
 };
@@ -122,9 +124,7 @@ class StructureView extends PureComponent<Props, State> {
 
         // Register a getter so createScoreMapFromCif can read the current
         // chain filter from Redux without importing the store directly.
-        registerChainFilterGetter(
-          () => this.props.afConfidenceChainFilter ?? null,
-        );
+        registerChainFilter(() => this.props.afConfidenceChainFilter ?? null);
       }
       // mouseover ?????
       // window.viewer = this.viewer;
@@ -144,7 +144,7 @@ class StructureView extends PureComponent<Props, State> {
   }
 
   componentWillUnmount() {
-    registerChainFilterGetter(null);
+    registerChainFilter(null);
   }
 
   delay(ms: number) {
@@ -420,9 +420,9 @@ class StructureView extends PureComponent<Props, State> {
                 ref={this._structureViewer}
                 className={css('structure-viewer-ref')}
               >
-                {/* The canvas stays visible; a white overlay sits on top and
+                {/* The canvas stays visible but a white overlay sits on top and
                 fades out once the colouring is applied, so the user never sees
-                a mis-coloured (whole-structure) flash and there's no flicker. */}
+                a mis-coloured (whole-structure) flash and there's no flickering. */}
                 <canvas ref={this._structureViewerCanvas} />
                 <div
                   className={css('loading-overlay')}

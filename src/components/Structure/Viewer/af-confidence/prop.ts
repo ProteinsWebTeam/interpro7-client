@@ -32,18 +32,13 @@ export { AfConfidence };
 
 let _getChainFilter: (() => AfConfidenceChainFilterValue) | null = null;
 
-export function registerChainFilterGetter(
-  getter: (() => AfConfidenceChainFilterValue) | null,
+export function registerChainFilter(
+  getFilter: (() => AfConfidenceChainFilterValue) | null,
 ): void {
-  _getChainFilter = getter;
+  _getChainFilter = getFilter;
 }
 
-/**
- * Re-compute and re-inject the confidence score map into all models currently
- * loaded in the given plugin.  Call this when the chain filter changes so the
- * 3D viewer reflects the correct chain even when the CIF was loaded before the
- * confidence JSON arrived.
- */
+// Re-compute and re-inject the confidence score map into all models currently loaded
 export async function reapplyAfConfidence(
   plugin: PluginContext,
 ): Promise<void> {
