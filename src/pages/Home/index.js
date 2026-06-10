@@ -272,7 +272,7 @@ class Home extends PureComponent {
                 <Description textBlocks={[description]} />
                 <br></br>
                 <Callout type="info">
-                  We're pleased to announce the&nbsp;
+                  We&apos;re pleased to announce the&nbsp;
                   <a
                     href="https://doi.org/10.1093/bioadv/vbag141"
                     target="_blank"
