@@ -181,6 +181,7 @@ const ProteinViewerForAlphafold = ({
   colorBy,
   dataTED,
   isSplitScreen = false,
+  selectedCifUrl,
   sequenceMismatch = false,
   dispatchChainFilter,
   afConfidenceChainFilter,
@@ -233,6 +234,10 @@ const ProteinViewerForAlphafold = ({
       }
     }
   }, [matchTypeSettings, colorDomainsBy]);
+
+  useEffect(() => {
+    dispatchChainFilter(setAfConfidenceChainFilter(undefined));
+  }, [dispatchChainFilter, selectedCifUrl]);
 
   useEffect(() => {
     if (!processedData) return;

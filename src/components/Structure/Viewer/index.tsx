@@ -76,6 +76,8 @@ class StructureView extends PureComponent<Props, State> {
   name: string;
   highlightColour: number | null;
   selections: null | Array<unknown>;
+  loadedUrl: string | null;
+  loadSequence: number;
 
   constructor(props: Props) {
     super(props);
@@ -85,6 +87,8 @@ class StructureView extends PureComponent<Props, State> {
     this._structureViewerCanvas = React.createRef();
     this.highlightColour = null;
     this.selections = null;
+    this.loadedUrl = null;
+    this.loadSequence = 0;
     this.state = { coloringReady: false };
   }
 
@@ -130,17 +134,7 @@ class StructureView extends PureComponent<Props, State> {
       // window.viewer = this.viewer;
     }
 
-    if (this.props.url) {
-      this.loadStructureInViewer(
-        this.props.url,
-        this.props.ext || DEFAULT_EXTENSION,
-      );
-    } else {
-      this.loadStructureInViewer(
-        `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
-        'mmcif',
-      );
-    }
+    this.maybeLoadStructure();
   }
 
   componentWillUnmount() {
@@ -171,19 +165,20 @@ class StructureView extends PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.name !== `${this.props.id}` || prevProps.url !== this.props.url) {
+    const idChanged = this.name !== `${this.props.id}`;
+    const urlChanged = prevProps.url !== this.props.url;
+    const extChanged = prevProps.ext !== this.props.ext;
+    const afBecameReady =
+      this.props.theme === 'af' &&
+      this.props.afConfidenceChainFilter !== undefined &&
+      prevProps.afConfidenceChainFilter === undefined;
+
+    if (idChanged) {
       this.name = `${this.props.id}`;
-      if (this.props.url) {
-        this.loadStructureInViewer(
-          this.props.url,
-          this.props.ext || DEFAULT_EXTENSION,
-        );
-      } else {
-        this.loadStructureInViewer(
-          `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
-          'mmcif',
-        );
-      }
+    }
+
+    if (idChanged || urlChanged || extChanged || afBecameReady) {
+      this.maybeLoadStructure();
     }
 
     if (
@@ -212,6 +207,7 @@ class StructureView extends PureComponent<Props, State> {
   }
 
   loadStructureInViewer(url: string, format: string) {
+    const loadSequence = ++this.loadSequence;
     if (this.state.coloringReady) {
       this.setState({ coloringReady: false });
     }
@@ -243,6 +239,7 @@ class StructureView extends PureComponent<Props, State> {
           );
           if (outcome)
             outcome.then(async () => {
+              if (loadSequence !== this.loadSequence) return;
               // populate the entry map object used for entry highlighting
               if (this.props.onStructureLoaded) {
                 this.props.onStructureLoaded();
@@ -264,6 +261,47 @@ class StructureView extends PureComponent<Props, State> {
         console.log('Molstar error', e);
       }
     });
+  }
+
+  getStructureSource() {
+    if (this.props.url) {
+      return {
+        url: this.props.url,
+        format: this.props.ext || DEFAULT_EXTENSION,
+      };
+    }
+    return {
+      url: `https://www.ebi.ac.uk/pdbe/static/entry/${this.name}_updated.cif`,
+      format: 'mmcif',
+    };
+  }
+
+  async clearStructureViewer() {
+    this.loadSequence += 1;
+    this.loadedUrl = null;
+    if (this.state.coloringReady) {
+      this.setState({ coloringReady: false });
+    }
+    if (this.viewer) {
+      await this.viewer.clear();
+    }
+  }
+
+  maybeLoadStructure() {
+    const source = this.getStructureSource();
+
+    if (
+      this.props.theme === 'af' &&
+      this.props.afConfidenceChainFilter === undefined
+    ) {
+      void this.clearStructureViewer();
+      return;
+    }
+
+    if (this.loadedUrl === source.url) return;
+
+    this.loadedUrl = source.url;
+    this.loadStructureInViewer(source.url, source.format);
   }
 
   setSpin(spinState = false) {

@@ -144,11 +144,14 @@ export interface SequenceMismatchAction
 
 // Alphafold confidence chain filter
 export const SET_AF_CONFIDENCE_CHAIN_FILTER = 'SET_AF_CONFIDENCE_CHAIN_FILTER';
-export type AfConfidenceChainFilterValue = {
-  label_asym_id: string;
-  sequenceStart: number;
-  sequenceEnd: number;
-} | null;
+export type AfConfidenceChainFilterValue =
+  | {
+      label_asym_id: string;
+      sequenceStart: number;
+      sequenceEnd: number;
+    }
+  | null
+  | undefined;
 export interface AfConfidenceChainFilterAction
   extends Action<typeof SET_AF_CONFIDENCE_CHAIN_FILTER> {
   filter: AfConfidenceChainFilterValue;
