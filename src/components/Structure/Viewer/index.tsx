@@ -122,8 +122,7 @@ class StructureView extends PureComponent<Props, State> {
           CustomThemeProvider,
         );
 
-        // Register a getter so createScoreMapFromCif can read the current
-        // chain filter from Redux without importing the store directly.
+        // createScoreMapFromCif needs to read the current chain filter from global Redux state
         registerChainFilter(() => this.props.afConfidenceChainFilter ?? null);
       }
       // mouseover ?????

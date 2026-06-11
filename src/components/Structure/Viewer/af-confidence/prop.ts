@@ -42,12 +42,11 @@ export function registerChainFilter(
 export async function reapplyAfConfidence(
   plugin: PluginContext,
 ): Promise<void> {
-  // fromCif does not use ctx, so a stub is fine here.
-  const stubCtx = {} as CustomProperty.Context;
+  const tempCtx = {} as CustomProperty.Context;
   for (const s of plugin.managers.structure.hierarchy.current.structures) {
     const model = s.cell.obj?.data.models[0] as Model | undefined;
     if (!model) continue;
-    const info = AfConfidence.fromCif(stubCtx, model);
+    const info = AfConfidence.fromCif(tempCtx, model);
     if (!info) continue;
     AfConfidenceProvider.set(
       model,
