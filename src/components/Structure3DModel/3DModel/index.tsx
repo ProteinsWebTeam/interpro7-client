@@ -182,7 +182,11 @@ const Structure3DModel = ({
   useEffect(() => {
     const docs = data?.payload?.docs || [];
     if (docs.length > 0 && selectedEntryId === null) {
-      const first = sortAlphaFoldDocs(docs)[0];
+      const sortedDocs = sortAlphaFoldDocs(docs);
+      const firstMonomer = sortedDocs.find(
+        (doc) => (doc.oligomericState || '').toLowerCase() === 'monomer',
+      );
+      const first = firstMonomer || sortedDocs[0];
       setSelectedEntryId(first.entryId);
     }
   }, [data, selectedEntryId]);

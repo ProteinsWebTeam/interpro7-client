@@ -236,10 +236,6 @@ const ProteinViewerForAlphafold = ({
   }, [matchTypeSettings, colorDomainsBy]);
 
   useEffect(() => {
-    dispatchChainFilter(setAfConfidenceChainFilter(undefined));
-  }, [dispatchChainFilter, selectedCifUrl]);
-
-  useEffect(() => {
     if (!processedData) return;
     const newGroups = { ...groups };
 
