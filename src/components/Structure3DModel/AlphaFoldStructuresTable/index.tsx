@@ -46,10 +46,10 @@ const AlphaFoldStructuresTable = ({ docs, onSelect, selectedId }: Props) => {
   }, [docs]);
 
   useEffect(() => {
-    if (sortedDocs.length > 0) {
+    if (sortedDocs.length > 0 && !selectedId) {
       onSelect(sortedDocs[0].entryId);
     }
-  }, [sortedDocs]);
+  }, [sortedDocs, selectedId, onSelect]);
 
   return (
     <div className={css('alphafold-structures-table')}>
