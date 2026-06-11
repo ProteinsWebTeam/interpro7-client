@@ -254,10 +254,7 @@ const Help = () => {
                 target="_blank"
                 withReferrer
               >
-                <span
-                  className={css('icon', 'icon-common', 'icon-medkit')}
-                  data-icon="&#x6e;"
-                />{' '}
+                <span className={css('icon', 'icon-common', 'icon-medkit')} />{' '}
                 Helpdesk
               </Link>
             </li>
@@ -299,10 +296,7 @@ const Help = () => {
                 target="_blank"
                 withReferrer
               >
-                <span
-                  className={css('icon', 'icon-common')}
-                  data-icon="&#x6e;"
-                />{' '}
+                <span className={css('icon', 'icon-common', 'icon-medkit')} />{' '}
                 Helpdesk
               </Link>
             </li>

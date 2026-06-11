@@ -6,6 +6,6 @@
 
 .inline-logo {
   filter: brightness(50%) sepia(100) saturate(100) hue-rotate(200deg);
-  height: 1rem;
+  height: 0.85rem;
   vertical-align: baseline;
 }
