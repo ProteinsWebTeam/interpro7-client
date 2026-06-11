@@ -142,6 +142,21 @@ export interface SequenceMismatchAction
   hasMismatch: boolean;
 }
 
+// Alphafold confidence chain filter
+export const SET_AF_CONFIDENCE_CHAIN_FILTER = 'SET_AF_CONFIDENCE_CHAIN_FILTER';
+export type AfConfidenceChainFilterValue =
+  | {
+      label_asym_id: string;
+      sequenceStart: number;
+      sequenceEnd: number;
+    }
+  | null
+  | undefined;
+export interface AfConfidenceChainFilterAction
+  extends Action<typeof SET_AF_CONFIDENCE_CHAIN_FILTER> {
+  filter: AfConfidenceChainFilterValue;
+}
+
 // toast messages
 export const ADD_TOAST = 'ADD_TOAST';
 export const REMOVE_TOAST = 'REMOVE_TOAST';

@@ -73,7 +73,26 @@ const FullScreenButton = ({
     );
   }, [element]);
 
-  if (!elementInDOM) return null;
+  const _className =
+    className || css('margin-bottom-none', 'icon', 'icon-common');
+  const icon =
+    dataIcon || (isFull ? 'icon-fullscreen-collapse' : 'icon-fullscreen');
+
+  if (!elementInDOM) {
+    return (
+      <Tooltip title={tooltip}>
+        <Button
+          type="inline"
+          onClick={noop}
+          icon={icon}
+          title={tooltip}
+          className={_className}
+          disabled={true}
+        />
+      </Tooltip>
+    );
+  }
+
   const _handleFullScreen = () => {
     if (isFull) {
       exitFullScreen();
@@ -83,10 +102,6 @@ const FullScreenButton = ({
     }
     setFull(!isFull);
   };
-  const _className =
-    className || css('margin-bottom-none', 'icon', 'icon-common');
-  const icon =
-    dataIcon || (isFull ? 'icon-fullscreen-collapse' : 'icon-fullscreen');
   return (
     <Tooltip title={tooltip}>
       <Button
