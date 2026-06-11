@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<Help /> should render 1`] = `
 <div
@@ -347,7 +347,6 @@ exports[`<Help /> should render 1`] = `
           >
             <span
               className="icon icon-common icon-medkit"
-              data-icon="n"
             />
              
             Helpdesk
@@ -403,8 +402,7 @@ exports[`<Help /> should render 1`] = `
             withReferrer={true}
           >
             <span
-              className="icon icon-common"
-              data-icon="n"
+              className="icon icon-common icon-medkit"
             />
              
             Helpdesk
