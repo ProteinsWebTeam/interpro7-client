@@ -51,12 +51,16 @@ export const getConfidenceURLFromPayload = (namespace: string) =>
       selectedCifUrl: props.selectedCifUrl,
     }),
     ({ dataPrediction, accession, search, selectedCifUrl }) => {
+      const matchedCifUrl = dataPrediction?.payload?.find(
+        (item) =>
+          item.uniprotAccession === ((search.isoform as string) || accession),
+      )?.cifUrl;
       const fallbackCifUrl =
         dataPrediction?.payload?.length === 1
           ? dataPrediction.payload[0]?.cifUrl
           : null;
 
-      const cifURL = selectedCifUrl || fallbackCifUrl;
+      const cifURL = selectedCifUrl || matchedCifUrl || fallbackCifUrl;
 
       return cifURL?.length
         ? cifURL.replace('-model', '-confidence').replace('.cif', '.json')
