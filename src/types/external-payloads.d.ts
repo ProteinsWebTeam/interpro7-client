@@ -176,6 +176,7 @@ type AlphafoldModelInfo = {
   entryId: string;
   modelEntityId: string;
   uniprotAccession: string;
+  chainId?: string;
   uniprotId: string;
   uniprotDescription: string;
   taxId: number;
@@ -285,3 +286,5 @@ type TEDDomain = {
 type TEDPayload = {
   annotations: Array<TEDDomain>;
 };
+
+type MultimerModelPayload = {};

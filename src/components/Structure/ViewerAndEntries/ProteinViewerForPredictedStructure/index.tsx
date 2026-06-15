@@ -69,8 +69,7 @@ export const addConfidenceTrack = (
   protein: string,
   tracks: ProteinViewerDataObject,
   type: string,
-  sequenceStart?: number,
-  sequenceEnd?: number,
+  dataPrediction?: RequestedData<AlphafoldPayload>,
   dispatch?: (action: ReturnType<typeof setAfConfidenceChainFilter>) => void,
 ) => {
   const scoreToCategory = (score: number): string => {
@@ -81,46 +80,62 @@ export const addConfidenceTrack = (
   };
 
   let confidenceCategories: string[] = [];
+  let matchedChain = null;
+  let chains: AlphafoldConfidenceChain[] | undefined = [];
+  let chainLength: number = 0;
+  let scores: number[] = [];
 
-  if (type === 'alphafold' && dataConfidence?.payload?.confidenceScore) {
-    let scores = dataConfidence.payload.confidenceScore;
-    const chains = dataConfidence.payload.chains;
-    if (chains && chains.length > 1) {
-      // For multimers, restrict to the chain that matches the selected protein.
-      // Match by name (UniProt accession) and, when available, sequence start/end.
-      // Fall back to name-only match, then to the first chain.
-      const matchedChain =
-        chains.find(
-          (c) =>
-            c.name === protein &&
-            (sequenceStart === undefined ||
-              c.sequenceStart === sequenceStart) &&
-            (sequenceEnd === undefined || c.sequenceEnd === sequenceEnd),
-        ) ??
-        chains.find((c) => c.name === protein) ??
-        chains[0];
+  dispatch?.(setAfConfidenceChainFilter(null));
 
-      // Tell the 3D viewer which chain to color
-      dispatch?.(
-        setAfConfidenceChainFilter({
-          label_asym_id: matchedChain.label_asym_id,
-          sequenceStart: matchedChain.sequenceStart,
-          sequenceEnd: matchedChain.sequenceEnd,
-        }),
-      );
-
-      const chainLength =
-        matchedChain.sequenceEnd - matchedChain.sequenceStart + 1;
-
-      const chainOffset = chains
-        .slice(0, chains.indexOf(matchedChain))
-        .reduce((acc, c) => acc + (c.sequenceEnd - c.sequenceStart + 1), 0);
-      scores = scores.slice(chainOffset, chainOffset + chainLength);
-    } else {
-      dispatch?.(setAfConfidenceChainFilter(null));
-    }
-    confidenceCategories = scores.map(scoreToCategory);
+  if (dataConfidence?.payload?.confidenceScore) {
+    chains = dataConfidence.payload.chains;
+    scores = dataConfidence.payload.confidenceScore;
   }
+
+  // If we pass dataPrediction, it means we are in the multimer scenario
+  if (dataPrediction?.payload && dataPrediction.payload?.length > 0) {
+    // Get the correct protein prediction from the dataPrediction payload based on the current protein
+    const currentProteinPrediction = dataPrediction.payload.find(
+      (p) => p.uniprotAccession === protein,
+    );
+    if (type === 'alphafold') {
+      if (chains && chains.length > 1) {
+        // For multimers, restrict to the chain that matches the selected protein.
+        matchedChain = chains.find(
+          (c) => c.label_asym_id === currentProteinPrediction?.chainId,
+        );
+        chainLength = matchedChain
+          ? matchedChain.sequenceEnd - matchedChain.sequenceStart + 1
+          : 0;
+
+        // Tell the 3D viewer which chain to color
+        if (matchedChain)
+          dispatch?.(
+            setAfConfidenceChainFilter({
+              label_asym_id: matchedChain.label_asym_id,
+              sequenceStart: matchedChain.sequenceStart,
+              sequenceEnd: matchedChain.sequenceEnd,
+            }),
+          );
+      }
+    }
+  }
+
+  // Monomer case, used also for standard protein viewer
+  else {
+    if (chains && chains.length > 1) {
+      matchedChain = chains.find((c) => c.label_asym_id === 'A');
+    }
+  }
+
+  if (matchedChain && chains) {
+    const chainOffset = chains
+      .slice(0, chains.indexOf(matchedChain))
+      .reduce((acc, c) => acc + (c.sequenceEnd - c.sequenceStart + 1), 0);
+    scores = scores.slice(chainOffset, chainOffset + chainLength);
+  }
+
+  confidenceCategories = scores.map(scoreToCategory);
 
   if (confidenceCategories.length) {
     tracks[`${type}_confidence`] = [];
@@ -171,6 +186,7 @@ const ProteinViewerForAlphafold = ({
   dataProtein,
   dataInterProNMatches,
   dataConfidence,
+  dataPrediction,
   matchTypeSettings,
   colorDomainsBy,
   onChangeSelection,
@@ -245,14 +261,19 @@ const ProteinViewerForAlphafold = ({
         protein,
         newGroups,
         'alphafold',
-        undefined,
-        undefined,
+        dataPrediction,
         dispatchChainFilter,
       );
     }
     // For synchronous operations, we can set state immediately
     setProcessedTracks(newGroups);
-  }, [processedData, dataConfidence, protein]);
+  }, [
+    processedData,
+    dataConfidence,
+    protein,
+    dataPrediction,
+    dispatchChainFilter,
+  ]);
 
   useEffect(() => {
     const currentTrack = trackRef.current;
