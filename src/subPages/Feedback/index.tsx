@@ -7,7 +7,7 @@ import { addToast } from 'actions/creators';
 import { format } from 'url';
 import { cleanUpMultipleSlashes } from 'higherOrder/loadData/defaults';
 
-import { HCAPTCHA_SITE_KEY } from 'config';
+import { HCAPTCHA_SITE_KEY, HCAPTCHA_HOST } from 'config';
 
 import Button from 'components/SimpleCommonComponents/Button';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -59,6 +59,19 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
     setCaptchaToken(token);
   };
 
+  const handleCaptchaError = (error: string) => {
+    setCaptchaToken(null);
+    setFeedbackText(
+      <>
+        The verification widget could not be loaded
+        {error ? <> (error: {error})</> : null}. This is often caused by a
+        browser extension (e.g. an ad or privacy blocker) blocking hCaptcha.
+        Please disable it for this page and try again.
+      </>,
+    );
+    setFeedbackType('warning');
+  };
+
   const entry = `${metadata.name.name} (${metadata.accession})`;
   const queue =
     metadata.source_database.toLowerCase() === 'pfam' ? 'pfam' : 'interpro';
@@ -72,6 +85,7 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
       llm ? `LLM Feedback, ${entry}` : `Add annotation, ${entry}`,
     );
     data.append('queue', queue);
+    if (captchaToken) data.append('h-captcha-response', captchaToken);
     fetch(apiUrl, {
       method: 'POST',
       body: data,
@@ -231,7 +245,10 @@ const Feedback = ({ api, llm, data, addToast }: LoadedProps) => {
         ) : (
           <HCaptcha
             sitekey={HCAPTCHA_SITE_KEY}
+            host={HCAPTCHA_HOST || undefined}
+            sentry={false}
             onVerify={(token, _) => handleVerificationSuccess(token)}
+            onError={handleCaptchaError}
             ref={captchaRef}
           />
         )}
