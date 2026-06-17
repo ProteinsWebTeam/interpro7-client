@@ -15,6 +15,8 @@ import { format } from 'url';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import { createSelector } from 'reselect';
 
+import { setAfConfidenceChainFilter } from 'actions/creators';
+
 import cssBinder from 'styles/cssBinder';
 import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
@@ -26,6 +28,9 @@ type Props = {
   customLocation: InterProLocation;
   matchTypeSettings: MatchTypeUISettings;
   colorDomainsBy: string;
+  setChainFilter: (
+    filter: import('actions/types').AfConfidenceChainFilterValue,
+  ) => void;
 };
 interface LoadedProps
   extends Props,
@@ -38,6 +43,7 @@ const AlphaFoldModelSubPage = ({
   dataInterProNMatches,
   matchTypeSettings,
   colorDomainsBy,
+  setChainFilter,
 }: LoadedProps) => {
   const { description } = customLocation;
   const mainAccession = description[description.main.key as Endpoint].accession;
@@ -84,6 +90,12 @@ const AlphaFoldModelSubPage = ({
     } else setProteinAcc(mainAccession as string);
   }, [mainAccession, data]);
 
+  useEffect(() => {
+    if (mainType === 'entry') {
+      setChainFilter(null);
+    }
+  }, [mainType, proteinAcc, setChainFilter]);
+
   if (data?.loading) return <Loading />;
   const hasMultipleProteins =
     mainType === 'entry' && (data?.payload?.count || 0) > 1;
@@ -97,6 +109,7 @@ const AlphaFoldModelSubPage = ({
     >
       {proteinAcc && hasRepresentativeData !== null && (
         <AlphaFoldModel
+          key={proteinAcc}
           colorMap={colorMap}
           proteinAcc={proteinAcc}
           hasTED={hasTED}
@@ -185,7 +198,14 @@ const mapStateToProps = createSelector(
   }),
 );
 
-export default connect(mapStateToProps)(
+const mapDispatchToProps = {
+  setChainFilter: setAfConfidenceChainFilter,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(
   loadData({
     getUrl: getUrl(false),
   } as LoadDataParameters)(
