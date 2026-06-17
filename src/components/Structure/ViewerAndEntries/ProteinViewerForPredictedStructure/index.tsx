@@ -93,7 +93,10 @@ export const addConfidenceTrack = (
   }
 
   // If we pass dataPrediction, it means we are in the multimer scenario
-  if (dataPrediction?.payload && dataPrediction.payload?.length > 0) {
+  if (
+    Array.isArray(dataPrediction?.payload) &&
+    dataPrediction.payload?.length > 0
+  ) {
     // Get the correct protein prediction from the dataPrediction payload based on the current protein
     const currentProteinPrediction = dataPrediction.payload.find(
       (p) => p.uniprotAccession === protein,

@@ -51,14 +51,19 @@ export const getConfidenceURLFromPayload = (namespace: string) =>
       selectedCifUrl: props.selectedCifUrl,
     }),
     ({ dataPrediction, accession, search, selectedCifUrl }) => {
-      const matchedCifUrl = dataPrediction?.payload?.find(
-        (item) =>
-          item.uniprotAccession === ((search.isoform as string) || accession),
-      )?.cifUrl;
-      const fallbackCifUrl =
-        dataPrediction?.payload?.length === 1
-          ? dataPrediction.payload[0]?.cifUrl
-          : null;
+      let predictionPayload: AlphafoldPayload = dataPrediction.payload || {};
+      let matchedCifUrl: string = '';
+      let fallbackCifUrl: string = '';
+
+      if (Array.isArray(predictionPayload)) {
+        matchedCifUrl = predictionPayload.find(
+          (item) =>
+            item.uniprotAccession === ((search.isoform as string) || accession),
+        )?.cifUrl;
+
+        fallbackCifUrl =
+          predictionPayload.length === 1 ? predictionPayload[0].cifUrl : null;
+      }
 
       const cifURL = selectedCifUrl || matchedCifUrl || fallbackCifUrl;
 

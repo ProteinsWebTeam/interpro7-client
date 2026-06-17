@@ -193,7 +193,7 @@ type AlphafoldModelInfo = {
   pdbUrl: string;
 };
 
-type AlphafoldPayload = Array<AlphafoldModelInfo>;
+type AlphafoldPayload = Array<AlphafoldModelInfo> | {};
 
 type AlphafoldConfidenceChain = {
   name: string;
