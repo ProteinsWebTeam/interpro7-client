@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<Help /> should render 1`] = `
 <div
@@ -346,15 +346,27 @@ exports[`<Help /> should render 1`] = `
             withReferrer={true}
           >
             <span
-              className="icon icon-common"
-              data-icon="n"
+              className="icon icon-common icon-medkit"
             />
              
-            Submit a ticket
+            Helpdesk
           </Memo(Connect(Link))>
         </li>
         <li>
           <Twitter />
+        </li>
+        <li>
+          <Memo(Connect(Link))
+            href="https://bsky.app/profile/interprodb.bsky.social"
+            target="_blank"
+            withReferrer={true}
+          >
+            <span
+              className="icon icon-common icon-bluesky"
+            />
+             
+            Bluesky
+          </Memo(Connect(Link))>
         </li>
         <li>
           <Memo(Connect(Link))
@@ -367,7 +379,7 @@ exports[`<Help /> should render 1`] = `
               data-icon=""
             />
              
-            LinkedIn account
+            LinkedIn
           </Memo(Connect(Link))>
         </li>
       </ul>
@@ -390,11 +402,10 @@ exports[`<Help /> should render 1`] = `
             withReferrer={true}
           >
             <span
-              className="icon icon-common"
-              data-icon="n"
+              className="icon icon-common icon-medkit"
             />
              
-            Submit a ticket
+            Helpdesk
           </Memo(Connect(Link))>
         </li>
         <li>
