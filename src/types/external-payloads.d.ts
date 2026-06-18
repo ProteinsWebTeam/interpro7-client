@@ -176,6 +176,7 @@ type AlphafoldModelInfo = {
   entryId: string;
   modelEntityId: string;
   uniprotAccession: string;
+  chainId?: string;
   uniprotId: string;
   uniprotDescription: string;
   taxId: number;
@@ -192,7 +193,7 @@ type AlphafoldModelInfo = {
   pdbUrl: string;
 };
 
-type AlphafoldPayload = Array<AlphafoldModelInfo>;
+type AlphafoldPayload = Array<AlphafoldModelInfo> | {};
 
 type AlphafoldConfidenceChain = {
   name: string;
@@ -285,3 +286,5 @@ type TEDDomain = {
 type TEDPayload = {
   annotations: Array<TEDDomain>;
 };
+
+type MultimerModelPayload = {};

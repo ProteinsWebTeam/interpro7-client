@@ -23,7 +23,9 @@ import ipro from 'styles/interpro-vf.css';
 import fonts from 'EBI-Icon-fonts/fonts.css';
 import style from './style.css';
 import buttonBar from 'components/Structure/ViewerAndEntries/button-bar.css';
-import AlphaFoldStructuresTable from '../AlphaFoldStructuresTable';
+import AlphaFoldStructuresTable, {
+  sortAlphaFoldDocs,
+} from '../AlphaFoldStructuresTable';
 
 const css = cssBinder(style, buttonBar, ipro, fonts);
 
@@ -180,10 +182,31 @@ const Structure3DModel = ({
   useEffect(() => {
     const docs = data?.payload?.docs || [];
     if (docs.length > 0 && selectedEntryId === null) {
-      const first = docs[0];
+      const sortedDocs = sortAlphaFoldDocs(docs);
+      const firstMonomer = sortedDocs.find(
+        (doc) => (doc.oligomericState || '').toLowerCase() === 'monomer',
+      );
+      const first = firstMonomer || sortedDocs[0];
       setSelectedEntryId(first.entryId);
     }
-  }, [data]);
+  }, [data, selectedEntryId]);
+
+  const selectedDoc = (data?.payload?.docs || []).find(
+    (d) => d.entryId === selectedEntryId,
+  );
+  const selectedCifUrl = selectedDoc
+    ? `${config.root.alphafold.href}files/${selectedDoc.entryId}-model_v${selectedDoc.latestVersion}.cif`
+    : selectedModel?.cifUrl;
+
+  useEffect(() => {
+    if (selectedCifUrl) {
+      onModelLoaded?.(selectedCifUrl);
+    }
+  }, [onModelLoaded, selectedCifUrl]);
+
+  useEffect(() => {
+    setReady(false);
+  }, [selectedCifUrl]);
 
   if (data?.loading) return <Loading />;
 
@@ -197,15 +220,6 @@ const Structure3DModel = ({
   }
 
   const elementId = 'new-structure-model-viewer';
-
-  // Derive cifUrl immediately from the already-loaded search doc so the
-  // structure viewer updates on click without waiting for the prediction API.
-  const selectedDoc = (data?.payload?.docs || []).find(
-    (d) => d.entryId === selectedEntryId,
-  );
-  const selectedCifUrl = selectedDoc
-    ? `${config.root.alphafold.href}files/${selectedDoc.entryId}-model_v${selectedDoc.latestVersion}.cif`
-    : selectedModel?.cifUrl;
 
   return (
     <div className={css('alphafold-model')}>
@@ -375,6 +389,7 @@ const Structure3DModel = ({
             )}
 
             <StructureViewer
+              key={selectedCifUrl || 'alphafold-structure-viewer'}
               id={'fullSequence'}
               url={selectedCifUrl}
               elementId={elementId}
@@ -393,7 +408,6 @@ const Structure3DModel = ({
                   entryId={selectedEntryId}
                   onLoaded={(model) => {
                     setSelectedModel(model);
-                    onModelLoaded?.(model.cifUrl);
                   }}
                 />
                 <AlphaFoldStructuresTable
@@ -410,7 +424,6 @@ const Structure3DModel = ({
                 entryId={selectedEntryId}
                 onLoaded={(model) => {
                   setSelectedModel(model);
-                  onModelLoaded?.(model.cifUrl);
                 }}
               />
               <AlphaFoldStructuresTable
