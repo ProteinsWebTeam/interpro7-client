@@ -12,6 +12,7 @@ type ColorMap = Record<number, number>;
 
 export const CustomThemeParams = {
   colorMap: PD.Value<ColorMap>({} as ColorMap),
+  chain: PD.Text(''),
 };
 
 type Params = typeof CustomThemeParams;
@@ -25,6 +26,12 @@ export function CustomTheme(
   if (ctx.structure && !ctx.structure.isEmpty) {
     color = (location: Location) => {
       if (StructureElement.Location.is(location)) {
+        if (props.chain) {
+          const asymId = StructureProperties.chain.label_asym_id(location);
+          if (asymId !== props.chain) {
+            return Color.fromRgb(170, 170, 170);
+          }
+        }
         const pos = StructureProperties.residue.auth_seq_id(location);
         if (props.colorMap[pos]) {
           return Color(props.colorMap[pos]);

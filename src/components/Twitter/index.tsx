@@ -26,7 +26,7 @@ const Twitter = ({ handler = 'InterProDB' }: Props) => {
         target="_blank"
       >
         {' '}
-        Posts by @{handler}
+        @{handler}
       </Link>
     </div>
   );

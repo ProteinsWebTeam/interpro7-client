@@ -1,4 +1,5 @@
 import React, { PureComponent, RefObject } from 'react';
+import { connect } from 'react-redux';
 
 import { DefaultPluginSpec, PluginSpec } from 'molstar/lib/mol-plugin/spec';
 import { PluginConfig } from 'molstar/lib/mol-plugin/config';
@@ -18,12 +19,19 @@ import {
 } from 'molstar/lib/mol-theme/color/uniform';
 
 import ResizeObserverComponent from 'wrappers/ResizeObserverComponent';
+import Loading from 'components/SimpleCommonComponents/Loading';
 
 import Labels from './Labels';
 import { Selection } from '../ViewerAndEntries';
-import { AfConfidenceProvider } from './af-confidence/prop';
+import {
+  AfConfidenceProvider,
+  reapplyAfConfidence,
+  registerChainFilter,
+} from './af-confidence/prop';
 import { AfConfidenceColorThemeProvider } from './af-confidence/color';
 import { CustomThemeProvider } from './custom/color';
+import { afConfidenceChainFilterSelector } from 'reducers/ui/afConfidenceChainFilter';
+import type { AfConfidenceChainFilterValue } from 'actions/types';
 
 import cssBinder from 'styles/cssBinder';
 
@@ -45,11 +53,23 @@ export type Props = {
   selections?: Array<Selection> | null;
   colorBy?: string;
   colorMap?: Record<number, number>;
+  afConfidenceChainFilter?: AfConfidenceChainFilterValue | undefined;
 };
 
 const DEFAULT_EXTENSION = 'mmcif';
 
-class StructureView extends PureComponent<Props> {
+/* 
+While the structure is loading (and, for the af-confidence theme, while we
+wait for the chain filter reducer to resolve and the colouring to be
+applied), the canvas is hidden behind a loading overlay. This prevents the
+user from  seeing the whole structure mis-coloured before the correct
+per-chain confidence colouring is in place. 
+*/
+type State = {
+  coloringReady: boolean;
+};
+
+class StructureView extends PureComponent<Props, State> {
   _structureViewer: RefObject<HTMLDivElement>;
   _structureViewerCanvas: RefObject<HTMLCanvasElement>;
   viewer: PluginContext | null;
@@ -65,6 +85,7 @@ class StructureView extends PureComponent<Props> {
     this._structureViewerCanvas = React.createRef();
     this.highlightColour = null;
     this.selections = null;
+    this.state = { coloringReady: false };
   }
 
   async componentDidMount() {
@@ -100,6 +121,9 @@ class StructureView extends PureComponent<Props> {
         this.viewer.representation.structure.themes.colorThemeRegistry.add(
           CustomThemeProvider,
         );
+
+        // createScoreMapFromCif needs to read the current chain filter from global Redux state
+        registerChainFilter(() => this.props.afConfidenceChainFilter ?? null);
       }
       // mouseover ?????
       // window.viewer = this.viewer;
@@ -116,6 +140,10 @@ class StructureView extends PureComponent<Props> {
         'mmcif',
       );
     }
+  }
+
+  componentWillUnmount() {
+    registerChainFilter(null);
   }
 
   delay(ms: number) {
@@ -142,7 +170,16 @@ class StructureView extends PureComponent<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.name !== `${this.props.id}` || prevProps.url !== this.props.url) {
+    const afBecameReady =
+      this.props.theme === 'af' &&
+      this.props.afConfidenceChainFilter !== undefined &&
+      prevProps.afConfidenceChainFilter === undefined;
+
+    if (
+      this.name !== `${this.props.id}` ||
+      prevProps.url !== this.props.url ||
+      prevProps.ext !== this.props.ext
+    ) {
       this.name = `${this.props.id}`;
       if (this.props.url) {
         this.loadStructureInViewer(
@@ -156,6 +193,18 @@ class StructureView extends PureComponent<Props> {
         );
       }
     }
+
+    if (
+      this.viewer &&
+      this.props.theme === 'af' &&
+      this.props.afConfidenceChainFilter !== undefined &&
+      (prevProps.afConfidenceChainFilter === undefined ||
+        prevProps.theme !== 'af')
+    ) {
+      reapplyAfConfidence(this.viewer).then(() => this.applyChainIdTheme());
+      return;
+    }
+
     if (this.viewer) {
       this.setSpin(this.props.isSpinning);
       if (this.props.shouldResetViewer) {
@@ -171,6 +220,9 @@ class StructureView extends PureComponent<Props> {
   }
 
   loadStructureInViewer(url: string, format: string) {
+    if (this.state.coloringReady) {
+      this.setState({ coloringReady: false });
+    }
     requestAnimationFrame(async () => {
       try {
         if (this.viewer) {
@@ -198,13 +250,21 @@ class StructureView extends PureComponent<Props> {
             },
           );
           if (outcome)
-            outcome.then(() => {
+            outcome.then(async () => {
               // populate the entry map object used for entry highlighting
               if (this.props.onStructureLoaded) {
                 this.props.onStructureLoaded();
               }
               // spin/stop spinning the structure
               this.setSpin(this.props.isSpinning);
+
+              if (
+                this.viewer &&
+                this.props.theme === 'af' &&
+                this.props.afConfidenceChainFilter !== undefined
+              ) {
+                await reapplyAfConfidence(this.viewer);
+              }
               this.applyChainIdTheme();
             });
         }
@@ -252,7 +312,7 @@ class StructureView extends PureComponent<Props> {
         const molSelection = Script.getStructureSelection((MS) => {
           if (!this.viewer) return;
           const atomGroups = [];
-          const positions = [];
+          const positionsByChain: Record<string, number[]> = {};
           let ShouldColourChange = true;
           for (const selection of selections) {
             if (ShouldColourChange) {
@@ -271,19 +331,31 @@ class StructureView extends PureComponent<Props> {
               ShouldColourChange = false;
             }
 
+            const chain = selection.chain || '';
+            if (!positionsByChain[chain]) positionsByChain[chain] = [];
             for (let i = selection.start; i <= selection.end; i++) {
-              positions.push(i);
+              positionsByChain[chain].push(i);
             }
           }
 
-          atomGroups.push(
-            MS.struct.generator.atomGroups({
-              'residue-test': MS.core.set.has([
-                MS.set(...positions),
-                MS.ammp('auth_seq_id'),
-              ]),
-            }),
-          );
+          for (const [chain, positions] of Object.entries(positionsByChain)) {
+            atomGroups.push(
+              MS.struct.generator.atomGroups({
+                'residue-test': MS.core.set.has([
+                  MS.set(...positions),
+                  MS.ammp('auth_seq_id'),
+                ]),
+                ...(chain
+                  ? {
+                      'chain-test': MS.core.rel.eq([
+                        MS.ammp('label_asym_id'),
+                        chain,
+                      ]),
+                    }
+                  : {}),
+              }),
+            );
+          }
 
           return MS.struct.combinator.merge(atomGroups);
         }, data);
@@ -298,6 +370,7 @@ class StructureView extends PureComponent<Props> {
 
     switch (this.props.theme) {
       case 'af':
+        if (this.props.afConfidenceChainFilter === undefined) return;
         colouringTheme = AfConfidenceColorThemeProvider.name;
         break;
       case 'ted':
@@ -313,22 +386,34 @@ class StructureView extends PureComponent<Props> {
         colouringTheme = ChainIdColorThemeProvider.name;
     }
 
+    if (!this.viewer) return;
+
     // apply colouring
-    this.viewer?.dataTransaction(async () => {
-      for (const s of this.viewer?.managers.structure.hierarchy.current
-        .structures || []) {
-        await this.viewer?.managers.structure.component.updateRepresentationsTheme(
-          s.components,
-          {
-            color: colouringTheme as typeof ChainIdColorThemeProvider.name,
-            colorParams: {
-              colorMap: this.props.colorMap,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any,
-          },
-        );
-      }
-    });
+    this.viewer
+      .dataTransaction(async () => {
+        for (const s of this.viewer?.managers.structure.hierarchy.current
+          .structures || []) {
+          await this.viewer?.managers.structure.component.updateRepresentationsTheme(
+            s.components,
+            {
+              color: colouringTheme as typeof ChainIdColorThemeProvider.name,
+              colorParams: {
+                colorMap: this.props.colorMap,
+                // Restrict custom (TED/domains/families) colouring to the chain
+                // being viewed so a heterodimer's other chain isn't coloured.
+                chain: this.props.afConfidenceChainFilter?.label_asym_id || '',
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              } as any,
+            },
+          );
+        }
+      })
+      .then(() => {
+        // Colouring is now applied; reveal the canvas.
+        if (!this.state.coloringReady) {
+          this.setState({ coloringReady: true });
+        }
+      });
   }
 
   clearSelections() {
@@ -358,7 +443,19 @@ class StructureView extends PureComponent<Props> {
                 ref={this._structureViewer}
                 className={css('structure-viewer-ref')}
               >
+                {/* The canvas stays visible but a white overlay sits on top and
+                fades out once the colouring is applied, so the user never sees
+                a mis-coloured (whole-structure) flash and there's no flickering. */}
                 <canvas ref={this._structureViewerCanvas} />
+                <div
+                  className={css('loading-overlay')}
+                  style={{
+                    opacity: this.state.coloringReady ? 0 : 1,
+                    pointerEvents: this.state.coloringReady ? 'none' : 'auto',
+                  }}
+                >
+                  <Loading />
+                </div>
               </div>
               <Labels viewer={this.viewer} accession={this.name} />
             </div>
@@ -369,4 +466,8 @@ class StructureView extends PureComponent<Props> {
   }
 }
 
-export default StructureView;
+const mapStateToProps = (state: GlobalState) => ({
+  afConfidenceChainFilter: afConfidenceChainFilterSelector(state),
+});
+
+export default connect(mapStateToProps)(StructureView);

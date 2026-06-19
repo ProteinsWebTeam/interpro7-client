@@ -1,6 +1,8 @@
 import * as types from 'actions/types';
 import parseValueFromInput from './parse-value-from-input';
 import {
+  AfConfidenceChainFilterAction,
+  AfConfidenceChainFilterValue,
   AlphafoldModelCountAction,
   DataProgressAction,
   DownloadAction,
@@ -130,6 +132,14 @@ export const resetSettings = (value: unknown) =>
     type: types.RESET_SETTINGS,
     value,
   }) as SettingsAction;
+
+export const setAfConfidenceChainFilter = (
+  filter: AfConfidenceChainFilterValue,
+) =>
+  ({
+    type: types.SET_AF_CONFIDENCE_CHAIN_FILTER,
+    filter,
+  }) as AfConfidenceChainFilterAction;
 
 // dataProgress
 export const dataProgressInfo = (

@@ -31,6 +31,15 @@
   }
 }
 
+.icon-bluesky {
+  width: 16px;
+  height: 16px;
+  background: url(../../images/icons/bluesky-icon.svg) no-repeat;
+  background-size: 100%;
+  display: inline-block;
+  color: #1779ba;
+}
+
 @media screen and (min-width: 39.9375em) {
   .flex-box:first-of-type {
     margin-right: 1rem;
