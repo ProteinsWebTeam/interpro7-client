@@ -2,3 +2,16 @@ div.flex-space-evenly {
   display: flex;
   justify-content: space-evenly;
 }
+
+div.captcha {
+  display: flex;
+  justify-content: flex-start;
+}
+
+form.locked {
+  min-height: 50vh;
+}
+
+div.form-fields.hidden {
+  visibility: hidden;
+}
