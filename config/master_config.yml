@@ -1,6 +1,6 @@
 googleAnalytics: G-JD9QTGRJ05
 hcaptchaSiteKey: '0486ab3e-27ac-41b4-a228-4b0ef6f29f0c'
-hcaptchaHost: '/www.ebi.ac.uk/interpro/'
+hcaptchaHost: 'www.ebi.ac.uk'
 
 root:
   website: https://www.ebi.ac.uk/interpro/
