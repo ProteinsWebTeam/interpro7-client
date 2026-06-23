@@ -12,7 +12,7 @@ ARG CONFIG_FILE=config/dev_config.yml
 COPY $CONFIG_FILE config.yml
 
 RUN npx patch-package
-RUN npm run build
+RUN npm run deploy
 
 FROM nginx:1.27-alpine
 COPY --from=build /app/build /usr/share/nginx/html
