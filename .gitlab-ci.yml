@@ -13,6 +13,7 @@ build:
     - echo "$EBI_REGISTRY_PASSWORD" | docker login -u "$EBI_REGISTRY_USER" --password-stdin dockerhub.ebi.ac.uk
     - docker build -f Dockerfile -t "dockerhub.ebi.ac.uk/interpro/interpro-client:$CI_COMMIT_SHA" .
     - docker push "dockerhub.ebi.ac.uk/interpro/interpro-client:$CI_COMMIT_SHA"
+    - docker push "dockerhub.ebi.ac.uk/interpro/interpro-client:latest"
 
 deploy:
   stage: deploy
