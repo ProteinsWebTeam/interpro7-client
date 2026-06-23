@@ -6,11 +6,11 @@ ENV PUPPETEER_SKIP_DOWNLOAD=true
 COPY package*.json ./
 RUN npm ci
 
+COPY . .
+
 ARG CONFIG_FILE=config/dev_config.yml
 COPY $CONFIG_FILE config.yml
 
-COPY . .
-COPY config.yml.example config.yml
 RUN npx patch-package
 RUN npm run build
 
