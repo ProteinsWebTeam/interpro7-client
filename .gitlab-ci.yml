@@ -1,14 +1,37 @@
 stages:
+  - install
   - build
   - deploy
+
+install:
+  stage: install
+  image: node:19          
+  tags:
+    - docker
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+  variables:
+    HUSKY: "0"
+    PUPPETEER_SKIP_DOWNLOAD: "true"
+  script:
+    - cp config.yml.example config.yml
+    - npm ci
+    - npx patch-package
+  artifacts:
+    paths:
+      - node_modules/
+      - config.yml
+    expire_in: 1 hour
 
 build:
   stage: build
   image: docker:27
   tags:
     - docker
+  needs:
+    - install
   rules:
-    - if: '$CI_COMMIT_BRANCH == "dev"'     
+    - if: '$CI_COMMIT_BRANCH == "dev"'
   script:
     - echo "$EBI_REGISTRY_PASSWORD" | docker login -u "$EBI_REGISTRY_USER" --password-stdin dockerhub.ebi.ac.uk
     - docker build -f Dockerfile -t "dockerhub.ebi.ac.uk/interpro/interpro-client:$CI_COMMIT_SHA" .
