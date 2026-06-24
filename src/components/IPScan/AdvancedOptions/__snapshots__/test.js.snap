@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<AdvancedOptions /> should render 1`] = `
 <section>
@@ -121,7 +121,42 @@ exports[`<AdvancedOptions /> should render 1`] = `
         className="new-fieldset"
       >
         <legend>
-          Other sequence features
+          CATH-based functional families
+        </legend>
+      </fieldset>
+      <fieldset
+        className="new-fieldset"
+      >
+        <legend>
+          Coiled-coil regions
+        </legend>
+      </fieldset>
+      <fieldset
+        className="new-fieldset"
+      >
+        <legend>
+          Intrinsically disordered regions
+        </legend>
+      </fieldset>
+      <fieldset
+        className="new-fieldset"
+      >
+        <legend>
+          Signal peptides and transmembrane regions
+        </legend>
+      </fieldset>
+      <fieldset
+        className="new-fieldset"
+      >
+        <legend>
+          Spurious proteins
+        </legend>
+      </fieldset>
+      <fieldset
+        className="new-fieldset"
+      >
+        <legend>
+          Additional conserved site annotations
         </legend>
       </fieldset>
     </fieldset>
