@@ -16,92 +16,82 @@ import localParent from '../Search/style.css';
 
 const css = cssBinder(local, localParent);
 
-const mdb1Values = new Set([
-  'CDD',
-  'HAMAP',
-  'Panther',
-  'PfamA',
-  'PIRSF',
-  'PRINTS',
-  'PrositeProfiles',
-  'SMART',
-  'NCBIfam',
-  'PrositePatterns',
-  'SFLD',
-]);
-const mdb2Values = new Set(['Gene3d', 'SuperFamily']);
-const otherValues = new Set([
-  'Coils',
-  'MobiDBLite',
-  'Phobius',
-  'SignalP',
-  'TMHMM',
-]);
-const ignoreList = new Set();
+/* Application categories used to group the checkboxes in the UI. The names
+match the values returned by the InterProScan `parameterdetails/appl`
+endpoint. Only applications that need a dedicated section are listed here;
+anything else is treated as a member database and shown under
+"Families, domains, sites & repeats". */
+const APPLICATION_CATEGORIES = {
+  structuralDomains: new Set(['CATH-Gene3D', 'SUPERFAMILY']),
+  functionalFamilies: new Set(['CATH-FunFam']),
+  coiledCoil: new Set(['COILS']),
+  disorderedRegions: new Set(['MobiDB-lite']),
+  signalAndTransmembrane: new Set(['Phobius', 'SignalP-Euk', 'SignalP-Prok']),
+  spuriousProteins: new Set(['AntiFam']),
+  additionalSites: new Set(['PIRSR']),
+} as const;
 
-const labels = new Map([
-  ['PfamA', 'Pfam'],
-  ['Panther', 'PANTHER'],
-  ['SuperFamily', 'SUPERFAMILY'],
-  ['Gene3d', 'CATH-Gene3D'],
-  ['PrositeProfiles', 'PROSITE profiles'],
-  ['PrositePatterns', 'PROSITE patterns'],
-  ['FunFam', 'CATH-FunFam'],
-]);
+type ApplicationCategory = keyof typeof APPLICATION_CATEGORIES | 'families';
 
-const excludeFromOptions = ['SignalP'];
-
-const sortOptions = (a: { value: string }, b: { value: string }) => {
-  return a.value[0].toLowerCase() < b.value[0].toLowerCase() ? -1 : 1;
+const categoryFor = (value: string): ApplicationCategory => {
+  for (const [category, values] of Object.entries(APPLICATION_CATEGORIES)) {
+    if (values.has(value)) return category as ApplicationCategory;
+  }
+  // Default: treat unknown applications as member databases.
+  return 'families';
 };
+
+type GroupedApplications = Record<
+  ApplicationCategory,
+  Array<IprscanParameterValue>
+>;
+
+const sortOptions = (a: IprscanParameterValue, b: IprscanParameterValue) =>
+  (a.label || a.value).localeCompare(b.label || b.value);
 
 const groupApplications = (
   applications: Array<IprscanParameterValue>,
   initialOptions?: InterProLocationSearch,
-) => {
-  let mdb1 = [];
-  let mdb2 = [];
-  const other = [];
-  const noCategory = [];
-  let otherFeatures = [];
+): GroupedApplications => {
+  const groups: GroupedApplications = {
+    families: [],
+    structuralDomains: [],
+    functionalFamilies: [],
+    coiledCoil: [],
+    disorderedRegions: [],
+    signalAndTransmembrane: [],
+    spuriousProteins: [],
+    additionalSites: [],
+  };
   const appOptions = initialOptions?.applications as Array<string>;
 
   for (const application of applications) {
     if (appOptions?.length) {
       application.defaultValue = appOptions.includes(application.value);
     }
-    if (mdb1Values.has(application.value)) mdb1.push(application);
-    else if (mdb2Values.has(application.value)) mdb2.push(application);
-    else if (otherValues.has(application.value)) other.push(application);
-    else if (!ignoreList.has(application.value)) noCategory.push(application);
+    groups[categoryFor(application.value)].push(application);
   }
 
-  mdb1 = mdb1.sort(sortOptions);
-  mdb2 = mdb2.sort(sortOptions);
-  otherFeatures = other
-    .concat(noCategory)
-    .filter((o) => !excludeFromOptions.includes(o.value))
-    .sort(sortOptions);
-  return { mdb1, mdb2, otherFeatures };
+  for (const category of Object.keys(groups) as Array<ApplicationCategory>) {
+    groups[category].sort(sortOptions);
+  }
+  return groups;
 };
 
 const applicationToCheckbox = ({
   value,
+  label,
   defaultValue,
   properties,
-}: {
-  value: string;
-  defaultValue: boolean;
-  properties: { properties: Array<{ value: string }> };
-}) => (
+}: IprscanParameterValue) => (
   <AdvancedOption
     name="appl"
     value={value}
     defaultChecked={defaultValue}
-    title={properties && properties.properties[0].value}
+    title={properties?.properties?.[0]?.value}
     key={value}
   >
-    {labels.get(value) || value}
+    {label || value}
   </AdvancedOption>
 );
 
@@ -135,10 +125,7 @@ export const AdvancedOptions = ({
   const { loading, payload, ok } = data;
   if (loading) return 'Loading…';
   if (!ok || !payload) return 'Failed…';
-  const { mdb1, mdb2, otherFeatures } = groupApplications(
-    payload.values.values,
-    initialOptions,
-  );
+  const groups = groupApplications(payload.values.values, initialOptions);
   const selectAll = (event: Event) => {
     event.preventDefault();
     toggleAll(true, fieldSetRef.current);
@@ -207,16 +194,36 @@ export const AdvancedOptions = ({
             <legend>Member databases</legend>
             <fieldset className={css('new-fieldset')}>
               <legend>Families, domains, sites & repeats</legend>
-              {mdb1.map(applicationToCheckbox)}
+              {groups.families.map(applicationToCheckbox)}
             </fieldset>
             <fieldset className={css('new-fieldset')}>
               <legend>Structural domains</legend>
-              {mdb2.map(applicationToCheckbox)}
+              {groups.structuralDomains.map(applicationToCheckbox)}
             </fieldset>
           </fieldset>
           <fieldset className={css('new-fieldset')}>
-            <legend>Other sequence features</legend>
-            {otherFeatures.map(applicationToCheckbox)}
+            <legend>CATH-based functional families</legend>
+            {groups.functionalFamilies.map(applicationToCheckbox)}
+          </fieldset>
+          <fieldset className={css('new-fieldset')}>
+            <legend>Coiled-coil regions</legend>
+            {groups.coiledCoil.map(applicationToCheckbox)}
+          </fieldset>
+          <fieldset className={css('new-fieldset')}>
+            <legend>Intrinsically disordered regions</legend>
+            {groups.disorderedRegions.map(applicationToCheckbox)}
+          </fieldset>
+          <fieldset className={css('new-fieldset')}>
+            <legend>Signal peptides and transmembrane regions</legend>
+            {groups.signalAndTransmembrane.map(applicationToCheckbox)}
+          </fieldset>
+          <fieldset className={css('new-fieldset')}>
+            <legend>Spurious proteins</legend>
+            {groups.spuriousProteins.map(applicationToCheckbox)}
+          </fieldset>
+          <fieldset className={css('new-fieldset')}>
+            <legend>Additional conserved site annotations</legend>
+            {groups.additionalSites.map(applicationToCheckbox)}
           </fieldset>
         </fieldset>
       </details>
