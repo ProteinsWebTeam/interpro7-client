@@ -199,8 +199,8 @@ export const mergeData = (
       });
     }
     if (RESIDUE_ONLY_DBS.includes(processedMatch.source_database)) continue;
-    if (NOT_MEMBER_DBS.has(library)) {
-      processedMatch.source_database = library; // Making sure the change matches the ignore list.
+    if (NOT_MEMBER_DBS.has(library.toLowerCase())) {
+      processedMatch.source_database = library.toLowerCase(); // Making sure the change matches the ignore list.
       if (processedMatch.accession in otherFeatures) {
         otherFeatures[processedMatch.accession].locations.push(
           ...processedMatch.locations,
