@@ -68,8 +68,8 @@ export const typeNameToSectionName: Record<string, string> = {
     'Coiled-coils, Signal Peptides and Transmembrane Regions',
   'short linear motifs': 'Short Linear Motifs',
   'pfam-n': 'Pfam-N',
-  funfam: 'FunFam',
-  'cath-funfam': 'FunFam',
+  funfam: 'CATH functional families',
+  'cath-funfam': 'CATH functional families',
   'external sources': 'External Sources',
   'secondary structure': 'Secondary Structure',
 };
