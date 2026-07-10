@@ -92,7 +92,7 @@ class TextSearchBox extends PureComponent<Props, State> {
     // }
     // searchStorage.setValue(tmpSearchHistory);
 
-    // Handle automatic redirections links except for profile and prosite cases (regex can't distinguish between them)
+    // Handle automatic redirection except for profile and prosite cases (regex can't distinguish between them)
     let directLinkDescription = !value?.match(/^PS[0-9]{5}$/)
       ? getURLByAccession(value)
       : null;
