@@ -138,7 +138,7 @@ export class _SideIcons extends PureComponent {
     this.setState({ searchValue: value });
 
     // Handle automatic redirection except for profile and prosite cases (regex can't distinguish between them)
-    let directLinkDescription = !value?.match(/^PS[0-9]{5}$/)
+    const directLinkDescription = !value?.match(/^PS[0-9]{5}$/)
       ? getURLByAccession(value)
       : null;
     if (directLinkDescription) {
