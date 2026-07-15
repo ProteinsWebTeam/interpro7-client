@@ -212,6 +212,12 @@ exports[`<SummaryProtein /> should render 1`] = `
             label="Download matches (TSV)"
             minWidth="200px"
             primary="entry"
+            search={
+              {
+                "extra_features": "",
+                "interpro_n": "",
+              }
+            }
             secondary="protein"
           />
         </label>

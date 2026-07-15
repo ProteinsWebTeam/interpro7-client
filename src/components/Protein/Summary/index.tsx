@@ -286,6 +286,7 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
                   },
                   entry: { integration: 'all' },
                 }}
+                search={{ interpro_n: '', extra_features: '' }}
                 count={metadata.counters!.entries as number}
                 fileType="tsv"
                 primary="entry"

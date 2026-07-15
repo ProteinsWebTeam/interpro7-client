@@ -5,7 +5,12 @@ import { throttle } from 'lodash-es';
 import { sleep } from 'timing-functions';
 
 import getTableAccess, { DownloadJobs } from 'storage/idb';
-import { object2TSV, columns } from './object2TSV';
+import {
+  object2TSV,
+  columns,
+  interProNMatchesToRows,
+  extraFeaturesToRows,
+} from './object2TSV';
 
 // $FlowFixMe
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
@@ -207,6 +212,10 @@ const downloadContent =
       let next = format(firstPage);
       let errorCount = 0;
       let version = null;
+      // The interpro_n and extra_features extensions are returned on every page when requested,
+      // but they are the same for all pages, so we don't want to process them on every page
+      let interProNHandled = false;
+      let extraFeaturesHandled = false;
       while (next) {
         try {
           const response = await fetch(next);
@@ -228,6 +237,42 @@ const downloadContent =
             // use `totalCount + 1` to not finish at exactly 1 to account for the
             // time needed to create the blob
             onProgress({ part, progress: ++i / (totalCount + 1) });
+          }
+          // Append the InterPro-N matches and the extra features rows (only for the TSV), reusing the
+          // same columns as the standard matches and flagging them via the db
+          // column.
+          if (fileType === 'tsv' && !interProNHandled && payload.interpro_n) {
+            interProNHandled = true;
+            const firstProtein = payload.results?.[0]?.proteins?.[0];
+            const interProNRows = interProNMatchesToRows(
+              payload.interpro_n,
+              firstProtein?.accession,
+              firstProtein?.protein_length,
+            );
+            for (const part of processResults(interProNRows)) {
+              // eslint-disable-next-line
+              if (canceled.has(key)) return;
+              onProgress({ part, progress: ++i / (totalCount + 1) });
+            }
+          }
+
+          if (
+            fileType === 'tsv' &&
+            !extraFeaturesHandled &&
+            payload.extra_features
+          ) {
+            extraFeaturesHandled = true;
+            const firstProtein = payload.results?.[0]?.proteins?.[0];
+            const extraFeatureRows = extraFeaturesToRows(
+              payload.extra_features,
+              firstProtein?.accession,
+              firstProtein?.protein_length,
+            );
+            for (const part of processResults(extraFeatureRows)) {
+              // eslint-disable-next-line
+              if (canceled.has(key)) return;
+              onProgress({ part, progress: ++i / (totalCount + 1) });
+            }
           }
           // If it's the last page, it will be null, so we exit the loop
           next = payload.next;
