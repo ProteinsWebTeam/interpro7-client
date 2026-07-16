@@ -203,7 +203,7 @@ const downloadContent =
 
       const key = [url, fileType, subset].filter(Boolean).join('|');
       // Counters for progress information
-      let totalCount;
+      let totalCount = 0;
       let i = 0;
       // Create a function to transform API response into processed file part
       const processResults = processResultsFor(fileType, subset, endpoint);
