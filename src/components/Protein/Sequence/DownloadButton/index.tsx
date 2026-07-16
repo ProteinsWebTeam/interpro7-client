@@ -28,11 +28,8 @@ const DownloadButton = ({ accession, sequence }: Props) => {
         }),
       )}
     >
-      <span
-        className={css('icon', 'icon-common', 'icon-download')}
-        data-icon="&#xf019;"
-      />
-      &nbsp;Download sequence (FASTA)
+      <span className={css('icon', 'icon-common', 'icon-download-alt')} />
+      &nbsp; Download sequence (FASTA)
     </a>
   );
 };

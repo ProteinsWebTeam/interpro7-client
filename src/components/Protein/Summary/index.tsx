@@ -11,7 +11,10 @@ import Link from 'components/generic/Link';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
-import DomainsOnProtein from 'components/Related/DomainsOnProtein';
+import DomainsOnProtein, {
+  getExtraURL,
+  getInterProNMatches,
+} from 'components/Related/DomainsOnProtein';
 
 import loadable from 'higherOrder/loadable';
 import {
@@ -40,7 +43,9 @@ import local from './style.css';
 import summary from 'styles/summary.css';
 import BaseLink from 'components/ExtLink/BaseLink';
 
-const css = cssBinder(summary, fonts, ipro, local);
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
+
+const css = cssBinder(summary, fonts, ipro, local, buttonCSS);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -77,9 +82,17 @@ type Props = {
   loading: boolean;
 };
 
-interface LoadedProps extends Props {}
+interface LoadedProps
+  extends Props,
+    LoadDataProps<ExtraFeaturesPayload, 'Features'>,
+    LoadDataProps<InterProNMatches, 'InterProNMatches'> {}
 
-export const SummaryProtein = ({ data, loading }: LoadedProps) => {
+export const SummaryProtein = ({
+  data,
+  loading,
+  dataFeatures,
+  dataInterProNMatches,
+}: LoadedProps) => {
   const comparisonContainerRef = useRef<HTMLElement | null>(null);
   const [matchesLoaded, setMatchesLoaded] = useState(false);
   const [families, setFamilies] = useState<Array<
@@ -275,9 +288,9 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
               title="Search sequence with InterProScan"
               minWidth={MIN_WIDTH}
             />
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label style={{ marginBottom: '0.4rem' }}>
+            <label style={{ marginBottom: '0.3rem' }}>
               <FileExporter
+                className={css('vf-button', 'vf-button--secondary')}
                 description={{
                   main: { key: 'protein' },
                   protein: {
@@ -286,7 +299,10 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
                   },
                   entry: { integration: 'all' },
                 }}
-                search={{ interpro_n: '', extra_features: '' }}
+                extraData={{
+                  interpro_n: dataInterProNMatches?.payload || undefined,
+                  extra_features: dataFeatures?.payload || undefined,
+                }}
                 count={metadata.counters!.entries as number}
                 fileType="tsv"
                 primary="entry"
@@ -295,6 +311,7 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
                 label="Download matches (TSV)"
               />
             </label>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <DownloadButton
               sequence={metadata.sequence}
               accession={metadata.accession}
@@ -317,4 +334,12 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
   );
 };
 
-export default SummaryProtein;
+export default loadData<ExtraFeaturesPayload, 'Features'>({
+  getUrl: getExtraURL('extra_features'),
+  propNamespace: 'Features',
+} as LoadDataParameters)(
+  loadData<InterProNMatches, 'InterProNMatches'>({
+    getUrl: getInterProNMatches,
+    propNamespace: 'InterProNMatches',
+  } as LoadDataParameters)(SummaryProtein),
+);

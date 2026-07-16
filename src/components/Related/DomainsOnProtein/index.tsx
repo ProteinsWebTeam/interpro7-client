@@ -274,7 +274,7 @@ const getRelatedEntriesURL = createSelector(
   },
 );
 
-const getExtraURL = (query: string) =>
+export const getExtraURL = (query: string) =>
   createSelector(
     (state: GlobalState) => state.settings.api,
     (state: GlobalState) => state.customLocation.description,
@@ -325,7 +325,7 @@ const getPTMPayload = createSelector(
   },
 );
 
-const getInterProNMatches = createSelector(
+export const getInterProNMatches = createSelector(
   (state: GlobalState) => state.settings.api,
   (state: GlobalState) => state.customLocation.description.protein.accession,
   (

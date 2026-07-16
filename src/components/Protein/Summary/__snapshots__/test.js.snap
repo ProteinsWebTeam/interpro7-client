@@ -188,11 +188,12 @@ exports[`<SummaryProtein /> should render 1`] = `
         <label
           style={
             {
-              "marginBottom": "0.4rem",
+              "marginBottom": "0.3rem",
             }
           }
         >
           <FileExporter
+            className="vf-button vf-button--secondary"
             count={13}
             description={
               {
@@ -208,16 +209,16 @@ exports[`<SummaryProtein /> should render 1`] = `
                 },
               }
             }
+            extraData={
+              {
+                "extra_features": undefined,
+                "interpro_n": undefined,
+              }
+            }
             fileType="tsv"
             label="Download matches (TSV)"
             minWidth="200px"
             primary="entry"
-            search={
-              {
-                "extra_features": "",
-                "interpro_n": "",
-              }
-            }
             secondary="protein"
           />
         </label>

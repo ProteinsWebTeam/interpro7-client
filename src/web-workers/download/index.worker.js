@@ -188,7 +188,7 @@ const mutatePayloadTo3rdPartyAPI = (payload, endpoint, page) => {
 };
 // the `_` is just to make flow happy
 const downloadContent =
-  (onProgress, onSuccess, onError) =>
+  (onProgress, onSuccess, onError, extraData = {}) =>
   // eslint-disable-next-line max-statements
   async (url, fileType, subset, endpoint, _) => {
     try {
@@ -212,10 +212,8 @@ const downloadContent =
       let next = format(firstPage);
       let errorCount = 0;
       let version = null;
-      // The interpro_n and extra_features extensions are returned on every page when requested,
-      // but they are the same for all pages, so we don't want to process them on every page
-      let interProNHandled = false;
-      let extraFeaturesHandled = false;
+      // The protein the extra rows are attached to, taken from the first page
+      let firstProtein = null;
       while (next) {
         try {
           const response = await fetch(next);
@@ -230,6 +228,7 @@ const downloadContent =
           version = response.headers.get('InterPro-Version');
           mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
           totalCount = payload.count;
+          if (!firstProtein) firstProtein = payload.results?.[0]?.proteins?.[0];
           for (const part of processResults(payload.results)) {
             // Check if it was canceled, if so, stop everything and return
             // eslint-disable-next-line
@@ -237,42 +236,6 @@ const downloadContent =
             // use `totalCount + 1` to not finish at exactly 1 to account for the
             // time needed to create the blob
             onProgress({ part, progress: ++i / (totalCount + 1) });
-          }
-          // Append the InterPro-N matches and the extra features rows (only for the TSV), reusing the
-          // same columns as the standard matches and flagging them via the db
-          // column.
-          if (fileType === 'tsv' && !interProNHandled && payload.interpro_n) {
-            interProNHandled = true;
-            const firstProtein = payload.results?.[0]?.proteins?.[0];
-            const interProNRows = interProNMatchesToRows(
-              payload.interpro_n,
-              firstProtein?.accession,
-              firstProtein?.protein_length,
-            );
-            for (const part of processResults(interProNRows)) {
-              // eslint-disable-next-line
-              if (canceled.has(key)) return;
-              onProgress({ part, progress: ++i / (totalCount + 1) });
-            }
-          }
-
-          if (
-            fileType === 'tsv' &&
-            !extraFeaturesHandled &&
-            payload.extra_features
-          ) {
-            extraFeaturesHandled = true;
-            const firstProtein = payload.results?.[0]?.proteins?.[0];
-            const extraFeatureRows = extraFeaturesToRows(
-              payload.extra_features,
-              firstProtein?.accession,
-              firstProtein?.protein_length,
-            );
-            for (const part of processResults(extraFeatureRows)) {
-              // eslint-disable-next-line
-              if (canceled.has(key)) return;
-              onProgress({ part, progress: ++i / (totalCount + 1) });
-            }
           }
           // If it's the last page, it will be null, so we exit the loop
           next = payload.next;
@@ -288,6 +251,27 @@ const downloadContent =
           }
         }
       }
+      // Append the InterPro-N matches and the extra features rows (only for the
+      // TSV), reusing the same columns as the standard matches and flagging them
+      // via the db column. They come from the responses already cached by the page.
+      if (fileType === 'tsv') {
+        const extraRows = [
+          ...interProNMatchesToRows(
+            extraData.interpro_n,
+            firstProtein?.accession,
+            firstProtein?.protein_length,
+          ),
+          ...extraFeaturesToRows(
+            extraData.extra_features,
+            firstProtein?.accession,
+            firstProtein?.protein_length,
+          ),
+        ];
+        for (const part of processResults(extraRows)) {
+          if (canceled.has(key)) return;
+          onProgress({ part, progress: ++i / (totalCount + 1) });
+        }
+      }
       onSuccess({ key, version: Number(version) });
     } catch (error) {
       onError(error);
@@ -300,7 +284,14 @@ const postProgress = throttle(
 );
 
 // Download manager, send messages from there
-const download = async (url, fileType, subset, endpoint, originURL) => {
+const download = async (
+  url,
+  fileType,
+  subset,
+  endpoint,
+  originURL,
+  extraData,
+) => {
   const action = createActionCallerFor(url, fileType, subset, endpoint);
   const onError = (error) => {
     postProgress(action(downloadProgress, 1));
@@ -338,6 +329,7 @@ const download = async (url, fileType, subset, endpoint, originURL) => {
           self.postMessage(action(downloadSuccess, newDownload));
         },
         onError,
+        extraData,
       ),
     );
   } catch (error) {
@@ -354,6 +346,7 @@ const main = ({ data }) => {
         data.subset,
         data.endpoint,
         data.originURL,
+        data.extraData,
       );
       break;
     case DOWNLOAD_DELETE:
