@@ -201,6 +201,22 @@ const downloadContent =
         });
       }
 
+      const extraRows =
+        fileType === 'tsv'
+          ? [
+              ...interProNMatchesToRows(
+                extraData.interpro_n,
+                extraData.protein?.accession,
+                extraData.protein?.length,
+              ),
+              ...extraFeaturesToRows(
+                extraData.extra_features,
+                extraData.protein?.accession,
+                extraData.protein?.length,
+              ),
+            ]
+          : [];
+
       const key = [url, fileType, subset].filter(Boolean).join('|');
       // Counters for progress information
       let totalCount = 0;
@@ -212,8 +228,6 @@ const downloadContent =
       let next = format(firstPage);
       let errorCount = 0;
       let version = null;
-      // The protein the extra rows are attached to, taken from the first page
-      let firstProtein = null;
       while (next) {
         try {
           const response = await fetch(next);
@@ -227,8 +241,7 @@ const downloadContent =
           const payload = await response.json();
           version = response.headers.get('InterPro-Version');
           mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
-          totalCount = payload.count;
-          if (!firstProtein) firstProtein = payload.results?.[0]?.proteins?.[0];
+          totalCount = payload.count + extraRows.length;
           for (const part of processResults(payload.results)) {
             // Check if it was canceled, if so, stop everything and return
             // eslint-disable-next-line
@@ -251,26 +264,9 @@ const downloadContent =
           }
         }
       }
-      // Append the InterPro-N matches and the extra features rows (only for the
-      // TSV), reusing the same columns as the standard matches and flagging them
-      // via the db column. They come from the responses already cached by the page.
-      if (fileType === 'tsv') {
-        const extraRows = [
-          ...interProNMatchesToRows(
-            extraData.interpro_n,
-            firstProtein?.accession,
-            firstProtein?.protein_length,
-          ),
-          ...extraFeaturesToRows(
-            extraData.extra_features,
-            firstProtein?.accession,
-            firstProtein?.protein_length,
-          ),
-        ];
-        for (const part of processResults(extraRows)) {
-          if (canceled.has(key)) return;
-          onProgress({ part, progress: ++i / (totalCount + 1) });
-        }
+      for (const part of processResults(extraRows)) {
+        if (canceled.has(key)) return;
+        onProgress({ part, progress: ++i / (totalCount + 1) });
       }
       onSuccess({ key, version: Number(version) });
     } catch (error) {

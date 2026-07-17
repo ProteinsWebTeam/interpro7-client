@@ -76,6 +76,7 @@ export const SET_INITIAL_DOWNLOADS = 'SET_INITIAL_DOWNLOADS';
 export interface DownloadExtraData {
   interpro_n?: InterProNMatches;
   extra_features?: ExtraFeaturesPayload;
+  protein?: { accession: string; length: number };
 }
 
 export interface DownloadAction

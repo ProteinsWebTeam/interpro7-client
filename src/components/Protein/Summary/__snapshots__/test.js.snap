@@ -209,12 +209,7 @@ exports[`<SummaryProtein /> should render 1`] = `
                 },
               }
             }
-            extraData={
-              {
-                "extra_features": undefined,
-                "interpro_n": undefined,
-              }
-            }
+            extraData={{}}
             fileType="tsv"
             label="Download matches (TSV)"
             minWidth="200px"
@@ -289,6 +284,7 @@ exports[`<SummaryProtein /> should render 1`] = `
           },
         }
       }
+      onExtraDataLoaded={[Function]}
       onFamiliesFound={[Function]}
       onMatchesLoaded={[Function]}
     />

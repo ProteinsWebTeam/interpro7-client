@@ -24,6 +24,7 @@ import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variatio
 import { proteinViewerReorganization } from './utils';
 import { connect } from 'react-redux';
 import { changeSettingsRaw } from 'actions/creators';
+import { DownloadExtraData } from 'actions/types';
 
 type Props = PropsWithChildren<{
   mainData: {
@@ -35,6 +36,7 @@ type Props = PropsWithChildren<{
     results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[],
   ) => void;
   onFamiliesFound?: (families: Record<string, unknown>[]) => void;
+  onExtraDataLoaded?: (extraData: DownloadExtraData) => void;
   title?: string;
   matchTypeSettings: MatchTypeUISettings;
   colorDomainsBy: string;
@@ -74,6 +76,7 @@ const DomainOnProteinWithoutData = ({
   dataInterProNMatches,
   onMatchesLoaded,
   onFamiliesFound,
+  onExtraDataLoaded,
   children,
   externalSourcesData,
   title,
@@ -119,6 +122,18 @@ const DomainOnProteinWithoutData = ({
       }
     }
   }, [data, processData]);
+
+  useEffect(() => {
+    if (dataFeatures?.loading || dataInterProNMatches?.loading) return;
+    onExtraDataLoaded?.({
+      interpro_n: dataInterProNMatches?.payload || undefined,
+      extra_features: dataFeatures?.payload || undefined,
+      protein: {
+        accession: mainData.metadata.accession,
+        length: mainData.metadata.length,
+      },
+    });
+  }, [dataFeatures, dataInterProNMatches, mainData]);
 
   if (data?.loading && dataFeatures?.loading) return <Loading />;
   const payload = data?.payload as PayloadList<

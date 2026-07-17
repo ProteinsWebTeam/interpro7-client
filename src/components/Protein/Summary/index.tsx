@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash-es';
 import { format } from 'url';
-import loadData from 'higherOrder/loadData/ts';
 import config from 'config';
+import { DownloadExtraData } from 'actions/types';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
@@ -11,10 +11,7 @@ import Link from 'components/generic/Link';
 import ProteinEntryHierarchy from 'components/Protein/ProteinEntryHierarchy';
 
 import { UniProtLink } from 'components/ExtLink/patternLinkWrapper';
-import DomainsOnProtein, {
-  getExtraURL,
-  getInterProNMatches,
-} from 'components/Related/DomainsOnProtein';
+import DomainsOnProtein from 'components/Related/DomainsOnProtein';
 
 import loadable from 'higherOrder/loadable';
 import {
@@ -82,19 +79,10 @@ type Props = {
   loading: boolean;
 };
 
-interface LoadedProps
-  extends Props,
-    LoadDataProps<ExtraFeaturesPayload, 'Features'>,
-    LoadDataProps<InterProNMatches, 'InterProNMatches'> {}
-
-export const SummaryProtein = ({
-  data,
-  loading,
-  dataFeatures,
-  dataInterProNMatches,
-}: LoadedProps) => {
+export const SummaryProtein = ({ data, loading }: Props) => {
   const comparisonContainerRef = useRef<HTMLElement | null>(null);
   const [matchesLoaded, setMatchesLoaded] = useState(false);
+  const [extraData, setExtraData] = useState<DownloadExtraData>({});
   const [families, setFamilies] = useState<Array<
     Record<string, unknown>
   > | null>(null);
@@ -102,6 +90,12 @@ export const SummaryProtein = ({
 
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
+
+  // Handle count and download for proteins with no matches, but with InterPro-N matches or extra features (only for TSV)
+  const downloadableCount =
+    (metadata.counters!.entries as number) +
+    Object.keys(extraData.interpro_n || {}).length +
+    Object.keys(extraData.extra_features || {}).length;
 
   const getSubfamiliesFromMatches = (
     results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[],
@@ -288,6 +282,7 @@ export const SummaryProtein = ({
               title="Search sequence with InterProScan"
               minWidth={MIN_WIDTH}
             />
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label style={{ marginBottom: '0.3rem' }}>
               <FileExporter
                 className={css('vf-button', 'vf-button--secondary')}
@@ -299,11 +294,8 @@ export const SummaryProtein = ({
                   },
                   entry: { integration: 'all' },
                 }}
-                extraData={{
-                  interpro_n: dataInterProNMatches?.payload || undefined,
-                  extra_features: dataFeatures?.payload || undefined,
-                }}
-                count={metadata.counters!.entries as number}
+                extraData={extraData}
+                count={downloadableCount}
                 fileType="tsv"
                 primary="entry"
                 secondary="protein"
@@ -311,7 +303,6 @@ export const SummaryProtein = ({
                 label="Download matches (TSV)"
               />
             </label>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <DownloadButton
               sequence={metadata.sequence}
               accession={metadata.accession}
@@ -324,6 +315,7 @@ export const SummaryProtein = ({
           mainData={data}
           onMatchesLoaded={getSubfamiliesFromMatches}
           onFamiliesFound={handleInterProFamilies}
+          onExtraDataLoaded={setExtraData}
         />
       </section>
       {metadata.go_terms && (
@@ -334,12 +326,4 @@ export const SummaryProtein = ({
   );
 };
 
-export default loadData<ExtraFeaturesPayload, 'Features'>({
-  getUrl: getExtraURL('extra_features'),
-  propNamespace: 'Features',
-} as LoadDataParameters)(
-  loadData<InterProNMatches, 'InterProNMatches'>({
-    getUrl: getInterProNMatches,
-    propNamespace: 'InterProNMatches',
-  } as LoadDataParameters)(SummaryProtein),
-);
+export default SummaryProtein;
