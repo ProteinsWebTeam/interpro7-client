@@ -659,70 +659,6 @@ const results: Array<MenuItemProps> = [
   },
 ];
 
-const help: Array<MenuItemProps> = [
-  {
-    name: 'Tutorials & Webinars',
-    to: { description: { other: ['help', 'tutorial'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'Training',
-    to: { description: { other: ['help', 'training'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'FAQs',
-    to: { description: { other: ['help', 'faqs'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'Protein families game',
-    to: { description: { other: ['help', 'protein_families_game'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'Documentation',
-    to: { description: { other: ['help', 'documentation'] } },
-    activeClass: css('is-active'),
-  },
-];
-const about: Array<MenuItemProps> = [
-  {
-    name: 'InterPro',
-    to: { description: { other: ['about', 'interpro'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'InterProScan',
-    to: { description: { other: ['about', 'interproscan'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'The InterPro Consortium',
-    to: { description: { other: ['about', 'consortium'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'Funding',
-    to: { description: { other: ['about', 'funding'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'License',
-    to: { description: { other: ['about', 'license'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'Privacy',
-    to: { description: { other: ['about', 'privacy'] } },
-    activeClass: css('is-active'),
-  },
-  {
-    name: 'Team',
-    to: { description: { other: ['about', 'team'] } },
-    activeClass: css('is-active'),
-  },
-];
 export const InterPro: Array<MenuItemProps> = [
   {
     to: { description: {} },
@@ -824,9 +760,7 @@ export const InterPro: Array<MenuItemProps> = [
 ];
 
 const _NOT_MEMBER_DBS = [
-  'PRODOM',
   'COILS',
-  'SCOP',
   'MOBIDB',
   'MOBIDB_LITE',
   'MOBIDB-LITE',
@@ -840,13 +774,8 @@ const _NOT_MEMBER_DBS = [
   'SIGNALP_GRAM_NEGATIVE',
   'PHOBIUS',
   'TMHMM',
-  'CATH',
-  'SWISS-MODEL',
-  'MODBASE',
-  'SMODEL',
   'FUNFAM',
   'CATH-FUNFAM',
-  'PFAM-N',
   'ALPHAFOLD',
   'ELM',
 ];

@@ -17,7 +17,7 @@ describe('<IPScanSearch />', () => {
           hostname: 'www.ebi.ac.uk',
           port: '443',
           protocol: 'https:',
-          root: '/Tools/services/rest/iprscan5/',
+          root: '/Tools/services/rest/iprscan6/',
         }}
         value={''}
       />,
