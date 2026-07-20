@@ -31,6 +31,7 @@ const MAX_EBI_PAGE_SIZE = 100;
 // Time to wait before retrying to get results from API when we have a problem
 const DELAY_WHEN_SOME_KIND_OF_PROBLEM = 60000; // 1 minute
 const REQUEST_TIMEOUT = 408;
+const NO_CONTENT = 204;
 const MAX_ERROR_COUNT_FOR_ONE_REQUEST = 3;
 const THROTTLE_TIME = 500; // half a second
 
@@ -236,6 +237,14 @@ const downloadContent =
             // …wait a bit…
             await sleep(DELAY_WHEN_SOME_KIND_OF_PROBLEM);
             // …then restart the loop with at the same URL
+            continue;
+          }
+          // No content: this page has no results (e.g. a protein with no
+          // standard matches), so there's nothing to parse as JSON.
+          if (response.status === NO_CONTENT) {
+            next = null;
+            errorCount = 0;
+            totalCount = extraRows.length;
             continue;
           }
           const payload = await response.json();
