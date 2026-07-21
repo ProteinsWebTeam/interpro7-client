@@ -6,6 +6,7 @@ import { format } from 'url';
 import { askNotificationPermission } from 'utils/browser-notifications';
 import { downloadSelector } from 'reducers/download';
 import { downloadURL } from 'actions/creators';
+import { DownloadExtraData } from 'actions/types';
 
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
 import blockEvent from 'utils/block-event';
@@ -40,6 +41,7 @@ type Props = {
   minWidth?: number | string;
   label?: string;
   showIcon?: boolean;
+  extraData?: DownloadExtraData;
 };
 
 type State = {
@@ -100,6 +102,7 @@ export class File extends PureComponent<Props, State> {
       !!this.props.subset,
       this.props.endpoint,
       window.location.href,
+      this.props.extraData,
     );
   });
 

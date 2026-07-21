@@ -188,11 +188,12 @@ exports[`<SummaryProtein /> should render 1`] = `
         <label
           style={
             {
-              "marginBottom": "0.4rem",
+              "marginBottom": "0.3rem",
             }
           }
         >
           <FileExporter
+            className="vf-button vf-button--secondary"
             count={13}
             description={
               {
@@ -208,6 +209,7 @@ exports[`<SummaryProtein /> should render 1`] = `
                 },
               }
             }
+            extraData={{}}
             fileType="tsv"
             label="Download matches (TSV)"
             minWidth="200px"
@@ -282,6 +284,7 @@ exports[`<SummaryProtein /> should render 1`] = `
           },
         }
       }
+      onExtraDataLoaded={[Function]}
       onFamiliesFound={[Function]}
       onMatchesLoaded={[Function]}
     />

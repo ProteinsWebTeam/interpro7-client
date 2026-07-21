@@ -2,6 +2,7 @@ import React from 'react';
 import File from 'components/File';
 import { SupportedExtensions } from 'components/File/FileButton';
 import { getNeededCountersForSubpages } from 'higherOrder/loadData/defaults/relatedCounters';
+import { DownloadExtraData } from 'actions/types';
 
 const endpoint: Partial<
   Record<Endpoint, Partial<Record<Endpoint, string | undefined>>>
@@ -31,6 +32,7 @@ type Props = {
   label?: string;
   focused?: string | null;
   className?: string;
+  extraData?: DownloadExtraData;
 };
 const FileExporter = ({
   description,
@@ -43,6 +45,7 @@ const FileExporter = ({
   label,
   focused = null,
   minWidth,
+  extraData,
 }: Props) => {
   if (!description?.main) return null;
   const customLocationDescription = {
@@ -81,6 +84,7 @@ const FileExporter = ({
       endpoint={(endpoint?.[primary]?.[secondary] as string) || primary}
       minWidth={minWidth}
       label={label}
+      extraData={extraData}
     />
   );
 };
