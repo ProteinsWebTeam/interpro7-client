@@ -232,6 +232,11 @@ const downloadContent =
       while (next) {
         try {
           const response = await fetch(next);
+
+          // Avoid reassigning version if it was already set by a previous page/retry on timeout
+          if (version == null)
+            version = response.headers.get('InterPro-Version');
+
           // If the server sent a timeout response…
           if (response.status === REQUEST_TIMEOUT) {
             // …wait a bit…
@@ -248,7 +253,6 @@ const downloadContent =
             continue;
           }
           const payload = await response.json();
-          version = response.headers.get('InterPro-Version');
           mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
           totalCount = payload.count + extraRows.length;
           for (const part of processResults(payload.results)) {
