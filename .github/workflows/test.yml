@@ -1,0 +1,39 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 19
+          cache: 'npm'
+
+      - name: 🔧 - Install
+        env:
+          HUSKY: "0"
+          PUPPETEER_SKIP_DOWNLOAD: "true"
+        run: |
+          cp config.yml.example config.yml
+          npm ci
+          npx patch-package
+
+      - name: 🧪 - Test
+        run: npm test
+
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2
+        continue-on-error: true
+        if: |
+          github.ref == 'refs/heads/master' || github.ref == 'refs/heads/dev'
+        env:
+          SLACK_COLOR: "${{ job.status == 'success' && 'good' || 'danger' }}"
+          SLACK_USERNAME: 'Github Actions'
+          SLACK_ICON_EMOJI: ':octocat:'
+          SLACK_TITLE: 'CI results in GitHub Actions'
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: '#interpro7'
+          MSG_MINIMAL: Actions URL
