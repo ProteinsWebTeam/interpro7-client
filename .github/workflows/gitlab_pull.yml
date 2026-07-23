@@ -1,8 +1,12 @@
 name: Trigger GitLab pull
-on: push
+on:
+  workflow_run:
+    workflows: [test]
+    types: [completed]
 jobs:
   trigger:
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Notify GitLab
         run: |

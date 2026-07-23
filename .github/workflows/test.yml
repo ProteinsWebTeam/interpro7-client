@@ -1,9 +1,9 @@
-name: test_and_build
+name: test
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,45 +23,6 @@ jobs:
 
       - name: 🧪 - Test
         run: npm test
-
-      - name: 🏗 - Build (dev)
-        run: |
-          cp config/dev_config.yml config.yml
-          npm run deploy -- -- --output-path=dist/dev/
-        if: github.ref_name == 'dev'
-
-      - name: Upload Build Artifact (dev)
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifact
-          path: dist/dev/**
-        if: github.ref_name == 'dev'
-
-      - name: 🏗 - Build (master - master_config)
-        run: |
-          cp config/master_config.yml config.yml
-          npm run deploy -- -- --output-path=dist/master/
-        if: github.ref_name == 'master'
-
-      - name: Upload Build Artifact (master)
-        uses: actions/upload-artifact@v4
-        with:
-          name: master-build-artifact
-          path: dist/master/**
-        if: github.ref_name == 'master'
-
-      - name: 🏗 - Build (master - staging_config)
-        run: |
-          cp config/staging_config.yml config.yml
-          npm run deploy -- -- --output-path=dist/staging/
-        if: github.ref_name == 'master'
-
-      - name: Upload Build Artifact (staging)
-        uses: actions/upload-artifact@v4
-        with:
-          name: staging-build-artifact
-          path: dist/staging/**
-        if: github.ref_name == 'master'
 
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2
