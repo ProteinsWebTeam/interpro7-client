@@ -6,7 +6,6 @@ variables:
   REGISTRY_IMAGE: dockerhub.ebi.ac.uk/interpro/interpro-client
 
 # Templates
-
 .build:
   stage: build
   image: docker:27
