@@ -9,10 +9,6 @@ variables:
 .build:
   stage: build
   image: docker:27
-  services:
-    - docker:27-dind
-  variables:
-    DOCKER_TLS_CERTDIR: "/certs"
   tags:
     - docker
   script:
