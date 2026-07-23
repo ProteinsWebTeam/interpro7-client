@@ -1,0 +1,111 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  REGISTRY_IMAGE: dockerhub.ebi.ac.uk/interpro/interpro-client
+
+# Templates
+
+.build:
+  stage: build
+  image: docker:27
+  tags:
+    - docker
+  script:
+    - echo "$EBI_REGISTRY_PASSWORD" | docker login -u "$EBI_REGISTRY_USER" --password-stdin dockerhub.ebi.ac.uk
+    - docker build --build-arg CONFIG_FILE="$CONFIG_FILE" -f Dockerfile -t "$IMAGE" .
+    - docker push "$IMAGE"
+
+.deploy:
+  stage: deploy
+  image:
+    name: bitnami/kubectl
+    entrypoint: [""]
+  variables:
+    KUBECONFIG: /tmp/kubeconfig
+  before_script:
+    - echo "$KUBECONFIG_DATA" | base64 -d > "$KUBECONFIG"
+  script:
+    - kubectl set image deployment/interpro-client interpro-client="$IMAGE" --kubeconfig="$KUBECONFIG"
+    - kubectl rollout status deployment/interpro-client --kubeconfig="$KUBECONFIG" --timeout=120s
+
+# DEV BRANCH ON INT WITH DEV CONFIG
+
+build:test:
+  extends: .build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+  variables:
+    CONFIG_FILE: config/dev_config.yml
+    IMAGE: $REGISTRY_IMAGE:test-$CI_COMMIT_SHA
+
+deploy:test:
+  extends: .deploy
+  needs:
+    - build:test
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+  variables:
+    IMAGE: $REGISTRY_IMAGE:test-$CI_COMMIT_SHA
+    KUBECONFIG_DATA: $KUBECONFIG_TEST
+  environment:
+    name: test
+
+# MASTER BRANCH ON DEV WITH STAGING CONFIG
+
+build:staging:
+  extends: .build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+  variables:
+    CONFIG_FILE: config/staging_config.yml
+    IMAGE: $REGISTRY_IMAGE:staging-$CI_COMMIT_SHA
+
+deploy:staging:
+  extends: .deploy
+  needs:
+    - build:staging
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+  variables:
+    IMAGE: $REGISTRY_IMAGE:staging-$CI_COMMIT_SHA
+    KUBECONFIG_DATA: $KUBECONFIG_STAGING
+  environment:
+    name: staging
+
+# MASTER BRANCH ON LIVE AND FALLBACK WITH MASTER CONFIG
+
+build:master:
+  extends: .build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+  variables:
+    CONFIG_FILE: config/master_config
+    IMAGE: $REGISTRY_IMAGE:master-$CI_COMMIT_SHA
+
+deploy:fallback:
+  extends: .deploy
+  needs:
+    - build:master
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: manual
+  variables:
+    IMAGE: $REGISTRY_IMAGE:master-$CI_COMMIT_SHA
+    KUBECONFIG_DATA: $KUBECONFIG_FALLBACK
+  environment:
+    name: fallback
+
+deploy:live:
+  extends: .deploy
+  needs:
+    - build:master
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: manual
+  variables:
+    IMAGE: $REGISTRY_IMAGE:master-$CI_COMMIT_SHA
+    KUBECONFIG_DATA: $KUBECONFIG_LIVE
+  environment:
+    name: live
