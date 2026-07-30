@@ -12,6 +12,7 @@ variables:
   tags:
     - docker
   script:
+    - unset DOCKER_HOST
     - echo "$EBI_REGISTRY_PASSWORD" | docker login -u "$EBI_REGISTRY_USER" --password-stdin dockerhub.ebi.ac.uk
     - docker build --build-arg CONFIG_FILE="$CONFIG_FILE" -f Dockerfile -t "$IMAGE" .
     - docker push "$IMAGE"
