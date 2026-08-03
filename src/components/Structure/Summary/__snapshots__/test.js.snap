@@ -124,16 +124,6 @@ exports[`<SummaryStructure /> should render 1`] = `
             <BaseLink
               className="ext"
               id="102m"
-              pattern="http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode={id}"
-              target="_blank"
-            >
-              PDBsum
-            </BaseLink>
-          </li>
-          <li>
-            <BaseLink
-              className="ext"
-              id="102m"
               pattern="https://www.cathdb.info/pdb/{id}"
               target="_blank"
             >
