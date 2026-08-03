@@ -76,19 +76,6 @@ export const WithImageIconClass: CardStory = {
   },
 };
 
-export const WithImage: CardStory = {
-  args: {
-    title: 'The Card',
-    imageComponent: (
-      <LazyImage
-        src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=1cuk&file=traces.jpg`}
-        alt={`structure with accession 1cuk`}
-      />
-    ),
-    children: 'A message to show',
-  },
-};
-
 export const WithSpeciesIcon: CardStory = {
   args: {
     title: 'The Card',

@@ -25,11 +25,6 @@ const css = cssBinder(summary, ipro);
 const EXTERNAL_LINKS = [
   { pattern: 'https://www.ebi.ac.uk/pdbe/entry/pdb/{id}', label: 'PDBe' },
   { pattern: 'https://www.rcsb.org/structure/{id}', label: 'RCSB PDB' },
-  {
-    pattern:
-      'http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode={id}',
-    label: 'PDBsum',
-  },
   { pattern: 'https://www.cathdb.info/pdb/{id}', label: 'CATH' },
   {
     pattern: 'https://www.ebi.ac.uk/pdbe/scop/search?t=txt;q={id}',
