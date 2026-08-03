@@ -56,7 +56,7 @@ export const ViewerOnDemand = (props: Props) => {
       <button className={styles['inner-wrapper']} onClick={handleClick}>
         <div className={styles.background}>
           <LazyImage
-            src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${id}&file=traces.jpg`}
+            src={`https://www.ebi.ac.uk/pdbe/static/entry/${id}_assembly_1_chain_front_image-200x200.png`}
             alt={`structure with accession ${id}`}
           />
         </div>
@@ -92,7 +92,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui.structureViewer,
   (userActivatedVisible) => ({
     userActivatedVisible: userActivatedVisible || false,
-  })
+  }),
 );
 
 export default connect(mapStateToProps, { changeSettingsRaw }, null, {

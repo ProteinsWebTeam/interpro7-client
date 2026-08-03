@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import LazyImage from 'components/LazyImage';
 import Link from 'components/generic/Link';
@@ -9,6 +9,8 @@ import local from '../style.css';
 
 const css = cssBinder(local);
 
+const PDBE_IMAGES = 'https://www.ebi.ac.uk/pdbe/static/entry';
+
 const RepresentativeStructure = ({
   accession,
   name,
@@ -16,6 +18,10 @@ const RepresentativeStructure = ({
   accession: string;
   name: string;
 }) => {
+  const [hiddenImages, setHiddenImages] = useState<Record<string, boolean>>({});
+  const hideImage = (view: string) => () =>
+    setHiddenImages((previous) => ({ ...previous, [view]: true }));
+
   return (
     <div className={css('side-panel')}>
       <div className={css('side-box')}>
@@ -29,17 +35,30 @@ const RepresentativeStructure = ({
             },
           }}
         >
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <LazyImage
-              src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${accession}&file=traces.jpg`}
-              alt={`structure with accession ${accession}`}
-            />
+          <div className={css('structure-images')}>
+            {!hiddenImages.front && (
+              <LazyImage
+                src={`${PDBE_IMAGES}/${accession}_assembly_1_chain_front_image-200x200.png`}
+                alt={`structure with accession ${accession}, front view`}
+                onError={hideImage('front')}
+              />
+            )}
+            <div className={css('structure-images-side')}>
+              {!hiddenImages.side && (
+                <LazyImage
+                  src={`${PDBE_IMAGES}/${accession}_assembly_1_chain_side_image-100x100.png`}
+                  alt={`structure with accession ${accession}, side view`}
+                  onError={hideImage('side')}
+                />
+              )}
+              {!hiddenImages.top && (
+                <LazyImage
+                  src={`${PDBE_IMAGES}/${accession}_assembly_1_chain_top_image-100x100.png`}
+                  alt={`structure with accession ${accession}, top view`}
+                  onError={hideImage('top')}
+                />
+              )}
+            </div>
           </div>
 
           <div>
