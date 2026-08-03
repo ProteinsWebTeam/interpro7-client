@@ -9,6 +9,8 @@ variables:
 .build:
   stage: build
   image: docker:27
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
   tags:
     - docker
   script:
