@@ -34,7 +34,11 @@
 
     <link rel="stylesheet" href="https://assets.emblstatic.net/vf/v2.5.10/css/styles.css">
     <link rel="stylesheet" href="https://assets.emblstatic.net/vf/v2.5.10/assets/ebi-header-footer/ebi-header-footer.css">
-    
+
+    <!-- DocBot Modal -->
+    <link rel="stylesheet" href="https://docbot-64c680.gitdocs.ebi.ac.uk/dist/Chatbot-Modal.css">
+    <script src="https://docbot-64c680.gitdocs.ebi.ac.uk/Chatbot-Modal.web.js" type="module"></script>
+
     <title><%= htmlWebpackPlugin.options.title %></title>
 
     <% for (const font of webpack.assets.map(({name}) => name).filter(name =>
@@ -183,6 +187,11 @@
       </div>
     </div>
     <div id="modal-root"></div>
+    <docbot-modal
+      selectedteam="interpro"
+      backendurl="<%= require("../interpro-config.js").root.docbot %>"
+      enableselector="false"
+    ></docbot-modal>
       <script>
         function forceRefreshIfNotloaded(){
           if (!document.getElementById('interpro-root')) {
