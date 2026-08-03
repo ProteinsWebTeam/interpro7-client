@@ -72,6 +72,13 @@ export const DOWNLOAD_SUCCESS = 'DOWNLOAD_SUCCESS';
 export const DOWNLOAD_DELETE = 'DOWNLOAD_DELETE';
 export const SET_INITIAL_DOWNLOADS = 'SET_INITIAL_DOWNLOADS';
 
+// Data already fetched (and cached) by the page, to be downloaded on file request
+export interface DownloadExtraData {
+  interpro_n?: InterProNMatches;
+  extra_features?: ExtraFeaturesPayload;
+  protein?: { accession: string; length: number };
+}
+
 export interface DownloadAction
   extends Action<
     | typeof DOWNLOAD_URL
@@ -81,6 +88,7 @@ export interface DownloadAction
     | typeof DOWNLOAD_DELETE
   > {
   url: string;
+  extraData?: DownloadExtraData;
   key?: string;
   fileType: DownloadFileTypes;
   subset: boolean;

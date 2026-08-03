@@ -6,6 +6,7 @@ import {
   AlphafoldModelCountAction,
   DataProgressAction,
   DownloadAction,
+  DownloadExtraData,
   FavouritesAction,
   IPScanAction,
   IPScanMetadataAction,
@@ -238,6 +239,7 @@ export const downloadURL = (
   subset: boolean,
   endpoint: string,
   originURL?: string,
+  extraData?: DownloadExtraData,
 ) =>
   ({
     type: types.DOWNLOAD_URL,
@@ -246,6 +248,7 @@ export const downloadURL = (
     subset,
     endpoint,
     originURL,
+    extraData,
   }) as DownloadAction;
 
 export const downloadError = (

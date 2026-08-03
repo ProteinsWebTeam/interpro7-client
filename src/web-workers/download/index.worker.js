@@ -5,7 +5,12 @@ import { throttle } from 'lodash-es';
 import { sleep } from 'timing-functions';
 
 import getTableAccess, { DownloadJobs } from 'storage/idb';
-import { object2TSV, columns } from './object2TSV';
+import {
+  object2TSV,
+  columns,
+  interProNMatchesToRows,
+  extraFeaturesToRows,
+} from './object2TSV';
 
 // $FlowFixMe
 import { DOWNLOAD_URL, DOWNLOAD_DELETE } from 'actions/types';
@@ -26,6 +31,7 @@ const MAX_EBI_PAGE_SIZE = 100;
 // Time to wait before retrying to get results from API when we have a problem
 const DELAY_WHEN_SOME_KIND_OF_PROBLEM = 60000; // 1 minute
 const REQUEST_TIMEOUT = 408;
+const NO_CONTENT = 204;
 const MAX_ERROR_COUNT_FOR_ONE_REQUEST = 3;
 const THROTTLE_TIME = 500; // half a second
 
@@ -183,7 +189,7 @@ const mutatePayloadTo3rdPartyAPI = (payload, endpoint, page) => {
 };
 // the `_` is just to make flow happy
 const downloadContent =
-  (onProgress, onSuccess, onError) =>
+  (onProgress, onSuccess, onError, extraData = {}) =>
   // eslint-disable-next-line max-statements
   async (url, fileType, subset, endpoint, _) => {
     try {
@@ -196,9 +202,25 @@ const downloadContent =
         });
       }
 
+      const extraRows =
+        fileType === 'tsv'
+          ? [
+              ...interProNMatchesToRows(
+                extraData.interpro_n,
+                extraData.protein?.accession,
+                extraData.protein?.length,
+              ),
+              ...extraFeaturesToRows(
+                extraData.extra_features,
+                extraData.protein?.accession,
+                extraData.protein?.length,
+              ),
+            ]
+          : [];
+
       const key = [url, fileType, subset].filter(Boolean).join('|');
       // Counters for progress information
-      let totalCount;
+      let totalCount = 0;
       let i = 0;
       // Create a function to transform API response into processed file part
       const processResults = processResultsFor(fileType, subset, endpoint);
@@ -210,6 +232,11 @@ const downloadContent =
       while (next) {
         try {
           const response = await fetch(next);
+
+          // Avoid reassigning version if it was already set by a previous page/retry on timeout
+          if (version == null)
+            version = response.headers.get('InterPro-Version');
+
           // If the server sent a timeout response…
           if (response.status === REQUEST_TIMEOUT) {
             // …wait a bit…
@@ -217,10 +244,17 @@ const downloadContent =
             // …then restart the loop with at the same URL
             continue;
           }
+          // No content: this page has no results (e.g. a protein with no
+          // standard matches), so there's nothing to parse as JSON.
+          if (response.status === NO_CONTENT) {
+            next = null;
+            errorCount = 0;
+            totalCount = extraRows.length;
+            continue;
+          }
           const payload = await response.json();
-          version = response.headers.get('InterPro-Version');
           mutatePayloadTo3rdPartyAPI(payload, endpoint, firstPage);
-          totalCount = payload.count;
+          totalCount = payload.count + extraRows.length;
           for (const part of processResults(payload.results)) {
             // Check if it was canceled, if so, stop everything and return
             // eslint-disable-next-line
@@ -243,6 +277,10 @@ const downloadContent =
           }
         }
       }
+      for (const part of processResults(extraRows)) {
+        if (canceled.has(key)) return;
+        onProgress({ part, progress: ++i / (totalCount + 1) });
+      }
       onSuccess({ key, version: Number(version) });
     } catch (error) {
       onError(error);
@@ -255,7 +293,14 @@ const postProgress = throttle(
 );
 
 // Download manager, send messages from there
-const download = async (url, fileType, subset, endpoint, originURL) => {
+const download = async (
+  url,
+  fileType,
+  subset,
+  endpoint,
+  originURL,
+  extraData,
+) => {
   const action = createActionCallerFor(url, fileType, subset, endpoint);
   const onError = (error) => {
     postProgress(action(downloadProgress, 1));
@@ -293,6 +338,7 @@ const download = async (url, fileType, subset, endpoint, originURL) => {
           self.postMessage(action(downloadSuccess, newDownload));
         },
         onError,
+        extraData,
       ),
     );
   } catch (error) {
@@ -309,6 +355,7 @@ const main = ({ data }) => {
         data.subset,
         data.endpoint,
         data.originURL,
+        data.extraData,
       );
       break;
     case DOWNLOAD_DELETE:

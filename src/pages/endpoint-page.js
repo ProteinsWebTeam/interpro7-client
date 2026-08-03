@@ -148,13 +148,23 @@ class Summary extends PureComponent {
     }
 
     /* UniParc edge case */
-    if (status === 204 && payloadUniParc.results.length > 0) {
+    if (status === 204 && payloadUniParc?.results?.length > 0) {
       const uniprotAccession =
         customLocation.description[customLocation.description.main.key]
           .accession;
-      const uniParcResult = payloadUniParc.results.filter((res) =>
-        res.uniProtKBAccessions.some((acc) => acc.includes(uniprotAccession)),
+      const uniParcResult = payloadUniParc.results.filter(
+        (res) =>
+          res.uniProtKBAccessions?.some((acc) =>
+            acc.includes(uniprotAccession),
+          ),
       )[0];
+
+      if (!uniParcResult) {
+        const edgeCaseText = edgeCases.get(status);
+        return edgeCaseText ? (
+          <EdgeCase text={edgeCaseText} status={status} />
+        ) : null;
+      }
 
       const standardizedData = {
         metadata: {

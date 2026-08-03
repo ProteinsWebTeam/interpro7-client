@@ -19,6 +19,7 @@ root:
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
   EBISurvey:
   ted: https://ted.cathdb.info/
+  docbot: https://www.ebi.ac.uk/docbot/api
 
 title: InterPro
 

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { isEqual } from 'lodash-es';
 import { format } from 'url';
-import loadData from 'higherOrder/loadData/ts';
 import config from 'config';
+import { DownloadExtraData } from 'actions/types';
 import GoTerms from 'components/GoTerms';
 import Length from 'components/Protein/Length';
 import Species from 'components/Protein/Species';
@@ -40,7 +40,9 @@ import local from './style.css';
 import summary from 'styles/summary.css';
 import BaseLink from 'components/ExtLink/BaseLink';
 
-const css = cssBinder(summary, fonts, ipro, local);
+import buttonCSS from 'components/SimpleCommonComponents/Button/style.css';
+
+const css = cssBinder(summary, fonts, ipro, local, buttonCSS);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
@@ -77,11 +79,10 @@ type Props = {
   loading: boolean;
 };
 
-interface LoadedProps extends Props {}
-
-export const SummaryProtein = ({ data, loading }: LoadedProps) => {
+export const SummaryProtein = ({ data, loading }: Props) => {
   const comparisonContainerRef = useRef<HTMLElement | null>(null);
   const [matchesLoaded, setMatchesLoaded] = useState(false);
+  const [extraData, setExtraData] = useState<DownloadExtraData>({});
   const [families, setFamilies] = useState<Array<
     Record<string, unknown>
   > | null>(null);
@@ -89,6 +90,12 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
 
   if (loading || !data || !data.metadata) return <Loading />;
   const metadata = data.metadata;
+
+  // Handle count and download for proteins with no matches, but with InterPro-N matches or extra features (only for TSV)
+  const downloadableCount =
+    (metadata.counters!.entries as number) +
+    Object.keys(extraData.interpro_n || {}).length +
+    Object.keys(extraData.extra_features || {}).length;
 
   const getSubfamiliesFromMatches = (
     results: EndpointWithMatchesPayload<EntryMetadata, MatchI>[],
@@ -276,8 +283,9 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
               minWidth={MIN_WIDTH}
             />
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label style={{ marginBottom: '0.4rem' }}>
+            <label style={{ marginBottom: '0.3rem' }}>
               <FileExporter
+                className={css('vf-button', 'vf-button--secondary')}
                 description={{
                   main: { key: 'protein' },
                   protein: {
@@ -286,7 +294,8 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
                   },
                   entry: { integration: 'all' },
                 }}
-                count={metadata.counters!.entries as number}
+                extraData={extraData}
+                count={downloadableCount}
                 fileType="tsv"
                 primary="entry"
                 secondary="protein"
@@ -306,6 +315,7 @@ export const SummaryProtein = ({ data, loading }: LoadedProps) => {
           mainData={data}
           onMatchesLoaded={getSubfamiliesFromMatches}
           onFamiliesFound={handleInterProFamilies}
+          onExtraDataLoaded={setExtraData}
         />
       </section>
       {metadata.go_terms && (

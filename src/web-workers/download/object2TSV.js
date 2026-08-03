@@ -296,6 +296,57 @@ columns.entryProtein = [
   },
 ];
 
+// Map interpro_n matches to rows in the entryProtein results' format
+export const interProNMatchesToRows = (
+  interproN /*: ?Object */,
+  proteinAccession /*: ?string */,
+  proteinLength /*: ?number */,
+) => {
+  if (!interproN) return [];
+  return Object.values(interproN).map((match /*: Object */) => ({
+    metadata: {
+      accession: match.accession,
+      name: match.name,
+      source_database: 'interpro-n',
+      type: match.type,
+      integrated:
+        match.integrated && typeof match.integrated === 'object'
+          ? match.integrated.accession
+          : match.integrated || null,
+    },
+    extra_fields: { short_name: match.short_name },
+    proteins: [
+      {
+        accession: proteinAccession,
+        protein_length: proteinLength,
+        entry_protein_locations: match.entry_protein_locations,
+      },
+    ],
+  }));
+};
+
+// Map extra features to rows in the entryProtein results' format
+export const extraFeaturesToRows = (
+  extraFeatures /*: ?Object */,
+  proteinAccession /*: ?string */,
+  proteinLength /*: ?number */,
+) => {
+  if (!extraFeatures) return [];
+  return Object.values(extraFeatures).map((feature /*: Object */) => ({
+    metadata: {
+      accession: feature.accession,
+      source_database: feature.source_database,
+    },
+    proteins: [
+      {
+        accession: proteinAccession,
+        protein_length: proteinLength,
+        entry_protein_locations: feature.locations,
+      },
+    ],
+  }));
+};
+
 export const object2TSV = (
   object /*: Object */,
   selectors /*: Array<{selector: string, serializer?: function}> */,

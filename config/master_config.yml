@@ -18,6 +18,7 @@ root:
   UniProt: https://rest.uniprot.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
   matches: https://www.ebi.ac.uk/interpro/matches/api/matches
+  docbot: https://www.ebi.ac.uk/docbot/api
 
 github:
   InterProClient:
