@@ -25,16 +25,6 @@ type Props = {
   isPrinting: boolean;
 };
 
-const IPScanStandardization = (name: string): string => {
-  const IPScan5to6: Record<string, string> = {
-    'prosite profiles': 'profile',
-    'prosite patterns': 'prosite',
-    'cath-gene3d': 'cathgene3d',
-  };
-
-  return IPScan5to6[name] || name;
-};
-
 const LabelsInTrack = ({
   entry,
   hideCategory,
@@ -42,9 +32,7 @@ const LabelsInTrack = ({
   expandedTrack,
 }: Props) => {
   const key = entry.source_database === 'pdb' ? 'structure' : 'entry';
-
-  //Imports, IPScan5 and IPScan6 standardizations
-  const filteredSourceDb = IPScanStandardization(entry.source_database || '');
+  const sourceDb = entry.source_database || '';
 
   return (
     <div
@@ -66,7 +54,7 @@ const LabelsInTrack = ({
             </b>
           ) : (
             <>
-              {filteredSourceDb !== 'interpro' &&
+              {sourceDb !== 'interpro' &&
                 // Conditions for residue section
                 !(
                   entry.accession.startsWith('residue:') ||
@@ -97,7 +85,7 @@ const LabelsInTrack = ({
                         key,
                       },
                       [key]: {
-                        db: filteredSourceDb,
+                        db: sourceDb,
                         accession: entry.accession.startsWith('residue:')
                           ? entry.accession.split('residue:')[1]
                           : entry.accession.replaceAll(/:nmatch/gi, ''),
@@ -131,7 +119,7 @@ const LabelsInTrack = ({
                         description: {
                           main: { key: 'entry' },
                           entry: {
-                            db: IPScanStandardization(d.source_database || ''),
+                            db: d.source_database || '',
                             accession: d.accession.replaceAll(/:nmatch/gi, ''),
                           },
                         },

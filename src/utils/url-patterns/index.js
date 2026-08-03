@@ -9,18 +9,23 @@ const ACCESSION_CLEANUP = [
   [/^SFLDG0*(\d+)$/i, 'subgroup/$1'],
 ];
 
-// TODO: have consistent data to eventually remove this
+// InterProScan 5 to InterProScan 6 database name mapping, retro-compatible and needed for import as well
+const iproscanDBToUrlDB = new Map([
+  // InterProScan 5
+  ['tigrfam', 'tigrfams'],
+  ['gene3d', 'cathgene3d'],
+  ['prosite_profiles', 'profile'],
+  ['prosite_patterns', 'prosite'],
+  // InterProScan 6
+  ['cath-gene3d', 'cathgene3d'],
+  ['prosite profiles', 'profile'],
+  ['prosite patterns', 'prosite'],
+  // Unchanged
+  ['superfamily', 'ssf'],
+]);
 
 export const iproscan2urlDB = (db /*: string */) =>
-  new Map([
-    ['TIGRFAM', 'tigrfams'],
-    ['NCBIfam', 'ncbifam'],
-    ['AntiFam', 'antifam'],
-    ['PROSITE_PROFILES', 'profile'],
-    ['PROSITE_PATTERNS', 'prosite'],
-    ['SUPERFAMILY', 'ssf'],
-    ['GENE3D', 'cathgene3d'],
-  ]).get(db) || db.toLowerCase();
+  iproscanDBToUrlDB.get(db.toLowerCase()) || db.toLowerCase();
 
 export const ebiSearch2urlDB = (db /*: string */) =>
   new Map([
