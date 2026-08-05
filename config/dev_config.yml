@@ -1,8 +1,8 @@
 googleAnalytics: G-N098XBK8Q7
 
 root:
-  website: http://wwwint.ebi.ac.uk/interpro/
-  API: http://wwwint.ebi.ac.uk/interpro/api/
+  website: https://wwwint.ebi.ac.uk/interpro/
+  API: https://wwwint.ebi.ac.uk/interpro/api/
   EBIsearch: https://wwwdev.ebi.ac.uk/ebisearch/ws/rest/interpro7
   IPScan: //wwwdev.ebi.ac.uk/Tools/services/rest/iprscan6/
   genome3d: //www.genome3d.net/api/v1/
