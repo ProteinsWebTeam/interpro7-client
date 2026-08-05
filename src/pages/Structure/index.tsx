@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'components/generic/Link';
 
 import MemberDBSelector from 'components/MemberDBSelector';
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 
 import StructureListFilters from 'components/Structure/StructureListFilters';
 
@@ -350,8 +350,8 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
                   search: {},
                 })}
               >
-                <LazyImage
-                  src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${accession}&file=traces.jpg`}
+                <StructureImage
+                  pdbId={accession as string}
                   alt={`structure with accession ${accession}`}
                   style={{ maxWidth: '33%' }}
                 />

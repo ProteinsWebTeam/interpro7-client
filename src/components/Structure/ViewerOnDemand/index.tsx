@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 
 import loadable from 'higherOrder/loadable';
 
@@ -55,10 +55,7 @@ export const ViewerOnDemand = (props: Props) => {
     <div className={styles.wrapper}>
       <button className={styles['inner-wrapper']} onClick={handleClick}>
         <div className={styles.background}>
-          <LazyImage
-            src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${id}&file=traces.jpg`}
-            alt={`structure with accession ${id}`}
-          />
+          <StructureImage pdbId={id} alt={`structure with accession ${id}`} />
         </div>
         <div className={styles.text}>
           <p>
@@ -92,7 +89,7 @@ const mapStateToProps = createSelector(
   (state: GlobalState) => state.settings.ui.structureViewer,
   (userActivatedVisible) => ({
     userActivatedVisible: userActivatedVisible || false,
-  })
+  }),
 );
 
 export default connect(mapStateToProps, { changeSettingsRaw }, null, {

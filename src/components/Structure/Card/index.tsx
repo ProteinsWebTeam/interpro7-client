@@ -4,7 +4,7 @@ import Link from 'components/generic/Link';
 import Card from 'components/SimpleCommonComponents/Card';
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import Tooltip from 'components/SimpleCommonComponents/Tooltip';
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 import SummaryCounterStructures from '../SummaryCounterStructures';
 import TaxnameStructures from './TaxnameStructures';
 import Lazy from 'wrappers/Lazy';
@@ -42,8 +42,8 @@ const StructureCard = ({ data, search, entryDB }: Props) => {
       }
       imageComponent={
         <Tooltip title={`3D visualisation of ${data.metadata.accession}`}>
-          <LazyImage
-            src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${data.metadata.accession}&file=traces.jpg`}
+          <StructureImage
+            pdbId={data.metadata.accession}
             alt={`PDBe entry ${data.metadata.accession}`}
           />
         </Tooltip>
