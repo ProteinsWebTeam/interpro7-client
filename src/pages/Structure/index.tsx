@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'components/generic/Link';
 
 import MemberDBSelector from 'components/MemberDBSelector';
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 
 import StructureListFilters from 'components/Structure/StructureListFilters';
 
@@ -350,8 +350,8 @@ const List = ({ data, customLocation, isStale, dataBase }: LoadedProps) => {
                   search: {},
                 })}
               >
-                <LazyImage
-                  src={`https://www.ebi.ac.uk/pdbe/static/entry/${accession}_assembly_1_chain_front_image-200x200.png`}
+                <StructureImage
+                  pdbId={accession as string}
                   alt={`structure with accession ${accession}`}
                   style={{ maxWidth: '33%' }}
                 />

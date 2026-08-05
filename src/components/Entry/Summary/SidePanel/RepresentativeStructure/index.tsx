@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 import Link from 'components/generic/Link';
 
 import cssBinder from 'styles/cssBinder';
@@ -8,8 +8,6 @@ import cssBinder from 'styles/cssBinder';
 import local from '../style.css';
 
 const css = cssBinder(local);
-
-const PDBE_IMAGES = 'https://www.ebi.ac.uk/pdbe/static/entry';
 
 const RepresentativeStructure = ({
   accession,
@@ -37,24 +35,24 @@ const RepresentativeStructure = ({
         >
           <div className={css('structure-images')}>
             {!hiddenImages.front && (
-              <LazyImage
-                src={`${PDBE_IMAGES}/${accession}_assembly_1_chain_front_image-200x200.png`}
-                alt={`structure with accession ${accession}, front view`}
+              <StructureImage
+                pdbId={accession}
+                view="front"
                 onError={hideImage('front')}
               />
             )}
             <div className={css('structure-images-side')}>
               {!hiddenImages.side && (
-                <LazyImage
-                  src={`${PDBE_IMAGES}/${accession}_assembly_1_chain_side_image-100x100.png`}
-                  alt={`structure with accession ${accession}, side view`}
+                <StructureImage
+                  pdbId={accession}
+                  view="side"
                   onError={hideImage('side')}
                 />
               )}
               {!hiddenImages.top && (
-                <LazyImage
-                  src={`${PDBE_IMAGES}/${accession}_assembly_1_chain_top_image-100x100.png`}
-                  alt={`structure with accession ${accession}, top view`}
+                <StructureImage
+                  pdbId={accession}
+                  view="top"
                   onError={hideImage('top')}
                 />
               )}

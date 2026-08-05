@@ -22,7 +22,7 @@ import Table, {
 import HighlightedText from 'components/SimpleCommonComponents/HighlightedText';
 import NumberComponent from 'components/NumberComponent';
 import ExternalExportButton from 'components/Table/Exporter/ExternalExportButton';
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 import Lazy from 'wrappers/Lazy';
 import loadWebComponent from 'utils/load-web-component';
 import { toPublicAPI } from 'utils/url';
@@ -538,8 +538,8 @@ const Matches = ({
               search: {},
             })}
           >
-            <LazyImage
-              src={`https://www.ebi.ac.uk/pdbe/static/entry/${accession}_assembly_1_chain_front_image-200x200.png`}
+            <StructureImage
+              pdbId={accession}
               alt={`structure with accession ${accession}`}
             />
           </Link>

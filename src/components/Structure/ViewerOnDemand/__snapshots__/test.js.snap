@@ -11,9 +11,9 @@ exports[`<ViewerOnDemand /> should render 1`] = `
     <div
       className="background"
     >
-      <LazyImage
+      <StructureImage
         alt="structure with accession 102m"
-        src="https://www.ebi.ac.uk/pdbe/static/entry/102m_assembly_1_chain_front_image-200x200.png"
+        pdbId="102m"
       />
     </div>
     <div

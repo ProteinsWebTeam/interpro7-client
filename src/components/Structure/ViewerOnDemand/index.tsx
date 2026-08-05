@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import Link from 'components/generic/Link';
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 
 import loadable from 'higherOrder/loadable';
 
@@ -55,10 +55,7 @@ export const ViewerOnDemand = (props: Props) => {
     <div className={styles.wrapper}>
       <button className={styles['inner-wrapper']} onClick={handleClick}>
         <div className={styles.background}>
-          <LazyImage
-            src={`https://www.ebi.ac.uk/pdbe/static/entry/${id}_assembly_1_chain_front_image-200x200.png`}
-            alt={`structure with accession ${id}`}
-          />
+          <StructureImage pdbId={id} alt={`structure with accession ${id}`} />
         </div>
         <div className={styles.text}>
           <p>
