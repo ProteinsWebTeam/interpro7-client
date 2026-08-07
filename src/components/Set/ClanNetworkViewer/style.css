@@ -27,6 +27,13 @@
   height: auto;
 }
 
+/* Keep the canvas the flexible one; the legend takes only what it needs. */
+.clan-network-full-screen:fullscreen .clan-network-legend {
+  flex: 0 0 auto;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
 .clan-network-controls {
   display: flex;
   align-items: center;
@@ -35,23 +42,36 @@
   margin-bottom: 0.5em;
 }
 
+/* The legend sits under the canvas rather than in a dropdown, so it lays out
+   as columns across the full width instead of a narrow scrolling panel. */
 .clan-network-legend {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 1.5em;
-  padding: 0.5em;
-  max-width: 500px;
-  max-height: 400px;
-  overflow-y: auto;
-  white-space: normal;
+  padding: 0.5em 0;
+  font-size: 0.85em;
   & ul {
     padding: 0;
     margin: 0;
-    & header {
-      font-weight: bold;
-      margin-bottom: 0.25em;
-    }
   }
+  & header {
+    font-weight: bold;
+    margin-bottom: 0.25em;
+  }
+}
+
+/* The comparison methods are three tiers deep each, so they run across the
+   legend instead of stacking into one very tall column. */
+.legend-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 1.5em;
+}
+
+.legend-method-name {
+  display: block;
+  font-style: italic;
 }
 
 .legend-swatch {
@@ -75,4 +95,10 @@
   display: flex;
   align-items: center;
   gap: 0.5em;
+}
+
+.clan-network-hint {
+  font-size: 0.85em;
+  font-style: italic;
+  color: #666;
 }

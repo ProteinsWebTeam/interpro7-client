@@ -137,6 +137,14 @@ export const getClanStatus = (
 export const getMethodColor = (method: string | undefined): string =>
   methodColorHash.hex(method || 'unknown');
 
+// Display name for a method: the legend's wording for the known ones, the
+// raw value for anything else so an unexpected method is still identifiable.
+export const getMethodLabel = (method?: string): string =>
+  METHOD_LEGEND.find((entry) => entry.method === method?.toLowerCase())
+    ?.label ||
+  method ||
+  'Unknown method';
+
 const matchesTier = (tier: ScoreTier, score: number): boolean =>
   'max' in tier ? score < tier.max : score >= tier.min;
 

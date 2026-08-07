@@ -2,7 +2,11 @@ import { ClanNetworkLink, ClanNetworkNode } from './types';
 
 const GRID_COLS = 4;
 const GRID_SPACING = 80;
-const GRID_OFFSET_X = 600;
+// Isolated nodes go in a grid to the *left* of the connected graph, which the
+// physics engine settles around the origin. The grid grows leftwards from
+// this right edge, kept far enough out that a spread-out cluster doesn't
+// reach into it.
+const GRID_RIGHT_EDGE_X = -800;
 
 export const getConnectedAccessions = (
   links: Array<ClanNetworkLink>,
@@ -29,12 +33,16 @@ export const placeIsolatedNodes = (
   isolatedAccessions: Array<string>,
 ): Record<string, { x: number; y: number }> => {
   const positions: Record<string, { x: number; y: number }> = {};
+  const rowCount = Math.ceil(isolatedAccessions.length / GRID_COLS);
+  // Rows straddle y = 0 so the block sits level with the connected graph
+  // rather than hanging below it.
+  const firstRowY = (-(rowCount - 1) * GRID_SPACING) / 2;
   isolatedAccessions.forEach((accession, i) => {
     const col = i % GRID_COLS;
     const row = Math.floor(i / GRID_COLS);
     positions[accession] = {
-      x: GRID_OFFSET_X + col * GRID_SPACING,
-      y: row * GRID_SPACING,
+      x: GRID_RIGHT_EDGE_X - (GRID_COLS - 1 - col) * GRID_SPACING,
+      y: firstRowY + row * GRID_SPACING,
     };
   });
   return positions;

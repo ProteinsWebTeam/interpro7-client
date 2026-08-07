@@ -1,6 +1,7 @@
 import { Edge as VisEdge } from 'vis-network';
 
-import { getEdgeStyle } from './colorPalette';
+import { getEdgeStyle, getMethodLabel } from './colorPalette';
+import { formatScore, getScoreLabel } from './scoreLabel';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
 
 // Every edge gets at least a slight curve, matching the reference curator
@@ -44,8 +45,8 @@ const buildEdgeTooltip = (
 ): HTMLElement => {
   const el = document.createElement('div');
   el.innerHTML = `
-    <strong>${link.method || 'Unknown method'}</strong><br/>
-    Score: ${link.score}<br/>
+    <strong>${getMethodLabel(link.method)}</strong><br/>
+    ${getScoreLabel(link.method)}: ${formatScore(link.score)}<br/>
     Between:<br/>
     ${sourceLabel}<br/>
     ${targetLabel}

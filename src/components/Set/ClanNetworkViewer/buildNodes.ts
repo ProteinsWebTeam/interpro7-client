@@ -1,8 +1,6 @@
 import { scaleLinear } from 'd3-scale';
 import { Node as VisNode } from 'vis-network';
 
-import { getTextForLabel } from 'utils/text';
-
 import {
   getClanStatus,
   STATUS_COLOR,
@@ -13,7 +11,7 @@ import { ClanNetworkNode } from './types';
 // Keyed on InterPro's own entry-type vocabulary (lowercase snake_case, see
 // src/components/Entry/EntryListFilters/EntryTypeFilter), not Pfam's own
 // (capitalized) type strings that the reference curator tool used.
-const SHAPE_BY_TYPE: Record<string, string> = {
+export const SHAPE_BY_TYPE: Record<string, string> = {
   domain: 'square',
   family: 'dot',
   homologous_superfamily: 'hexagon',
@@ -23,7 +21,16 @@ const SHAPE_BY_TYPE: Record<string, string> = {
   binding_site: 'triangleDown',
   ptm: 'box',
 };
-const DEFAULT_SHAPE = 'dot';
+export const DEFAULT_SHAPE = 'dot';
+
+export const getShapeForType = (type?: string): string =>
+  SHAPE_BY_TYPE[type?.toLowerCase() || ''] || DEFAULT_SHAPE;
+
+// Deliberately not configurable: a short name alone is ambiguous and a full
+// name is too long to draw on a node, so every node reads the same way. The
+// full name lives in the hover tooltip instead.
+export const getNodeLabel = (node: ClanNetworkNode): string =>
+  node.short_name ? `${node.short_name} (${node.accession})` : node.accession;
 
 const MIN_NODE_SIZE = 10;
 const MAX_NODE_SIZE = 40;
@@ -56,7 +63,6 @@ const buildNodeTooltip = (
 export const buildNodes = (
   nodes: Array<ClanNetworkNode>,
   currentClanAccession: string,
-  label: LabelUISettings,
   positions: Record<string, { x: number; y: number }>,
 ): Array<ClanVisNode> => {
   const scores = nodes.map((node) => node.score);
@@ -75,8 +81,8 @@ export const buildNodes = (
 
     return {
       id: node.accession,
-      shape: SHAPE_BY_TYPE[node.type?.toLowerCase()] || DEFAULT_SHAPE,
-      label: getTextForLabel(node, label),
+      shape: getShapeForType(node.type),
+      label: getNodeLabel(node),
       color: {
         background: color.background,
         border: color.border,

@@ -8,19 +8,15 @@ import 'vis-network/styles/vis-network.css';
 
 import { goToCustomLocation } from 'actions/creators';
 
-import DropDownButton from 'components/SimpleCommonComponents/DropDownButton';
 import Card from 'components/SimpleCommonComponents/Card';
 import Button from 'components/SimpleCommonComponents/Button';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
-import LabelBy from 'components/ProteinViewer/Options/LabelBy';
-import { getTextForLabel } from 'utils/text';
 
 import { buildNodes, ClanVisNode } from './buildNodes';
 import { buildEdges } from './buildEdges';
 import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
 import Legend from './Legend';
 import SizeSlider from './SizeSlider';
-import EditModeToggle from './EditModeToggle';
 
 import cssBinder from 'styles/cssBinder';
 import summary from 'styles/summary.css';
@@ -37,12 +33,6 @@ const MAX_NUMBER_OF_NODES = 100;
 // `.current` is still null on the first render.
 const FULL_SCREEN_ID = 'clanNetworkViewerFullScreen';
 
-const DEFAULT_LABEL: LabelUISettings = {
-  accession: false,
-  name: false,
-  short: true,
-};
-
 type Props = {
   data: {
     metadata: SetMetadata;
@@ -50,7 +40,6 @@ type Props = {
   db?: string | null;
   goToCustomLocation: typeof goToCustomLocation;
   loading: boolean;
-  label?: LabelUISettings;
 };
 
 type ClickParams = {
@@ -63,23 +52,19 @@ export const ClanNetworkViewer = ({
   db,
   goToCustomLocation,
   loading,
-  label,
 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const networkRef = useRef<Network | null>(null);
   const nodesDataSetRef = useRef<DataSet<ClanVisNode> | null>(null);
-  const editModeRef = useRef(false);
 
   const metadata = loading || !data.metadata ? null : data.metadata;
   const relationships = metadata?.relationships;
   const nodeCount = relationships?.nodes.length || 0;
 
   const [forceShow, setForceShow] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [sizeScale, setSizeScale] = useState(1);
 
   const showNetwork = forceShow || nodeCount <= MAX_NUMBER_OF_NODES;
-  const effectiveLabel = label || DEFAULT_LABEL;
 
   // Redirect off the "all" pseudo-database, same as the old ClanViewer.
   useEffect(() => {
@@ -96,11 +81,6 @@ export const ClanNetworkViewer = ({
     }
   }, [db, metadata?.source_database, metadata?.accession, goToCustomLocation]);
 
-  useEffect(() => {
-    editModeRef.current = editMode;
-    networkRef.current?.setOptions({ interaction: { dragNodes: editMode } });
-  }, [editMode]);
-
   // Build (or rebuild) the network whenever the clan being viewed changes.
   useEffect(() => {
     if (!containerRef.current || !relationships || !showNetwork) {
@@ -115,7 +95,6 @@ export const ClanNetworkViewer = ({
     const nodes = buildNodes(
       relationships.nodes,
       metadata?.accession || '',
-      effectiveLabel,
       positions,
     );
     const edges = buildEdges(relationships.links, relationships.nodes);
@@ -123,6 +102,20 @@ export const ClanNetworkViewer = ({
     const nodesDataSet = new DataSet<ClanVisNode>(nodes);
     const edgesDataSet = new DataSet(edges);
     nodesDataSetRef.current = nodesDataSet;
+
+    // TEMP DEBUG -- remove once the node-count discrepancy is understood.
+    const w = window as unknown as { __clanNetLog?: Array<unknown> };
+    w.__clanNetLog = w.__clanNetLog || [];
+    w.__clanNetLog.push({
+      t: Math.round(performance.now()),
+      kind: 'render',
+      accession: metadata?.accession,
+      propsNodes: relationships.nodes.length,
+      propsLinks: relationships.links.length,
+      builtNodes: nodes.length,
+      inDataSet: nodesDataSet.length,
+      firstFew: relationships.nodes.slice(0, 5).map((n) => n.short_name),
+    });
 
     const network = new Network(
       containerRef.current,
@@ -153,7 +146,10 @@ export const ClanNetworkViewer = ({
           },
         },
         interaction: {
-          dragNodes: editModeRef.current,
+          // Nodes are always draggable; navigation is on ctrl/cmd-click, so
+          // repositioning and opening an entry can't be confused for each
+          // other and no mode switch is needed.
+          dragNodes: true,
           hover: true,
           navigationButtons: true,
           keyboard: true,
@@ -171,21 +167,14 @@ export const ClanNetworkViewer = ({
       network.fit();
     });
 
+    // Ctrl/cmd-click, rather than a plain click, so that dragging a node
+    // around never risks navigating away from the network by accident.
     network.on('click', (params: ClickParams) => {
-      if (editModeRef.current) return;
       const accession = params.nodes?.[0];
       if (!accession) return;
       const nativeEvent = params.event?.srcEvent;
-      if (nativeEvent?.metaKey || nativeEvent?.ctrlKey) {
-        window.open(`/interpro/entry/${db}/${accession}`, '_blank')?.focus();
-      } else {
-        goToCustomLocation({
-          description: {
-            main: { key: 'entry' },
-            entry: { db: db || undefined, accession },
-          },
-        });
-      }
+      if (!nativeEvent?.metaKey && !nativeEvent?.ctrlKey) return;
+      window.open(`/interpro/entry/${db}/${accession}`, '_blank')?.focus();
     });
 
     return () => {
@@ -193,8 +182,7 @@ export const ClanNetworkViewer = ({
       networkRef.current = null;
       nodesDataSetRef.current = null;
     };
-    // Rebuilding on every label/db change would wipe layout & physics state;
-    // those are handled by the lighter-weight effects below instead.
+    // Rebuilding on every db change would wipe layout & physics state.
   }, [metadata?.accession, showNetwork]);
 
   // Keep the canvas the same size as its container. Without this the network
@@ -218,18 +206,6 @@ export const ClanNetworkViewer = ({
     observer.observe(container);
     return () => observer.disconnect();
   }, [showNetwork]);
-
-  // Label content changed: refresh labels only, no full rebuild.
-  useEffect(() => {
-    const nodesDataSet = nodesDataSetRef.current;
-    if (!nodesDataSet || !relationships) return;
-    nodesDataSet.update(
-      relationships.nodes.map((node) => ({
-        id: node.accession,
-        label: getTextForLabel(node, effectiveLabel),
-      })),
-    );
-  }, [label?.accession, label?.name, label?.short]);
 
   // Size slider changed: rescale nodes/fonts relative to their base size.
   useEffect(() => {
@@ -263,20 +239,10 @@ export const ClanNetworkViewer = ({
       {showNetwork && (
         <div id={FULL_SCREEN_ID} className={css('clan-network-full-screen')}>
           <div className={css('clan-network-controls')}>
-            <DropDownButton
-              label="Label Content"
-              extraClasses={css('protvista-menu')}
-            >
-              <LabelBy />
-            </DropDownButton>
-            <DropDownButton label="Legend">
-              <Legend links={relationships.links} />
-            </DropDownButton>
             <SizeSlider value={sizeScale} onChange={setSizeScale} />
-            <EditModeToggle
-              editMode={editMode}
-              onToggle={() => setEditMode((current) => !current)}
-            />
+            <span className={css('clan-network-hint')}>
+              Drag a node to reposition it, ctrl/⌘-click it to open its entry.
+            </span>
             <FullScreenButton
               element={FULL_SCREEN_ID}
               tooltip="View the clan network in full screen mode"
@@ -287,6 +253,11 @@ export const ClanNetworkViewer = ({
             className={css('clan-network-canvas')}
             id="clanNetworkViewerContainer"
           />
+          <Legend
+            nodes={relationships.nodes}
+            links={relationships.links}
+            currentClanAccession={metadata.accession}
+          />
         </div>
       )}
     </div>
@@ -295,8 +266,7 @@ export const ClanNetworkViewer = ({
 
 const mapStateToProps = createSelector(
   (state: GlobalState) => state.customLocation.description.set.db,
-  (state: GlobalState) => state.settings.ui,
-  (db, ui) => ({ db, label: ui.labelContent }),
+  (db) => ({ db }),
 );
 
 export default connect(mapStateToProps, { goToCustomLocation })(
