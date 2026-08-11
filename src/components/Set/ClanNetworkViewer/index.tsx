@@ -15,6 +15,7 @@ import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton
 import { buildNodes, ClanVisNode } from './buildNodes';
 import { buildEdges } from './buildEdges';
 import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
+import { ClanNetworkLink, ClanNetworkNode } from './types';
 import Legend from './Legend';
 import SizeSlider from './SizeSlider';
 
@@ -26,6 +27,27 @@ import style from './style.css';
 const css = cssBinder(summary, ipro, style);
 
 const MAX_NUMBER_OF_NODES = 100;
+
+// vis-network seeds its layout RNG with Math.random() unless told otherwise, so
+// the same clan settles into a different shape on every mount. Pinning the seed
+// (and feeding nodes/edges in a stable order, see sortNodes/sortLinks) makes the
+// stabilised topology reproducible.
+const LAYOUT_RANDOM_SEED = 42;
+
+// The seed only pins the *starting* positions; which node gets which of them
+// depends on insertion order, so the API returning the same members in a
+// different order would still reshuffle the graph. Sorting by accession (and
+// links by their endpoints) removes that source of variation.
+const sortNodes = (nodes: Array<ClanNetworkNode>): Array<ClanNetworkNode> =>
+  [...nodes].sort((a, b) => a.accession.localeCompare(b.accession));
+
+const sortLinks = (links: Array<ClanNetworkLink>): Array<ClanNetworkLink> =>
+  [...links].sort(
+    (a, b) =>
+      a.source.localeCompare(b.source) ||
+      a.target.localeCompare(b.target) ||
+      (a.method || '').localeCompare(b.method || ''),
+  );
 
 // The whole viewer (controls included) goes full screen, not just the canvas,
 // so the legend and the size slider stay reachable. FullScreenButton resolves
@@ -87,17 +109,13 @@ export const ClanNetworkViewer = ({
       return undefined;
     }
 
-    const isolated = getIsolatedAccessions(
-      relationships.nodes,
-      relationships.links,
-    );
+    const sortedNodes = sortNodes(relationships.nodes);
+    const sortedLinks = sortLinks(relationships.links);
+
+    const isolated = getIsolatedAccessions(sortedNodes, sortedLinks);
     const positions = placeIsolatedNodes(isolated);
-    const nodes = buildNodes(
-      relationships.nodes,
-      metadata?.accession || '',
-      positions,
-    );
-    const edges = buildEdges(relationships.links, relationships.nodes);
+    const nodes = buildNodes(sortedNodes, metadata?.accession || '', positions);
+    const edges = buildEdges(sortedLinks, sortedNodes);
 
     const nodesDataSet = new DataSet<ClanVisNode>(nodes);
     const edgesDataSet = new DataSet(edges);
@@ -157,6 +175,7 @@ export const ClanNetworkViewer = ({
         },
         layout: {
           improvedLayout: true,
+          randomSeed: LAYOUT_RANDOM_SEED,
         },
       },
     );
