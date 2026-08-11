@@ -92,21 +92,21 @@ export const METHOD_LEGEND: Array<{
     ],
   },
   {
-    method: 'hhsearch',
-    label: 'HHsearch (profile)',
-    tiers: [
-      { label: 'E-value < 1e-10', color: EDGE_TIERS.hhsearch[0].color },
-      { label: 'E-value 1e-10 to 1e-5', color: EDGE_TIERS.hhsearch[1].color },
-      { label: 'E-value ≥ 1e-5', color: EDGE_TIERS.hhsearch[2].color },
-    ],
-  },
-  {
     method: 'dali',
     label: 'DALI (structural)',
     tiers: [
       { label: 'Z-score ≥ 20', color: EDGE_TIERS.dali[0].color },
       { label: 'Z-score 12 to 20', color: EDGE_TIERS.dali[1].color },
       { label: 'Z-score < 12', color: EDGE_TIERS.dali[2].color },
+    ],
+  },
+  {
+    method: 'hhsearch',
+    label: 'HHsearch (profile)',
+    tiers: [
+      { label: 'E-value < 1e-10', color: EDGE_TIERS.hhsearch[0].color },
+      { label: 'E-value 1e-10 to 1e-5', color: EDGE_TIERS.hhsearch[1].color },
+      { label: 'E-value ≥ 1e-5', color: EDGE_TIERS.hhsearch[2].color },
     ],
   },
   {

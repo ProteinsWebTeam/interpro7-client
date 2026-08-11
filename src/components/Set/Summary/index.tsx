@@ -152,8 +152,8 @@ const SummarySet = ({ data, loading }: Props) => {
       metadata.description = metadata.name.name;
   }
 
-  const hasWiki =
-    metadata.source_database === 'pfam' && !!metadata.wikipedia?.length;
+  const isPfam = metadata.source_database?.toLowerCase() === 'pfam';
+  const hasWiki = isPfam && !!metadata.wikipedia?.length;
 
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
@@ -228,10 +228,12 @@ const SummarySet = ({ data, loading }: Props) => {
           </Tabs>
         </section>
       )}
-      <div className={css('vf-stack', 'vf-stack-400')}>
-        <h4>Clan Network Viewer</h4>
-        <ClanNetworkViewerAsync data={data} loading={loading} />
-      </div>
+      {isPfam && (
+        <div className={css('vf-stack', 'vf-stack-400')}>
+          <h4>Clan Network Viewer</h4>
+          <ClanNetworkViewerAsync data={data} loading={loading} />
+        </div>
+      )}
     </div>
   );
 };

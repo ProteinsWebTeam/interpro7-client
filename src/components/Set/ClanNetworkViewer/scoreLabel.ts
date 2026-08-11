@@ -3,8 +3,8 @@
 // calling everything "Score".
 const SCORE_LABEL_BY_METHOD: Record<string, string> = {
   foldseek: 'E-value',
-  hhsearch: 'E-value',
   dali: 'Z-score',
+  hhsearch: 'E-value',
   scoop: 'Score',
 };
 const DEFAULT_SCORE_LABEL = 'Score';

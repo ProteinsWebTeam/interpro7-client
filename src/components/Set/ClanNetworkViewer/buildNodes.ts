@@ -25,12 +25,8 @@ export const DEFAULT_SHAPE = 'dot';
 
 export const getShapeForType = (type?: string): string =>
   SHAPE_BY_TYPE[type?.toLowerCase() || ''] || DEFAULT_SHAPE;
-
-// Deliberately not configurable: a short name alone is ambiguous and a full
-// name is too long to draw on a node, so every node reads the same way. The
-// full name lives in the hover tooltip instead.
 export const getNodeLabel = (node: ClanNetworkNode): string =>
-  node.short_name ? `${node.short_name} (${node.accession})` : node.accession;
+  node.short_name || node.accession;
 
 const MIN_NODE_SIZE = 10;
 const MAX_NODE_SIZE = 40;
