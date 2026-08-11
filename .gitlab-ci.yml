@@ -83,7 +83,7 @@ build:master:
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
   variables:
-    CONFIG_FILE: config/master_config
+    CONFIG_FILE: config/master_config.yml
     IMAGE: $REGISTRY_IMAGE:master-$CI_COMMIT_SHA
 
 deploy:fallback:
