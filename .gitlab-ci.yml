@@ -54,6 +54,7 @@ deploy:test:
     name: test
 
 # MASTER BRANCH ON DEV WITH STAGING CONFIG
+# staging frontend cluster: hh-wp-webadmin-114.wp-k8s.ebi.ac.uk
 
 build:staging:
   extends: .build
