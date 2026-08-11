@@ -261,6 +261,12 @@ button {
   cursor: pointer;
 }
 
+button.vf-chatbot-fab,
+.vf-chatbot-fab[type="button"] {
+  border-radius: 50%;
+  border-bottom-right-radius: 10%;
+}
+
 /* buttons (alert, warning, secondary, hollow) - IScan form*/
 .button.alert {
   background-color: var(--colors-alert-main);

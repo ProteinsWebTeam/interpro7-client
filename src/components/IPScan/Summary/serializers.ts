@@ -3,6 +3,13 @@ import { iproscan2urlDB } from 'utils/url-patterns';
 
 const OTHER_FEATURES_DBS = ['mobidb-lite', 'cath-funfam'];
 const OTHER_RESIDUES_DBS = [''];
+/* Databases that only provide conserved-site/residue annotations. Their match
+regions are not meaningful as standalone feature tracks (the sites are shown
+under "Conserved Residues"), so the match itself is not added to any section.
+Without this, PIRSR matches (signature type "Region", no integrated entry)
+would fall into the "unintegrated" bucket and end up rendered as "Spurious
+proteins" alongside AntiFam. */
+const RESIDUE_ONLY_DBS = ['pirsr'];
 
 type IpScanEntry = {
   accession: string;
@@ -191,8 +198,9 @@ export const mergeData = (
         residues,
       });
     }
-    if (NOT_MEMBER_DBS.has(library)) {
-      processedMatch.source_database = library; // Making sure the change matches the ignore list.
+    if (RESIDUE_ONLY_DBS.includes(processedMatch.source_database)) continue;
+    if (NOT_MEMBER_DBS.has(library.toLowerCase())) {
+      processedMatch.source_database = library.toLowerCase(); // Making sure the change matches the ignore list.
       if (processedMatch.accession in otherFeatures) {
         otherFeatures[processedMatch.accession].locations.push(
           ...processedMatch.locations,

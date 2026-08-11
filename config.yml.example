@@ -6,7 +6,7 @@ root:
   website: http://localhost:8080/interpro/
   API: https://www.ebi.ac.uk/interpro/api/
   EBIsearch: https://www.ebi.ac.uk/ebisearch/ws/rest/interpro
-  IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan5/
+  IPScan: https://www.ebi.ac.uk/Tools/services/rest/iprscan6/
   wikipedia: https://en.wikipedia.org/w/api.php
   readthedocs: https://interpro-documentation.readthedocs.io/en/latest/
   alphafold: https://alphafold.ebi.ac.uk/
@@ -19,6 +19,7 @@ root:
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
   EBISurvey:
   ted: https://ted.cathdb.info/
+  docbot: https://www.ebi.ac.uk/docbot/api
 
 title: InterPro
 

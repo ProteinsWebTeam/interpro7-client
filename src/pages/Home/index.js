@@ -196,7 +196,7 @@ class Home extends PureComponent {
   render() {
     return (
       <>
-        {this.props.showSettingsToast ? (
+        {/* {this.props.showSettingsToast ? (
           <Tip
             title="💡 How to edit the website settings?"
             body="To customise settings, click on the ☰ icon at the top right corner and select settings from the menu options"
@@ -250,7 +250,7 @@ class Home extends PureComponent {
             toastID="rtdhelp"
             settingsName="showHelpToast"
           />
-        ) : null}
+        ) : null} */}
         <GeneralWarning />
         <EBISurvey />
 

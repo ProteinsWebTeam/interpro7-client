@@ -123,7 +123,7 @@ const ImportResultSearch = ({ goToCustomLocation }: Props) => {
       <input
         name="interproScanId"
         type="text"
-        placeholder="Retrieve your job using ID (e.g. iprscan5-R20251028-215031-0803-66247021-p1m)"
+        placeholder="Retrieve your job using ID (e.g. iprscan6-R20251028-215031-0803-66247021-p1m)"
         value={id}
         onChange={handleChange}
         onKeyUp={handleKeyPress}

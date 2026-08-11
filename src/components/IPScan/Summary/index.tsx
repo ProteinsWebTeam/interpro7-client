@@ -89,7 +89,7 @@ const getCreated = (
   let created = (payload as IprscanMetaIDB)?.times?.created;
   if (!created) {
     const regex =
-      /iprscan5-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
+      /iprscan\d+-[SRI](\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})(\d{2})-\d{4}-\d+-\w{2,4}/;
     const matches = regex.exec(accession);
     if (matches) {
       const [_, y, m, d, hh, mm, ss] = matches;

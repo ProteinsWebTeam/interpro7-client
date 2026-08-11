@@ -101,7 +101,8 @@ export class IPScanStatus extends PureComponent<Props, State> {
       jobsToRemove: jobs.filter(
         (job) =>
           (from === 'file' && job.status === 'imported file') ||
-          (from === 'server' && (job.remoteID || '').startsWith('iprscan5')),
+          // Any InterProScan version: jobs submitted to 5 may still be stored
+          (from === 'server' && (job.remoteID || '').startsWith('iprscan')),
       ),
     });
   };
