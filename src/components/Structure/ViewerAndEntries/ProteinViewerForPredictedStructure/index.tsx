@@ -480,9 +480,8 @@ const ProteinViewerForAlphafold = ({
         {interpro_NMatchesCount > 0 && (
           <>
             <Callout type="warning" alt={false} closable={true}>
-              This sequence includes additional matches predicted by ✨
-              <b>InterPro‑N</b>, an AI-powered deep learning model developed by
-              Google DeepMind.
+              This sequence includes matches predicted by ✨<b>InterPro‑N</b>,
+              an AI-powered deep learning model developed by Google DeepMind.
               <br />
               By default, InterPro matches are supplemented with novel
               InterPro‑N predictions (novel matches or those at least 5%
@@ -496,7 +495,15 @@ const ProteinViewerForAlphafold = ({
               >
                 our documentation
               </Link>{' '}
-              for an explanation of each display mode.
+              for an explanation of each display mode. If you use InterPro-N
+              predictions, please include{' '}
+              <Link
+                href={`${config.root.readthedocs.href}citing.html#interpro-n`}
+                target="_blank"
+              >
+                the InterPro-N citation
+              </Link>{' '}
+              in your references.
             </Callout>
           </>
         )}
