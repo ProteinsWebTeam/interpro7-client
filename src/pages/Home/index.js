@@ -281,9 +281,7 @@ class Home extends PureComponent {
                     publication of the InterProScan 6 paper
                   </a>
                   , describing the latest generation of our sequence analysis
-                  pipeline. Please note that matches in the current release
-                  (InterPro 109.0) were calculated with InterProScan 5. We will
-                  transition to InterProScan 6 in mid-summer 2026.
+                  pipeline.
                 </Callout>
                 <CitingInterPro />
               </div>
