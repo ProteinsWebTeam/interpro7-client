@@ -251,6 +251,7 @@ const DomainsOnProteinLoaded = ({
       'spurious_proteins',
       'active_site',
       'external_sources',
+      'other_features',
     ];
 
     if (matchTypeSettings && colorDomainsBy) {
