@@ -12,8 +12,8 @@ import { ClanNetworkNode } from './types';
 // src/components/Entry/EntryListFilters/EntryTypeFilter), not Pfam's own
 // (capitalized) type strings that the reference curator tool used.
 export const SHAPE_BY_TYPE: Record<string, string> = {
-  domain: 'square',
   family: 'dot',
+  domain: 'square',
   homologous_superfamily: 'hexagon',
   repeat: 'triangle',
   conserved_site: 'diamond',
@@ -30,7 +30,7 @@ export const getNodeLabel = (node: ClanNetworkNode): string =>
 
 const MIN_NODE_SIZE = 10;
 const MAX_NODE_SIZE = 40;
-const BASE_FONT_SIZE = 14;
+const BASE_FONT_SIZE = 20;
 
 export type ClanVisNode = VisNode & {
   id: string;
@@ -90,7 +90,9 @@ export const buildNodes = (
       size: baseSize,
       baseSize,
       baseFontSize: BASE_FONT_SIZE,
-      font: { size: BASE_FONT_SIZE },
+      // A white halo keeps labels readable where they cross an edge or a
+      // neighbouring node -- vis-network draws none by default.
+      font: { size: BASE_FONT_SIZE, strokeWidth: 3, strokeColor: '#ffffff' },
       title: buildNodeTooltip(node, currentClanAccession),
       ...(position ? { x: position.x, y: position.y, fixed: true } : undefined),
     };
