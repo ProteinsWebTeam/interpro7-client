@@ -84,7 +84,8 @@ export const ClanNetworkViewer = ({
   const nodeCount = relationships?.nodes.length || 0;
 
   const [forceShow, setForceShow] = useState(false);
-  const [sizeScale, setSizeScale] = useState(1);
+  const [nodeScale, setNodeScale] = useState(1);
+  const [fontScale, setFontScale] = useState(1);
 
   const showNetwork = forceShow || nodeCount <= MAX_NUMBER_OF_NODES;
 
@@ -226,31 +227,32 @@ export const ClanNetworkViewer = ({
     return () => observer.disconnect();
   }, [showNetwork]);
 
-  // Size slider changed: rescale nodes/fonts relative to their base size.
+  // Size sliders: rescale nodes/labels relative to their base size.
   useEffect(() => {
     const nodesDataSet = nodesDataSetRef.current;
     if (!nodesDataSet) return;
     nodesDataSet.update(
       nodesDataSet.get().map((node) => ({
         id: node.id,
-        size: node.baseSize * sizeScale,
-        font: { size: node.baseFontSize * sizeScale },
+        size: node.baseSize * nodeScale,
+        font: { size: node.baseFontSize * fontScale },
       })),
     );
-  }, [sizeScale]);
+  }, [nodeScale, fontScale]);
 
   if (!metadata || !relationships) return null;
 
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
       {!showNetwork && nodeCount > MAX_NUMBER_OF_NODES && (
-        <Card title="Clan Network Viewer">
+        <Card>
           <section>
-            The selected clan has {nodeCount} member entries. Displaying more
-            than {MAX_NUMBER_OF_NODES} nodes in this visualisation can affect
-            the performance of your browser.
-            <div style={{ textAlign: 'right' }}>
-              <Button onClick={() => setForceShow(true)}>Visualise it</Button>
+            This network has {nodeCount} nodes. The clan network viewer will not
+            be loaded automatically for performance reasons.
+            <div>
+              <Button onClick={() => setForceShow(true)}>
+                Click to load the clan viewer
+              </Button>
             </div>
           </section>
         </Card>
@@ -258,7 +260,16 @@ export const ClanNetworkViewer = ({
       {showNetwork && (
         <div id={FULL_SCREEN_ID} className={css('clan-network-full-screen')}>
           <div className={css('clan-network-controls')}>
-            <SizeSlider value={sizeScale} onChange={setSizeScale} />
+            <SizeSlider
+              label="Node size"
+              value={nodeScale}
+              onChange={setNodeScale}
+            />
+            <SizeSlider
+              label="Label size"
+              value={fontScale}
+              onChange={setFontScale}
+            />
             <span className={css('clan-network-hint')}>
               Drag a node to reposition it, ctrl/⌘-click it to open its entry.
             </span>
