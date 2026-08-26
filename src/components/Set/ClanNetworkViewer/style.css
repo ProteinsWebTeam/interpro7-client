@@ -83,10 +83,21 @@
   vertical-align: middle;
 }
 
-.legend-dashed-line {
+.legend-line {
   display: inline-block;
   width: 24px;
-  border-top: 2px dashed #666;
+  border-top: 2px solid #666;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+.legend-line-dashed {
+  border-top-style: dashed;
+}
+
+/* Neutral, so a shape key never reads as one of the membership colours. */
+.legend-shape {
+  color: #555;
   margin-right: 0.4em;
   vertical-align: middle;
 }

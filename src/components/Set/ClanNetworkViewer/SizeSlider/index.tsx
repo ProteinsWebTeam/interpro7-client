@@ -11,15 +11,16 @@ const MAX = 2;
 const STEP = 0.1;
 
 type Props = {
+  label: string;
   value: number;
   onChange: (value: number) => void;
 };
 
-const SizeSlider = ({ value, onChange }: Props) => {
+const SizeSlider = ({ label, value, onChange }: Props) => {
   const id = useId();
   return (
     <div className={css('clan-network-size-slider')}>
-      <label htmlFor={id}>Node &amp; text scale</label>{' '}
+      <label htmlFor={id}>{label}</label>{' '}
       <input
         id={id}
         type="range"

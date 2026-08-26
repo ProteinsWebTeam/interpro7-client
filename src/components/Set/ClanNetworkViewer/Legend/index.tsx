@@ -28,19 +28,42 @@ type Props = {
 
 const KNOWN_METHODS = new Set(METHOD_LEGEND.map(({ method }) => method));
 
+// The node shapes as drawn, so the legend can show one rather than name it.
+const SHAPES: Record<string, React.ReactNode> = {
+  dot: <circle cx="8" cy="8" r="7" />,
+  square: <rect x="1" y="1" width="14" height="14" />,
+  box: <rect x="1" y="3" width="14" height="10" rx="3" />,
+  triangle: <polygon points="8,1 15,15 1,15" />,
+  triangleDown: <polygon points="1,1 15,1 8,15" />,
+  diamond: <polygon points="8,0 16,8 8,16 0,8" />,
+  hexagon: <polygon points="12,1 4,1 0,8 4,15 12,15 16,8" />,
+  star: (
+    <polygon points="8,0 9.9,5.4 15.6,5.5 11,9 12.7,14.5 8,11.2 3.3,14.5 5,9 0.4,5.5 6.1,5.4" />
+  ),
+};
+
+const ShapeSwatch = ({ type }: { type: string }) => (
+  <svg
+    className={css('legend-shape')}
+    viewBox="0 0 16 16"
+    width="14"
+    height="14"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    {SHAPES[getShapeForType(type)] || SHAPES.dot}
+  </svg>
+);
+
 const STATUS_ORDER: Array<ClanMembershipStatus> = [
   'current-clan',
   'other-clan',
   'no-clan',
 ];
 
-// 'homologous_superfamily' -> 'Homologous superfamily',
-// 'triangleDown' -> 'triangle down'
+// 'homologous_superfamily' -> 'homologous superfamily'
 const humanize = (value: string): string =>
-  value
-    .replace(/_/g, ' ')
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .toLowerCase();
+  value.replace(/_/g, ' ').toLowerCase();
 
 const capitalize = (value: string): string =>
   value.charAt(0).toUpperCase() + value.slice(1);
@@ -73,7 +96,7 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
     <section className={css('clan-network-legend')}>
       {statuses.length > 0 && (
         <div className={css('legend-block')}>
-          <header>Node color (clan membership)</header>
+          <header>Clan membership</header>
           <ul className={css('no-bullet')}>
             {statuses.map((status) => (
               <li key={status}>
@@ -89,11 +112,12 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
       )}
       {types.length > 0 && (
         <div className={css('legend-block')}>
-          <header>Node shape (entry type)</header>
+          <header>Entry type</header>
           <ul className={css('no-bullet')}>
             {types.map((type) => (
               <li key={type}>
-                {capitalize(humanize(type))} ({humanize(getShapeForType(type))})
+                <ShapeSwatch type={type} />
+                {capitalize(humanize(type))}
               </li>
             ))}
           </ul>
@@ -101,7 +125,7 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
       )}
       {(knownMethodLegend.length > 0 || otherMethods.length > 0) && (
         <div className={css('legend-block')}>
-          <header>Edge color (comparison method)</header>
+          <header>Predicted by</header>
           {/* One column per method rather than one long stack: with four
               methods and three tiers each, a single list is taller than it
               is wide and pushes the rest of the page down. */}
@@ -113,8 +137,8 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
                   {tiers.map((tier) => (
                     <li key={tier.label}>
                       <span
-                        className={css('legend-swatch')}
-                        style={{ backgroundColor: tier.color }}
+                        className={css('legend-line')}
+                        style={{ borderTopColor: tier.color }}
                       />
                       {tier.label}
                     </li>
@@ -129,9 +153,9 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
                   {otherMethods.map((method) => (
                     <li key={method}>
                       <span
-                        className={css('legend-swatch')}
+                        className={css('legend-line')}
                         style={{
-                          backgroundColor: getMethodColor(
+                          borderTopColor: getMethodColor(
                             method === 'unknown' ? undefined : method,
                           ),
                         }}
@@ -147,10 +171,10 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
       )}
       {hasNested && (
         <div className={css('legend-block')}>
-          <header>Edge style</header>
+          <header>Relationship</header>
           <ul className={css('no-bullet')}>
             <li>
-              <span className={css('legend-dashed-line')} />
+              <span className={css('legend-line', 'legend-line-dashed')} />
               Nested domain relationship
             </li>
           </ul>
