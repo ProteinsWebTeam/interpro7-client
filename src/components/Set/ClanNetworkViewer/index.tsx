@@ -122,20 +122,6 @@ export const ClanNetworkViewer = ({
     const edgesDataSet = new DataSet(edges);
     nodesDataSetRef.current = nodesDataSet;
 
-    // TEMP DEBUG -- remove once the node-count discrepancy is understood.
-    const w = window as unknown as { __clanNetLog?: Array<unknown> };
-    w.__clanNetLog = w.__clanNetLog || [];
-    w.__clanNetLog.push({
-      t: Math.round(performance.now()),
-      kind: 'render',
-      accession: metadata?.accession,
-      propsNodes: relationships.nodes.length,
-      propsLinks: relationships.links.length,
-      builtNodes: nodes.length,
-      inDataSet: nodesDataSet.length,
-      firstFew: relationships.nodes.slice(0, 5).map((n) => n.short_name),
-    });
-
     const network = new Network(
       containerRef.current,
       { nodes: nodesDataSet, edges: edgesDataSet },
@@ -184,6 +170,13 @@ export const ClanNetworkViewer = ({
 
     network.once('stabilizationIterationsDone', () => {
       network.setOptions({ physics: false });
+
+      isolated.forEach((nodeId) => {
+        nodesDataSet.update({
+          id: nodeId,
+          fixed: false,
+        });
+      });
       network.fit();
     });
 
