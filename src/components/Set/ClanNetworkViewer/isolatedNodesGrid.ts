@@ -1,12 +1,12 @@
 import { ClanNetworkLink, ClanNetworkNode } from './types';
 
 const GRID_COLS = 4;
-const GRID_SPACING = 80;
+const GRID_SPACING = 100;
 // Isolated nodes go in a grid to the *left* of the connected graph, which the
 // physics engine settles around the origin. The grid grows leftwards from
 // this right edge, kept far enough out that a spread-out cluster doesn't
 // reach into it.
-const GRID_RIGHT_EDGE_X = -800;
+const GRID_RIGHT_EDGE_X = -1500;
 
 export const getConnectedAccessions = (
   links: Array<ClanNetworkLink>,
