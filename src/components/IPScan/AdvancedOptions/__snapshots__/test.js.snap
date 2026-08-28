@@ -116,6 +116,13 @@ exports[`<AdvancedOptions /> should render 1`] = `
             Structural domains
           </legend>
         </fieldset>
+        <fieldset
+          className="new-fieldset"
+        >
+          <legend>
+            InterPro-N
+          </legend>
+        </fieldset>
       </fieldset>
       <fieldset
         className="new-fieldset"
