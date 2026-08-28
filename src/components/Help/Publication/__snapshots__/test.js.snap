@@ -12,8 +12,8 @@ exports[`<Publication /> should render 1`] = `
     <React.Fragment>
       <i />
       . 
-      ,
-       
+      , 
+      
       <Memo(Connect(Link))
         className="ext"
         href="https://doi.org/undefined"

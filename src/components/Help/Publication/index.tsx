@@ -34,12 +34,23 @@ const PfamCitationDetails = {
   imageClass: 'image-nar-default',
 };
 
+const InterProScanCitationDetails = {
+  doi: '10.1093/bioadv/vbag141',
+  title:
+    'InterProScan 6: a modern large-scale protein function annotation pipeline',
+  authors: 'Blum M, Hobbs E, Florentino L, Bateman A.',
+  source: 'Bioinformatics Advances',
+  year: 2026,
+  details: '6(1):vbag141',
+};
+
 type pubProps = {
   doi: string;
   title: string;
   authors: string;
   source: string;
   year: number;
+  details?: string;
 };
 
 export const PrintedPublication = ({
@@ -48,6 +59,7 @@ export const PrintedPublication = ({
   authors,
   source,
   year,
+  details,
 }: pubProps) => {
   return (
     <>
@@ -57,7 +69,7 @@ export const PrintedPublication = ({
           <b>{title}</b>
         </div>
         <>
-          <i>{source}</i>. {year},{' '}
+          <i>{source}</i>. {year}, {details ? `${details}, ` : ''}
           <Link
             href={`https://doi.org/${doi}`}
             className={css('ext')}
@@ -70,6 +82,10 @@ export const PrintedPublication = ({
     </>
   );
 };
+
+export const InterProScanCitation = () => (
+  <PrintedPublication {...InterProScanCitationDetails} />
+);
 
 export const InterProCitation = () => (
   <>
