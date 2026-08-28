@@ -47,6 +47,8 @@ type Iprscan5Match = {
   accession?: string;
   source_database?: string;
   goXRefs?: Array<IPrscan5GO>;
+  /* InterProScan 6 reports the origin/source of each match. */
+  source?: string;
 };
 type Iprscan5Result = {
   sequence: string;
