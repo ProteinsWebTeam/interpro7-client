@@ -1,5 +1,6 @@
 import { NOT_MEMBER_DBS } from 'menuConfig';
 import { iproscan2urlDB } from 'utils/url-patterns';
+import { N_MATCH_SUFFIX } from 'components/Related/DomainsOnProtein/DomainsOnProteinLoaded/utils';
 
 const OTHER_FEATURES_DBS = ['mobidb-lite', 'cath-funfam'];
 const OTHER_RESIDUES_DBS = [''];
@@ -10,6 +11,11 @@ Without this, PIRSR matches (signature type "Region", no integrated entry)
 would fall into the "unintegrated" bucket and end up rendered as "Spurious
 proteins" alongside AntiFam. */
 const RESIDUE_ONLY_DBS = ['pirsr'];
+/* InterProScan 6 tags every match with its source (origin).
+Matches predicted by InterPro-N do not have rich metadata */
+export const INTERPRO_N_SOURCE = 'InterPro-N';
+// Section holding the predictions that have no InterPro counterpart
+const INTERPRO_N_SECTION = 'interpro-n';
 
 type IpScanEntry = {
   accession: string;
@@ -31,6 +37,7 @@ type IpScanMatch = {
   score?: number;
   residues: undefined;
   signature?: Iprscan5Signature;
+  children?: Array<IpScanMatch>;
 };
 
 const mergeMatch = (match1: IpScanMatch | undefined, match2: IpScanMatch) => {
@@ -58,6 +65,16 @@ const integrateSignature = (
   entry.children = Object.values(entry._children);
   integrated.set(accession, entry);
 };
+
+const normaliseLocations = (match: Iprscan5Match) =>
+  match.locations.map((loc) => ({
+    ...loc,
+    model_acc: match['model-ac'],
+    fragments:
+      loc['location-fragments'] && loc['location-fragments'].length
+        ? loc['location-fragments']
+        : [{ start: loc.start, end: loc.end }],
+  }));
 
 const match2residues = (match: Iprscan5Match | IpScanMatch) => {
   return match.locations
@@ -144,6 +161,88 @@ const condenseLocations = (
   }));
 };
 
+/* The only metadata we have on an InterPro-N prediction is the accession of the
+signature it predicts, so we use it to look up the InterPro match for the
+same signature and hang the prediction next to it: as an extra child of the
+InterPro entry when the signature is integrated, or of the "Unintegrated"
+header otherwise. Predictions with no InterPro counterpart have nowhere to
+go and end up in their own section. */
+const addInterProNMatches = (
+  matches: Array<Iprscan5Match>,
+  {
+    interproNSection,
+    signatures,
+    signatureToEntry,
+    integrated,
+    unintegrated,
+    sequenceLength,
+  }: {
+    interproNSection: Array<Record<string, unknown>>;
+    signatures: Map<string, IpScanMatch>;
+    signatureToEntry: Map<string, string>;
+    integrated: Map<string, IpScanEntry>;
+    unintegrated: Record<string, IpScanMatch>;
+    sequenceLength?: number;
+  },
+) => {
+  // A prediction can be reported as several matches of the same signature.
+  const nMatches = new Map<string, IpScanMatch>();
+  for (const match of matches) {
+    const { library } = match.signature.signatureLibraryRelease;
+    const sourceDatabase = iproscan2urlDB(library);
+    // Databases that don't produce entry tracks can't hold a prediction either.
+    if (
+      NOT_MEMBER_DBS.has(library.toLowerCase()) ||
+      RESIDUE_ONLY_DBS.includes(sourceDatabase)
+    )
+      continue;
+    const accession = match.signature.accession;
+    const traditional = signatures.get(accession);
+    const nMatch: IpScanMatch = mergeMatch(nMatches.get(accession), {
+      accession: `${accession}${N_MATCH_SUFFIX}`,
+      name: traditional?.name || '',
+      short_name: traditional?.short_name || '',
+      type: traditional?.type,
+      source_database: sourceDatabase,
+      protein_length: sequenceLength || 0,
+      locations: normaliseLocations(match),
+      score: match.score,
+      residues: undefined,
+      signature: undefined,
+    });
+    nMatches.set(accession, nMatch);
+  }
+
+  for (const [accession, nMatch] of nMatches) {
+    const entryAccession = signatureToEntry.get(accession);
+    if (entryAccession) {
+      const entry = integrated.get(entryAccession);
+      // Place the prediction right after the signature it predicts.
+      const index =
+        (entry?.children || []).findIndex(
+          (child) => child.accession === accession,
+        ) + 1;
+      entry?.children.splice(index, 0, nMatch);
+      continue;
+    }
+    const traditional = unintegrated[accession];
+    if (traditional) {
+      /* Grouped exactly like an integrated signature, except the parent is the
+      "Unintegrated" header rather than an InterPro entry: the match and the
+      prediction are both drawn as its children, at the same level. */
+      const children = [traditional, nMatch];
+      unintegrated[accession] = {
+        ...traditional,
+        accession: `parentUnintegrated:${accession}`,
+        locations: condenseLocations(children) as IpScanMatch['locations'],
+        children,
+      };
+      continue;
+    }
+    interproNSection.push(nMatch);
+  }
+};
+
 // eslint-disable-next-line max-statements
 export const mergeData = (
   matches: Array<Iprscan5Match>,
@@ -156,15 +255,24 @@ export const mergeData = (
     other_residues: [],
     representative_domains: [],
     representative_families: [],
+    [INTERPRO_N_SECTION]: [],
   };
   const unintegrated: Record<string, IpScanMatch> = {};
   const otherFeatures: Record<string, IpScanMatch> = {};
   let integrated = new Map<string, IpScanEntry>();
   const signatures = new Map<string, IpScanMatch>();
+  // Signature accession -> accession of the InterPro entry it is integrated in.
+  const signatureToEntry = new Map<string, string>();
+  const interproNMatches: Array<Iprscan5Match> = [];
   const representativeDomains = [];
   const representativeFamilies = [];
 
   for (const match of matches) {
+    if (match.source === INTERPRO_N_SOURCE) {
+      // Handled once all the InterPro matches are known
+      interproNMatches.push(match);
+      continue;
+    }
     const { library } = match.signature.signatureLibraryRelease;
     const processedMatch: IpScanMatch = {
       accession: match.signature.accession,
@@ -173,14 +281,7 @@ export const mergeData = (
       type: match.signature.type,
       source_database: iproscan2urlDB(library),
       protein_length: sequenceLength || 0,
-      locations: match.locations.map((loc) => ({
-        ...loc,
-        model_acc: match['model-ac'],
-        fragments:
-          loc['location-fragments'] && loc['location-fragments'].length
-            ? loc['location-fragments']
-            : [{ start: loc.start, end: loc.end }],
-      })),
+      locations: normaliseLocations(match),
       score: match.score,
       residues: undefined,
       signature: undefined,
@@ -218,6 +319,10 @@ export const mergeData = (
     signatures.set(mergedMatch.accession, mergedMatch);
     if (match.signature.entry) {
       integrateSignature(mergedMatch, match.signature.entry, integrated);
+      signatureToEntry.set(
+        mergedMatch.accession,
+        match.signature.entry.accession,
+      );
     } else if (OTHER_FEATURES_DBS.includes(mergedMatch.source_database)) {
       mergedData.other_features.push(mergedMatch);
     } else if (OTHER_RESIDUES_DBS.includes(mergedMatch.source_database)) {
@@ -250,8 +355,6 @@ export const mergeData = (
     }
   }
 
-  mergedData.unintegrated = Object.values(unintegrated);
-  mergedData.other_features.push(...Object.values(otherFeatures));
   const integratedList = Array.from(integrated.values()).map((m) => {
     const locations = condenseLocations(m.children);
     return {
@@ -259,6 +362,18 @@ export const mergeData = (
       locations,
     };
   });
+
+  addInterProNMatches(interproNMatches, {
+    interproNSection: mergedData[INTERPRO_N_SECTION],
+    signatures,
+    signatureToEntry,
+    integrated,
+    unintegrated,
+    sequenceLength,
+  });
+
+  mergedData.unintegrated = Object.values(unintegrated);
+  mergedData.other_features.push(...Object.values(otherFeatures));
   mergedData.unintegrated.sort(
     (m1, m2) =>
       (m2 as { score: number }).score - (m1 as { score: number }).score,
