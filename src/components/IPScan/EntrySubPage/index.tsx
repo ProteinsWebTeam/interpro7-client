@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 import loadData from 'higherOrder/loadData/ts';
 import { getUrlForMeta } from 'higherOrder/loadData/defaults';
 import { iproscan2urlDB } from 'utils/url-patterns';
+import { INTERPRO_N_SOURCE } from 'components/IPScan/Summary/serializers';
 
 import { RelatedAdvanced } from 'components/Related/RelatedAdvanced';
 import Loading from 'components/SimpleCommonComponents/Loading';
@@ -14,6 +15,9 @@ const flatMatchesFromIPScanPayload = function* (
   proteinLength: number,
 ) {
   for (const match of ipScanMatches) {
+    /* Ignore InterPro-N matches (to avoid duplicated rows
+    or broken links if the predicted signature no longer exists in InterPro */
+    if (match.source === INTERPRO_N_SOURCE) continue;
     if (match.signature.entry) {
       yield {
         accession: match.signature.entry.accession,
