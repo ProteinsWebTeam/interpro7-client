@@ -65,11 +65,13 @@ const MARGIN_CHANGE_TRACKS = [
   'mobidblt',
   'mobidb-lite',
   'tmhmm',
+  'tmbed',
   'signalp',
   'signalp_gram_positive',
   'signalp_g+',
   'signalp_g-',
   'signalp_e',
+  'signalp_p',
   'signalp_gram_negative',
   'coils',
 ];
@@ -440,6 +442,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
                   hideCategory={hideCategory}
                   expandedTrack={!!expandedTrack[entry.accession]}
                   isPrinting={isPrinting}
+                  databases={databases}
                 />
               </React.Fragment>
             );

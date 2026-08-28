@@ -23,6 +23,7 @@ type Props = {
   hideCategory: boolean;
   expandedTrack: boolean;
   isPrinting: boolean;
+  databases?: DBsInfo;
 };
 
 const LabelsInTrack = ({
@@ -30,6 +31,7 @@ const LabelsInTrack = ({
   hideCategory,
   isPrinting,
   expandedTrack,
+  databases,
 }: Props) => {
   const key = entry.source_database === 'pdb' ? 'structure' : 'entry';
   const sourceDb = entry.source_database || '';
@@ -45,7 +47,11 @@ const LabelsInTrack = ({
       )}
     >
       {isAnExceptionalLabel(entry) ? (
-        <ExceptionalLabels entry={entry} isPrinting={isPrinting} />
+        <ExceptionalLabels
+          entry={entry}
+          isPrinting={isPrinting}
+          databases={databases}
+        />
       ) : (
         <>
           {isPrinting ? (
