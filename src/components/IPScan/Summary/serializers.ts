@@ -14,8 +14,27 @@ const RESIDUE_ONLY_DBS = ['pirsr'];
 /* InterProScan 6 tags every match with its source (origin).
 Matches predicted by InterPro-N do not have rich metadata */
 export const INTERPRO_N_SOURCE = 'InterPro-N';
-// Section holding the predictions that have no InterPro counterpart
+// Section holding the predictions whose type could not be determined
 const INTERPRO_N_SECTION = 'interpro-n';
+/* A prediction with no InterPro counterpart has no type to borrow, but each of
+these member databases produces exclusively, or mostly, one type of
+signature, so we can use the the database to know where the match belongs.
+Pfam is absent because it has families, domains, repeats, etc. so its predictions can
+only go to the InterPro-N section. */
+const DB_TO_INFERRED_TYPE: Record<string, string> = {
+  cathgene3d: 'homologous_superfamily',
+  cdd: 'domain',
+  hamap: 'family',
+  ncbifam: 'family',
+  panther: 'family',
+  pirsf: 'family',
+  prints: 'family',
+  profile: 'domain',
+  prosite: 'conserved_site',
+  sfld: 'family',
+  smart: 'domain',
+  ssf: 'homologous_superfamily',
+};
 
 type IpScanEntry = {
   accession: string;
@@ -165,8 +184,9 @@ const condenseLocations = (
 signature it predicts, so we use it to look up the InterPro match for the
 same signature and hang the prediction next to it: as an extra child of the
 InterPro entry when the signature is integrated, or of the "Unintegrated"
-header otherwise. Predictions with no InterPro counterpart have nowhere to
-go and end up in their own section. */
+header otherwise. A prediction with no InterPro counterpart is filed as an
+unintegrated match of the type inferred from its member database, and only
+ends up in the InterPro-N section when even that is unknown. */
 const addInterProNMatches = (
   matches: Array<Iprscan5Match>,
   {
@@ -202,7 +222,7 @@ const addInterProNMatches = (
       accession: `${accession}${N_MATCH_SUFFIX}`,
       name: traditional?.name || '',
       short_name: traditional?.short_name || '',
-      type: traditional?.type,
+      type: traditional?.type || DB_TO_INFERRED_TYPE[sourceDatabase],
       source_database: sourceDatabase,
       protein_length: sequenceLength || 0,
       locations: normaliseLocations(match),
@@ -237,6 +257,11 @@ const addInterProNMatches = (
         locations: condenseLocations(children) as IpScanMatch['locations'],
         children,
       };
+      continue;
+    }
+    if (nMatch.type) {
+      // Nothing to hang the prediction on, but we know which section it goes to.
+      unintegrated[nMatch.accession] = nMatch;
       continue;
     }
     interproNSection.push(nMatch);

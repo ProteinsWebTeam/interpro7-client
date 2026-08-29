@@ -454,8 +454,7 @@ const DomainsOnProteinLoaded = ({
           Google DeepMind.
           <br />
           Predictions for a signature that InterPro also matched are shown next
-          to that match; the remaining ones are listed under{' '}
-          <i>InterPro-N predictions</i>.
+          to that match.
           <br />
           See{' '}
           <Link
