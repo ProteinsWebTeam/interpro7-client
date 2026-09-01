@@ -255,7 +255,11 @@ const getConfigFor = (env, mode) => {
           ],
         },
         {
-          test: /((clanviewer)|(ebi-global)|(interpro-new))\.css$/i,
+          // Third-party stylesheets whose class names are hardcoded in the
+          // library's own runtime (e.g. vis-network builds `<div
+          // class="vis-tooltip">` in JS). CSS-modules hashing would rename the
+          // selectors and leave those elements unstyled, so keep `[local]`.
+          test: /((clanviewer)|(ebi-global)|(interpro-new)|(vis-network))\.css$/i,
           use: [
             {
               loader:
@@ -317,7 +321,8 @@ const getConfigFor = (env, mode) => {
               },
             },
           ],
-          exclude: /((clanviewer)|(ebi-global)|(interpro-new)|(logo))\.css$/i,
+          exclude:
+            /((clanviewer)|(ebi-global)|(interpro-new)|(vis-network)|(logo))\.css$/i,
         },
         {
           test: /\.scss$/i,

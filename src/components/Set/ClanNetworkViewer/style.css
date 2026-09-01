@@ -1,0 +1,115 @@
+.clan-network-container {
+  position: relative;
+}
+
+.clan-network-canvas {
+  width: 100%;
+  height: 600px;
+  border: 1px solid rgba(50, 50, 50, 0.2);
+}
+
+/* A full-screened element has a transparent background by default, which the
+   browser paints black -- explicitly keep the viewer on white, and let the
+   canvas take all the height left over by the controls row. */
+.clan-network-full-screen:fullscreen {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 1em;
+  background-color: white;
+}
+
+.clan-network-full-screen:fullscreen .clan-network-canvas {
+  flex: 1 1 auto;
+  /* Without this the flex item refuses to shrink below its 600px basis. */
+  min-height: 0;
+  height: auto;
+}
+
+/* Keep the canvas the flexible one; the legend takes only what it needs. */
+.clan-network-full-screen:fullscreen .clan-network-legend {
+  flex: 0 0 auto;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+.clan-network-controls {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  flex-wrap: wrap;
+  margin-bottom: 0.5em;
+}
+
+/* The legend sits under the canvas rather than in a dropdown, so it lays out
+   as columns across the full width instead of a narrow scrolling panel. */
+.clan-network-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.5em;
+  padding: 0.5em 0;
+  font-size: 0.85em;
+  & ul {
+    padding: 0;
+    margin: 0;
+  }
+  & header {
+    font-weight: bold;
+    margin-bottom: 0.25em;
+  }
+}
+
+/* The comparison methods are three tiers deep each, so they run across the
+   legend instead of stacking into one very tall column. */
+.legend-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 1.5em;
+}
+
+.legend-method-name {
+  display: block;
+  font-style: italic;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+.legend-line {
+  display: inline-block;
+  width: 24px;
+  border-top: 2px solid #666;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+.legend-line-dashed {
+  border-top-style: dashed;
+}
+
+/* Neutral, so a shape key never reads as one of the membership colours. */
+.legend-shape {
+  color: #555;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+.clan-network-size-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.clan-network-hint {
+  font-size: 0.85em;
+  font-style: italic;
+  color: #666;
+}

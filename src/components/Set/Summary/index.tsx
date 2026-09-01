@@ -10,21 +10,27 @@ import Tabs from 'components/Tabs';
 import loadable from 'higherOrder/loadable';
 import config from 'config';
 import descriptionToPath from 'utils/processDescription/descriptionToPath';
-import ClanViewer from '../ClanViewer';
 import Wikipedia from 'components/Entry/Summary/Wikipedia';
 
 import cssBinder from 'styles/cssBinder';
 
-import style from './style.css';
 import protvistaOptions from 'components/ProteinViewer/Options/style.css';
 import ipro from 'styles/interpro-vf.css';
 import summary from 'styles/summary.css';
 
-const css = cssBinder(style, summary, protvistaOptions, ipro);
+const css = cssBinder(summary, protvistaOptions, ipro);
 
 const SchemaOrgData = loadable({
   loader: () => import(/* webpackChunkName: "schemaOrg" */ 'schema_org'),
   loading: () => null,
+});
+
+const ClanNetworkViewerAsync = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "clan-network-viewer" */ 'components/Set/ClanNetworkViewer'
+    ),
+  loading: null,
 });
 
 export const schemaProcessData = ({
@@ -146,8 +152,8 @@ const SummarySet = ({ data, loading }: Props) => {
       metadata.description = metadata.name.name;
   }
 
-  const hasWiki =
-    metadata.source_database === 'pfam' && !!metadata.wikipedia?.length;
+  const isPfam = metadata.source_database?.toLowerCase() === 'pfam';
+  const hasWiki = isPfam && !!metadata.wikipedia?.length;
 
   return (
     <div className={css('vf-stack', 'vf-stack--400')}>
@@ -222,10 +228,12 @@ const SummarySet = ({ data, loading }: Props) => {
           </Tabs>
         </section>
       )}
-      <div className={css('vf-stack', 'vf-stack-400')}>
-        <h4>Clan Viewer</h4>
-        <ClanViewer data={data} loading={loading} />
-      </div>
+      {isPfam && (
+        <div className={css('vf-stack', 'vf-stack-400')}>
+          <h4>Clan Network Viewer</h4>
+          <ClanNetworkViewerAsync data={data} loading={loading} />
+        </div>
+      )}
     </div>
   );
 };
