@@ -16,6 +16,7 @@ import {
 import { ProteinsAPIVariation } from '@nightingale-elements/nightingale-variation/dist/proteinAPI';
 import {
   UNDERSCORE,
+  N_MATCH_SUFFIX,
   byEntryType,
   sortTracks,
   standardizeMobiDBFeatureStructure,
@@ -313,8 +314,11 @@ const DomainsOnProteinLoaded = ({
     }
   }
 
+  /* InterProScan results don't go through `mergeMatches`: their InterPro-N
+  predictions are already in `dataMerged`, flagged with the `:nMatch` suffix. */
+  let hasIPScanInterProN = false;
   if (
-    (protein.name as IPScanProteinName).name == 'InterProScan Search Result'
+    (protein.name as IPScanProteinName).name === 'InterProScan Search Result'
   ) {
     /*
     Results coming from InterProScan need a different processing pipeline. The data coming in is in a different format
@@ -423,6 +427,18 @@ const DomainsOnProteinLoaded = ({
       }
     });
 
+    hasIPScanInterProN = Object.values(
+      proteinViewerData as ProteinViewerDataObject<ExtendedFeature>,
+    ).some((entries) =>
+      entries.some(
+        (entry) =>
+          entry.accession.includes(N_MATCH_SUFFIX) ||
+          entry.children?.some((child) =>
+            child.accession.includes(N_MATCH_SUFFIX),
+          ),
+      ),
+    );
+
     // Flatten data to be processed by ProteinViewer
     flattenedData = flattenTracksObject(proteinViewerData);
   } else {
@@ -431,6 +447,25 @@ const DomainsOnProteinLoaded = ({
 
   return (
     <>
+      {hasIPScanInterProN && (
+        <Callout type="warning" alt={false} closable={true}>
+          This sequence includes additional matches predicted by ✨
+          <b>InterPro‑N</b>, an AI-powered deep learning model developed by
+          Google DeepMind.
+          <br />
+          Predictions for a signature that InterPro also matched are shown next
+          to that match.
+          <br />
+          See{' '}
+          <Link
+            href={`${config.root.readthedocs.href}protein_viewer.html#interpro-n-display-modes`}
+            target="_blank"
+          >
+            our documentation
+          </Link>{' '}
+          for more about InterPro-N.
+        </Callout>
+      )}
       {interpro_NMatchesCount > 0 && (
         <>
           <Callout type="warning" alt={false} closable={true}>

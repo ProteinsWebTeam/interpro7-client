@@ -35,6 +35,7 @@ const LabelsInTrack = ({
 }: Props) => {
   const key = entry.source_database === 'pdb' ? 'structure' : 'entry';
   const sourceDb = entry.source_database || '';
+  const isUnintegratedGroup = entry.accession.startsWith('parentUnintegrated:');
 
   return (
     <div
@@ -66,15 +67,11 @@ const LabelsInTrack = ({
                   entry.accession.startsWith('residue:') ||
                   entry.accession.startsWith('PIRSR')
                 ) &&
-                !hideCategory && (
+                !hideCategory &&
+                // The grouping track heads its own matches, see below.
+                !isUnintegratedGroup && (
                   <div className={css('inner-track-label')}>
-                    {/* Handle new type of parent track for stacked-view: unintegrated parent entry with matches coming from InterPro-N and HMMs */}
-                    <b>
-                      {' '}
-                      {!entry.accession.includes('parentUnintegrated')
-                        ? 'Unintegrated'
-                        : ''}
-                    </b>
+                    <b> Unintegrated</b>
                   </div>
                 )}
               <div
@@ -84,23 +81,33 @@ const LabelsInTrack = ({
                     : 'track-accession-child',
                 )}
               >
-                <Link
-                  to={{
-                    description: {
-                      main: {
-                        key,
+                {isUnintegratedGroup ? (
+                  /* Stands where the InterPro entry stands for an integrated
+                  signature, so its matches line up the same way. It groups
+                  rather than names something, so there is nothing to link to
+                  and the label reads "Unintegrated". */
+                  <b>
+                    <Label entry={entry} />
+                  </b>
+                ) : (
+                  <Link
+                    to={{
+                      description: {
+                        main: {
+                          key,
+                        },
+                        [key]: {
+                          db: sourceDb,
+                          accession: entry.accession.startsWith('residue:')
+                            ? entry.accession.split('residue:')[1]
+                            : entry.accession.replaceAll(/:nmatch/gi, ''),
+                        },
                       },
-                      [key]: {
-                        db: sourceDb,
-                        accession: entry.accession.startsWith('residue:')
-                          ? entry.accession.split('residue:')[1]
-                          : entry.accession.replaceAll(/:nmatch/gi, ''),
-                      },
-                    },
-                  }}
-                >
-                  <Label entry={entry} />
-                </Link>
+                    }}
+                  >
+                    <Label entry={entry} />
+                  </Link>
+                )}
               </div>
             </>
           )}

@@ -312,6 +312,7 @@ const TracksInCategory = forwardRef<ExpandedHandle, Props>(
             // Space unintegrated tracks
             const trackTopMargin =
               entry.source_database !== 'interpro' && // Not integrated
+              !entry.accession.startsWith('parentUnintegrated:') && // Not a grouping track
               !MARGIN_CHANGE_TRACKS.includes(
                 entry.source_database?.toLowerCase() || '',
               ) && // Not included in other_features (eg. pfam-n, etc..)
