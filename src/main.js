@@ -90,8 +90,16 @@ export const handleError = (error) => {
   } catch {
     /**/
   }
+  // `unhandledrejection` hands us a PromiseRejectionEvent, whose `.message` is
+  // undefined - the actual error is on `.reason`. Reporting `error.message`
+  // unconditionally is why those events reached GA with a blank label.
+  const cause = error?.reason ?? error;
+  // Without this, a failure to start is completely silent: the loading shell
+  // stays up, the console is clean, and the 30s watchdog in
+  // index.template.html reloads the page forever with nothing to debug.
+  console.error('InterPro failed to start:', cause);
   gtag('event', 'error', {
-    event_label: error.message,
+    event_label: cause?.message || String(cause),
     event_fatal: true,
   });
 };
