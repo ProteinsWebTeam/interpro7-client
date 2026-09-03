@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<GeneralWarning /> shows the message it is given 1`] = `
+<Callout
+  type="alert"
+>
+  <b>
+    InterPro will be unavailable on Sunday.
+  </b>
+</Callout>
+`;
