@@ -10,18 +10,27 @@ import { goToCustomLocation } from 'actions/creators';
 
 import Card from 'components/SimpleCommonComponents/Card';
 import Button from 'components/SimpleCommonComponents/Button';
-import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
+import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
 
 import { buildNodes, ClanVisNode, labelFont } from './buildNodes';
 import { ClanVisEdge } from './buildEdges';
 import { createEllipseRenderer } from './ellipseNode';
-import { FilterKey, isFilteredOut, toggleKey } from './filterKeys';
+import {
+  FilterKey,
+  isFilteredOut,
+  statusKey,
+  toggleKey,
+  typeKey,
+} from './filterKeys';
+import { getClanStatus } from './colorPalette';
 import { buildEdges } from './buildEdges';
 import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
 import { isAboveMinimumScore } from './colorPalette';
+import HintPopover from './HintPopover';
 import Legend from './Legend';
-import SizeSlider from './SizeSlider';
+import NodeSearch from './NodeSearch';
+import SizeControls from './SizeControls';
 
 import cssBinder from 'styles/cssBinder';
 import summary from 'styles/summary.css';
@@ -31,6 +40,11 @@ import style from './style.css';
 const css = cssBinder(summary, ipro, style);
 
 const MAX_NUMBER_OF_NODES = 100;
+
+// Picking a search result zooms in on that node. Held to a modest scale (and
+// never zooming *out* of a closer view) so selecting an entry reads as "take me
+// there" rather than resetting how far in the user already was.
+const SEARCH_FOCUS_SCALE = 1.2;
 
 // vis-network seeds its layout RNG with Math.random() unless told otherwise, so
 // the same clan settles into a different shape on every mount. Pinning the seed
@@ -101,6 +115,25 @@ export const ClanNetworkViewer = ({
   const [disabledFilters, setDisabledFilters] = useState<Set<FilterKey>>(
     () => new Set(),
   );
+  // Outside full screen the legend is a panel opened from the toolbar; in full
+  // screen there is no room beside the viewer, so it goes back to being laid
+  // out under the canvas and the toolbar button disappears with it.
+  const [showLegend, setShowLegend] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  // The browser can leave full screen without going through our button (Escape,
+  // the platform's own control), so the flag follows the document, not clicks.
+  useEffect(() => {
+    const onChange = () => setIsFullScreen(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+
+  const toggleFullScreen = () => {
+    const element = document.getElementById(FULL_SCREEN_ID);
+    if (isFullScreen) exitFullScreen();
+    else if (element) requestFullScreen(element);
+  };
 
   const showNetwork = forceShow || nodeCount <= MAX_NUMBER_OF_NODES;
 
@@ -292,10 +325,53 @@ export const ClanNetworkViewer = ({
       (nodesDataSet.get()[0]?.baseFontSize || 0) * fontScale;
   }, [nodeScale, fontScale]);
 
+  // Only what is actually on the canvas is findable: offering a hidden entry
+  // would zoom to empty space.
+  const searchableNodes = useMemo(
+    () =>
+      (relationships?.nodes || []).filter(
+        (node) =>
+          !isFilteredOut(
+            [
+              statusKey(getClanStatus(node, metadata?.accession || '')),
+              typeKey(node.type),
+            ],
+            disabledFilters,
+          ),
+      ),
+    [relationships?.nodes, metadata?.accession, disabledFilters],
+  );
+
+  const focusOnNode = (accession: string) => {
+    const network = networkRef.current;
+    if (!network) return;
+    network.selectNodes([accession]);
+    network.focus(accession, {
+      scale: Math.max(network.getScale(), SEARCH_FOCUS_SCALE),
+      animation: { duration: 600, easingFunction: 'easeInOutQuad' },
+    });
+  };
+
   if (!metadata || !relationships) return null;
 
+  const legend = (
+    <Legend
+      nodes={relationships.nodes}
+      links={links}
+      disabled={disabledFilters}
+      onToggle={(key) =>
+        setDisabledFilters((current) => toggleKey(current, key))
+      }
+      onReset={() => setDisabledFilters(new Set())}
+      currentClanAccession={metadata.accession}
+    />
+  );
+
   return (
-    <div className={css('vf-stack', 'vf-stack--400')}>
+    <div className={css('vf-stack', 'vf-stack--400', 'clan-network-viewer')}>
+      {!showNetwork && nodeCount > MAX_NUMBER_OF_NODES && (
+        <h4 className={css('clan-network-title')}>Clan Network Viewer</h4>
+      )}
       {!showNetwork && nodeCount > MAX_NUMBER_OF_NODES && (
         <Card>
           <section>
@@ -312,39 +388,68 @@ export const ClanNetworkViewer = ({
       {showNetwork && (
         <div id={FULL_SCREEN_ID} className={css('clan-network-full-screen')}>
           <div className={css('clan-network-controls')}>
-            <SizeSlider
-              label="Node size"
-              value={nodeScale}
-              onChange={setNodeScale}
-            />
-            <SizeSlider
-              label="Label size"
-              value={fontScale}
-              onChange={setFontScale}
-            />
-            <span className={css('clan-network-hint')}>
-              Drag a node to reposition it, ctrl/⌘-click it to open its entry.
-            </span>
-            <FullScreenButton
-              element={FULL_SCREEN_ID}
-              tooltip="View the clan network in full screen mode"
-            />
+            <h4 className={css('clan-network-title')}>Clan Network Viewer</h4>
+            {/* All three read the same way: `hollow` has a transparent border,
+                so the boxed pair is secondary (outlined) when the thing they
+                control is off, primary (filled) when it is on. */}
+            <div className={css('clan-network-controls-right')}>
+              {!isFullScreen && (
+                <Button
+                  type={showLegend ? 'primary' : 'secondary'}
+                  onClick={() => setShowLegend((current) => !current)}
+                  aria-pressed={showLegend}
+                  aria-controls="clanNetworkLegend"
+                >
+                  {showLegend
+                    ? 'Hide Interactive Legend'
+                    : 'Show Interactive Legend'}
+                </Button>
+              )}
+              <SizeControls
+                nodeScale={nodeScale}
+                onNodeScaleChange={setNodeScale}
+                fontScale={fontScale}
+                onFontScaleChange={setFontScale}
+              />
+              <Button
+                type={isFullScreen ? 'primary' : 'secondary'}
+                onClick={toggleFullScreen}
+                aria-pressed={isFullScreen}
+                title="View the clan network in full screen mode"
+              >
+                {isFullScreen ? 'Exit full screen' : 'Full screen'}
+              </Button>
+            </div>
           </div>
-          <div
-            ref={containerRef}
-            className={css('clan-network-canvas')}
-            id="clanNetworkViewerContainer"
-          />
-          <Legend
-            nodes={relationships.nodes}
-            links={links}
-            disabled={disabledFilters}
-            onToggle={(key) =>
-              setDisabledFilters((current) => toggleKey(current, key))
-            }
-            onReset={() => setDisabledFilters(new Set())}
-            currentClanAccession={metadata.accession}
-          />
+          <div className={css('clan-network-container')}>
+            <div
+              ref={containerRef}
+              className={css('clan-network-canvas')}
+              id="clanNetworkViewerContainer"
+            />
+            <NodeSearch nodes={searchableNodes} onSelect={focusOnNode} />
+            <HintPopover label="How to use this network">
+              Drag a node to reposition it, ctrl/⌘-click it to open its entry.
+            </HintPopover>
+            {!isFullScreen && showLegend && (
+              <div
+                id="clanNetworkLegend"
+                className={css('clan-network-legend-floating')}
+              >
+                <button
+                  type="button"
+                  className={css('clan-network-legend-close')}
+                  onClick={() => setShowLegend(false)}
+                  aria-label="Close the legend"
+                  title="Close the legend"
+                >
+                  ×
+                </button>
+                {legend}
+              </div>
+            )}
+          </div>
+          {isFullScreen && legend}
         </div>
       )}
     </div>

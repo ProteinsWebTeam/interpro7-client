@@ -1,3 +1,9 @@
+/* Sets the viewer apart from whatever section precedes it on the page -- the
+   Wikipedia block, usually -- which the surrounding stack does not space for. */
+.clan-network-viewer {
+  margin-top: 2rem;
+}
+
 .clan-network-container {
   position: relative;
 }
@@ -6,6 +12,57 @@
   width: 100%;
   height: 600px;
   border: 1px solid rgba(50, 50, 50, 0.2);
+}
+
+/* The legend floats just outside the viewer's left edge, level with the top of
+   the canvas, so it never covers the graph. It is positioned rather than laid
+   out so that opening it doesn't reflow the page or shrink the canvas. In full
+   screen there is no "outside" to use, so the rule further down brings it back
+   over the top-left corner. */
+.clan-network-legend-floating {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 0.5em);
+  z-index: 1;
+  width: 14em;
+  /* Never taller than the canvas beside it; scroll inside instead. */
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 0.25em 0.75em 0.5em;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+  /* One narrow stack rather than the wide row it lays out as by default. */
+  & .clan-network-legend {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1em;
+  }
+
+  & .legend-methods {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+}
+
+.clan-network-legend-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  padding: 0 0.25em;
+  border: none;
+  background: none;
+  color: #666;
+  font-size: 1.2em;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.clan-network-legend-close:hover {
+  color: #000;
 }
 
 /* A full-screened element has a transparent background by default, which the
@@ -20,11 +77,16 @@
   background-color: white;
 }
 
-.clan-network-full-screen:fullscreen .clan-network-canvas {
+/* The canvas is wrapped (the search box and legend are positioned over it), so
+   it is the wrapper that has to flex, and the canvas that has to fill it. */
+.clan-network-full-screen:fullscreen .clan-network-container {
   flex: 1 1 auto;
   /* Without this the flex item refuses to shrink below its 600px basis. */
   min-height: 0;
-  height: auto;
+}
+
+.clan-network-full-screen:fullscreen .clan-network-canvas {
+  height: 100%;
 }
 
 /* Keep the canvas the flexible one; the legend takes only what it needs. */
@@ -34,12 +96,139 @@
   overflow-y: auto;
 }
 
+/* Both of these sit over the canvas rather than in the controls row, so they
+   stay within reach in full screen and don't push the graph down: the search in
+   the top-left corner, the hint button in the top-right. */
+.clan-network-info {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  font-size: 0.85em;
+}
+
+.clan-network-info-button {
+  width: 1.9em;
+  height: 1.9em;
+  padding: 0;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 50%;
+  background-color: white;
+  color: #1779ba;
+  font-style: italic;
+  font-family: serif;
+  font-size: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.clan-network-info-button:hover {
+  background-color: #e8f2f8;
+}
+
+/* Opens leftwards, into the canvas: the button is at the right-hand edge of the
+   viewer, so anchoring the other way would run the bubble off the side. */
+.clan-network-info-bubble {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 16em;
+  margin-top: 0.35em;
+  padding: 0.5em 0.75em;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.clan-network-search {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  z-index: 1;
+  width: 15em;
+  max-width: calc(100% - 1em);
+  font-size: 0.85em;
+
+  & input {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0.35em 0.6em;
+    box-sizing: border-box;
+    border: 1px solid rgba(50, 50, 50, 0.3);
+    border-radius: 3px;
+    background-color: white;
+    font-size: inherit;
+  }
+}
+
+.clan-network-search-results {
+  position: absolute;
+  width: 100%;
+  max-height: 16em;
+  overflow-y: auto;
+  margin: 0.25em 0 0;
+  padding: 0;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.clan-network-search-result {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em;
+  padding: 0.3em 0.6em;
+  cursor: pointer;
+}
+
+.clan-network-search-result-active {
+  background-color: #e8f2f8;
+}
+
+.clan-network-search-name {
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clan-network-search-accession {
+  flex: 0 0 auto;
+  color: #666;
+}
+
+.clan-network-search-empty {
+  padding: 0.3em 0.6em;
+  color: #666;
+  font-style: italic;
+}
+
+/* The heading shares the toolbar row with the buttons, so it loses the block
+   margins it would otherwise be centred against. */
+.clan-network-title {
+  margin: 0;
+}
+
 .clan-network-controls {
   display: flex;
   align-items: center;
   gap: 1em;
   flex-wrap: wrap;
   margin-bottom: 0.5em;
+}
+
+/* Every control is a button of the same kind, so they travel together at the
+   far end of the toolbar. `gap` is tighter than the toolbar's own, to read as
+   one group rather than three separate controls. */
+.clan-network-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-left: auto;
 }
 
 /* The legend sits under the canvas rather than in a dropdown, so it lays out
@@ -153,14 +342,31 @@
   vertical-align: middle;
 }
 
+/* Anchors the size popover under its button. The button sits at the right-hand
+   end of the toolbar, so the panel is right-aligned to stay on the page. */
+.clan-network-sizes {
+  position: relative;
+}
+
+.clan-network-sizes-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: max-content;
+  margin-top: 0.35em;
+  padding: 0.6em 0.75em;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
 .clan-network-size-slider {
   display: flex;
   align-items: center;
   gap: 0.5em;
-}
-
-.clan-network-hint {
-  font-size: 0.85em;
-  font-style: italic;
-  color: #666;
 }

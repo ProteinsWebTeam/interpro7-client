@@ -230,7 +230,8 @@ const SummarySet = ({ data, loading }: Props) => {
       )}
       {isPfam && (
         <div className={css('vf-stack', 'vf-stack-400')}>
-          <h4>Clan Network Viewer</h4>
+          {/* The heading is rendered by the viewer itself, on the same row as
+              its controls. */}
           <ClanNetworkViewerAsync data={data} loading={loading} />
         </div>
       )}
