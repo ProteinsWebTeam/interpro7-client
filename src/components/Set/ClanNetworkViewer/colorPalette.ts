@@ -165,6 +165,18 @@ export const getMethodLabel = (method?: string): string =>
 const matchesTier = (tier: ScoreTier, score: number): boolean =>
   'max' in tier ? score < tier.max : score >= tier.min;
 
+// Which strength tier a match falls into, or null for a method we have no
+// strength convention for. Also what the legend's per-tier filters key on.
+export const getEdgeTierIndex = (
+  method: string | undefined,
+  score: number,
+): number | null => {
+  const tiers = method && EDGE_TIERS[method.toLowerCase()];
+  if (!tiers) return null;
+  const index = tiers.findIndex((tier) => matchesTier(tier, score));
+  return index === -1 ? tiers.length - 1 : index;
+};
+
 // Edge color + width for a given method/score pair. Known methods use the
 // fixed reference tiers above; anything else falls back to the hash color
 // at the thinnest (weak) width, since we have no strength convention for it.
@@ -172,9 +184,8 @@ export const getEdgeStyle = (
   method: string | undefined,
   score: number,
 ): EdgeTier => {
-  const tiers = method && EDGE_TIERS[method.toLowerCase()];
-  if (!tiers) return { color: getMethodColor(method), width: 1 };
-  const { color, width } =
-    tiers.find((tier) => matchesTier(tier, score)) || tiers[tiers.length - 1];
+  const index = getEdgeTierIndex(method, score);
+  if (index === null) return { color: getMethodColor(method), width: 1 };
+  const { color, width } = EDGE_TIERS[(method as string).toLowerCase()][index];
   return { color, width };
 };

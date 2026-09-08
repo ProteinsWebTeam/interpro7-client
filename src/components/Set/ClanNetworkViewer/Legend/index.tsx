@@ -11,6 +11,14 @@ import {
 } from '../colorPalette';
 import { getShapeForType } from '../buildNodes';
 import {
+  FilterKey,
+  methodKey,
+  NESTED_KEY,
+  statusKey,
+  tierKey,
+  typeKey,
+} from '../filterKeys';
+import {
   ClanNetworkLink,
   ClanNetworkNode,
   ClanMembershipStatus,
@@ -24,6 +32,9 @@ type Props = {
   nodes: Array<ClanNetworkNode>;
   links: Array<ClanNetworkLink>;
   currentClanAccession: string;
+  disabled: Set<FilterKey>;
+  onToggle: (key: FilterKey) => void;
+  onReset: () => void;
 };
 
 const KNOWN_METHODS = new Set(METHOD_LEGEND.map(({ method }) => method));
@@ -41,6 +52,34 @@ const SHAPES: Record<string, React.ReactNode> = {
   star: (
     <polygon points="8,0 9.9,5.4 15.6,5.5 11,9 12.7,14.5 8,11.2 3.3,14.5 5,9 0.4,5.5 6.1,5.4" />
   ),
+};
+
+// Every legend entry is the filter for what it describes: clicking one hides
+// those nodes or edges and strikes the entry through. A button rather than a
+// styled span so it is reachable by keyboard and announces its state.
+const Toggle = ({
+  filterKey,
+  disabled,
+  onToggle,
+  children,
+}: {
+  filterKey: FilterKey;
+  disabled: Set<FilterKey>;
+  onToggle: (key: FilterKey) => void;
+  children: React.ReactNode;
+}) => {
+  const isOff = disabled.has(filterKey);
+  return (
+    <button
+      type="button"
+      className={css('legend-toggle', { 'legend-toggle-off': isOff })}
+      aria-pressed={!isOff}
+      onClick={() => onToggle(filterKey)}
+      title={isOff ? 'Click to show' : 'Click to hide'}
+    >
+      {children}
+    </button>
+  );
 };
 
 const ShapeSwatch = ({ type }: { type: string }) => (
@@ -74,7 +113,14 @@ const uniqueInOrder = <T,>(values: Array<T>, order: Array<T>): Array<T> => {
   return order.filter((value) => present.has(value));
 };
 
-const Legend = ({ nodes, links, currentClanAccession }: Props) => {
+const Legend = ({
+  nodes,
+  links,
+  currentClanAccession,
+  disabled,
+  onToggle,
+  onReset,
+}: Props) => {
   // Every section below is derived from what is actually drawn, so a clan
   // with, say, no DALI edges and no nested links gets no entries for them.
   const statuses = uniqueInOrder(
@@ -101,11 +147,17 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
           <ul className={css('no-bullet')}>
             {statuses.map((status) => (
               <li key={status}>
-                <span
-                  className={css('legend-swatch')}
-                  style={{ backgroundColor: STATUS_COLOR[status].background }}
-                />
-                {STATUS_LABEL[status]}
+                <Toggle
+                  filterKey={statusKey(status)}
+                  disabled={disabled}
+                  onToggle={onToggle}
+                >
+                  <span
+                    className={css('legend-swatch')}
+                    style={{ backgroundColor: STATUS_COLOR[status].background }}
+                  />
+                  {STATUS_LABEL[status]}
+                </Toggle>
               </li>
             ))}
           </ul>
@@ -117,8 +169,14 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
           <ul className={css('no-bullet')}>
             {types.map((type) => (
               <li key={type}>
-                <ShapeSwatch type={type} />
-                {capitalize(humanize(type))}
+                <Toggle
+                  filterKey={typeKey(type)}
+                  disabled={disabled}
+                  onToggle={onToggle}
+                >
+                  <ShapeSwatch type={type} />
+                  {capitalize(humanize(type))}
+                </Toggle>
               </li>
             ))}
           </ul>
@@ -133,15 +191,31 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
           <div className={css('legend-methods')}>
             {knownMethodLegend.map(({ method, label, tiers }) => (
               <div key={method} className={css('legend-method')}>
-                <span className={css('legend-method-name')}>{label}</span>
+                {/* The method name switches the whole method off, since each of
+                    its edges carries the method key as well as its tier key. */}
+                <span className={css('legend-method-name')}>
+                  <Toggle
+                    filterKey={methodKey(method)}
+                    disabled={disabled}
+                    onToggle={onToggle}
+                  >
+                    {label}
+                  </Toggle>
+                </span>
                 <ul className={css('no-bullet')}>
-                  {tiers.map((tier) => (
+                  {tiers.map((tier, tierIndex) => (
                     <li key={tier.label}>
-                      <span
-                        className={css('legend-line')}
-                        style={{ borderTopColor: tier.color }}
-                      />
-                      {tier.label}
+                      <Toggle
+                        filterKey={tierKey(method, tierIndex)}
+                        disabled={disabled}
+                        onToggle={onToggle}
+                      >
+                        <span
+                          className={css('legend-line')}
+                          style={{ borderTopColor: tier.color }}
+                        />
+                        {tier.label}
+                      </Toggle>
                     </li>
                   ))}
                 </ul>
@@ -153,15 +227,21 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
                 <ul className={css('no-bullet')}>
                   {otherMethods.map((method) => (
                     <li key={method}>
-                      <span
-                        className={css('legend-line')}
-                        style={{
-                          borderTopColor: getMethodColor(
-                            method === 'unknown' ? undefined : method,
-                          ),
-                        }}
-                      />
-                      {method}
+                      <Toggle
+                        filterKey={methodKey(method)}
+                        disabled={disabled}
+                        onToggle={onToggle}
+                      >
+                        <span
+                          className={css('legend-line')}
+                          style={{
+                            borderTopColor: getMethodColor(
+                              method === 'unknown' ? undefined : method,
+                            ),
+                          }}
+                        />
+                        {method}
+                      </Toggle>
                     </li>
                   ))}
                 </ul>
@@ -175,10 +255,28 @@ const Legend = ({ nodes, links, currentClanAccession }: Props) => {
           <header>Relationship</header>
           <ul className={css('no-bullet')}>
             <li>
-              <span className={css('legend-line', 'legend-line-dashed')} />
-              Nested domain relationship
+              <Toggle
+                filterKey={NESTED_KEY}
+                disabled={disabled}
+                onToggle={onToggle}
+              >
+                <span className={css('legend-line', 'legend-line-dashed')} />
+                Nested domain relationship
+              </Toggle>
             </li>
           </ul>
+        </div>
+      )}
+      {disabled.size > 0 && (
+        <div className={css('legend-block')}>
+          <header>Filters</header>
+          <button
+            type="button"
+            className={css('legend-reset')}
+            onClick={onReset}
+          >
+            Show all ({disabled.size} hidden)
+          </button>
         </div>
       )}
     </section>

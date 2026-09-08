@@ -95,6 +95,57 @@
   border-top-style: dashed;
 }
 
+/* Legend entries are filter switches, so they are buttons -- stripped back to
+   read as the plain text they replaced, and struck through when switched off.
+   The opacity is on the button, so a switched-off entry's swatch or line fades
+   along with its label. */
+.legend-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.legend-toggle:hover {
+  text-decoration: underline;
+}
+
+.legend-toggle:focus-visible {
+  outline: 2px solid #1d78b3;
+  outline-offset: 1px;
+}
+
+.legend-toggle-off {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.legend-toggle-off:hover {
+  text-decoration: line-through underline;
+}
+
+/* The method name is a toggle too, and inherits the italics around it. */
+.legend-method-name .legend-toggle {
+  font-style: inherit;
+  font-weight: inherit;
+}
+
+.legend-reset {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: #1d78b3;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 /* Neutral, so a shape key never reads as one of the membership colours. */
 .legend-shape {
   color: #555;

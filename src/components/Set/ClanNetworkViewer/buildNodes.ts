@@ -7,6 +7,7 @@ import {
   STATUS_HIGHLIGHT_BORDER,
 } from './colorPalette';
 import { EllipseRenderer } from './ellipseNode';
+import { FilterKey, statusKey, typeKey } from './filterKeys';
 import { ClanNetworkNode } from './types';
 
 // Keyed on InterPro's own entry-type vocabulary (lowercase snake_case, see
@@ -62,6 +63,7 @@ export type ClanVisNode = VisNode & {
   baseSize: number;
   baseFontSize: number;
   ctxRenderer?: EllipseRenderer;
+  filterKeys: Array<FilterKey>;
 };
 
 const buildNodeTooltip = (
@@ -118,6 +120,7 @@ export const buildNodes = (
       baseSize,
       baseFontSize: BASE_FONT_SIZE,
       font: labelFont(BASE_FONT_SIZE),
+      filterKeys: [statusKey(status), typeKey(node.type)],
       title: buildNodeTooltip(node, currentClanAccession),
       ...(position ? { x: position.x, y: position.y, fixed: true } : undefined),
     };

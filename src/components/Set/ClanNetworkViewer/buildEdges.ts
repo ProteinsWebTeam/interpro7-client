@@ -1,6 +1,7 @@
 import { Edge as VisEdge } from 'vis-network';
 
-import { getEdgeStyle, getMethodLabel } from './colorPalette';
+import { getEdgeStyle, getEdgeTierIndex, getMethodLabel } from './colorPalette';
+import { FilterKey, methodKey, NESTED_KEY, tierKey } from './filterKeys';
 import { formatScore, getScoreLabel } from './scoreLabel';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
 
@@ -55,10 +56,23 @@ const buildEdgeTooltip = (
   return el;
 };
 
+export type ClanVisEdge = VisEdge & { filterKeys: Array<FilterKey> };
+
+// An edge answers to its method, to its strength tier within that method, and
+// to `nested` when it is one, so the legend can switch off any of the three.
+const filterKeysFor = (link: ClanNetworkLink): Array<FilterKey> => {
+  const tierIndex = getEdgeTierIndex(link.method, link.score);
+  return [
+    methodKey(link.method),
+    ...(tierIndex === null ? [] : [tierKey(link.method as string, tierIndex)]),
+    ...(link.nested ? [NESTED_KEY] : []),
+  ];
+};
+
 export const buildEdges = (
   links: Array<ClanNetworkLink>,
   nodes: Array<ClanNetworkNode>,
-): Array<VisEdge> => {
+): Array<ClanVisEdge> => {
   const nodeByAccession = new Map(nodes.map((node) => [node.accession, node]));
 
   const groups = new Map<string, Array<ClanNetworkLink>>();
@@ -69,7 +83,7 @@ export const buildEdges = (
     groups.set(key, group);
   }
 
-  const edges: Array<VisEdge> = [];
+  const edges: Array<ClanVisEdge> = [];
   for (const group of groups.values()) {
     group.forEach((link, index) => {
       const sourceNode = nodeByAccession.get(link.source);
@@ -94,6 +108,7 @@ export const buildEdges = (
         dashes: Boolean(link.nested),
         smooth: curvatureFor(index, group.length),
         title: buildEdgeTooltip(link, sourceLabel, targetLabel),
+        filterKeys: filterKeysFor(link),
       });
     });
   }

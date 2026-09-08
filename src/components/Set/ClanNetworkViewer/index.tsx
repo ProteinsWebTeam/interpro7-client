@@ -13,7 +13,9 @@ import Button from 'components/SimpleCommonComponents/Button';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
 import { buildNodes, ClanVisNode, labelFont } from './buildNodes';
+import { ClanVisEdge } from './buildEdges';
 import { createEllipseRenderer } from './ellipseNode';
+import { FilterKey, isFilteredOut, toggleKey } from './filterKeys';
 import { buildEdges } from './buildEdges';
 import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
@@ -80,6 +82,7 @@ export const ClanNetworkViewer = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const networkRef = useRef<Network | null>(null);
   const nodesDataSetRef = useRef<DataSet<ClanVisNode> | null>(null);
+  const edgesDataSetRef = useRef<DataSet<ClanVisEdge> | null>(null);
 
   const metadata = loading || !data.metadata ? null : data.metadata;
   const relationships = metadata?.relationships;
@@ -92,6 +95,12 @@ export const ClanNetworkViewer = ({
   // size at draw time -- a ref, because vis-network holds on to the renderer it
   // was given when the node was created.
   const fontSizeRef = useRef(0);
+  // Legend entries the user has switched off. Nodes and edges carrying a
+  // disabled key are hidden rather than removed, so the layout the network
+  // stabilised into survives filtering and un-filtering.
+  const [disabledFilters, setDisabledFilters] = useState<Set<FilterKey>>(
+    () => new Set(),
+  );
 
   const showNetwork = forceShow || nodeCount <= MAX_NUMBER_OF_NODES;
 
@@ -138,8 +147,9 @@ export const ClanNetworkViewer = ({
     const edges = buildEdges(sortedLinks, sortedNodes);
 
     const nodesDataSet = new DataSet<ClanVisNode>(nodes);
-    const edgesDataSet = new DataSet(edges);
+    const edgesDataSet = new DataSet<ClanVisEdge>(edges);
     nodesDataSetRef.current = nodesDataSet;
+    edgesDataSetRef.current = edgesDataSet;
 
     const network = new Network(
       containerRef.current,
@@ -213,9 +223,35 @@ export const ClanNetworkViewer = ({
       network.destroy();
       networkRef.current = null;
       nodesDataSetRef.current = null;
+      edgesDataSetRef.current = null;
     };
     // Rebuilding on every db change would wipe layout & physics state.
   }, [metadata?.accession, showNetwork]);
+
+  // Legend filters: hide whatever carries a switched-off key. vis-network hides
+  // a hidden node's edges for us, so only explicitly disabled edges need doing.
+  useEffect(() => {
+    const nodesDataSet = nodesDataSetRef.current;
+    const edgesDataSet = edgesDataSetRef.current;
+    if (!nodesDataSet || !edgesDataSet) return;
+    nodesDataSet.update(
+      nodesDataSet.get().map((node) => ({
+        id: node.id,
+        hidden: isFilteredOut(node.filterKeys, disabledFilters),
+      })),
+    );
+    edgesDataSet.update(
+      edgesDataSet.get().map((edge) => ({
+        id: edge.id as string,
+        hidden: isFilteredOut(edge.filterKeys, disabledFilters),
+      })),
+    );
+  }, [disabledFilters, showNetwork, metadata?.accession]);
+
+  // A filter set built for one clan means nothing in the next one.
+  useEffect(() => {
+    setDisabledFilters(new Set());
+  }, [metadata?.accession]);
 
   // Keep the canvas the same size as its container. Without this the network
   // keeps whatever pixel size it was built at, so going full screen would just
@@ -302,6 +338,11 @@ export const ClanNetworkViewer = ({
           <Legend
             nodes={relationships.nodes}
             links={links}
+            disabled={disabledFilters}
+            onToggle={(key) =>
+              setDisabledFilters((current) => toggleKey(current, key))
+            }
+            onReset={() => setDisabledFilters(new Set())}
             currentClanAccession={metadata.accession}
           />
         </div>
