@@ -31,6 +31,7 @@ const KNOWN_METHODS = new Set(METHOD_LEGEND.map(({ method }) => method));
 // The node shapes as drawn, so the legend can show one rather than name it.
 const SHAPES: Record<string, React.ReactNode> = {
   dot: <circle cx="8" cy="8" r="7" />,
+  ellipse: <ellipse cx="8" cy="8" rx="7.5" ry="5" />,
   square: <rect x="1" y="1" width="14" height="14" />,
   box: <rect x="1" y="3" width="14" height="10" rx="3" />,
   triangle: <polygon points="8,1 15,15 1,15" />,

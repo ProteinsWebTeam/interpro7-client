@@ -6,16 +6,24 @@ import {
   STATUS_COLOR,
   STATUS_HIGHLIGHT_BORDER,
 } from './colorPalette';
+import { EllipseRenderer } from './ellipseNode';
 import { ClanNetworkNode } from './types';
 
 // Keyed on InterPro's own entry-type vocabulary (lowercase snake_case, see
 // src/components/Entry/EntryListFilters/EntryTypeFilter), not Pfam's own
-// (capitalized) type strings that the reference curator tool used.
+// (capitalized) type strings that the reference curator tool used. The API
+// lower-cases to the same keys, but note the separator differs from that tool:
+// it sends `Coiled_coil`, not `Coiled-coil`.
+//
+// Only the Pfam types can actually occur here -- the viewer is rendered for
+// Pfam clans alone -- so `homologous_superfamily` shares the hexagon with
+// `disordered` without ever colliding with it.
 export const SHAPE_BY_TYPE: Record<string, string> = {
   family: 'dot',
   domain: 'square',
-  homologous_superfamily: 'hexagon',
   repeat: 'triangle',
+  coiled_coil: 'ellipse',
+  disordered: 'hexagon',
   conserved_site: 'diamond',
   active_site: 'star',
   binding_site: 'triangleDown',
@@ -32,10 +40,28 @@ const MIN_NODE_SIZE = 10;
 const MAX_NODE_SIZE = 40;
 const BASE_FONT_SIZE = 20;
 
+// A white halo keeps labels readable where they cross an edge or a
+// neighbouring node -- vis-network draws none by default.
+export const labelFont = (fontSize: number) => ({
+  size: fontSize,
+  strokeWidth: 3,
+  strokeColor: '#ffffff',
+});
+
+// SHAPE_BY_TYPE names shapes semantically; `ellipse` is the one vis-network
+// cannot size from `size`, so it is drawn as a custom shape instead. See
+// ellipseNode.ts.
+const toVisShape = (
+  shape: string,
+  ctxRenderer: EllipseRenderer,
+): { shape: string; ctxRenderer?: EllipseRenderer } =>
+  shape === 'ellipse' ? { shape: 'custom', ctxRenderer } : { shape };
+
 export type ClanVisNode = VisNode & {
   id: string;
   baseSize: number;
   baseFontSize: number;
+  ctxRenderer?: EllipseRenderer;
 };
 
 const buildNodeTooltip = (
@@ -60,6 +86,7 @@ export const buildNodes = (
   nodes: Array<ClanNetworkNode>,
   currentClanAccession: string,
   positions: Record<string, { x: number; y: number }>,
+  ellipseRenderer: EllipseRenderer,
 ): Array<ClanVisNode> => {
   const scores = nodes.map((node) => node.score);
   const minScore = Math.min(...scores);
@@ -77,7 +104,7 @@ export const buildNodes = (
 
     return {
       id: node.accession,
-      shape: getShapeForType(node.type),
+      ...toVisShape(getShapeForType(node.type), ellipseRenderer),
       label: getNodeLabel(node),
       color: {
         background: color.background,
@@ -90,9 +117,7 @@ export const buildNodes = (
       size: baseSize,
       baseSize,
       baseFontSize: BASE_FONT_SIZE,
-      // A white halo keeps labels readable where they cross an edge or a
-      // neighbouring node -- vis-network draws none by default.
-      font: { size: BASE_FONT_SIZE, strokeWidth: 3, strokeColor: '#ffffff' },
+      font: labelFont(BASE_FONT_SIZE),
       title: buildNodeTooltip(node, currentClanAccession),
       ...(position ? { x: position.x, y: position.y, fixed: true } : undefined),
     };

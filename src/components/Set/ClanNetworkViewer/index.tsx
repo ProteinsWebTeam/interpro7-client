@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
@@ -12,10 +12,12 @@ import Card from 'components/SimpleCommonComponents/Card';
 import Button from 'components/SimpleCommonComponents/Button';
 import FullScreenButton from 'components/SimpleCommonComponents/FullScreenButton';
 
-import { buildNodes, ClanVisNode } from './buildNodes';
+import { buildNodes, ClanVisNode, labelFont } from './buildNodes';
+import { createEllipseRenderer } from './ellipseNode';
 import { buildEdges } from './buildEdges';
 import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
+import { isAboveMinimumScore } from './colorPalette';
 import Legend from './Legend';
 import SizeSlider from './SizeSlider';
 
@@ -86,8 +88,19 @@ export const ClanNetworkViewer = ({
   const [forceShow, setForceShow] = useState(false);
   const [nodeScale, setNodeScale] = useState(1);
   const [fontScale, setFontScale] = useState(1);
+  // The custom ellipse shape draws its own label, so it needs the current font
+  // size at draw time -- a ref, because vis-network holds on to the renderer it
+  // was given when the node was created.
+  const fontSizeRef = useRef(0);
 
   const showNetwork = forceShow || nodeCount <= MAX_NUMBER_OF_NODES;
+
+  // Weak matches are dropped before anything reads the links, so the graph, the
+  // isolated-node grid and the legend all describe the same set of edges.
+  const links = useMemo(
+    () => (relationships?.links || []).filter(isAboveMinimumScore),
+    [relationships?.links],
+  );
 
   // Redirect off the "all" pseudo-database, same as the old ClanViewer.
   useEffect(() => {
@@ -111,11 +124,17 @@ export const ClanNetworkViewer = ({
     }
 
     const sortedNodes = sortNodes(relationships.nodes);
-    const sortedLinks = sortLinks(relationships.links);
+    const sortedLinks = sortLinks(links);
 
     const isolated = getIsolatedAccessions(sortedNodes, sortedLinks);
     const positions = placeIsolatedNodes(isolated);
-    const nodes = buildNodes(sortedNodes, metadata?.accession || '', positions);
+    const nodes = buildNodes(
+      sortedNodes,
+      metadata?.accession || '',
+      positions,
+      createEllipseRenderer(() => fontSizeRef.current),
+    );
+    fontSizeRef.current = nodes[0]?.baseFontSize || 0;
     const edges = buildEdges(sortedLinks, sortedNodes);
 
     const nodesDataSet = new DataSet<ClanVisNode>(nodes);
@@ -228,9 +247,13 @@ export const ClanNetworkViewer = ({
       nodesDataSet.get().map((node) => ({
         id: node.id,
         size: node.baseSize * nodeScale,
-        font: { size: node.baseFontSize * fontScale },
+        // The whole font object, not just its size: replacing it with `{ size }`
+        // alone would drop the white halo the labels are built with.
+        font: labelFont(node.baseFontSize * fontScale),
       })),
     );
+    fontSizeRef.current =
+      (nodesDataSet.get()[0]?.baseFontSize || 0) * fontScale;
   }, [nodeScale, fontScale]);
 
   if (!metadata || !relationships) return null;
@@ -278,7 +301,7 @@ export const ClanNetworkViewer = ({
           />
           <Legend
             nodes={relationships.nodes}
-            links={relationships.links}
+            links={links}
             currentClanAccession={metadata.accession}
           />
         </div>

@@ -47,9 +47,9 @@ type ScoreTier = { color: string; width: number } & (
 // Thresholds and colors mirror the reference curator visualisation script
 // (visualise_clan_network.py) exactly: 3 significance tiers per comparison
 // method, using a colorblind-safe palette distinct per method. These are
-// purely a styling/legend concern -- edges reaching the frontend have
-// already passed whatever inclusion threshold the backend/pipeline applied;
-// these tiers just bucket the *strength* of an already-included match.
+// purely a styling/legend concern: they bucket the *strength* of a match that
+// has already passed both the pipeline's inclusion threshold and
+// MIN_SCORE_BY_METHOD below.
 const EDGE_TIERS: Record<string, Array<ScoreTier>> = {
   // E-value: lower is stronger.
   foldseek: [
@@ -74,6 +74,24 @@ const EDGE_TIERS: Record<string, Array<ScoreTier>> = {
     { min: -Infinity, color: '#00d9a3', width: 1 },
   ],
 };
+
+// Minimum score a link must reach to be drawn at all. The API applies the
+// reference pipeline's own inclusion thresholds, which are deliberately loose
+// for curators -- SCOOP arrives from 10 up, and below 30 it is dominated by
+// false positives, so the web view raises that floor to 30. Methods without an
+// entry here are drawn exactly as received.
+export const MIN_SCORE_BY_METHOD: Record<string, number> = {
+  scoop: 30,
+};
+
+// The weakest SCOOP tier in EDGE_TIERS is unreachable while that floor is in
+// place; it stays as a fallback but is deliberately absent from the legend.
+export const isAboveMinimumScore = (link: {
+  method?: string;
+  score: number;
+}): boolean =>
+  link.score >=
+  (MIN_SCORE_BY_METHOD[link.method?.toLowerCase() || ''] ?? -Infinity);
 
 // Legend copy for the 4 known methods, in the same tier order as
 // EDGE_TIERS, worded after the reference tool's legend.
@@ -115,7 +133,6 @@ export const METHOD_LEGEND: Array<{
     tiers: [
       { label: 'Score > 100', color: EDGE_TIERS.scoop[0].color },
       { label: 'Score 30 to 100', color: EDGE_TIERS.scoop[1].color },
-      { label: 'Score < 30', color: EDGE_TIERS.scoop[2].color },
     ],
   },
 ];
