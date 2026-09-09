@@ -60,7 +60,8 @@ export type ClanVisEdge = VisEdge & { filterKeys: Array<FilterKey> };
 
 // An edge answers to its method, to its strength tier within that method, and
 // to `nested` when it is one, so the legend can switch off any of the three.
-const filterKeysFor = (link: ClanNetworkLink): Array<FilterKey> => {
+// Exported for nodeVisibility.ts, which applies the same test to the raw links.
+export const edgeFilterKeys = (link: ClanNetworkLink): Array<FilterKey> => {
   const tierIndex = getEdgeTierIndex(link.method, link.score);
   return [
     methodKey(link.method),
@@ -108,7 +109,7 @@ export const buildEdges = (
         dashes: Boolean(link.nested),
         smooth: curvatureFor(index, group.length),
         title: buildEdgeTooltip(link, sourceLabel, targetLabel),
-        filterKeys: filterKeysFor(link),
+        filterKeys: edgeFilterKeys(link),
       });
     });
   }

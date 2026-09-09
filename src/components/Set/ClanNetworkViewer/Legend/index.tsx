@@ -8,6 +8,7 @@ import {
   METHOD_LEGEND,
   getClanStatus,
   getMethodColor,
+  isDefaultFilterState,
 } from '../colorPalette';
 import { getShapeForType } from '../buildNodes';
 import {
@@ -267,7 +268,7 @@ const Legend = ({
           </ul>
         </div>
       )}
-      {disabled.size > 0 && (
+      {!isDefaultFilterState(disabled) && (
         <div className={css('legend-block')}>
           <header>Filters</header>
           <button
@@ -275,7 +276,8 @@ const Legend = ({
             className={css('legend-reset')}
             onClick={onReset}
           >
-            Show all ({disabled.size} hidden)
+            Reset filters
+            {disabled.size > 0 ? ` (${disabled.size} hidden)` : ''}
           </button>
         </div>
       )}

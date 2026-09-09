@@ -66,6 +66,17 @@ export type ClanVisNode = VisNode & {
   filterKeys: Array<FilterKey>;
 };
 
+// A node answers to its clan membership status and to its entry type. Exported
+// because nodeVisibility.ts asks the same question of the raw API nodes, which
+// carry no `filterKeys` of their own to read the answer off.
+export const nodeFilterKeys = (
+  node: ClanNetworkNode,
+  currentClanAccession: string,
+): Array<FilterKey> => [
+  statusKey(getClanStatus(node, currentClanAccession)),
+  typeKey(node.type),
+];
+
 const buildNodeTooltip = (
   node: ClanNetworkNode,
   currentClanAccession: string,
@@ -120,7 +131,7 @@ export const buildNodes = (
       baseSize,
       baseFontSize: BASE_FONT_SIZE,
       font: labelFont(BASE_FONT_SIZE),
-      filterKeys: [statusKey(status), typeKey(node.type)],
+      filterKeys: nodeFilterKeys(node, currentClanAccession),
       title: buildNodeTooltip(node, currentClanAccession),
       ...(position ? { x: position.x, y: position.y, fixed: true } : undefined),
     };

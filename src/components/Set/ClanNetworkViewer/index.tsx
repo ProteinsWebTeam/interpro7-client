@@ -15,18 +15,12 @@ import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
 import { buildNodes, ClanVisNode, labelFont } from './buildNodes';
 import { ClanVisEdge } from './buildEdges';
 import { createEllipseRenderer } from './ellipseNode';
-import {
-  FilterKey,
-  isFilteredOut,
-  statusKey,
-  toggleKey,
-  typeKey,
-} from './filterKeys';
-import { getClanStatus } from './colorPalette';
+import { FilterKey, isFilteredOut, toggleKey } from './filterKeys';
+import { DEFAULT_DISABLED_FILTERS } from './colorPalette';
 import { buildEdges } from './buildEdges';
 import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
+import { getHiddenAccessions } from './nodeVisibility';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
-import { isAboveMinimumScore } from './colorPalette';
 import HintPopover from './HintPopover';
 import Legend from './Legend';
 import NodeSearch from './NodeSearch';
@@ -113,7 +107,7 @@ export const ClanNetworkViewer = ({
   // disabled key are hidden rather than removed, so the layout the network
   // stabilised into survives filtering and un-filtering.
   const [disabledFilters, setDisabledFilters] = useState<Set<FilterKey>>(
-    () => new Set(),
+    () => new Set(DEFAULT_DISABLED_FILTERS),
   );
   // Outside full screen the legend is a panel opened from the toolbar; in full
   // screen there is no room beside the viewer, so it goes back to being laid
@@ -137,10 +131,13 @@ export const ClanNetworkViewer = ({
 
   const showNetwork = forceShow || nodeCount <= MAX_NUMBER_OF_NODES;
 
-  // Weak matches are dropped before anything reads the links, so the graph, the
-  // isolated-node grid and the legend all describe the same set of edges.
+  // Every link the API sent is built into the network, weak ones included --
+  // they are hidden by a legend filter that starts switched off (see
+  // DEFAULT_DISABLED_FILTERS), not dropped, so the graph, the isolated-node
+  // grid and the legend all describe the same set of edges and a curator can
+  // switch the weak ones back on.
   const links = useMemo(
-    () => (relationships?.links || []).filter(isAboveMinimumScore),
+    () => relationships?.links || [],
     [relationships?.links],
   );
 
@@ -261,6 +258,20 @@ export const ClanNetworkViewer = ({
     // Rebuilding on every db change would wipe layout & physics state.
   }, [metadata?.accession, showNetwork]);
 
+  // Which nodes the current filters take off the canvas -- their own keys, or
+  // being stranded with no edges left. Computed from the API's own nodes/links
+  // rather than from the DataSets so the search box below can share the answer.
+  const hiddenAccessions = useMemo(
+    () =>
+      getHiddenAccessions(
+        relationships?.nodes || [],
+        links,
+        metadata?.accession || '',
+        disabledFilters,
+      ),
+    [relationships?.nodes, links, metadata?.accession, disabledFilters],
+  );
+
   // Legend filters: hide whatever carries a switched-off key. vis-network hides
   // a hidden node's edges for us, so only explicitly disabled edges need doing.
   useEffect(() => {
@@ -270,7 +281,7 @@ export const ClanNetworkViewer = ({
     nodesDataSet.update(
       nodesDataSet.get().map((node) => ({
         id: node.id,
-        hidden: isFilteredOut(node.filterKeys, disabledFilters),
+        hidden: hiddenAccessions.has(node.id),
       })),
     );
     edgesDataSet.update(
@@ -279,11 +290,11 @@ export const ClanNetworkViewer = ({
         hidden: isFilteredOut(edge.filterKeys, disabledFilters),
       })),
     );
-  }, [disabledFilters, showNetwork, metadata?.accession]);
+  }, [hiddenAccessions, disabledFilters, showNetwork, metadata?.accession]);
 
   // A filter set built for one clan means nothing in the next one.
   useEffect(() => {
-    setDisabledFilters(new Set());
+    setDisabledFilters(new Set(DEFAULT_DISABLED_FILTERS));
   }, [metadata?.accession]);
 
   // Keep the canvas the same size as its container. Without this the network
@@ -330,16 +341,9 @@ export const ClanNetworkViewer = ({
   const searchableNodes = useMemo(
     () =>
       (relationships?.nodes || []).filter(
-        (node) =>
-          !isFilteredOut(
-            [
-              statusKey(getClanStatus(node, metadata?.accession || '')),
-              typeKey(node.type),
-            ],
-            disabledFilters,
-          ),
+        (node) => !hiddenAccessions.has(node.accession),
       ),
-    [relationships?.nodes, metadata?.accession, disabledFilters],
+    [relationships?.nodes, hiddenAccessions],
   );
 
   const focusOnNode = (accession: string) => {
@@ -362,7 +366,7 @@ export const ClanNetworkViewer = ({
       onToggle={(key) =>
         setDisabledFilters((current) => toggleKey(current, key))
       }
-      onReset={() => setDisabledFilters(new Set())}
+      onReset={() => setDisabledFilters(new Set(DEFAULT_DISABLED_FILTERS))}
       currentClanAccession={metadata.accession}
     />
   );
