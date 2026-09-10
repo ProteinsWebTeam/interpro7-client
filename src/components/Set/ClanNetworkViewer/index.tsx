@@ -17,12 +17,7 @@ import { ClanVisEdge, EDGE_HIGHLIGHT_COLOR } from './buildEdges';
 import { createEllipseRenderer } from './ellipseNode';
 import { FilterKey, isFilteredOut, toggleKeys } from './filterKeys';
 import { buildEdges } from './buildEdges';
-import {
-  drawIsolatedGridFrame,
-  getIsolatedAccessions,
-  getIsolatedGridBounds,
-  placeIsolatedNodes,
-} from './isolatedNodesGrid';
+import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
 import { getFocusAccessions, getHiddenAccessions } from './nodeVisibility';
 import { dropWeakMatches } from './weakMatches';
 import { drawSelectionOnTop } from './selectionLayer';
@@ -129,10 +124,6 @@ export const ClanNetworkViewer = ({
   // size at draw time -- a ref, because vis-network holds on to the renderer it
   // was given when the node was created.
   const fontSizeRef = useRef(0);
-  // Read by the canvas's draw hook, which was registered once when the network
-  // was built, to leave out the isolated grid's heading once filters have
-  // hidden every node under it.
-  const hiddenAccessionsRef = useRef<Set<string>>(new Set());
   // The node selected on the canvas, and the node the view is focused on (only
   // it and its direct connections shown). Kept apart so that, while focused,
   // the user can select one of the neighbours and move the focus on to it.
@@ -194,9 +185,6 @@ export const ClanNetworkViewer = ({
 
     const isolated = getIsolatedAccessions(sortedNodes, sortedLinks);
     const positions = placeIsolatedNodes(isolated);
-    // Where the isolated nodes actually sit once the layout has settled (see
-    // getIsolatedGridBounds). Until then there is no grid to frame.
-    let isolatedHomes: Record<string, { x: number; y: number }> | null = null;
     const nodes = buildNodes(
       sortedNodes,
       metadata?.accession || '',
@@ -260,7 +248,6 @@ export const ClanNetworkViewer = ({
     network.once('stabilizationIterationsDone', () => {
       network.setOptions({ physics: false });
 
-      if (isolated.length) isolatedHomes = network.getPositions(isolated);
       isolated.forEach((nodeId) => {
         nodesDataSet.update({
           id: nodeId,
@@ -270,27 +257,10 @@ export const ClanNetworkViewer = ({
       network.fit();
     });
 
-    // Frames the isolated grid, shrinking to the nodes filters leave visible
-    // and disappearing with the last of them; then lifts whatever is selected
-    // above everything else (see selectionLayer.ts).
-    network.on('afterDrawing', (ctx: CanvasRenderingContext2D) => {
-      const bounds =
-        isolatedHomes &&
-        getIsolatedGridBounds(
-          network,
-          isolatedHomes,
-          hiddenAccessionsRef.current,
-        );
-      if (bounds) {
-        drawIsolatedGridFrame(
-          ctx,
-          bounds,
-          fontSizeRef.current,
-          network.getScale(),
-        );
-      }
-      drawSelectionOnTop(network, ctx);
-    });
+    // Lifts whatever is selected above everything else (see selectionLayer.ts).
+    network.on('afterDrawing', (ctx: CanvasRenderingContext2D) =>
+      drawSelectionOnTop(network, ctx),
+    );
 
     // Ctrl/cmd-click, rather than a plain click, so that dragging a node
     // around never risks navigating away from the network by accident.
@@ -381,7 +351,6 @@ export const ClanNetworkViewer = ({
   // selected, so its edges would all turn the selection black: they keep their
   // own colour instead (see EDGE_HIGHLIGHT_COLOR).
   useEffect(() => {
-    hiddenAccessionsRef.current = offCanvasAccessions;
     const nodesDataSet = nodesDataSetRef.current;
     const edgesDataSet = edgesDataSetRef.current;
     if (!nodesDataSet || !edgesDataSet) return;
@@ -413,10 +382,6 @@ export const ClanNetworkViewer = ({
     metadata?.accession,
   ]);
 
-  // Entering, moving or leaving focus frames what is now on the canvas.
-  // Declared after the effect above so the nodes are already shown or hidden
-  // by the time fit() measures them. Skips the first run, where the network is
-  // still settling and does its own fit.
   // Entering, moving or leaving focus frames what is now on the canvas.
   // Declared after the effect above so the nodes are already shown or hidden
   // by the time fit() measures them. Skips the first run, where the network is
