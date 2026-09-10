@@ -13,13 +13,19 @@ import Button from 'components/SimpleCommonComponents/Button';
 import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
 
 import { buildNodes, ClanVisNode, labelFont } from './buildNodes';
-import { ClanVisEdge } from './buildEdges';
+import { ClanVisEdge, EDGE_HIGHLIGHT_COLOR } from './buildEdges';
 import { createEllipseRenderer } from './ellipseNode';
-import { FilterKey, isFilteredOut, toggleKey } from './filterKeys';
-import { DEFAULT_DISABLED_FILTERS } from './colorPalette';
+import { FilterKey, isFilteredOut, toggleKeys } from './filterKeys';
 import { buildEdges } from './buildEdges';
-import { getIsolatedAccessions, placeIsolatedNodes } from './isolatedNodesGrid';
-import { getHiddenAccessions } from './nodeVisibility';
+import {
+  drawIsolatedGridFrame,
+  getIsolatedAccessions,
+  getIsolatedGridBounds,
+  placeIsolatedNodes,
+} from './isolatedNodesGrid';
+import { getFocusAccessions, getHiddenAccessions } from './nodeVisibility';
+import { dropWeakMatches } from './weakMatches';
+import { drawSelectionOnTop } from './selectionLayer';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
 import HintPopover from './HintPopover';
 import Legend from './Legend';
@@ -39,6 +45,13 @@ const MAX_NUMBER_OF_NODES = 100;
 // never zooming *out* of a closer view) so selecting an entry reads as "take me
 // there" rather than resetting how far in the user already was.
 const SEARCH_FOCUS_SCALE = 1.2;
+
+// Entering or leaving focus on a node reframes the view; animated so the user
+// can follow where the rest of the network went.
+const FOCUS_ANIMATION = {
+  duration: 600,
+  easingFunction: 'easeInOutQuad' as const,
+};
 
 // vis-network seeds its layout RNG with Math.random() unless told otherwise, so
 // the same clan settles into a different shape on every mount. Pinning the seed
@@ -94,7 +107,20 @@ export const ClanNetworkViewer = ({
 
   const metadata = loading || !data.metadata ? null : data.metadata;
   const relationships = metadata?.relationships;
-  const nodeCount = relationships?.nodes.length || 0;
+
+  // Weak matches, and the nodes that had nothing else, are dropped before
+  // anything is built: from here on the graph, the legend, the search box and
+  // the node count all describe the same, trustworthy set.
+  const { nodes: networkNodes, links } = useMemo(
+    () =>
+      dropWeakMatches(
+        relationships?.nodes || [],
+        relationships?.links || [],
+        metadata?.accession || '',
+      ),
+    [relationships?.nodes, relationships?.links, metadata?.accession],
+  );
+  const nodeCount = networkNodes.length;
 
   const [forceShow, setForceShow] = useState(false);
   const [nodeScale, setNodeScale] = useState(1);
@@ -103,11 +129,22 @@ export const ClanNetworkViewer = ({
   // size at draw time -- a ref, because vis-network holds on to the renderer it
   // was given when the node was created.
   const fontSizeRef = useRef(0);
+  // Read by the canvas's draw hook, which was registered once when the network
+  // was built, to leave out the isolated grid's heading once filters have
+  // hidden every node under it.
+  const hiddenAccessionsRef = useRef<Set<string>>(new Set());
+  // The node selected on the canvas, and the node the view is focused on (only
+  // it and its direct connections shown). Kept apart so that, while focused,
+  // the user can select one of the neighbours and move the focus on to it.
+  const [selectedAccession, setSelectedAccession] = useState<string | null>(
+    null,
+  );
+  const [focusAccession, setFocusAccession] = useState<string | null>(null);
   // Legend entries the user has switched off. Nodes and edges carrying a
   // disabled key are hidden rather than removed, so the layout the network
   // stabilised into survives filtering and un-filtering.
   const [disabledFilters, setDisabledFilters] = useState<Set<FilterKey>>(
-    () => new Set(DEFAULT_DISABLED_FILTERS),
+    () => new Set(),
   );
   // Outside full screen the legend is a panel opened from the toolbar; in full
   // screen there is no room beside the viewer, so it goes back to being laid
@@ -131,16 +168,6 @@ export const ClanNetworkViewer = ({
 
   const showNetwork = forceShow || nodeCount <= MAX_NUMBER_OF_NODES;
 
-  // Every link the API sent is built into the network, weak ones included --
-  // they are hidden by a legend filter that starts switched off (see
-  // DEFAULT_DISABLED_FILTERS), not dropped, so the graph, the isolated-node
-  // grid and the legend all describe the same set of edges and a curator can
-  // switch the weak ones back on.
-  const links = useMemo(
-    () => relationships?.links || [],
-    [relationships?.links],
-  );
-
   // Redirect off the "all" pseudo-database, same as the old ClanViewer.
   useEffect(() => {
     if (db === 'all' && metadata?.source_database) {
@@ -162,11 +189,14 @@ export const ClanNetworkViewer = ({
       return undefined;
     }
 
-    const sortedNodes = sortNodes(relationships.nodes);
+    const sortedNodes = sortNodes(networkNodes);
     const sortedLinks = sortLinks(links);
 
     const isolated = getIsolatedAccessions(sortedNodes, sortedLinks);
     const positions = placeIsolatedNodes(isolated);
+    // Where the isolated nodes actually sit once the layout has settled (see
+    // getIsolatedGridBounds). Until then there is no grid to frame.
+    let isolatedHomes: Record<string, { x: number; y: number }> | null = null;
     const nodes = buildNodes(
       sortedNodes,
       metadata?.accession || '',
@@ -230,6 +260,7 @@ export const ClanNetworkViewer = ({
     network.once('stabilizationIterationsDone', () => {
       network.setOptions({ physics: false });
 
+      if (isolated.length) isolatedHomes = network.getPositions(isolated);
       isolated.forEach((nodeId) => {
         nodesDataSet.update({
           id: nodeId,
@@ -237,6 +268,28 @@ export const ClanNetworkViewer = ({
         });
       });
       network.fit();
+    });
+
+    // Frames the isolated grid, shrinking to the nodes filters leave visible
+    // and disappearing with the last of them; then lifts whatever is selected
+    // above everything else (see selectionLayer.ts).
+    network.on('afterDrawing', (ctx: CanvasRenderingContext2D) => {
+      const bounds =
+        isolatedHomes &&
+        getIsolatedGridBounds(
+          network,
+          isolatedHomes,
+          hiddenAccessionsRef.current,
+        );
+      if (bounds) {
+        drawIsolatedGridFrame(
+          ctx,
+          bounds,
+          fontSizeRef.current,
+          network.getScale(),
+        );
+      }
+      drawSelectionOnTop(network, ctx);
     });
 
     // Ctrl/cmd-click, rather than a plain click, so that dragging a node
@@ -249,6 +302,16 @@ export const ClanNetworkViewer = ({
       window.open(`/interpro/entry/${db}/${accession}`, '_blank')?.focus();
     });
 
+    // Follows the selection for the focus button. Dragging an unselected node
+    // selects it through `dragStart` rather than `select`, so that is
+    // followed too.
+    network.on('select', (params: { nodes: Array<string> }) =>
+      setSelectedAccession(params.nodes[0] || null),
+    );
+    network.on('dragStart', (params: { nodes: Array<string> }) => {
+      if (params.nodes.length) setSelectedAccession(params.nodes[0]);
+    });
+
     return () => {
       network.destroy();
       networkRef.current = null;
@@ -258,43 +321,133 @@ export const ClanNetworkViewer = ({
     // Rebuilding on every db change would wipe layout & physics state.
   }, [metadata?.accession, showNetwork]);
 
-  // Which nodes the current filters take off the canvas -- their own keys, or
-  // being stranded with no edges left. Computed from the API's own nodes/links
-  // rather than from the DataSets so the search box below can share the answer.
+  // Which nodes the current filters take off the canvas -- their own keys, or,
+  // outside this clan, being stranded with no edges left (see
+  // nodeVisibility.ts). Computed from the API's own nodes/links rather than
+  // from the DataSets so the search box below can share the answer.
   const hiddenAccessions = useMemo(
     () =>
       getHiddenAccessions(
-        relationships?.nodes || [],
+        networkNodes,
         links,
         metadata?.accession || '',
         disabledFilters,
       ),
-    [relationships?.nodes, links, metadata?.accession, disabledFilters],
+    [networkNodes, links, metadata?.accession, disabledFilters],
   );
 
-  // Legend filters: hide whatever carries a switched-off key. vis-network hides
-  // a hidden node's edges for us, so only explicitly disabled edges need doing.
+  // While focused on a node: that node and its neighbours, filtered (see
+  // getFocusAccessions).
+  const focusedAccessions = useMemo(
+    () =>
+      focusAccession
+        ? getFocusAccessions(
+            focusAccession,
+            networkNodes,
+            links,
+            metadata?.accession || '',
+            hiddenAccessions,
+            disabledFilters,
+          )
+        : null,
+    [
+      focusAccession,
+      networkNodes,
+      links,
+      metadata?.accession,
+      hiddenAccessions,
+      disabledFilters,
+    ],
+  );
+
+  // Everything off the canvas: what the filters hide or, while focused on a
+  // node, everything outside its (filtered) neighbourhood.
+  const offCanvasAccessions = useMemo(
+    () =>
+      focusedAccessions
+        ? new Set(
+            networkNodes
+              .map((node) => node.accession)
+              .filter((accession) => !focusedAccessions.has(accession)),
+          )
+        : hiddenAccessions,
+    [focusedAccessions, hiddenAccessions, networkNodes],
+  );
+
+  // Legend filters and focus: hide whatever carries a switched-off key, and
+  // whatever focus leaves out -- for edges, any not touching the focused node,
+  // which drops the ones running between two of its neighbours. vis-network
+  // hides a hidden node's edges for us. While focused, the focused node stays
+  // selected, so its edges would all turn the selection black: they keep their
+  // own colour instead (see EDGE_HIGHLIGHT_COLOR).
   useEffect(() => {
+    hiddenAccessionsRef.current = offCanvasAccessions;
     const nodesDataSet = nodesDataSetRef.current;
     const edgesDataSet = edgesDataSetRef.current;
     if (!nodesDataSet || !edgesDataSet) return;
     nodesDataSet.update(
       nodesDataSet.get().map((node) => ({
         id: node.id,
-        hidden: hiddenAccessions.has(node.id),
+        hidden: offCanvasAccessions.has(node.id),
       })),
     );
     edgesDataSet.update(
       edgesDataSet.get().map((edge) => ({
         id: edge.id as string,
-        hidden: isFilteredOut(edge.filterKeys, disabledFilters),
+        hidden:
+          isFilteredOut(edge.filterKeys, disabledFilters) ||
+          (focusAccession !== null &&
+            edge.from !== focusAccession &&
+            edge.to !== focusAccession),
+        color: {
+          color: edge.baseColor,
+          highlight: focusAccession ? edge.baseColor : EDGE_HIGHLIGHT_COLOR,
+        },
       })),
     );
-  }, [hiddenAccessions, disabledFilters, showNetwork, metadata?.accession]);
+  }, [
+    offCanvasAccessions,
+    disabledFilters,
+    focusAccession,
+    showNetwork,
+    metadata?.accession,
+  ]);
 
-  // A filter set built for one clan means nothing in the next one.
+  // Entering, moving or leaving focus frames what is now on the canvas.
+  // Declared after the effect above so the nodes are already shown or hidden
+  // by the time fit() measures them. Skips the first run, where the network is
+  // still settling and does its own fit.
+  // Entering, moving or leaving focus frames what is now on the canvas.
+  // Declared after the effect above so the nodes are already shown or hidden
+  // by the time fit() measures them. Skips the first run, where the network is
+  // still settling and does its own fit.
+  const previousFocusRef = useRef<string | null>(null);
   useEffect(() => {
-    setDisabledFilters(new Set(DEFAULT_DISABLED_FILTERS));
+    if (previousFocusRef.current === focusAccession) return;
+    previousFocusRef.current = focusAccession;
+    // `nodes` is left out, not set to undefined, when leaving focus:
+    // vis-network rejects the key unless it holds an array.
+    networkRef.current?.fit(
+      focusedAccessions
+        ? { nodes: Array.from(focusedAccessions), animation: FOCUS_ANIMATION }
+        : { animation: FOCUS_ANIMATION },
+    );
+  }, [focusAccession, focusedAccessions]);
+
+  // A filter that hides the focused node itself ends the focus, rather than
+  // leaving an empty canvas with nothing to explain it.
+  useEffect(() => {
+    if (focusAccession && hiddenAccessions.has(focusAccession)) {
+      setFocusAccession(null);
+    }
+  }, [focusAccession, hiddenAccessions]);
+
+  // A filter set, a selection or a focus built for one clan means nothing in
+  // the next one.
+  useEffect(() => {
+    setDisabledFilters(new Set());
+    setSelectedAccession(null);
+    setFocusAccession(null);
   }, [metadata?.accession]);
 
   // Keep the canvas the same size as its container. Without this the network
@@ -340,16 +493,28 @@ export const ClanNetworkViewer = ({
   // would zoom to empty space.
   const searchableNodes = useMemo(
     () =>
-      (relationships?.nodes || []).filter(
-        (node) => !hiddenAccessions.has(node.accession),
-      ),
-    [relationships?.nodes, hiddenAccessions],
+      networkNodes.filter((node) => !offCanvasAccessions.has(node.accession)),
+    [networkNodes, offCanvasAccessions],
   );
+
+  // Focused, with the focused node still selected (or nothing selected), the
+  // button leads back out to the whole network; with another node selected it
+  // moves the focus on to that one.
+  const isFocusActive =
+    focusAccession !== null &&
+    (selectedAccession === null || selectedAccession === focusAccession);
+  const focusButtonLabel = isFocusActive
+    ? 'Show the whole network'
+    : 'Show only this entry and its connections';
+  const toggleFocus = () =>
+    setFocusAccession(isFocusActive ? null : selectedAccession);
 
   const focusOnNode = (accession: string) => {
     const network = networkRef.current;
     if (!network) return;
     network.selectNodes([accession]);
+    // selectNodes() is programmatic, so vis-network sends no `select` event.
+    setSelectedAccession(accession);
     network.focus(accession, {
       scale: Math.max(network.getScale(), SEARCH_FOCUS_SCALE),
       animation: { duration: 600, easingFunction: 'easeInOutQuad' },
@@ -360,13 +525,13 @@ export const ClanNetworkViewer = ({
 
   const legend = (
     <Legend
-      nodes={relationships.nodes}
+      nodes={networkNodes}
       links={links}
       disabled={disabledFilters}
-      onToggle={(key) =>
-        setDisabledFilters((current) => toggleKey(current, key))
+      onToggle={(keys) =>
+        setDisabledFilters((current) => toggleKeys(current, keys))
       }
-      onReset={() => setDisabledFilters(new Set(DEFAULT_DISABLED_FILTERS))}
+      onReset={() => setDisabledFilters(new Set())}
       currentClanAccession={metadata.accession}
     />
   );
@@ -435,6 +600,40 @@ export const ClanNetworkViewer = ({
             <HintPopover label="How to use this network">
               Drag a node to reposition it, ctrl/⌘-click it to open its entry.
             </HintPopover>
+            {(selectedAccession || focusAccession) && (
+              <button
+                type="button"
+                className={css('clan-network-focus-button', {
+                  'clan-network-focus-button-active': isFocusActive,
+                })}
+                onClick={toggleFocus}
+                aria-pressed={isFocusActive}
+                aria-label={focusButtonLabel}
+                title={focusButtonLabel}
+              >
+                {/* A hub and its spokes: one node and what it connects to. */}
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                >
+                  <g stroke="currentColor" strokeWidth="1.5">
+                    <line x1="12" y1="12" x2="4.5" y2="4.5" />
+                    <line x1="12" y1="12" x2="19.5" y2="4.5" />
+                    <line x1="12" y1="12" x2="4.5" y2="19.5" />
+                    <line x1="12" y1="12" x2="19.5" y2="19.5" />
+                  </g>
+                  <g fill="currentColor">
+                    <circle cx="12" cy="12" r="4" />
+                    <circle cx="4" cy="4" r="2.5" />
+                    <circle cx="20" cy="4" r="2.5" />
+                    <circle cx="4" cy="20" r="2.5" />
+                    <circle cx="20" cy="20" r="2.5" />
+                  </g>
+                </svg>
+              </button>
+            )}
             {!isFullScreen && showLegend && (
               <div
                 id="clanNetworkLegend"

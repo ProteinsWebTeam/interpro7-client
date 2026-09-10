@@ -1,6 +1,5 @@
 import ColorHash from 'color-hash';
 
-import { FilterKey, tierKey } from './filterKeys';
 import { ClanMembershipStatus, ClanNetworkNode } from './types';
 
 // Deterministic string -> color, same approach as src/utils/entry-color, used
@@ -68,27 +67,13 @@ const EDGE_TIERS: Record<string, Array<ScoreTier>> = {
     { min: 12, color: '#d896bc', width: 2 },
     { min: -Infinity, color: '#e4b3d1', width: 1 },
   ],
+  // Only two tiers: SCOOP matches below 30 never reach the network (see
+  // weakMatches.ts), so the reference tool's weakest tier has nothing in it.
   scoop: [
     { min: 100, color: '#009e73', width: 3 },
     { min: 30, color: '#00b883', width: 2 },
-    { min: -Infinity, color: '#00d9a3', width: 1 },
   ],
 };
-
-// The API applies the reference pipeline's own inclusion thresholds, which are
-// deliberately loose for curators -- SCOOP arrives from 10 up, and below 30 it
-// is dominated by false positives. Those matches are built into the network
-// like any other, but their legend entry starts switched off, so the default
-// view is the trustworthy one while a curator can still bring them back.
-export const DEFAULT_DISABLED_FILTERS: Array<FilterKey> = [tierKey('scoop', 2)];
-
-// Whether the legend is showing exactly what a fresh view shows. Used to keep
-// the reset control out of the way until the user has actually changed
-// something -- the default state has a filter switched off, so "anything
-// hidden?" would be true from the start and the control would never be absent.
-export const isDefaultFilterState = (disabled: Set<FilterKey>): boolean =>
-  disabled.size === DEFAULT_DISABLED_FILTERS.length &&
-  DEFAULT_DISABLED_FILTERS.every((key) => disabled.has(key));
 
 // Legend copy for the 4 known methods, in the same tier order as
 // EDGE_TIERS, worded after the reference tool's legend.
@@ -130,7 +115,6 @@ export const METHOD_LEGEND: Array<{
     tiers: [
       { label: 'Score > 100', color: EDGE_TIERS.scoop[0].color },
       { label: 'Score 30 to 100', color: EDGE_TIERS.scoop[1].color },
-      { label: 'Score < 30', color: EDGE_TIERS.scoop[2].color },
     ],
   },
 ];

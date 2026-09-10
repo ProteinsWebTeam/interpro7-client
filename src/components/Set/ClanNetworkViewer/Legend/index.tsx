@@ -8,7 +8,6 @@ import {
   METHOD_LEGEND,
   getClanStatus,
   getMethodColor,
-  isDefaultFilterState,
 } from '../colorPalette';
 import { getShapeForType } from '../buildNodes';
 import {
@@ -34,7 +33,7 @@ type Props = {
   links: Array<ClanNetworkLink>;
   currentClanAccession: string;
   disabled: Set<FilterKey>;
-  onToggle: (key: FilterKey) => void;
+  onToggle: (keys: Array<FilterKey>) => void;
   onReset: () => void;
 };
 
@@ -58,24 +57,27 @@ const SHAPES: Record<string, React.ReactNode> = {
 // Every legend entry is the filter for what it describes: clicking one hides
 // those nodes or edges and strikes the entry through. A button rather than a
 // styled span so it is reachable by keyboard and announces its state.
+//
+// An entry can stand for several keys (a method for all of its tiers); it
+// reads as off only when every one of them is.
 const Toggle = ({
-  filterKey,
+  filterKeys,
   disabled,
   onToggle,
   children,
 }: {
-  filterKey: FilterKey;
+  filterKeys: Array<FilterKey>;
   disabled: Set<FilterKey>;
-  onToggle: (key: FilterKey) => void;
+  onToggle: (keys: Array<FilterKey>) => void;
   children: React.ReactNode;
 }) => {
-  const isOff = disabled.has(filterKey);
+  const isOff = filterKeys.every((key) => disabled.has(key));
   return (
     <button
       type="button"
       className={css('legend-toggle', { 'legend-toggle-off': isOff })}
       aria-pressed={!isOff}
-      onClick={() => onToggle(filterKey)}
+      onClick={() => onToggle(filterKeys)}
       title={isOff ? 'Click to show' : 'Click to hide'}
     >
       {children}
@@ -149,7 +151,7 @@ const Legend = ({
             {statuses.map((status) => (
               <li key={status}>
                 <Toggle
-                  filterKey={statusKey(status)}
+                  filterKeys={[statusKey(status)]}
                   disabled={disabled}
                   onToggle={onToggle}
                 >
@@ -171,7 +173,7 @@ const Legend = ({
             {types.map((type) => (
               <li key={type}>
                 <Toggle
-                  filterKey={typeKey(type)}
+                  filterKeys={[typeKey(type)]}
                   disabled={disabled}
                   onToggle={onToggle}
                 >
@@ -192,11 +194,13 @@ const Legend = ({
           <div className={css('legend-methods')}>
             {knownMethodLegend.map(({ method, label, tiers }) => (
               <div key={method} className={css('legend-method')}>
-                {/* The method name switches the whole method off, since each of
-                    its edges carries the method key as well as its tier key. */}
+                {/* The method name switches all of its tiers at once, so the
+                    tiers below always show what is actually hidden. */}
                 <span className={css('legend-method-name')}>
                   <Toggle
-                    filterKey={methodKey(method)}
+                    filterKeys={tiers.map((_, tierIndex) =>
+                      tierKey(method, tierIndex),
+                    )}
                     disabled={disabled}
                     onToggle={onToggle}
                   >
@@ -207,7 +211,7 @@ const Legend = ({
                   {tiers.map((tier, tierIndex) => (
                     <li key={tier.label}>
                       <Toggle
-                        filterKey={tierKey(method, tierIndex)}
+                        filterKeys={[tierKey(method, tierIndex)]}
                         disabled={disabled}
                         onToggle={onToggle}
                       >
@@ -229,7 +233,7 @@ const Legend = ({
                   {otherMethods.map((method) => (
                     <li key={method}>
                       <Toggle
-                        filterKey={methodKey(method)}
+                        filterKeys={[methodKey(method)]}
                         disabled={disabled}
                         onToggle={onToggle}
                       >
@@ -257,7 +261,7 @@ const Legend = ({
           <ul className={css('no-bullet')}>
             <li>
               <Toggle
-                filterKey={NESTED_KEY}
+                filterKeys={[NESTED_KEY]}
                 disabled={disabled}
                 onToggle={onToggle}
               >
@@ -268,7 +272,7 @@ const Legend = ({
           </ul>
         </div>
       )}
-      {!isDefaultFilterState(disabled) && (
+      {disabled.size > 0 && (
         <div className={css('legend-block')}>
           <header>Filters</header>
           <button
@@ -276,8 +280,7 @@ const Legend = ({
             className={css('legend-reset')}
             onClick={onReset}
           >
-            Reset filters
-            {disabled.size > 0 ? ` (${disabled.size} hidden)` : ''}
+            Reset filters ({disabled.size} hidden)
           </button>
         </div>
       )}

@@ -56,7 +56,16 @@ const buildEdgeTooltip = (
   return el;
 };
 
-export type ClanVisEdge = VisEdge & { filterKeys: Array<FilterKey> };
+// What a selected node's edges turn to by default, so they stand out from the
+// rest. Focus mode swaps it for each edge's own `baseColor` (see index.tsx):
+// with only one node's edges on the canvas there is nothing to stand out from,
+// and black would hide the method and strength the colours encode.
+export const EDGE_HIGHLIGHT_COLOR = '#000000';
+
+export type ClanVisEdge = VisEdge & {
+  baseColor: string;
+  filterKeys: Array<FilterKey>;
+};
 
 // An edge answers to its method, to its strength tier within that method, and
 // to `nested` when it is one, so the legend can switch off any of the three.
@@ -104,7 +113,8 @@ export const buildEdges = (
         }-${index}`,
         from: link.source,
         to: link.target,
-        color: { color, highlight: '#000000' },
+        color: { color, highlight: EDGE_HIGHLIGHT_COLOR },
+        baseColor: color,
         width,
         dashes: Boolean(link.nested),
         smooth: curvatureFor(index, group.length),

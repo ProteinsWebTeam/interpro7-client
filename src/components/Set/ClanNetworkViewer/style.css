@@ -141,6 +141,48 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
+/* Joins vis-network's own navigation buttons in the bottom-right corner, in
+   the one free slot of their 2x2 block: above zoom-out, left of zoom-to-fit
+   (theirs are at right 15/55px, bottom 10/50px, inside the canvas's 1px
+   border). Same 34px circle and green hover glow, so it reads as one of them. */
+.clan-network-focus-button {
+  position: absolute;
+  right: 56px;
+  bottom: 51px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid #c8c8c8;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  color: #555;
+  cursor: pointer;
+}
+
+.clan-network-focus-button:hover {
+  box-shadow: 0 0 3px 3px rgba(56, 207, 21, 0.3);
+}
+
+.clan-network-focus-button:active {
+  box-shadow: 0 0 1px 3px rgba(56, 207, 21, 0.95);
+}
+
+.clan-network-focus-button:focus-visible {
+  outline: 2px solid #1d78b3;
+  outline-offset: 2px;
+}
+
+/* Filled while focused, so it is plain the rest of the network is hidden. */
+.clan-network-focus-button-active {
+  border-color: #1d78b3;
+  background-color: #1d78b3;
+  color: white;
+}
+
 .clan-network-search {
   position: absolute;
   top: 0.5em;

@@ -4,8 +4,9 @@
 //
 // A node carries its membership status and its entry type; an edge carries its
 // method, its strength tier within that method, and `nested` when it is one.
-// Turning off a method therefore hides all of its tiers, since every one of its
-// edges also carries the method key.
+// For a method with tiers, the legend's method entry works through the tier
+// keys (all of them at once), so what the tiers show is always what is hidden;
+// the method key is only toggled for methods with no tiers of their own.
 
 export type FilterKey = string;
 
@@ -27,11 +28,15 @@ export const isFilteredOut = (
 ): boolean =>
   disabled.size > 0 && (keys || []).some((key) => disabled.has(key));
 
-export const toggleKey = (
+// Toggles a group of keys as one: if they are all off they all come back on,
+// otherwise they all go off -- so a method with only some tiers hidden is
+// switched off entirely by its first click, not flipped tier by tier.
+export const toggleKeys = (
   disabled: Set<FilterKey>,
-  key: FilterKey,
+  keys: Array<FilterKey>,
 ): Set<FilterKey> => {
   const next = new Set(disabled);
-  if (!next.delete(key)) next.add(key);
+  const allOff = keys.every((key) => disabled.has(key));
+  keys.forEach((key) => (allOff ? next.delete(key) : next.add(key)));
   return next;
 };
