@@ -22,8 +22,8 @@ import { getFocusAccessions, getHiddenAccessions } from './nodeVisibility';
 import { dropWeakMatches } from './weakMatches';
 import { drawSelectionOnTop } from './selectionLayer';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
-import HintPopover from './HintPopover';
 import Legend from './Legend';
+import NetworkHelp from './NetworkHelp';
 import NodeSearch from './NodeSearch';
 import SizeControls from './SizeControls';
 
@@ -523,10 +523,16 @@ export const ClanNetworkViewer = ({
         <div id={FULL_SCREEN_ID} className={css('clan-network-full-screen')}>
           <div className={css('clan-network-controls')}>
             <h4 className={css('clan-network-title')}>Clan Network Viewer</h4>
-            {/* All three read the same way: `hollow` has a transparent border,
-                so the boxed pair is secondary (outlined) when the thing they
-                control is off, primary (filled) when it is on. */}
+            {/* All of these read the same way: `hollow` has a transparent
+                border, so the boxed ones are secondary (outlined) when the
+                thing they control is off, primary (filled) when it is on. */}
             <div className={css('clan-network-controls-right')}>
+              {/* In full screen the legend is always shown, under the canvas. */}
+              <NetworkHelp
+                onShowLegend={
+                  isFullScreen ? undefined : () => setShowLegend(true)
+                }
+              />
               {!isFullScreen && (
                 <Button
                   type={showLegend ? 'primary' : 'secondary'}
@@ -562,9 +568,6 @@ export const ClanNetworkViewer = ({
               id="clanNetworkViewerContainer"
             />
             <NodeSearch nodes={searchableNodes} onSelect={focusOnNode} />
-            <HintPopover label="How to use this network">
-              Drag a node to reposition it, ctrl/⌘-click it to open its entry.
-            </HintPopover>
             {(selectedAccession || focusAccession) && (
               <button
                 type="button"

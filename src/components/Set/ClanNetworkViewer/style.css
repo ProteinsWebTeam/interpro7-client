@@ -96,49 +96,49 @@
   overflow-y: auto;
 }
 
-/* Both of these sit over the canvas rather than in the controls row, so they
-   stay within reach in full screen and don't push the graph down: the search in
-   the top-left corner, the hint button in the top-right. */
+/* The help button leads the toolbar's group of buttons, off the canvas so it
+   never covers the graph. This anchors its panel, and lifts it above
+   everything positioned over the canvas (the search box, the focus button),
+   which it drops down across. The button itself is a plain VF one. */
 .clan-network-info {
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-  z-index: 1;
-  font-size: 0.85em;
+  position: relative;
+  z-index: 2;
 }
 
-.clan-network-info-button {
-  width: 1.9em;
-  height: 1.9em;
-  padding: 0;
-  border: 1px solid rgba(50, 50, 50, 0.3);
-  border-radius: 50%;
-  background-color: white;
-  color: #1779ba;
-  font-style: italic;
-  font-family: serif;
-  font-size: inherit;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.clan-network-info-button:hover {
-  background-color: #e8f2f8;
-}
-
-/* Opens leftwards, into the canvas: the button is at the right-hand edge of the
-   viewer, so anchoring the other way would run the bubble off the side. */
+/* Opens leftwards, over the canvas: the button is towards the right-hand end
+   of the toolbar, so anchoring the other way would run the panel off the side.
+   VF has no popover, so only the floating chrome is ours; the text and lists
+   inside are VF's, with its text margin tightened to suit a small panel. */
 .clan-network-info-bubble {
+  --vf-text-margin--bottom: 0.25rem;
   position: absolute;
   top: 100%;
   right: 0;
-  width: 16em;
-  margin-top: 0.35em;
-  padding: 0.5em 0.75em;
-  border: 1px solid rgba(50, 50, 50, 0.3);
-  border-radius: 3px;
+  width: 26rem;
+  max-width: calc(100vw - 2rem);
+  max-height: 34rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d0d0ce;
   background-color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+  & .vf-list + .vf-text-body--4 {
+    margin-top: 0.75rem;
+  }
+
+  /* "Interactive Legend" sits in a sentence, so it keeps the VF button's look
+     but at the size of the text around it, not VF's 16px bold small button.
+     Nested for the extra specificity over VF's own `.vf-button--sm`. */
+  & .clan-network-info-legend-button {
+    padding: 0.05em 0.4em;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: 1.4;
+    vertical-align: baseline;
+  }
 }
 
 /* Joins vis-network's own navigation buttons in the bottom-right corner, in
