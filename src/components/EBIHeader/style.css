@@ -3,6 +3,15 @@
   --vf-stack-margin--custom: 0;
   background-color: var(--vf-color--grey--darkest);
   /* border-top: 0 solid #eee; */
+  /* Same vf-u-fullbleed overflow the two footers clip; see the note in
+     components/ElixirFooter/style.css. The bleeding pseudo-element is `100vw`
+     wide, which counts the vertical scrollbar, so it reaches past the right of
+     the viewport and gives every page on the site a horizontal scrollbar. This
+     box is already viewport-wide and is the pseudo-element's containing block
+     (vf-u-fullbleed is `position: relative`), so clipping to it drops only the
+     off-screen part. `clip` rather than `hidden` so no scroll container is
+     created, which would break the sticky menu below. */
+  overflow-x: clip;
 
   & > nav {
     max-width: var(--vf-body-width, 80em);

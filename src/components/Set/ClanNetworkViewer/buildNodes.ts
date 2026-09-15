@@ -77,24 +77,6 @@ export const nodeFilterKeys = (
   typeKey(node.type),
 ];
 
-const buildNodeTooltip = (
-  node: ClanNetworkNode,
-  currentClanAccession: string,
-): HTMLElement => {
-  const el = document.createElement('div');
-  const status = getClanStatus(node, currentClanAccession);
-  el.innerHTML = `
-    <strong>${node.short_name}</strong> (${node.accession})<br/>
-    Type: ${node.type}<br/>
-    Length: ${node.score}<br/>
-    Clan: ${node.clan ?? 'none'} ${
-      status === 'current-clan' ? '(this clan)' : ''
-    }<br/>
-    ${node.name}
-  `;
-  return el;
-};
-
 export const buildNodes = (
   nodes: Array<ClanNetworkNode>,
   currentClanAccession: string,
@@ -131,8 +113,10 @@ export const buildNodes = (
       baseSize,
       baseFontSize: BASE_FONT_SIZE,
       font: labelFont(BASE_FONT_SIZE),
+      // No `title`: a node's details are shown in a popover of our own, which
+      // -- unlike vis-network's tooltip -- stays put and can be clicked into
+      // (see NodePopover). Edges keep theirs.
       filterKeys: nodeFilterKeys(node, currentClanAccession),
-      title: buildNodeTooltip(node, currentClanAccession),
       ...(position ? { x: position.x, y: position.y, fixed: true } : undefined),
     };
   });

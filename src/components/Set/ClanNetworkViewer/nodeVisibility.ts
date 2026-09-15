@@ -55,6 +55,71 @@ export const getHiddenAccessions = (
   return hidden;
 };
 
+// Which nodes are on the canvas with nothing left to connect them: the ones the
+// API never linked at all, and -- once the edge filters have been applied --
+// members of this clan whose every edge has just been switched off. Both are
+// unconnected in exactly the same sense, so both belong in the same grid off to
+// the left (see isolatedNodesGrid.ts) rather than floating, edgeless, in the
+// middle of the graph.
+//
+// An edge only counts while both of its ends are still on the canvas: an edge
+// to a node the filters hid is not a connection the user can see.
+//
+// Sorted, so the grid fills in a stable order rather than whatever order the
+// API happened to send.
+export const getUnconnectedAccessions = (
+  nodes: Array<ClanNetworkNode>,
+  links: Array<ClanNetworkLink>,
+  hidden: Set<string>,
+  disabled: Set<FilterKey>,
+): Array<string> => {
+  const stillLinked = new Set<string>();
+  for (const link of links) {
+    if (isFilteredOut(edgeFilterKeys(link), disabled)) continue;
+    if (hidden.has(link.source) || hidden.has(link.target)) continue;
+    stillLinked.add(link.source);
+    stillLinked.add(link.target);
+  }
+  return nodes
+    .map((node) => node.accession)
+    .filter(
+      (accession) => !hidden.has(accession) && !stillLinked.has(accession),
+    )
+    .sort((a, b) => a.localeCompare(b));
+};
+
+// Which filter keys anything on the canvas still answers to: those of every node
+// the filters have left showing, and of every edge still drawn between two of
+// them. The legend draws only the entries in here, so it describes the network
+// as it stands rather than as the API sent it.
+//
+// An edge counts only while *both* of its ends are still shown, which is the
+// case the legend was getting wrong: hiding this clan takes away every edge
+// that ran to it, so the methods those edges were predicted by have nothing
+// left on the canvas -- even though no edge filter was touched.
+export const getVisibleFilterKeys = (
+  nodes: Array<ClanNetworkNode>,
+  links: Array<ClanNetworkLink>,
+  currentClanAccession: string,
+  hidden: Set<string>,
+  disabled: Set<FilterKey>,
+): Set<FilterKey> => {
+  const keys = new Set<FilterKey>();
+  for (const node of nodes) {
+    if (hidden.has(node.accession)) continue;
+    for (const key of nodeFilterKeys(node, currentClanAccession)) {
+      keys.add(key);
+    }
+  }
+  for (const link of links) {
+    if (hidden.has(link.source) || hidden.has(link.target)) continue;
+    const linkKeys = edgeFilterKeys(link);
+    if (isFilteredOut(linkKeys, disabled)) continue;
+    for (const key of linkKeys) keys.add(key);
+  }
+  return keys;
+};
+
 // What focusing on a node keeps on the canvas: the node itself and its
 // neighbours -- nodes never connected to it are left out, clan members
 // included -- with the filters applied on top by the same rules as above,

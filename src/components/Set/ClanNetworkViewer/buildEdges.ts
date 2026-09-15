@@ -1,8 +1,7 @@
 import { Edge as VisEdge } from 'vis-network';
 
-import { getEdgeStyle, getEdgeTierIndex, getMethodLabel } from './colorPalette';
+import { getEdgeStyle, getEdgeTierIndex } from './colorPalette';
 import { FilterKey, methodKey, NESTED_KEY, tierKey } from './filterKeys';
-import { formatScore, getScoreLabel } from './scoreLabel';
 import { ClanNetworkLink, ClanNetworkNode } from './types';
 
 // Every edge gets at least a slight curve, matching the reference curator
@@ -39,23 +38,6 @@ export const curvatureFor = (
   };
 };
 
-const buildEdgeTooltip = (
-  link: ClanNetworkLink,
-  sourceLabel: string,
-  targetLabel: string,
-): HTMLElement => {
-  const el = document.createElement('div');
-  el.innerHTML = `
-    <strong>${getMethodLabel(link.method)}</strong><br/>
-    ${getScoreLabel(link.method)}: ${formatScore(link.score)}<br/>
-    Between:<br/>
-    ${sourceLabel}<br/>
-    ${targetLabel}
-    ${link.nested ? '<br/><strong>Nested domain relationship</strong>' : ''}
-  `;
-  return el;
-};
-
 // What a selected node's edges turn to by default, so they stand out from the
 // rest. Focus mode swaps it for each edge's own `baseColor` (see index.tsx):
 // with only one node's edges on the canvas there is nothing to stand out from,
@@ -65,6 +47,13 @@ export const EDGE_HIGHLIGHT_COLOR = '#000000';
 export type ClanVisEdge = VisEdge & {
   baseColor: string;
   filterKeys: Array<FilterKey>;
+  // What the hover popover shows. Carried on the edge itself so that hovering,
+  // which only hands back an edge id, can find it again without a second index
+  // from ids back to links. No `title`: edges are described by a popover of our
+  // own now, in the same corner and the same style as the nodes' (EdgePopover).
+  link: ClanNetworkLink;
+  sourceLabel: string;
+  targetLabel: string;
 };
 
 // An edge answers to its method, to its strength tier within that method, and
@@ -118,7 +107,9 @@ export const buildEdges = (
         width,
         dashes: Boolean(link.nested),
         smooth: curvatureFor(index, group.length),
-        title: buildEdgeTooltip(link, sourceLabel, targetLabel),
+        link,
+        sourceLabel,
+        targetLabel,
         filterKeys: edgeFilterKeys(link),
       });
     });
