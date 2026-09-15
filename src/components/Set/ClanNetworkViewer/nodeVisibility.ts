@@ -97,12 +97,17 @@ export const getUnconnectedAccessions = (
 // case the legend was getting wrong: hiding this clan takes away every edge
 // that ran to it, so the methods those edges were predicted by have nothing
 // left on the canvas -- even though no edge filter was touched.
+//
+// While focused on a node, `hidden` is everything outside its neighbourhood,
+// and only the edges touching the focused node are drawn -- the ones between
+// two of its neighbours are not, so they do not count either.
 export const getVisibleFilterKeys = (
   nodes: Array<ClanNetworkNode>,
   links: Array<ClanNetworkLink>,
   currentClanAccession: string,
   hidden: Set<string>,
   disabled: Set<FilterKey>,
+  focusAccession: string | null = null,
 ): Set<FilterKey> => {
   const keys = new Set<FilterKey>();
   for (const node of nodes) {
@@ -113,6 +118,13 @@ export const getVisibleFilterKeys = (
   }
   for (const link of links) {
     if (hidden.has(link.source) || hidden.has(link.target)) continue;
+    if (
+      focusAccession !== null &&
+      link.source !== focusAccession &&
+      link.target !== focusAccession
+    ) {
+      continue;
+    }
     const linkKeys = edgeFilterKeys(link);
     if (isFilteredOut(linkKeys, disabled)) continue;
     for (const key of linkKeys) keys.add(key);

@@ -33,9 +33,12 @@ type Props = {
   links: Array<ClanNetworkLink>;
   currentClanAccession: string;
   disabled: Set<FilterKey>;
-  // The keys anything still on the canvas answers to, which is what decides
-  // which entries are worth drawing (see nodeVisibility.ts).
-  visible: Set<FilterKey>;
+  // The keys whose entries can be clicked: what is still on the canvas, plus
+  // what has been switched off and can be brought back (see the viewer).
+  available: Set<FilterKey>;
+  // Keys that cannot be switched off at the moment -- the focused entry's own
+  // membership and type, while the view is focused on it.
+  locked: Set<FilterKey>;
   onToggle: (keys: Array<FilterKey>) => void;
 };
 
@@ -66,6 +69,7 @@ const Toggle = ({
   filterKeys,
   disabled,
   available,
+  locked = false,
   onToggle,
   children,
 }: {
@@ -77,25 +81,27 @@ const Toggle = ({
   // with it (in full screen, where it shares the height with the canvas) the
   // size of the network itself.
   available: boolean;
+  // Greyed out and unresponsive too, but for a different reason: hiding it
+  // would take away the entry the view is focused on.
+  locked?: boolean;
   onToggle: (keys: Array<FilterKey>) => void;
   children: React.ReactNode;
 }) => {
   const isOff = filterKeys.every((key) => disabled.has(key));
+  let title = `Click to ${isOff ? 'show' : 'hide'}`;
+  if (!available) title = 'Nothing on the network matches this';
+  else if (locked) title = 'The entry in focus is one of these';
   return (
     <button
       type="button"
       className={css('legend-toggle', {
         'legend-toggle-off': isOff,
-        'legend-toggle-unavailable': !available,
+        'legend-toggle-unavailable': !available || locked,
       })}
       aria-pressed={!isOff}
-      disabled={!available}
+      disabled={!available || locked}
       onClick={() => onToggle(filterKeys)}
-      title={
-        available
-          ? `Click to ${isOff ? 'show' : 'hide'}`
-          : 'Nothing on the network matches this'
-      }
+      title={title}
     >
       {children}
     </button>
@@ -138,13 +144,11 @@ const Legend = ({
   links,
   currentClanAccession,
   disabled,
-  visible,
+  available,
+  locked,
   onToggle,
 }: Props) => {
-  // Whether anything on the canvas still answers to an entry. One the user has
-  // switched off counts as available too: it is the only way of switching it
-  // back on again, so it has to stay live.
-  const isAvailable = (key: FilterKey) => visible.has(key) || disabled.has(key);
+  const isAvailable = (key: FilterKey) => available.has(key);
 
   // Every section is derived from the whole clan, so the legend holds the same
   // entries however the network is filtered -- a clan with no DALI edges gets
@@ -188,6 +192,7 @@ const Legend = ({
                     filterKeys={[statusKey(status)]}
                     disabled={disabled}
                     available={isAvailable(statusKey(status))}
+                    locked={locked.has(statusKey(status))}
                     onToggle={onToggle}
                   >
                     <span
@@ -213,6 +218,7 @@ const Legend = ({
                     filterKeys={[typeKey(type)]}
                     disabled={disabled}
                     available={isAvailable(typeKey(type))}
+                    locked={locked.has(typeKey(type))}
                     onToggle={onToggle}
                   >
                     <ShapeSwatch type={type} />

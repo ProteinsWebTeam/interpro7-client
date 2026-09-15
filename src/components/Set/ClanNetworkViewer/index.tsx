@@ -12,7 +12,12 @@ import Card from 'components/SimpleCommonComponents/Card';
 import Button from 'components/SimpleCommonComponents/Button';
 import { requestFullScreen, exitFullScreen } from 'utils/fullscreen';
 
-import { buildNodes, ClanVisNode, labelFont } from './buildNodes';
+import {
+  buildNodes,
+  ClanVisNode,
+  labelFont,
+  nodeFilterKeys,
+} from './buildNodes';
 import { ClanVisEdge, EDGE_HIGHLIGHT_COLOR } from './buildEdges';
 import { createEllipseRenderer } from './ellipseNode';
 import { FilterKey, isFilteredOut, toggleKeys } from './filterKeys';
@@ -150,6 +155,12 @@ export const ClanNetworkViewer = ({
   useEffect(() => {
     selectedAccessionRef.current = selectedAccession;
   }, [selectedAccession]);
+  // The focus, for the same click handler: a click on a neighbour moves the
+  // focus on to it.
+  const focusAccessionRef = useRef<string | null>(null);
+  useEffect(() => {
+    focusAccessionRef.current = focusAccession;
+  }, [focusAccession]);
   // Legend entries the user has switched off. Nodes and edges carrying a
   // disabled key are hidden rather than removed, so the layout the network
   // stabilised into survives filtering and un-filtering.
@@ -358,7 +369,21 @@ export const ClanNetworkViewer = ({
       const accession = params.nodes?.[0];
       if (!accession) return;
       const nativeEvent = params.event?.srcEvent;
-      if (!nativeEvent?.metaKey && !nativeEvent?.ctrlKey) return;
+      if (!nativeEvent?.metaKey && !nativeEvent?.ctrlKey) {
+        // Already focused, clicking one of the neighbours moves the focus
+        // straight on to it: while exploring a clan one entry at a time,
+        // following a connection is the whole point. Only on a full click --
+        // vis sends no `click` for a drag -- so grabbing a neighbour to move
+        // it doesn't pull the view out from under the pointer.
+        const focus = focusAccessionRef.current;
+        if (focus && accession !== focus) {
+          // The filters were set for the old neighbourhood (see resetting
+          // them in toggleFocus).
+          setFocusAccession(accession);
+          setDisabledFilters(new Set());
+        }
+        return;
+      }
       openEntry(accession);
       // vis selects whatever was clicked before it ever tells us about the
       // click, but a ctrl/cmd-click is only meant to open the entry. Putting
@@ -431,26 +456,6 @@ export const ClanNetworkViewer = ({
     [networkNodes, links, metadata?.accession, disabledFilters],
   );
 
-  // Which of the legend's entries anything left on the canvas still answers to,
-  // so that it can leave the rest out (see nodeVisibility.ts).
-  const visibleFilterKeys = useMemo(
-    () =>
-      getVisibleFilterKeys(
-        networkNodes,
-        links,
-        metadata?.accession || '',
-        hiddenAccessions,
-        disabledFilters,
-      ),
-    [
-      networkNodes,
-      links,
-      metadata?.accession,
-      hiddenAccessions,
-      disabledFilters,
-    ],
-  );
-
   // Everything with nothing left to connect it: never linked at all, or left
   // edgeless by the filters (see nodeVisibility.ts).
   const unconnectedAccessions = useMemo(
@@ -462,6 +467,16 @@ export const ClanNetworkViewer = ({
         disabledFilters,
       ),
     [networkNodes, links, hiddenAccessions, disabledFilters],
+  );
+
+  // What goes in the grid. Nothing while focused: a neighbourhood is small
+  // enough that an unconnected node is best left where the layout put it, next
+  // to the rest, rather than sent off to a grid on its own. Leaving focus fills
+  // the grid again.
+  const isFocused = focusAccession !== null;
+  const gridAccessions = useMemo(
+    () => (isFocused ? [] : unconnectedAccessions),
+    [isFocused, unconnectedAccessions],
   );
 
   // Which sends them to the grid the originally-unconnected entries already sit
@@ -480,7 +495,7 @@ export const ClanNetworkViewer = ({
     // the grid itself does not hold. Where those nodes have actually ended up,
     // not where they were expected to, so the grid lands the same short
     // distance away whether the clan settled tight or sprawled.
-    const gridded = new Set(unconnectedAccessions);
+    const gridded = new Set(gridAccessions);
     const connected = networkNodes
       .map((node) => node.accession)
       .filter(
@@ -506,14 +521,14 @@ export const ClanNetworkViewer = ({
       const xs = connected.map((accession) => settledAt(accession).x);
       const ys = connected.map((accession) => settledAt(accession).y);
       centre = gridCentreBeside(
-        unconnectedAccessions.length,
+        gridAccessions.length,
         Math.min(...xs),
         (Math.min(...ys) + Math.max(...ys)) / 2,
       );
     }
 
-    const positions = placeIsolatedNodes(unconnectedAccessions, centre);
-    const updates = unconnectedAccessions.map((accession) => ({
+    const positions = placeIsolatedNodes(gridAccessions, centre);
+    const updates = gridAccessions.map((accession) => ({
       id: accession,
       ...positions[accession],
     }));
@@ -521,7 +536,7 @@ export const ClanNetworkViewer = ({
       if (positions[accession] || !home[accession]) return;
       updates.push({ id: accession, ...home[accession] });
     });
-    griddedRef.current = new Set(unconnectedAccessions);
+    griddedRef.current = new Set(gridAccessions);
     if (updates.length) nodesDataSet.update(updates);
 
     // The framing done when the layout settled took in the grid at its staging
@@ -532,7 +547,7 @@ export const ClanNetworkViewer = ({
       fittedLayoutRef.current = layoutVersion;
       network.fit();
     }
-  }, [unconnectedAccessions, networkNodes, hiddenAccessions, layoutVersion]);
+  }, [gridAccessions, networkNodes, hiddenAccessions, layoutVersion]);
 
   // While focused on a node: that node and its neighbours, filtered (see
   // getFocusAccessions).
@@ -571,6 +586,86 @@ export const ClanNetworkViewer = ({
         : hiddenAccessions,
     [focusedAccessions, hiddenAccessions, networkNodes],
   );
+
+  // Which of the legend's entries anything left on the canvas still answers to,
+  // so that it can leave the rest out (see nodeVisibility.ts). While focused,
+  // that is the focused node's neighbourhood, not the whole network.
+  const visibleFilterKeys = useMemo(
+    () =>
+      getVisibleFilterKeys(
+        networkNodes,
+        links,
+        metadata?.accession || '',
+        offCanvasAccessions,
+        disabledFilters,
+        focusAccession,
+      ),
+    [
+      networkNodes,
+      links,
+      metadata?.accession,
+      offCanvasAccessions,
+      disabledFilters,
+      focusAccession,
+    ],
+  );
+
+  // The legend entries that can be clicked. Outside focus: whatever is on the
+  // canvas, plus whatever the user has switched off -- clicking it is the only
+  // way of switching it back on. While focused, a switched-off entry only stays
+  // live if it applies to the focused node's neighbourhood as it would be with
+  // no filters at all, so the legend describes that neighbourhood and not the
+  // whole network, and still lets anything it took away be brought back.
+  const availableFilterKeys = useMemo(() => {
+    const disabled = Array.from(disabledFilters);
+    if (!focusAccession) {
+      return new Set([...Array.from(visibleFilterKeys), ...disabled]);
+    }
+    const clanAccession = metadata?.accession || '';
+    const neighbourhood = getFocusAccessions(
+      focusAccession,
+      networkNodes,
+      links,
+      clanAccession,
+      new Set(),
+      new Set(),
+    );
+    const outside = new Set(
+      networkNodes
+        .map((node) => node.accession)
+        .filter((accession) => !neighbourhood.has(accession)),
+    );
+    const neighbourhoodKeys = getVisibleFilterKeys(
+      networkNodes,
+      links,
+      clanAccession,
+      outside,
+      new Set(),
+      focusAccession,
+    );
+    return new Set([
+      ...Array.from(visibleFilterKeys),
+      ...disabled.filter((key) => neighbourhoodKeys.has(key)),
+    ]);
+  }, [
+    visibleFilterKeys,
+    disabledFilters,
+    focusAccession,
+    networkNodes,
+    links,
+    metadata?.accession,
+  ]);
+
+  // While focused, the focused node's own membership and type cannot be
+  // filtered out: hiding it would end the focus rather than filter within it.
+  const lockedFilterKeys = useMemo(() => {
+    const focusNode = focusAccession
+      ? networkNodes.find((node) => node.accession === focusAccession)
+      : undefined;
+    return new Set<FilterKey>(
+      focusNode ? nodeFilterKeys(focusNode, metadata?.accession || '') : [],
+    );
+  }, [focusAccession, networkNodes, metadata?.accession]);
 
   // Legend filters and focus: hide whatever carries a switched-off key, and
   // whatever focus leaves out -- for edges, any not touching the focused node,
@@ -634,21 +729,6 @@ export const ClanNetworkViewer = ({
       setFocusAccession(null);
     }
   }, [focusAccession, hiddenAccessions]);
-
-  // Already focused, picking one of the neighbours moves the focus straight on
-  // to it: while exploring a clan one entry at a time, following a connection
-  // is the whole point, and having to press the focus button again for each
-  // step is a toll on the way. An effect rather than something in the click
-  // handler, which was built once on mount and would read a stale focus.
-  useEffect(() => {
-    if (
-      focusAccession &&
-      selectedAccession &&
-      selectedAccession !== focusAccession
-    ) {
-      setFocusAccession(selectedAccession);
-    }
-  }, [selectedAccession, focusAccession]);
 
   // A filter or the focus can take the hovered node off the canvas before the
   // pointer ever leaves it, which would leave its details up with nothing
@@ -754,8 +834,14 @@ export const ClanNetworkViewer = ({
   const focusButtonLabel = isFocusActive
     ? 'Show the whole network'
     : 'Show only this entry and its connections';
-  const toggleFocus = () =>
+  // Moving the focus on, or leaving it, starts again with no filters: they were
+  // chosen for the neighbourhood being left, and carried over they would hide
+  // things in the next one -- or in the whole network -- for no visible reason.
+  // Entering focus keeps them, as they were chosen for what is being narrowed.
+  const toggleFocus = () => {
+    if (focusAccession) setDisabledFilters(new Set());
     setFocusAccession(isFocusActive ? null : selectedAccession);
+  };
 
   const focusOnNode = (accession: string) => {
     const network = networkRef.current;
@@ -763,6 +849,11 @@ export const ClanNetworkViewer = ({
     network.selectNodes([accession]);
     // selectNodes() is programmatic, so vis-network sends no `select` event.
     setSelectedAccession(accession);
+    // Picking a result while focused moves the focus on, as clicking it would.
+    if (focusAccession && accession !== focusAccession) {
+      setFocusAccession(accession);
+      setDisabledFilters(new Set());
+    }
     network.focus(accession, {
       scale: Math.max(network.getScale(), SEARCH_FOCUS_SCALE),
       animation: { duration: 600, easingFunction: 'easeInOutQuad' },
@@ -809,7 +900,8 @@ export const ClanNetworkViewer = ({
       nodes={networkNodes}
       links={links}
       disabled={disabledFilters}
-      visible={visibleFilterKeys}
+      available={availableFilterKeys}
+      locked={lockedFilterKeys}
       onToggle={(keys) =>
         setDisabledFilters((current) => toggleKeys(current, keys))
       }
