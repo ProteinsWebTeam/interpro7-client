@@ -722,13 +722,11 @@ export const ClanNetworkViewer = ({
     );
   }, [focusAccession, focusedAccessions]);
 
-  // A filter that hides the focused node itself ends the focus, rather than
-  // leaving an empty canvas with nothing to explain it.
-  useEffect(() => {
-    if (focusAccession && hiddenAccessions.has(focusAccession)) {
-      setFocusAccession(null);
-    }
-  }, [focusAccession, hiddenAccessions]);
+  // Nothing here ends the focus when the filters would hide the focused node:
+  // its own membership and type are locked in the legend while focused, and
+  // the edge filters stranding it (see getHiddenAccessions) just leave it on
+  // its own -- getFocusAccessions always keeps it -- so the user stays where
+  // they were and can bring its connections back from the legend.
 
   // A filter or the focus can take the hovered node off the canvas before the
   // pointer ever leaves it, which would leave its details up with nothing
