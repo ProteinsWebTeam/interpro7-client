@@ -236,44 +236,54 @@ const Legend = ({
               methods and three tiers each, a single list is taller than it
               is wide and pushes the rest of the page down. */}
             <div className={css('legend-methods')}>
-              {knownMethodLegend.map(({ method, label, tiers }) => (
-                <div key={method} className={css('legend-method')}>
-                  {/* The method name switches all of its tiers at once, so the
+              {knownMethodLegend.map(({ method, label, tiers }) => {
+                const tierKeys = tiers.map((_, tierIndex) =>
+                  tierKey(method, tierIndex),
+                );
+                // Only the tiers with something to filter: switching off one
+                // with nothing behind it would leave it struck through, and --
+                // being switched off -- live, though there is nothing to bring
+                // back. With none available the button is disabled anyway.
+                const availableTierKeys = tierKeys.filter(isAvailable);
+                return (
+                  <div key={method} className={css('legend-method')}>
+                    {/* The method name switches all of its tiers at once, so the
                     tiers below always show what is actually hidden. */}
-                  <span className={css('legend-method-name')}>
-                    <Toggle
-                      filterKeys={tiers.map((_, tierIndex) =>
-                        tierKey(method, tierIndex),
-                      )}
-                      disabled={disabled}
-                      available={tiers.some((_, tierIndex) =>
-                        isAvailable(tierKey(method, tierIndex)),
-                      )}
-                      onToggle={onToggle}
-                    >
-                      {label}
-                    </Toggle>
-                  </span>
-                  <ul className={css('no-bullet')}>
-                    {tiers.map((tier, tierIndex) => (
-                      <li key={tier.label}>
-                        <Toggle
-                          filterKeys={[tierKey(method, tierIndex)]}
-                          disabled={disabled}
-                          available={isAvailable(tierKey(method, tierIndex))}
-                          onToggle={onToggle}
-                        >
-                          <span
-                            className={css('legend-line')}
-                            style={{ borderTopColor: tier.color }}
-                          />
-                          {tier.label}
-                        </Toggle>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                    <span className={css('legend-method-name')}>
+                      <Toggle
+                        filterKeys={
+                          availableTierKeys.length
+                            ? availableTierKeys
+                            : tierKeys
+                        }
+                        disabled={disabled}
+                        available={availableTierKeys.length > 0}
+                        onToggle={onToggle}
+                      >
+                        {label}
+                      </Toggle>
+                    </span>
+                    <ul className={css('no-bullet')}>
+                      {tiers.map((tier, tierIndex) => (
+                        <li key={tier.label}>
+                          <Toggle
+                            filterKeys={[tierKey(method, tierIndex)]}
+                            disabled={disabled}
+                            available={isAvailable(tierKey(method, tierIndex))}
+                            onToggle={onToggle}
+                          >
+                            <span
+                              className={css('legend-line')}
+                              style={{ borderTopColor: tier.color }}
+                            />
+                            {tier.label}
+                          </Toggle>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
               {otherMethods.length > 0 && (
                 <div className={css('legend-method')}>
                   <span className={css('legend-method-name')}>Other</span>
