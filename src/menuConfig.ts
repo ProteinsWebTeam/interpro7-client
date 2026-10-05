@@ -437,6 +437,25 @@ export const singleEntity: Map<string, MenuItemProps> = new Map([
     },
   ],
   [
+    'genomic_context',
+    {
+      to(customLocation: InterProLocation) {
+        const key = customLocation.description.main.key as Endpoint;
+        return {
+          description: {
+            ...getEmptyDescription(),
+            main: { key },
+            [key]: {
+              ...customLocation.description[key],
+              detail: 'genomic_context',
+            },
+          },
+        };
+      },
+      name: 'Genomic Context',
+    },
+  ],
+  [
     'logo',
     {
       to(customLocation: InterProLocation) {

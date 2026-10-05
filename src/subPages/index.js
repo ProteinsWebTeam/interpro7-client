@@ -17,6 +17,13 @@ const Sequence = loadable({
   loader: () => import(/* webpackChunkName: "sequence-subpage" */ './Sequence'),
 });
 
+const GenomicContext = loadable({
+  loader: () =>
+    import(
+      /* webpackChunkName: "genomic-context-subpage" */ './GenomicContext'
+    ),
+});
+
 const Isoform = loadable({
   loader: () => import(/* webpackChunkName: "isoform-subpage" */ './Isoform'),
 });
@@ -174,6 +181,7 @@ const subPages = new Map([
   ['logo', loadData(mapStateToPropsForHMMModel)(HMMModel)],
   ['proteome', loadData()(Proteome)],
   ['similar_proteins', SimilarProteins],
+  ['genomic_context', GenomicContext],
   ['feedback', FeedbackSubPage],
 ]);
 

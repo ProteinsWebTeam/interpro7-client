@@ -9,7 +9,12 @@ const singleEntityNames = new Map(
   Array.from(singleEntity).map((e) => [e[1].name, e[0]]),
 );
 
-const whitelist = new Set(['Overview', 'Sequence', 'Alignments']);
+const whitelist = new Set([
+  'Overview',
+  'Sequence',
+  'Alignments',
+  'Genomic Context',
+]);
 
 const hasAlignments = (
   name: string,
@@ -112,6 +117,13 @@ export const EntryMenuLink = ({
     }
     // TODO: find a generic way to deal with this:
     if (whitelist.has(name)) value = NaN;
+    if (
+      name === 'Genomic Context' &&
+      mainKey?.toLowerCase() === 'entry' &&
+      payload.metadata.source_database.toLowerCase() !== 'pfam'
+    ) {
+      value = null;
+    }
     // TODO: find a generic way to deal with this:
     if (
       name === 'Pathways' &&
