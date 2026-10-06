@@ -16,6 +16,9 @@ root:
   LLMFeedback: https://docs.google.com/forms/d/e/1FAIpQLSc9lPkgGOZBpnyLiHF87AbUYdAWyx_3YFTNNg4MGQEcqAK4jQ/viewform?usp=pp_url&entry.128814244=
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
+  SeqHub: https://seqhub.org/
+  # TODO: switch to https://seqhub.org/ once Tatta Bio deploys feature-list
+  SeqHubPfam: https://staging.seqhub.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
   matches: https://www.ebi.ac.uk/interpro/matches/api/matches
   docbot: https://wwwdev.ebi.ac.uk/docbot/api

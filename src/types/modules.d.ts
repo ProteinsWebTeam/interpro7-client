@@ -28,6 +28,10 @@ declare module '*.fasta' {
   const content: any;
   export default content;
 }
+declare module '*.txt' {
+  const content: string;
+  export default content;
+}
 
 // TODO: remove after migration of storage/
 declare module 'storage/searchStorage' {

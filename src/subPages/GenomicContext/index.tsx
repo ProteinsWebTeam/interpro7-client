@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Loading from 'components/SimpleCommonComponents/Loading';
 
 import config from 'config';
 
-// Same embed and limits as UniProt's SeqHub panel
-const SEQHUB_EMBED = 'https://seqhub.org/embed/search-list?q=';
-// TODO: switch to https://seqhub.org once Tatta Bio deploys feature-list
-const SEQHUB_PFAM_EMBED = 'https://staging.seqhub.org/embed/feature-list';
+import { useGenomicContextAvailability } from './availability';
+
 // Lets SeqHub track requests coming from InterPro
 const SEQHUB_PARTNER = 'interpro';
 // The sequence goes in the URL; SeqHub returns 431 above ~16k residues
 const MAX_LENGTH = 8000;
-// Bacteria and Archaea taxIds
-const PROKARYOTES = new Set(['2', '2157']);
 
 type Props = {
   data: RequestedData<MetadataPayload<ProteinMetadata | EntryMetadata>>;
@@ -39,44 +35,32 @@ const GenomicContextSubPage = ({ data }: Props) => {
   const metadata = data?.payload?.metadata as ProteinMetadata | undefined;
   const isPfam =
     (metadata?.source_database as string)?.toLowerCase() === 'pfam';
-  const taxId = isPfam ? undefined : metadata?.source_organism?.taxId;
-  const [isProkaryote, setIsProkaryote] = useState<boolean | null>(null);
+  const available = useGenomicContextAvailability(
+    isPfam ? 'entry' : 'protein',
+    metadata,
+  );
 
-  useEffect(() => {
-    if (!taxId) return;
-    fetch(`${config.root.API.href}taxonomy/uniprot/${taxId}`)
-      .then((response) => response.json())
-      .then((payload) => {
-        const lineage: string = payload?.metadata?.lineage || '';
-        setIsProkaryote(
-          lineage
-            .trim()
-            .split(/\s+/)
-            .some((id) => PROKARYOTES.has(id)),
-        );
-      })
-      .catch(() => setIsProkaryote(false));
-  }, [taxId]);
+  if (data.loading || !metadata || available === null) return <Loading />;
 
-  if (data.loading || !metadata) return <Loading />;
+  if (!available)
+    return (
+      <p>
+        Genomic context is only available for bacterial and archaeal proteins,
+        and for selected Pfam families.
+      </p>
+    );
 
   if (isPfam)
     return (
       <SeqHubFrame
-        src={`${SEQHUB_PFAM_EMBED}?features=${encodeURIComponent(
+        src={`${
+          config.root.SeqHubPfam.href
+        }embed/feature-list?features=${encodeURIComponent(
           metadata.accession,
         )}&partner=${SEQHUB_PARTNER}`}
       />
     );
 
-  if (isProkaryote === null) return <Loading />;
-
-  if (!isProkaryote)
-    return (
-      <p>
-        Genomic context is only available for bacterial and archaeal proteins.
-      </p>
-    );
   if (metadata.sequence.length > MAX_LENGTH)
     return (
       <p>
@@ -85,9 +69,12 @@ const GenomicContextSubPage = ({ data }: Props) => {
       </p>
     );
 
+  // Same embed and limits as UniProt's SeqHub panel
   return (
     <SeqHubFrame
-      src={`${SEQHUB_EMBED}${encodeURIComponent(metadata.sequence)}`}
+      src={`${config.root.SeqHub.href}embed/search-list?q=${encodeURIComponent(
+        metadata.sequence,
+      )}`}
     />
   );
 };
