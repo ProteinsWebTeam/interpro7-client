@@ -15,14 +15,11 @@ const css = cssBinder(local, fonts, cards);
 export const content = [
   {
     type: 'tool',
-    link: '//interproscan-docs.readthedocs.io/en/latest/',
+    link: '//interproscan6.readthedocs.io',
     title: 'InterProScan',
-    description: `InterProScan is the software package that allows sequences
-    (protein and nucleic) to be scanned against InterPro&apos;s
-    signatures. Signatures are predictive models, provided by
-    several different databases, that make up the InterPro
-    consortium. InterProScan only runs on Linux machine.`,
-    github: '//github.com/ebi-pf-team/interproscan',
+    description: `InterProScan is a software package designed to scan protein
+    or nucleotide sequences against InterPro's member database signatures.`,
+    github: '//github.com/ebi-pf-team/interproscan6',
     imageClass: 'image-tool-ipscan',
   },
   {

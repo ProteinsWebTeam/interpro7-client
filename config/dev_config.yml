@@ -59,6 +59,7 @@ pages:
       - genome3d
       - curation
       - subfamilies
+      - genomic_context
       - feedback
   protein:
     subPages:
@@ -68,6 +69,7 @@ pages:
       - sequence
       - alphafold
       - similar_proteins
+      - genomic_context
   structure:
     subPages:
       - entry

@@ -90,6 +90,10 @@
   flex-wrap: nowrap;
   & section {
     flex-grow: 2;
+    /* A flex item's automatic minimum size is its content's min-content width,
+       so a fixed-size child -- a canvas, say -- stops the column shrinking and
+       the page scrolls sideways instead. */
+    min-width: 0;
   }
 }
 /* small screen only*/

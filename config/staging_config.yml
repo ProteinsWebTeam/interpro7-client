@@ -60,6 +60,7 @@ pages:
       - pathways
       - curation
       - subfamilies
+      - genomic_context
       - feedback
   protein:
     subPages:
@@ -69,6 +70,7 @@ pages:
       - alphafold
       - sequence
       - similar_proteins
+      - genomic_context
   structure:
     subPages:
       - entry

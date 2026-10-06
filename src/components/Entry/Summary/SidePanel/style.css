@@ -6,3 +6,16 @@ div.flex-space-evenly {
   display: flex;
   justify-content: space-evenly;
 }
+
+.structure-images {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+.structure-images-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

@@ -112,7 +112,10 @@ const ProtVistaEntryPopup = ({
           <div>
             {accession?.startsWith('residue:')
               ? accession.split('residue:')[1]?.replace('PIRSF', 'PIRSR')
-              : accession?.replace('Mobidblt-', '').replaceAll(/:nmatch/gi, '')}
+              : accession
+                  ?.replace('Mobidblt-', '')
+                  .replace('parentUnintegrated:', '')
+                  .replaceAll(/:nmatch/gi, '')}
             {accession?.includes('nMatch') && (
               <sup>
                 {' '}

@@ -28,6 +28,8 @@ import Actions from '../../Actions';
 import DownloadAll from '../../Actions/Group/DownloadAll';
 import ReRun from '../../Actions/Group/ReRun';
 
+import { InterProScanCitation } from 'components/Help/Publication';
+
 import { MAX_TIME_ON_SERVER } from 'store/enhancer/jobs-middleware';
 
 import cssBinder from 'styles/cssBinder';
@@ -189,6 +191,17 @@ export const IPScanStatus = ({
         <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
       </h3>
 
+      {finalStatuses.includes(job?.status as string) && (
+        <p className={css('info')}>
+          <h5 className={css('light')}>Citing InterProScan</h5>
+          If you use InterProScan results in your work, please cite our latest
+          paper:
+          <br />
+          <br />
+          <InterProScanCitation />
+        </p>
+      )}
+
       <IPScanTitle
         type="job"
         accession={job?.localID || ''}
@@ -278,6 +291,7 @@ export const IPScanStatus = ({
           </section>
         </section>
       )}
+
       {jobsData === null ? (
         <Loading />
       ) : (

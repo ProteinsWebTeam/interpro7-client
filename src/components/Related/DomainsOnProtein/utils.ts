@@ -134,7 +134,7 @@ export const proteinViewerReorganization = (
 
   // Splitting the "other features" section in mulitple subsets.
   // Using this logic we can go back to having the "other_features" section again.
-  const CPST = ['coils', 'phobius', 'signalp', 'tmhmm'];
+  const CPST = ['coils', 'phobius', 'signalp', 'tmbed', 'tmhmm'];
   dataMerged['coiled-coils,_signal_peptides,_transmembrane_regions'] =
     getFeature(CPST, dataMerged) as MinimalFeature[];
   dataMerged['pfam-n'] = getFeature('pfam-n', dataMerged) as MinimalFeature[];

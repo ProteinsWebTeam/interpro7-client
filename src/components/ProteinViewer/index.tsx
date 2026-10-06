@@ -151,6 +151,7 @@ export const ProteinViewer = ({
   const mainTracks = [
     'alphafold confidence',
     'domain',
+    'interpro-n',
     'family',
     'residues',
     'intrinsically disordered regions',

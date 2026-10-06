@@ -54,6 +54,7 @@ deploy:test:
     name: test
 
 # MASTER BRANCH ON DEV WITH STAGING CONFIG
+# staging frontend cluster: hh-wp-webadmin-114.wp-k8s.ebi.ac.uk
 
 build:staging:
   extends: .build
@@ -82,7 +83,7 @@ build:master:
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
   variables:
-    CONFIG_FILE: config/master_config
+    CONFIG_FILE: config/master_config.yml
     IMAGE: $REGISTRY_IMAGE:master-$CI_COMMIT_SHA
 
 deploy:fallback:

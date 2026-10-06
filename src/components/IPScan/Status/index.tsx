@@ -31,6 +31,8 @@ import ClearAllDialog, {
 import ImportResultSearch from 'components/IPScan/ImportResultSearch';
 import Actions from 'components/IPScan/Actions';
 
+import { InterProScanCitation } from 'components/Help/Publication';
+
 import config from 'config';
 
 import cssBinder from 'styles/cssBinder';
@@ -150,14 +152,20 @@ export class IPScanStatus extends PureComponent<Props, State> {
           <TooltipAndRTDLink rtdPage="searchways.html#sequence-search-results" />
         </h3>
         <p className={css('info')}>
-          Your InterProScan search results are displayed below. You may navigate
-          to other pages while searches are running; you will be notified when
-          they complete. Results remain available for 7 days.
+          <h5 className={css('light')}>Citing InterProScan</h5>
+          If you use InterProScan results in your work, please cite our latest
+          paper:
+          <br />
+          <InterProScanCitation />
         </p>
         <p className={css('info')}>
-          You can also import results from an InterProScan run (JSON format) to
-          visualise hits in the sequence context.
+          Your InterProScan search results are displayed below. You may navigate
+          to other pages while searches are running; you will be notified when
+          they complete. Results remain available for 7 days. You can also
+          import results from an InterProScan run (JSON format) to visualise
+          hits in the sequence context.
         </p>
+
         <SchemaOrgData
           data={{
             name: 'Your InterProScan searches',

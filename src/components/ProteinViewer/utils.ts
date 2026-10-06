@@ -67,6 +67,7 @@ export const typeNameToSectionName: Record<string, string> = {
   'coiled-coils, signal peptides, transmembrane regions':
     'Coiled-coils, Signal Peptides and Transmembrane Regions',
   'short linear motifs': 'Short Linear Motifs',
+  'interpro-n': 'InterPro-N predictions',
   'pfam-n': 'Pfam-N',
   funfam: 'CATH functional families',
   'cath-funfam': 'CATH functional families',
@@ -87,6 +88,7 @@ export const firstHideCategories = {
   'match conservation': false,
   'coiled-coils, signal peptides, transmembrane regions': false,
   'short linear motifs': false,
+  'interpro-n': false,
   'pfam-n': false,
   funfam: false,
 };

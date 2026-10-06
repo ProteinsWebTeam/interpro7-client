@@ -1,6 +1,9 @@
 .vf-footer {
   padding-left: 1rem;
   padding-right: 1rem;
+  /* Same vf-u-fullbleed overflow as the Elixir footer above it; see the note in
+     components/ElixirFooter/style.css. */
+  overflow-x: clip;
 
   & .vf-list__item {
     font-size: 16px;

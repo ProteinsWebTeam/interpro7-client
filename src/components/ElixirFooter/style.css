@@ -1,6 +1,13 @@
 .elixir-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
   padding-left: 1rem;
+  /* vf-u-fullbleed paints the full-width background with a pseudo-element that
+     bleeds 1rem past each side to cancel the padding above. The right-hand
+     bleed lands outside the viewport and makes the whole page scroll
+     horizontally; this box is already viewport-wide, so clipping to it drops
+     only the off-screen part. `clip` rather than `hidden` so no scroll
+     container is created. */
+  overflow-x: clip;
 
   & .logo {
     height: 60px;

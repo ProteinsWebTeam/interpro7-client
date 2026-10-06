@@ -256,11 +256,14 @@ interface SetMetadata extends Omit<Metadata, 'description'> {
       name: string;
       type: string;
       score: number;
+      clan?: string;
     }>;
     links: Array<{
       source: string;
       target: string;
       score: number;
+      method?: string;
+      nested?: boolean;
     }>;
   };
   authors: Array<string> | null;

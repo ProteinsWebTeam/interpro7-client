@@ -124,38 +124,4 @@ export const getMismatchedFavourites = async ({
       }),
     );
   });
-  Promise.all(promises).then(() => {
-    if (changedEntries.length > 0) {
-      setChangedFav(changedEntries);
-
-      if (notify) {
-        const notification = createNotification(
-          'InterPro',
-          'Changes detected in your favourites',
-        );
-        notification.onclick = () => {
-          window.open(
-            `${window.location.origin}/interpro/fav-updates/`,
-            '_blank',
-          );
-        };
-
-        addToast(
-          {
-            title: '⭐ Favourites update',
-            body: 'Changed detected in your favourites in the new version',
-            ttl: 10000, // eslint-disable-line no-magic-numbers
-            link: {
-              to: {
-                description: { other: ['fav-updates'] },
-              },
-              children: 'See the difference',
-            },
-          },
-          id(),
-        );
-      }
-    }
-    setLoading(false);
-  });
 };

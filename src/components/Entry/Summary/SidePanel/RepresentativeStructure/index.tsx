@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import LazyImage from 'components/LazyImage';
+import StructureImage from 'components/Structure/StructureImage';
 import Link from 'components/generic/Link';
 
 import cssBinder from 'styles/cssBinder';
@@ -16,6 +16,10 @@ const RepresentativeStructure = ({
   accession: string;
   name: string;
 }) => {
+  const [hiddenImages, setHiddenImages] = useState<Record<string, boolean>>({});
+  const hideImage = (view: string) => () =>
+    setHiddenImages((previous) => ({ ...previous, [view]: true }));
+
   return (
     <div className={css('side-panel')}>
       <div className={css('side-box')}>
@@ -29,17 +33,30 @@ const RepresentativeStructure = ({
             },
           }}
         >
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <LazyImage
-              src={`//www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/getimg.pl?source=pdbsum&pdb_code=${accession}&file=traces.jpg`}
-              alt={`structure with accession ${accession}`}
-            />
+          <div className={css('structure-images')}>
+            {!hiddenImages.front && (
+              <StructureImage
+                pdbId={accession}
+                view="front"
+                onError={hideImage('front')}
+              />
+            )}
+            <div className={css('structure-images-side')}>
+              {!hiddenImages.side && (
+                <StructureImage
+                  pdbId={accession}
+                  view="side"
+                  onError={hideImage('side')}
+                />
+              )}
+              {!hiddenImages.top && (
+                <StructureImage
+                  pdbId={accession}
+                  view="top"
+                  onError={hideImage('top')}
+                />
+              )}
+            </div>
           </div>
 
           <div>

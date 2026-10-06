@@ -22,20 +22,26 @@ endpoint. Only applications that need a dedicated section are listed here;
 anything else is treated as a member database and shown under
 "Families, domains, sites & repeats". */
 const APPLICATION_CATEGORIES = {
-  structuralDomains: new Set(['CATH-Gene3D', 'SUPERFAMILY']),
-  functionalFamilies: new Set(['CATH-FunFam']),
-  coiledCoil: new Set(['COILS']),
-  disorderedRegions: new Set(['MobiDB-lite']),
-  signalAndTransmembrane: new Set(['Phobius', 'SignalP-Euk', 'SignalP-Prok']),
-  spuriousProteins: new Set(['AntiFam']),
-  additionalSites: new Set(['PIRSR']),
+  structuralDomains: ['CATH-Gene3D', 'SUPERFAMILY'],
+  interproN: ['InterPro-N'],
+  functionalFamilies: ['CATH-FunFam'],
+  coiledCoil: ['COILS'],
+  disorderedRegions: ['MobiDB-lite'],
+  signalAndTransmembrane: ['Phobius', 'SignalP'],
+  spuriousProteins: ['AntiFam'],
+  additionalSites: ['PIRSR'],
 } as const;
 
 type ApplicationCategory = keyof typeof APPLICATION_CATEGORIES | 'families';
 
+const normalize = (value: string) => value.toLowerCase().replace(/\W|_/g, '');
+
 const categoryFor = (value: string): ApplicationCategory => {
+  const normalized = normalize(value);
   for (const [category, values] of Object.entries(APPLICATION_CATEGORIES)) {
-    if (values.has(value)) return category as ApplicationCategory;
+    // startsWith so that one `SignalP` covers SignalP-Euk, SignalP_EUK, etc.
+    if (values.some((v) => normalized.startsWith(normalize(v))))
+      return category as ApplicationCategory;
   }
   // Default: treat unknown applications as member databases.
   return 'families';
@@ -55,6 +61,7 @@ const groupApplications = (
 ): GroupedApplications => {
   const groups: GroupedApplications = {
     families: [],
+    interproN: [],
     structuralDomains: [],
     functionalFamilies: [],
     coiledCoil: [],
@@ -199,6 +206,10 @@ export const AdvancedOptions = ({
             <fieldset className={css('new-fieldset')}>
               <legend>Structural domains</legend>
               {groups.structuralDomains.map(applicationToCheckbox)}
+            </fieldset>
+            <fieldset className={css('new-fieldset')}>
+              <legend>InterPro-N</legend>
+              {groups.interproN.map(applicationToCheckbox)}
             </fieldset>
           </fieldset>
           <fieldset className={css('new-fieldset')}>

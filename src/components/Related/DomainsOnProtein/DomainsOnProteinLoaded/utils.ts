@@ -6,12 +6,18 @@ import { selectRepresentativeData } from 'components/ProteinViewer/utils';
 
 /// UTILS
 export const UNDERSCORE = /_/g;
+/* Marks a match as an InterPro-N prediction. The protein viewer keys off it to
+draw the sparkle in labels and tooltips, and strips it again when building
+links. */
+export const N_MATCH_SUFFIX = ':nMatch';
 
 const FIRST_IN_ORDER = [
   'alphafold_confidence',
   'secondary_structure',
   'family',
   'domain',
+  // InterPro-N predictions with no InterPro counterpart
+  'interpro-n',
   'intrinsically_disordered_regions',
   'conserved_site',
   'residues',
@@ -220,7 +226,7 @@ const processRepresentativeData = (
     representativeData = representativeFamilies;
   }
 
-  representativeData.forEach((match) => (match.accession += ':nMatch'));
+  representativeData.forEach((match) => (match.accession += N_MATCH_SUFFIX));
 
   return representativeData as ExtendedFeature[];
 };
@@ -319,7 +325,7 @@ const integratedN_MatchFilter = (
 const addSuffix = (matches: InterProN_Match[]) => {
   const newMatches = JSON.parse(JSON.stringify(matches));
   newMatches.forEach((match: MinimalFeature) => {
-    match.accession = match.accession + ':nMatch';
+    match.accession = match.accession + N_MATCH_SUFFIX;
   });
   return newMatches;
 };

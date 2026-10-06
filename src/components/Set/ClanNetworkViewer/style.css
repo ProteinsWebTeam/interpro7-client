@@ -1,0 +1,456 @@
+/* Sets the viewer apart from whatever section precedes it on the page -- the
+   Wikipedia block, usually -- which the surrounding stack does not space for. */
+.clan-network-viewer {
+  margin-top: 2rem;
+}
+
+.clan-network-container {
+  position: relative;
+}
+
+.clan-network-canvas {
+  width: 100%;
+  height: 600px;
+  border: 1px solid rgba(50, 50, 50, 0.2);
+  /* vis-network sizes its own frame inside here in whole pixels, from a
+     measurement taken a moment earlier; while the box is being resized -- in
+     full screen, as the legend grows and shrinks -- that frame can briefly be
+     taller than this one, and would otherwise be drawn over whatever sits
+     below. */
+  overflow: hidden;
+}
+
+/* The legend floats just outside the viewer's left edge, level with the top of
+   the canvas, so it never covers the graph. It is positioned rather than laid
+   out so that opening it doesn't reflow the page or shrink the canvas. In full
+   screen there is no "outside" to use, so the rule further down brings it back
+   over the top-left corner. */
+.clan-network-legend-floating {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 0.5em);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 14em;
+  /* Never taller than the canvas beside it: the title and its line of
+     explanation stay put, and the list below them scrolls. */
+  max-height: 100%;
+  box-sizing: border-box;
+  padding: 0.25em 0.75em 0.5em;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+
+  /* The header keeps its height; only the list below it gives way and scrolls.
+     `min-height: 0` twice over, because a flex item refuses to shrink below its
+     content without it. */
+  & .clan-network-legend-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  /* One narrow stack rather than the wide row it lays out as by default, and no
+     top padding of its own -- that would eat into the gap under the title. */
+  & .clan-network-legend {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1em;
+    padding-top: 0;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  & .legend-methods {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+}
+
+/* The title and the line explaining what the legend does, stacked. The margin
+   sets both apart from the filters below rather than letting them read as the
+   first of them -- the same gap whether the legend is floating beside the
+   canvas or laid out under it in full screen. */
+.clan-network-legend-header {
+  padding-top: 0.25em;
+  margin-bottom: 1em;
+}
+
+.clan-network-legend-title {
+  margin: 0;
+  font-size: 0.95em;
+  font-weight: bold;
+}
+
+/* Quiet and italic: it is an instruction about the list below, not part of it. */
+.clan-network-legend-hint {
+  margin: 0.2em 0 0;
+  color: #666;
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+/* A full-screened element has a transparent background by default, which the
+   browser paints black -- explicitly keep the viewer on white, and let the
+   canvas take all the height left over by the controls row. */
+.clan-network-full-screen:fullscreen {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 1em;
+  background-color: white;
+  /* The screen is all the room there is: the canvas flexes and the legend
+     scrolls within its own cap, so nothing is allowed to run off the bottom. */
+  overflow: hidden;
+}
+
+/* The canvas is wrapped (the search box and legend are positioned over it), so
+   it is the wrapper that has to flex, and the canvas that has to fill it. */
+.clan-network-full-screen:fullscreen .clan-network-container {
+  flex: 1 1 auto;
+  /* Without this the flex item refuses to shrink below its 600px basis. */
+  min-height: 0;
+}
+
+.clan-network-full-screen:fullscreen .clan-network-canvas {
+  height: 100%;
+}
+
+/* Keep the canvas the flexible one; the legend takes only what it needs. As in
+   the floating panel, the title stays put and it is the list that scrolls. */
+.clan-network-full-screen:fullscreen .clan-network-legend-root {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  max-height: 30vh;
+  /* Sets the whole legend, title included, apart from the canvas above it --
+     in full screen they would otherwise sit directly on top of each other. */
+  margin-top: 1.5em;
+}
+
+.clan-network-full-screen:fullscreen .clan-network-legend {
+  min-height: 0;
+  padding-top: 0;
+  overflow-y: auto;
+}
+
+/* The view's controls sit in the canvas's top-right corner, opposite the search
+   box in the top-left and clear of the node details in the bottom-right. The
+   34px circle and green hover glow are inherited from the vis-network
+   navigation buttons these replaced. */
+.clan-network-canvas-tools {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  display: flex;
+  gap: 0.4em;
+
+  /* Every control in the group is the same circle, whatever it does. */
+  & button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid #c8c8c8;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    color: #555;
+    cursor: pointer;
+  }
+
+  & button:hover {
+    box-shadow: 0 0 3px 3px rgba(56, 207, 21, 0.3);
+  }
+
+  & button:active {
+    box-shadow: 0 0 1px 3px rgba(56, 207, 21, 0.95);
+  }
+
+  & button:focus-visible {
+    outline: 2px solid #1d78b3;
+    outline-offset: 2px;
+  }
+}
+
+/* Filled while focused, so it is plain the rest of the network is hidden.
+   Written through the group because that sets a background, colour and border
+   on every button in it from a more specific selector, and would otherwise
+   paint over this one. The circle, the hover glow and the focus ring all come
+   from the group too, so neither this button nor the reset and zoom ones
+   beside it need any of that again. */
+.clan-network-canvas-tools button.clan-network-focus-button-active {
+  border-color: #1d78b3;
+  background-color: #1d78b3;
+  color: white;
+}
+
+/* Details of the hovered node, always in this one corner rather than over the
+   node or trailing the pointer: the graph is never covered by something that
+   moves around, and the pointer always knows where to go to reach the link.
+   Diagonally opposite the search box, and below the controls group. */
+.clan-network-node-popover {
+  position: absolute;
+  right: 0.5em;
+  bottom: 0.5em;
+  z-index: 2;
+  width: 17em;
+  max-width: calc(100% - 1em);
+  box-sizing: border-box;
+  padding: 0.4em 0.6em;
+  border: 1px solid #808074;
+  border-radius: 3px;
+  background-color: #f5f4ed;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* The one addition to what vis-network's tooltip used to show: how to get from
+   the node to its page. Quieter than the details above it -- it is the same
+   line every time, so it should not compete with them. */
+.clan-network-node-popover-hint {
+  display: inline-block;
+  margin-top: 0.3em;
+  color: #666;
+  font-style: italic;
+}
+
+.clan-network-search {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+  z-index: 1;
+  width: 15em;
+  max-width: calc(100% - 1em);
+  font-size: 0.85em;
+
+  & input {
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0.35em 0.6em;
+    box-sizing: border-box;
+    border: 1px solid rgba(50, 50, 50, 0.3);
+    border-radius: 3px;
+    background-color: white;
+    font-size: inherit;
+  }
+}
+
+.clan-network-search-results {
+  position: absolute;
+  width: 100%;
+  max-height: 16em;
+  overflow-y: auto;
+  margin: 0.25em 0 0;
+  padding: 0;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.clan-network-search-result {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5em;
+  padding: 0.3em 0.6em;
+  cursor: pointer;
+}
+
+.clan-network-search-result-active {
+  background-color: #e8f2f8;
+}
+
+.clan-network-search-name {
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clan-network-search-accession {
+  flex: 0 0 auto;
+  color: #666;
+}
+
+.clan-network-search-empty {
+  padding: 0.3em 0.6em;
+  color: #666;
+  font-style: italic;
+}
+
+/* The heading shares the toolbar row with the buttons, so it loses the block
+   margins it would otherwise be centred against. */
+.clan-network-title {
+  margin: 0;
+}
+
+.clan-network-controls {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  flex-wrap: wrap;
+  margin-bottom: 0.5em;
+}
+
+/* Every control is a button of the same kind, so they travel together at the
+   far end of the toolbar. `gap` is tighter than the toolbar's own, to read as
+   one group rather than three separate controls. */
+.clan-network-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-left: auto;
+}
+
+/* The legend sits under the canvas rather than in a dropdown, so it lays out
+   as columns across the full width instead of a narrow scrolling panel. */
+.clan-network-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1.5em;
+  padding: 0.5em 0;
+  font-size: 0.85em;
+  & ul {
+    padding: 0;
+    margin: 0;
+  }
+  & header {
+    font-weight: bold;
+    margin-bottom: 0.25em;
+  }
+}
+
+/* The comparison methods are three tiers deep each, so they run across the
+   legend instead of stacking into one very tall column. */
+.legend-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 1.5em;
+}
+
+.legend-method-name {
+  display: block;
+  font-style: italic;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+.legend-line {
+  display: inline-block;
+  width: 24px;
+  border-top: 2px solid #666;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+.legend-line-dashed {
+  border-top-style: dashed;
+}
+
+/* Legend entries are filter switches, so they are buttons -- stripped back to
+   read as the plain text they replaced, and struck through when switched off.
+   The opacity is on the button, so a switched-off entry's swatch or line fades
+   along with its label. */
+.legend-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.legend-toggle:hover {
+  text-decoration: underline;
+}
+
+.legend-toggle:focus-visible {
+  outline: 2px solid #1d78b3;
+  outline-offset: 1px;
+}
+
+.legend-toggle-off {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.legend-toggle-off:hover {
+  text-decoration: line-through underline;
+}
+
+/* Nothing on the canvas answers to this entry for the moment. Faded rather than
+   struck through, which is what an entry the user switched off looks like, and
+   inert: there is nothing for it to hide. It keeps its place so that the legend
+   is always the same size -- in full screen it shares its height with the
+   canvas, and entries coming and going would resize the network itself. */
+.legend-toggle-unavailable {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.legend-toggle-unavailable:hover {
+  text-decoration: none;
+}
+
+/* The method name is a toggle too, and inherits the italics around it. */
+.legend-method-name .legend-toggle {
+  font-style: inherit;
+  font-weight: inherit;
+}
+
+/* Neutral, so a shape key never reads as one of the membership colours. */
+.legend-shape {
+  color: #555;
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
+
+/* Anchors the size popover under its button. The button sits at the right-hand
+   end of the toolbar, so the panel is right-aligned to stay on the page. */
+.clan-network-sizes {
+  position: relative;
+}
+
+.clan-network-sizes-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: max-content;
+  margin-top: 0.35em;
+  padding: 0.6em 0.75em;
+  border: 1px solid rgba(50, 50, 50, 0.3);
+  border-radius: 3px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.clan-network-size-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}

@@ -184,15 +184,19 @@ const ExceptionalLabels = ({ entry, isPrinting, databases }: PropsEL) => {
     NOT_MEMBER_DBS.has(entry.source_database || '') ||
     entry.type === 'chain' ||
     entry.type === 'secondary_structure'
-  )
+  ) {
+    // Prefer the display name coming from the API metadata (e.g. “TMbed”, “SignalP_Euk”),
+    // and only fall back to prettifying the source database when it hasn't loaded yet.
+    const databaseName = databases?.[entry.source_database || '']?.name;
     return (
       <>
         <span style={{ textTransform: 'capitalize' }}>
-          {(entry.source_database || '').replace('_', ' ')}:
+          {databaseName || (entry.source_database || '').replace('_', ' ')}:
         </span>{' '}
         {label}
       </>
     );
+  }
   if (entry.type === 'sequence_conservation') {
     return (
       <Tooltip title={'Score calculated using Phmmer and HMM profile'}>
