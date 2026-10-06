@@ -7,8 +7,9 @@ import config from 'config';
 // Same embed and limits as UniProt's SeqHub panel
 const SEQHUB_EMBED = 'https://seqhub.org/embed/search-list?q=';
 // TODO: switch to https://seqhub.org once Tatta Bio deploys feature-list
-const SEQHUB_PFAM_EMBED =
-  'https://seqhub-ui-staging-pr-1468.onrender.com/embed/feature-list?features=';
+const SEQHUB_PFAM_EMBED = 'https://staging.seqhub.org/embed/feature-list';
+// Lets SeqHub track requests coming from InterPro
+const SEQHUB_PARTNER = 'interpro';
 // The sequence goes in the URL; SeqHub returns 431 above ~16k residues
 const MAX_LENGTH = 8000;
 // Bacteria and Archaea taxIds
@@ -62,7 +63,9 @@ const GenomicContextSubPage = ({ data }: Props) => {
   if (isPfam)
     return (
       <SeqHubFrame
-        src={`${SEQHUB_PFAM_EMBED}${encodeURIComponent(metadata.accession)}`}
+        src={`${SEQHUB_PFAM_EMBED}?features=${encodeURIComponent(
+          metadata.accession,
+        )}&partner=${SEQHUB_PARTNER}`}
       />
     );
 
