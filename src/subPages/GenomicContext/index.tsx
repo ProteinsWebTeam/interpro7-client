@@ -22,8 +22,8 @@ const SeqHubFrame = ({ src }: { src: string }) => (
       title="Genomic context similarity from SeqHub"
       src={src}
       width="100%"
-      height="526"
-      style={{ border: 0 }}
+      height="542"
+      style={{ border: '1px solid #e5e5e5', borderRadius: '8px' }}
       loading="lazy"
       sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
       referrerPolicy="no-referrer"
@@ -54,7 +54,7 @@ const GenomicContextSubPage = ({ data }: Props) => {
     return (
       <SeqHubFrame
         src={`${
-          config.root.SeqHubPfam.href
+          config.root.SeqHub.href
         }embed/feature-list?features=${encodeURIComponent(
           metadata.accession,
         )}&partner=${SEQHUB_PARTNER}`}
