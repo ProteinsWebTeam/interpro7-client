@@ -17,8 +17,6 @@ root:
   Rfam: https://www.ebi.ac.uk/ebisearch/ws/rest/rfam
   UniProt: https://rest.uniprot.org/
   SeqHub: https://seqhub.org/
-  # TODO: switch to https://seqhub.org/ once Tatta Bio deploys feature-list
-  SeqHubPfam: https://staging.seqhub.org/
   proteinsAPI: https://www.ebi.ac.uk/proteins/api/
   EBISurvey:
   ted: https://ted.cathdb.info/
